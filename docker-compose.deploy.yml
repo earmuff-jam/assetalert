@@ -1,0 +1,43 @@
+version: '3'
+services:
+  webserver:
+    image: nginx
+    container_name: 'nginx'
+    build:
+      context: ./frontend
+      dockerfile: prod.Dockerfile
+    ports:
+      - '80:80'
+    environment:
+      NODE_ENV: production
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8089:5432'
+    environment:
+      CLIENT_USER: ${CLIENT_USER}
+      CLIENT_PASSWORD: ${CLIENT_PASSWORD}
+      ENVIRONMENT: ${PRODUCTION_ENVIRONMENT}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  apilayer:
+    build:
+      context: ./apilayer
+      dockerfile: Dockerfile
+    ports:
+      - '8087:8087'
+    environment:
+      TOKEN_VALIDITY_TIME: 2 # in minutes
+      ENVIRONMENT: ${PRODUCTION_ENVIRONMENT}
+      PGUSER: ${POSTGRES_USER}
+    volumes:
+      - api_layer:/usr/src/
+    depends_on:
+      - backend
+
+volumes:
+  pg_data:
+  api_layer:

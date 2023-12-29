@@ -1,0 +1,23 @@
+@startuml
+
+title Community Care Login and Signup Process
+
+USER -> ApplicationContainer: POST login user (id, email, pwd)
+note over ApplicationContainer: Determine if the user can login
+ApplicationContainer -> SupabaseAuthenticator: POST request
+SupabaseAuthenticator -> LandingPage: GET request with redirect
+note over LandingPage: After successful login, redirect to landing page
+
+@enduml
+
+
+@startuml
+
+USER -> ApplicationContainer: POST sign up user (id, email, pwd)
+note over ApplicationContainer: Determine if the user can signup
+ApplicationContainer -> SupabaseAuthenticator: POST request
+SupabaseAuthenticator -> LandingPage: GET request with redirect
+note over LandingPage: After successful login, redirect to landing page
+
+@enduml
+

@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# File: _loadEnvVariables.sh
+# Description: Loads the required environment variables
+
+sleep 2
+echo "loading environment variables"
+
+# postgres db parameters
+POSTGRES_DB="community"
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="home"
+POSTGRES_HOST=5432
+
+# general users for community care application
+CLIENT_USER="community_public"
+CLIENT_PASSWORD="password"
+DATABASE_DOCKER_CONTAINER_NAME="community-backend-1"
+DATABASE_DOCKER_CONTAINER_IP_ADDRESS=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $DATABASE_DOCKER_CONTAINER_NAME)
+DATABASE_DOCKER_CONTAINER_PORT=8089
+TOKEN_VALIDITY_TIME=2
+
+# test users for community care application
+COMMUNITY_TEST_USER="community_test"
+
+# UI localhost uri
+REACT_APP_LOCALHOST_URL=http://localhost:8087
+
+
+# Create .env file and set parameters
+cat <<EOF > .env
+POSTGRES_DB=$POSTGRES_DB
+POSTGRES_USER=$POSTGRES_USER
+POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+POSTGRES_HOST=$POSTGRES_HOST
+CLIENT_USER=$CLIENT_USER
+CLIENT_PASSWORD=$CLIENT_PASSWORD
+DATABASE_DOCKER_CONTAINER_NAME=$DATABASE_DOCKER_CONTAINER_NAME
+DATABASE_DOCKER_CONTAINER_IP_ADDRESS=$DATABASE_DOCKER_CONTAINER_IP_ADDRESS
+TOKEN_VALIDITY_TIME=$TOKEN_VALIDITY_TIME
+COMMUNITY_TEST_USER=$COMMUNITY_TEST_USER
+REACT_APP_LOCALHOST_URL=$REACT_APP_LOCALHOST_URL
+DATABASE_DOCKER_CONTAINER_PORT=$DATABASE_DOCKER_CONTAINER_PORT
+EOF
+echo "finished compiling required variables."

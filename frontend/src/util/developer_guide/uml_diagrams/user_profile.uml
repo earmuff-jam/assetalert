@@ -1,0 +1,16 @@
+@startuml
+
+title Community Care User Profile Process
+
+USER -> UserProfilePage: View the User Profile Page details.
+note over UserProfilePage: user can update full profile details.
+UserProfilePage -> EditFullName: PATCH update to the user profile page with full name.
+EditFullName -> UserProfilePage:
+note over UserProfilePage: user update the first name.
+UserProfilePage -> EditPhoneNumber: PATCH update to the user profile page with phone number.
+EditPhoneNumber -> UserProfilePage:
+note over UserProfilePage: user update the phone number.
+UserProfilePage -> EditEmailAddress: PATCH update to the user profile page with email address.
+EditEmailAddress -> UserProfilePage:
+note over UserProfilePage: user update the email address.
+@enduml

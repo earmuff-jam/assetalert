@@ -1,0 +1,47 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - ${POSTGRES_HOST}:${POSTGRES_HOST}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  apilayer:
+    build:
+      context: ./apilayer
+      dockerfile: Dockerfile
+    ports:
+      - '8087:8087'
+    environment:
+      TOKEN_VALIDITY_TIME: ${TOKEN_VALIDITY_TIME} # in minutes
+      CLIENT_USER: ${CLIENT_USER}
+      CLIENT_PASSWORD: ${CLIENT_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      DATABASE_DOCKER_CONTAINER_IP_ADDRESS: backend
+    volumes:
+      - api_layer:/usr/src/
+    depends_on:
+      - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_LOCALHOST_URL: ${REACT_APP_LOCALHOST_URL}
+    ports:
+      - '3000:3000'
+    environment:
+      REACT_APP_LOCALHOST_URL: ${REACT_APP_LOCALHOST_URL}
+    depends_on:
+      - backend
+
+volumes:
+  pg_data:
+  api_layer:

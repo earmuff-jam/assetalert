@@ -1,0 +1,44 @@
+.mapRow {
+  text-align: center;
+  height: 10%;
+  width: 100%;
+}
+
+.map-container {
+  height: 20vh;
+  width: 100%;
+}
+
+.ol-control {
+  display: flex;
+}
+
+.ol-attribution-bottom {
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1;
+}
+
+.ol-attribution-bottom a {
+  color: #0078D4;
+  text-decoration: none;
+}
+
+.ol-attribution-bottom a:hover {
+  text-decoration: underline;
+}
+
+.ol-attribution-bottom button {
+  color: #0078D4;
+  text-decoration: none;
+}
+
+.ol-attribution-bottom ul {
+  margin: 0px;
+  padding: 0px 5px;
+  list-style-type: none;
+}

@@ -1,0 +1,46 @@
+@startuml
+
+title Community Care Add, Deactivate and Report Process
+
+USER -> LandingPage: ADD EVENT FLOW: GET request to view list of existing projects
+note over LandingPage: View existing projects if exists
+LandingPage -> UserProfileService: GET request to view if the role is "user"
+UserProfileService -> LandingPage: Return data to LandingPage
+note over LandingPage: User is authorized to create new event
+LandingPage -> AddEvent: SELECT to add a new project
+AddEvent -> LandingPage: SELECT to add a new project complete
+note over LandingPage: User added a new event to the application
+
+@enduml
+
+
+@startuml
+
+USER -> LandingPage: DEACTIVATE EVENT FLOW: GET request to view list of existing projects
+note over LandingPage: View existing projects if exists
+LandingPage -> UserProfileService: GET request to view if the project contains user email in sharable_groups
+UserProfileService -> LandingPage: Return data to LandingPage
+note over LandingPage: User is authorized to deactivate the selected event
+LandingPage -> DeactivateEvent: SELECT to deactivate a new project
+note over DeactivateEvent: User can only deactivate the projects that he created
+DeactivateEvent -> LandingPage: SELECT to deactivate a new project complete
+note over LandingPage: User deactivated event to the application
+
+@enduml
+
+
+
+@startuml
+
+USER -> LandingPage: REPORT EVENT FLOW: GET request to view list of existing projects
+note over LandingPage: View existing projects if exists
+LandingPage -> UserProfileService: GET request to view if the role is "user"
+UserProfileService -> LandingPage: Return data to LandingPage
+note over LandingPage: User is authorized to report the selected event. All projects are repotable by default
+LandingPage -> ReportEvent: SELECT to report a new project
+note over ReportEvent: User can report projects even though they didn't create it
+ReportEvent -> LandingPage: SELECT to report a new project complete
+note over LandingPage: User reported event to the application
+
+@enduml
+

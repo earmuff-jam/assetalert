@@ -1,0 +1,38 @@
+@startuml
+
+title Community Care Event Details process
+
+LandingPage -> SelectedEvent: View the selected event details and update general information
+SelectedEvent -> EventService: PATCH update join, leave or rsvp
+EventService -> SelectedEvent:PATCH update complete
+note over SelectedEvent: Update community details like RSVP count, total members
+SelectedEvent -> EventService: PATCH update the manhours and volunteer.
+EventService -> SelectedEvent: PATCH update complete
+note over SelectedEvent: Update community details with volunteer hours and type
+
+
+@enduml
+
+
+@startuml
+
+LandingPage -> SelectedEvent: View the selected event details and update work effort
+SelectedEvent -> VolunteerActivityListService: Fetch the list of volunteering activities
+note over VolunteerActivityListService: this is created during the time the project is created
+VolunteerActivityListService -> SelectedEvent: Display the list of volunteering activities
+note over SelectedEvent: users submit the volunteering hours
+SelectedEvent -> VolunteerActivityListService: PATCH update the list with the volunteering hours and activities
+VolunteerActivityListService -> SelectedEvent: PATCH update complete
+SelectedEvent -> SelectedEvent: refresh the page
+
+@enduml
+
+@startuml
+
+LandingPage -> SelectedEvent: View the selected event details and chat with online members
+SelectedEvent -> RealtimeService: Initialize a connection with the chat system
+RealtimeService -> SelectedEvent: Display current memebers and online status of each member
+note over SelectedEvent: Display chat resources to SelectedEvent component
+SelectedEvent -> RealtimeService: Send data in realtime to communicate between members
+RealtimeService -> SelectedEvent: View data processed and continue step during comms
+@enduml
