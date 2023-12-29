@@ -16,7 +16,8 @@ POSTGRES_HOST=5432
 CLIENT_USER="community_public"
 CLIENT_PASSWORD="password"
 DATABASE_DOCKER_CONTAINER_NAME="community-backend-1"
-DATABASE_DOCKER_CONTAINER_IP_ADDRESS=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $DATABASE_DOCKER_CONTAINER_NAME)
+# DATABASE_DOCKER_CONTAINER_IP_ADDRESS=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $DATABASE_DOCKER_CONTAINER_NAME)
+DATABASE_DOCKER_CONTAINER_IP_ADDRESS="localhost"
 DATABASE_DOCKER_CONTAINER_PORT=8089
 TOKEN_VALIDITY_TIME=2
 
