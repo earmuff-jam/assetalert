@@ -75,7 +75,7 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 // GetUsername ...
 // swagger:route GET /api/v1/profile/{id}
 //
-// # Retrieves the user details from the profiles table. Does not meddle with authentication
+// # Retrieves the user name from the profiles table. Does not meddle with authentication
 //
 // Parameters:
 //   - name: id
@@ -95,7 +95,7 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 	userID := vars["id"]
 
 	if len(userID) <= 0 {
-		log.Printf("Unable to retrieve profile with empty id")
+		log.Printf("Unable to retrieve username with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
