@@ -16,7 +16,6 @@ import Overlay from 'ol/Overlay.js';
 import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
 import PopupContent from './PopupContent';
-import reddotSvg from '../../util/images/reddot.svg';
 import { Attribution, defaults as defaultControls } from 'ol/control.js';
 import { makeStyles } from '@material-ui/core';
 
@@ -157,7 +156,7 @@ const addMarkers = (vectorLayer, events) => {
     });
     const markerStyle = new Style({
       image: new Icon({
-        src: reddotSvg,
+        src: `${process.env.PUBLIC_URL}/reddot.svg`,
         scale: 0.4,
         anchor: [0.5, 0.5],
         anchorXUnits: 'fraction',

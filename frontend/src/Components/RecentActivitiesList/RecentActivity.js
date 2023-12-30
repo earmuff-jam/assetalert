@@ -47,22 +47,34 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
       <Typography variant="h6" className={classes.activityTitle}>
         {activity.title}
       </Typography>
-      <Typography className={classes.activityDescription}>{activity.comments}</Typography>
-      <Typography gutterBottom>
+      {activity?.comments && <Typography className={classes.activityDescription}>{activity.comments}</Typography>}
+      <Typography>
         {activity.volunteer_hours && (
-          <Tooltip title={`${activity.volunteer_hours} hrs volunteered`}>
-            <Badge variant="dot" color="primary">
-              <Chip className={classes.chip} size="small" label={activity.volunteeringActivity} />
-            </Badge>
-          </Tooltip>
+          <>
+            <Typography variant="h5" className={classes.textColor} gutterBottom>
+              Volunteered on
+            </Typography>
+            <Tooltip title={`${activity.volunteer_hours} hrs volunteered`}>
+              <Badge variant="dot" color="primary">
+                <Chip className={classes.chip} size="small" label={activity.volunteeringActivity} />
+              </Badge>
+            </Tooltip>
+          </>
         )}
       </Typography>
-      <div className={classes.chipContainer}>
-        {activity?.skills_required?.length > 1
-          ? activity?.skills_required.map((v, index) => (
-              <Chip size="small" className={classes.chip} key={index} label={v} />
-            ))
-          : null}
+      <div>
+        {activity?.skills_required?.length > 1 ? (
+          <>
+            <Typography variant="h5" className={classes.textColor} gutterBottom>
+              Requested help on
+            </Typography>
+            <div className={classes.chipContainer}>
+              {activity?.skills_required.map((v, index) => (
+                <Chip size="small" className={classes.chip} key={index} label={v} />
+              ))}
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );

@@ -75,8 +75,6 @@ const RecentActivitiesList = ({ userCreatedEvents, volunteeringDetails, username
     return <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />;
   }
 
-  console.log(combinedActivities);
-
   return (
     <Box className={classes.root}>
       <Typography variant="h5" className={classes.title}>

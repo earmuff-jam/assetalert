@@ -1,8 +1,8 @@
-# Community Care
+# Mashed
 
 ## Volunteer and Community Engagement Platform
 
-**Community Care** is a dynamic web-based platform designed to foster connections between passionate volunteers and local community projects and initiatives. It serves as a central hub where individuals and organizations can unite, collaborate, and create a meaningful impact within their neighborhoods. Whether it's environmental conservation, education, social welfare, or arts and culture, we empower users to contribute their time, skills, and hearts to the causes they care deeply about.
+**Mashed** is a dynamic web-based platform designed to foster connections between passionate volunteers and local community projects and initiatives. It serves as a central hub where individuals and organizations can unite, collaborate, and create a meaningful impact within their neighborhoods. Whether it's environmental conservation, education, social welfare, or arts and culture, we empower users to contribute their time, skills, and hearts to the causes they care deeply about.
 
 ## Key Features
 
@@ -17,27 +17,23 @@
 
 ## Application Usage
 
-To simply use the application as intended, log in or sign up with the provided services. Once verified, you will be able to use community care as intended.
-
-## Contributing
-
-We welcome contributions from the community! Before submitting pull requests, please review our [contributing guidelines](CONTRIBUTING.md) to make the process smoother and more efficient.
+To simply use the application as intended, log in or sign up with the provided services. Once verified, you will be able to use mashed as intended.
 
 ## Application Brief Demonstration
 
 **Version 01:**
 
-**A. Log In and View Profile Page**
+**A. Log in to view the application **
 
-![Application Overview](frontend/src/util/developer_guide/gifs/v1/logging-in.gif)
+![Application Overview](setup/demo/gifs/log-in.gif)
 
-**B. Select an Active Event and View Event Details**
+**B. View home page and sample event**
 
-![Event Overview](frontend/src/util/developer_guide/gifs/v1/event-overview.gif)
+![Event Overview](setup/demo/gifs/select-event-sample-items.gif)
 
-## License
+**C. View profile page**
 
-This project is licensed under the [MIT License](LICENSE.md).
+![Profile Overview](setup/demo/gifs/select-profile-sample.gif)
 
 ## Developer Guide
 
@@ -66,9 +62,6 @@ This project is licensed under the [MIT License](LICENSE.md).
 - Run `-e` command first to get all .env variables for build.
 - Run `-e` again before `-m` so that the migration scripts can run.
 
-## Note: 
-  Building with MacOS, we need to overwrite the `.env` file `DATABASE_DOCKER_CONTAINER_IP_ADDRESS` to `localhost`. This allows mac to connect via localhost to the docker container for development.
-
 ## Contact
 
-If you have any questions or need support, feel free to reach out to us at communitycares@gmail.com.
+If you have any questions or need support, feel free to reach out to us at earmuffjam@gmail.com
