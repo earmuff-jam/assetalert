@@ -31,7 +31,7 @@ func GetProfileHealthCheck(rw http.ResponseWriter, r *http.Request, user string)
 }
 
 // GetProfile ...
-// swagger:route GET /api/v1/profile
+// swagger:route GET /api/v1/profile/{id}
 //
 // # Retrieves the user details from the profiles table. Does not meddle with authentication
 //
@@ -70,6 +70,52 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode(resp)
+}
+
+// GetUsername ...
+// swagger:route GET /api/v1/profile/{id}
+//
+// # Retrieves the user details from the profiles table. Does not meddle with authentication
+//
+// Parameters:
+//   - name: id
+//     in: query
+//     description: The id of the user
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: Username
+// 400: Message
+// 404: Message
+// 500: Message
+func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve profile with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.FetchUserProfile(user, userID)
+	if err != nil {
+		log.Printf("Unable to retrieve profile details. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+
+	// only send username as response
+	username := resp.Username
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(username)
 }
 
 // UpdateProfile ...

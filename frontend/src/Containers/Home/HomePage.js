@@ -32,6 +32,7 @@ const HomePage = () => {
   const currentEvents = !loading && events;
 
   useEffect(() => {
+    dispatch(homeActions.getUsername());
     dispatch(homeActions.getEvents());
     dispatch(homeActions.getCauseList());
     dispatch(homeActions.getProjectTypes());
