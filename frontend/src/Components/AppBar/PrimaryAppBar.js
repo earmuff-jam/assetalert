@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.125rem',
     fontFamily: 'Poppins, sans-serif',
     textDecoration: 'none',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.925rem',
+    },
   },
   underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,
@@ -41,11 +44,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.black,
     backgroundColor: theme.palette.common.white,
   },
-  text: {
+  headerText: {
     fontSize: '2.0rem',
     letterSpacing: '0.125rem',
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      alignItems: 'center',
+      fontSize: '0.925rem',
+    },
   },
   logo: {
     marginLeft: '1rem',
@@ -112,7 +120,7 @@ const PrimaryAppBar = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={classes.appBar}>
-        <Typography variant="h6" className={classes.text}>
+        <Typography variant="h6" className={classes.headerText}>
           Mashed
           <img src={`${process.env.PUBLIC_URL}/mashed-logo.png`} className={classes.logo} alt="company logo" />
         </Typography>

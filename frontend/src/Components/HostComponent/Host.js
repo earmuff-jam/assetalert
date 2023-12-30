@@ -5,6 +5,9 @@ import { Table, TableBody, TableCell, TableRow, makeStyles, CircularProgress } f
 const useStyles = makeStyles((theme) => ({
   container: {
     minWidth: 'max-content',
+    [theme.breakpoints.down('sm')]: {
+      minWidth: 'auto',
+    },
   },
   blueTableCell: {
     color: theme.palette.primary.contrastText,

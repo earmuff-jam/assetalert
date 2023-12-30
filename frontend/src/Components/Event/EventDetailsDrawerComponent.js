@@ -148,7 +148,7 @@ const EventDetailsDrawerComponent = ({
       case 2:
         return (
           <Box>
-            <Box className={classNames(classes.rowContainer, classes.allowSpace)}>
+            <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>
               <Box>
                 <Paper>
                   <Host selectedEvent={selectedEvent} />
