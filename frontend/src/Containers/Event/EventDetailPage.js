@@ -8,6 +8,7 @@ import { produce } from 'immer';
 import '../../Components/Map/styles.css';
 import { eventActions } from './eventSlice';
 import { homeActions } from '../Home/homeSlice';
+import { BLANK_USER_DETAILS } from './constants';
 import { profileActions } from '../Profile/profileSlice';
 import SecondaryAppBar from '../../Components/AppBar/SecondaryAppBar';
 import EventDetailsCard from '../../Components/Event/EventDetailsCard';
@@ -37,20 +38,6 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
   },
 }));
-
-const BLANK_USER_DETAILS = {
-  userID: '',
-  email: '',
-  imageUrl: '',
-  title: '',
-  userFullName: '',
-  userIsMember: '',
-  requiredSkills: [],
-  sharable_groups: [],
-  totalAllocatedMembers: 0,
-  attendees: [],
-  location: {},
-};
 
 const EventDetailPage = () => {
   const classes = useStyles();

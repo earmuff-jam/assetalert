@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Title from '../DialogComponent/Title';
 import { Box, Button, Dialog, Typography, makeStyles } from '@material-ui/core';
-import AddCommunityEvent from '../Organization/AddCommunityEvent';
+import AddCommunityEvent from '../AddCommunityEvent/AddCommunityEvent';
 import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({

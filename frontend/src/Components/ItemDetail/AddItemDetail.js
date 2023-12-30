@@ -15,10 +15,6 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(6),
     padding: theme.spacing(4),
   },
-  buttonContainer: {
-    color: 'white',
-    backgroundColor: theme.palette.secondary.main,
-  },
 }));
 
 const filter = createFilterOptions();
@@ -51,6 +47,23 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
   };
 
   const submit = () => {
+    const containsErr = Object.values(formFields).reduce((acc, el) => {
+      if (el.errorMsg) {
+        return true;
+      }
+      return acc;
+    }, false);
+
+    const requiredFormFields = Object.values(formFields).filter((v) => v.required);
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
+
+    if (containsErr || isRequiredFieldsEmpty || Object.keys(value).length <= 0) {
+      enqueueSnackbar('Cannot update user profile details.', {
+        variant: 'error',
+      });
+      return;
+    }
+
     const formattedData = Object.values(formFields).reduce((acc, el) => {
       if (el.value) {
         if (el.name === 'quantity') {
@@ -154,9 +167,7 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
           'Adding items to any event will allow all members to view the item. Any person who is not within that event group must join that group to view the item.'
         }
       >
-        <Button className={classes.buttonContainer} onClick={submit}>
-          Submit
-        </Button>
+        <Button onClick={submit}>Submit</Button>
       </Tooltip>
     </div>
   );

@@ -23,7 +23,7 @@ To simply use the application as intended, log in or sign up with the provided s
 
 **Version 01:**
 
-**A. Log in to view the application **
+**A. Log in to view the application**
 
 ![Application Overview](setup/demo/gifs/log-in.gif)
 

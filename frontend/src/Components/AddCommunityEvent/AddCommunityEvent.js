@@ -8,9 +8,10 @@ import { Autocomplete } from '@material-ui/lab';
 
 import { enqueueSnackbar } from 'notistack';
 import { InfoRounded } from '@material-ui/icons';
-import { SKILLS_REQUIRED_OPTIONS } from './constants';
+import { SKILLS_REQUIRED_OPTIONS } from '../Organization/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { homeActions } from '../../Containers/Home/homeSlice';
+import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -33,52 +34,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 }));
-
-const BLANK_NEW_EVENT = {
-  title: '',
-  cause: '',
-  street: '',
-  city: '',
-  state: '',
-  zip: '',
-  max_attendees: '',
-  attendees: [],
-  project_type: '',
-  comments: '',
-  required_total_man_hours: '',
-  skills_required: [],
-  start_date: '',
-};
-
-const BLANK_NEW_EVENT_ERROR = {
-  title: '',
-  cause: '',
-  street: '',
-  city: '',
-  state: '',
-  zip: '',
-  max_attendees: '',
-  project_type: '',
-  comments: '',
-  required_total_man_hours: '',
-  skills_required: '',
-  start_date: '',
-};
-
-const BLANK_NEW_EVENT_TOUCHED = {
-  title: false,
-  cause: false,
-  street: false,
-  city: false,
-  state: false,
-  zip: false,
-  max_attendees: false,
-  project_type: false,
-  comments: false,
-  required_total_man_hours: false,
-  skills_required: false,
-  start_date: false,
-};
 
 const AddCommunityEvent = ({ setEditMode }) => {
   const classes = useStyles();

@@ -1,0 +1,45 @@
+export const BLANK_NEW_EVENT = {
+  title: '',
+  cause: '',
+  street: '',
+  city: '',
+  state: '',
+  zip: '',
+  max_attendees: '',
+  attendees: [],
+  project_type: '',
+  comments: '',
+  required_total_man_hours: '',
+  skills_required: [],
+  start_date: '',
+};
+
+export const BLANK_NEW_EVENT_ERROR = {
+  title: '',
+  cause: '',
+  street: '',
+  city: '',
+  state: '',
+  zip: '',
+  max_attendees: '',
+  project_type: '',
+  comments: '',
+  required_total_man_hours: '',
+  skills_required: '',
+  start_date: '',
+};
+
+export const BLANK_NEW_EVENT_TOUCHED = {
+  title: false,
+  cause: false,
+  street: false,
+  city: false,
+  state: false,
+  zip: false,
+  max_attendees: false,
+  project_type: false,
+  comments: false,
+  required_total_man_hours: false,
+  skills_required: false,
+  start_date: false,
+};
