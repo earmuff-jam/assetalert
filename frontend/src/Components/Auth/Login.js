@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { LOGIN_SIGN_UP_FORM_FIELDS } from './constants';
 import { authActions } from '../../Containers/Auth/authSlice';
-
 import { EmojiPeopleRounded, FaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ error }) => {
+const Login = ({ hasServerError }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -56,9 +55,6 @@ const Login = ({ error }) => {
   const [editing, setEditing] = useState(false);
   const [signUpView, setSignUpView] = useState(false);
   const [formFields, setFormFields] = useState(LOGIN_SIGN_UP_FORM_FIELDS);
-
-  const requiredFormFields = Object.values(formFields).filter((v) => v.required);
-  const isRequiredFieldsEmpty = requiredFormFields.filter((v) => v.value.length <= 0).length > 0;
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -80,20 +76,35 @@ const Login = ({ error }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const formattedData = Object.values(formFields).reduce((acc, el) => {
-      if (el.value) {
-        acc[el.name] = el.value;
+
+    const containsErr = Object.values(formFields).reduce((acc, el) => {
+      if (el.errorMsg) {
+        return true;
       }
       return acc;
-    }, {});
+    }, false);
 
-    setEditing(false);
+    const requiredFormFields = Object.values(formFields).filter((v) => v.required);
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    if (signUpView) {
-      dispatch(authActions.getSignup(formattedData));
+    if (containsErr || isRequiredFieldsEmpty) {
       return;
+    } else {
+      const formattedData = Object.values(formFields).reduce((acc, el) => {
+        if (el.value) {
+          acc[el.name] = el.value;
+        }
+        return acc;
+      }, {});
+
+      setEditing(false);
+
+      if (signUpView) {
+        dispatch(authActions.getSignup(formattedData));
+        return;
+      }
+      dispatch(authActions.getUserID(formattedData));
     }
-    dispatch(authActions.getUserID(formattedData));
   };
 
   return (
@@ -121,6 +132,11 @@ const Login = ({ error }) => {
             fullWidth={v.fullWidth}
             error={!!v.errorMsg}
             helperText={v.errorMsg}
+            onKeyDown={(e) => {
+              if (e.code === 'Enter') {
+                handleFormSubmit(e);
+              }
+            }}
             InputProps={{
               startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
             }}
@@ -139,11 +155,9 @@ const Login = ({ error }) => {
             }}
             variant="outlined"
           />
-          <Button disabled={isRequiredFieldsEmpty} onClick={handleFormSubmit}>
-            Submit
-          </Button>
+          <Button onClick={handleFormSubmit}>Submit</Button>
         </div>
-        <span className={classes.warningText}>{!editing && error}</span>
+        <span className={classes.warningText}>{!editing && hasServerError}</span>
       </div>
     </Box>
   );
