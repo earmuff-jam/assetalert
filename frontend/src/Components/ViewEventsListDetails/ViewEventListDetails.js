@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Grid, makeStyles, CircularProgress, Box } from '@material-ui/core';
+import { Typography, Grid, makeStyles, CircularProgress, Box, Divider } from '@material-ui/core';
 
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
@@ -31,9 +31,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.dark,
   },
   searchContainer: {
-    alignSelf: 'center',
-    width: '100%',
+    alignSelf: 'start',
+    width: '25%',
     paddingBottom: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   text: {
     fontSize: '1.2rem',
@@ -52,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     width: '50%',
     padding: theme.spacing(7, 0),
+  },
+  divider: {
+    width: '100%',
+    margin: theme.spacing(2),
   },
 }));
 
@@ -98,6 +105,7 @@ const ViewEventListDetails = (props) => {
       <Box className={classes.searchContainer}>
         <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} />
       </Box>
+      <Divider className={classes.divider} />
       {noAvailableProjects ? (
         <div className={classes.emptyProjectContainer}>
           <EmptyComponent />
