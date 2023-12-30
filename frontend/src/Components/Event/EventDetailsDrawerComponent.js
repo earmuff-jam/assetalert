@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
+  mapRoot: {
+    width: '100%',
+  },
+  allowSpace: {
+    gap: theme.spacing(2),
+  },
   center: {
     display: 'flex',
     margin: '0 auto',
@@ -142,10 +148,16 @@ const EventDetailsDrawerComponent = ({
       case 2:
         return (
           <Box>
-            <Paper>
-              <Host selectedEvent={selectedEvent} />
-            </Paper>
-            <MapComponentFn disabled={disabled} locationDetails={userDetail.location} />
+            <Box className={classNames(classes.rowContainer, classes.allowSpace)}>
+              <Box>
+                <Paper>
+                  <Host selectedEvent={selectedEvent} />
+                </Paper>
+              </Box>
+              <Box className={classes.mapRoot}>
+                <MapComponentFn shrinkSize={true} disabled={disabled} locationDetails={userDetail.location} />
+              </Box>
+            </Box>
           </Box>
         );
 

@@ -1,20 +1,10 @@
 import React from 'react';
-import {
-  Container,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  makeStyles,
-  Paper,
-  CircularProgress,
-} from '@material-ui/core';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
+import { Table, TableBody, TableCell, TableRow, makeStyles, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(2),
+    minWidth: 'max-content',
   },
   blueTableCell: {
     color: theme.palette.primary.contrastText,
@@ -39,7 +29,7 @@ const Host = ({ selectedEvent }) => {
     );
   }
   return (
-    <Table>
+    <Table className={classes.container}>
       <TableBody>
         {BUILD_TABLE_CONSTANTS(selectedEvent).map((row) => (
           <TableRow key={row.label}>

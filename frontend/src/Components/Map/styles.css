@@ -1,11 +1,11 @@
 .mapRow {
   text-align: center;
-  height: 10%;
+  height: 100%;
   width: 100%;
 }
 
 .map-container {
-  height: 20vh;
+  height: 36vh;
   width: 100%;
 }
 
