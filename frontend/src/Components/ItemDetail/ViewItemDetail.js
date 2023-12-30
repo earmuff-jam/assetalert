@@ -13,6 +13,7 @@ import {
   Typography,
   Box,
   makeStyles,
+  Container,
 } from '@material-ui/core';
 
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
@@ -31,12 +32,23 @@ const useStyles = makeStyles((theme) => ({
   tableHeaderCell: {
     fontWeight: 'bold',
   },
-  text: {
-    fontSize: '1.2rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
+  headerText: {
+    fontSize: '2.0rem',
+    letterSpacing: '0.125rem',
     textAlign: 'center',
-    cursor: 'pointer',
+    fontFamily: 'Poppins, sans-serif',
+    color: theme.palette.primary.main,
+  },
+  text: {
+    fontSize: '0.925rem',
+    fontWeight: 'lighter',
+    color: theme.palette.error.dark,
+    margin: theme.spacing(2),
+  },
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   spinnerContainer: {
     display: 'flex',
@@ -114,13 +126,15 @@ const ViewItemDetail = ({ disabled }) => {
   }
 
   return (
-    <>
-      <Typography className={classes.text}>View current supplies</Typography>
+    <Container maxWidth="lg">
+      <Typography className={classes.headerText}>View current supplies</Typography>
       <Box className={classes.tableWrapper}>
-        <Typography>
-          {`Viewing ${items.length > 0 ? items.length : `0`} items in inventory`}
+        <Box className={classes.rowContainer}>
+          <Typography className={classes.text}>
+            {`Inventory Count: ${items.length > 0 ? items.length : `0`}`}
+          </Typography>
           {items.length > 0 && <DownloadExcelButton items={items} />}
-        </Typography>
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -144,7 +158,7 @@ const ViewItemDetail = ({ disabled }) => {
           </Table>
         </TableContainer>
       </Box>
-    </>
+    </Container>
   );
 };
 

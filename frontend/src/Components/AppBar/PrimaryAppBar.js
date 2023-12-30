@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    marginLeft: '1rem',
+    marginLeft: theme.spacing(0.1),
     width: '1rem',
     height: '1rem',
   },
