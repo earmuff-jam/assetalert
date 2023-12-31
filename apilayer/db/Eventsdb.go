@@ -3,9 +3,10 @@ package db
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"mime/multipart"
-	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -49,7 +50,7 @@ func RetrieveAllEvents(user string) ([]model.Event, error) {
 	ev.max_attendees,
 	ev.attendees,
 	ev.required_total_man_hours,
-	ev.is_activated,
+	ev.deactivated,
 	ev.deactivated_reason,
 	ev.start_date,
 	ev.created_at,
@@ -100,7 +101,7 @@ func RetrieveAllEvents(user string) ([]model.Event, error) {
 
 	for rows.Next() {
 		var event model.Event
-		if err := rows.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.IsActivated, &deactivatedReason, &startDate, &createdAt, &event.CreatedBy, &updatedAt, &event.UpdatedBy, &sharableGroups); err != nil {
+		if err := rows.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.Deactivated, &deactivatedReason, &startDate, &createdAt, &event.CreatedBy, &updatedAt, &event.UpdatedBy, &sharableGroups); err != nil {
 			return nil, err
 		}
 
@@ -158,7 +159,7 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 
 	sqlStr := `
         INSERT INTO community.projects
-        (title, description, cause, image_url, street, city, state, zip, boundingbox, class, display_name, importance, lat, licence, lon, osm_id, osm_type, place_id, powered_by, type, project_type, comments, registration_link, max_attendees, attendees, required_total_man_hours, is_activated, start_date, created_by, updated_by, sharable_groups)
+        (title, description, cause, image_url, street, city, state, zip, boundingbox, class, display_name, importance, lat, licence, lon, osm_id, osm_type, place_id, powered_by, type, project_type, comments, registration_link, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
         VALUES
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
         RETURNING id`
@@ -192,7 +193,7 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 		draftEvent.MaxAttendees,
 		pq.Array(draftEvent.Attendees),
 		draftEvent.TotalManHours,
-		draftEvent.IsActivated,
+		draftEvent.Deactivated,
 		draftEvent.StartDate,
 		draftEvent.CreatedBy,
 		draftEvent.UpdatedBy,
@@ -625,71 +626,48 @@ func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 
 	updateFields := make(map[string]interface{})
 
-	if draftEvent.ID != "" {
-		id, _ := uuid.Parse(draftEvent.ID)
-		updateFields["id"] = id
+	// Check if ID exists and ensure it's a valid UUID
+	if draftEvent.ID == "" {
+		return nil, errors.New("missing event ID")
 	}
+	updateFields["id"] = draftEvent.ID
+
+	// Update fields based on provided data
 	if draftEvent.Title != "" {
 		updateFields["title"] = draftEvent.Title
 	}
 	if draftEvent.DeactivatedReason != "" {
 		updateFields["deactivated_reason"] = draftEvent.DeactivatedReason
 	}
-	if draftEvent.IsActivated {
-		updateFields["is_activated"] = draftEvent.IsActivated
-	}
-	if len(draftEvent.Comments) > 0 {
-		updateFields["comments"] = draftEvent.Comments
-	}
-	if draftEvent.MaxAttendees > 0 {
-		updateFields["max_attendees"] = draftEvent.MaxAttendees
-	}
-	// prevents the creator from leaving the group
-	if len(draftEvent.Attendees) != 0 {
-		updateFields["attendees"] = draftEvent.Attendees
-	}
-	// prevents the creator from leaving the group
-	if len(draftEvent.SharableGroups) != 0 {
-		updateFields["sharable_groups"] = draftEvent.SharableGroups
-	}
+	updateFields["deactivated"] = draftEvent.Deactivated
+	updateFields["comments"] = draftEvent.Comments
+	updateFields["max_attendees"] = draftEvent.MaxAttendees
+	updateFields["attendees"] = draftEvent.Attendees
+	updateFields["sharable_groups"] = draftEvent.SharableGroups
 	updateFields["updated_at"] = time.Now()
 
-	updatorID, _ := uuid.Parse(draftEvent.UpdatedBy)
+	updatorID, err := uuid.Parse(draftEvent.UpdatedBy)
+	if err != nil {
+		return nil, fmt.Errorf("invalid updater ID: %s", err.Error())
+	}
 	updateFields["updated_by"] = updatorID
 
-	if len(updateFields) == 0 {
-		return nil, errors.New("nothing to update")
-	}
+	// Construct SQL query and parameters
+	var placeholders []string
+	var params []interface{}
 
-	sqlStr := "UPDATE community.projects SET"
-	params := make([]interface{}, 0)
-
-	// Handle the id separately to ensure it's at the beginning
-	if id, ok := updateFields["id"]; ok {
-		sqlStr += " id = $" + strconv.Itoa(len(params)+1) + ","
-		params = append(params, id)
-	}
-
-	// Build the psql depending on the type and event item that is passed in
-	for _, field := range []string{"title", "deactivated_reason", "is_activated", "comments", "max_attendees", "attendees", "sharable_groups", "updated_at", "updated_by"} {
-		if value, ok := updateFields[field]; ok {
-			// since these are slices, we want to handle them differently
-			if field == "attendees" || field == "sharable_groups" {
-				sqlStr += " " + field + " = $" + strconv.Itoa(len(params)+1) + ","
-				params = append(params, pq.Array(value))
-			} else {
-				sqlStr += " " + field + " =$" + strconv.Itoa(len(params)+1) + ","
-				params = append(params, value)
-			}
+	for field, value := range updateFields {
+		placeholders = append(placeholders, fmt.Sprintf("%s = $%d", field, len(params)+1))
+		if sliceValue, ok := value.([]string); ok {
+			params = append(params, pq.Array(sliceValue))
+		} else {
+			params = append(params, value)
 		}
 	}
 
-	// Remove the trailing comma
-	sqlStr = sqlStr[:len(sqlStr)-1]
-
-	// Add the WHERE clause based on the event ID
-	sqlStr += " WHERE id = $" + strconv.Itoa(len(params)+1)
-	params = append(params, updateFields["id"])
+	sqlStr := fmt.Sprintf("UPDATE community.projects SET %s WHERE id = $%d",
+		strings.Join(placeholders, ", "), len(params)+1)
+	params = append(params, draftEvent.ID)
 
 	_, err = tx.Exec(sqlStr, params...)
 	if err != nil {
@@ -863,7 +841,7 @@ func RetrieveEvent(user string, eventID uuid.UUID) (*model.Event, error) {
        ev.max_attendees,
        ev.attendees,
        ev.required_total_man_hours,
-       ev.is_activated,
+       ev.deactivated,
        ev.deactivated_reason,
        ev.start_date,
        ev.created_at,
@@ -915,7 +893,7 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	var sharableGroups pq.StringArray
 
 	var event model.Event
-	if err := row.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.IsActivated, &deactivatedReason, &startDate, &createdAt, &event.CreatedBy, &creator, &updatedAt, &event.UpdatedBy, &updater, &sharableGroups); err != nil {
+	if err := row.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.Deactivated, &deactivatedReason, &startDate, &createdAt, &event.CreatedBy, &creator, &updatedAt, &event.UpdatedBy, &updater, &sharableGroups); err != nil {
 		return nil, err
 	}
 

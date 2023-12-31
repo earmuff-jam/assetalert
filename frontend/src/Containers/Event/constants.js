@@ -5,7 +5,7 @@ export const BLANK_USER_DETAILS = {
   title: '',
   userFullName: '',
   userIsMember: '',
-  is_activated: '',
+  deactivated: '',
   comments: '',
   requiredSkills: [],
   sharable_groups: [],

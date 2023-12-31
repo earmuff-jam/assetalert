@@ -55,7 +55,7 @@ const EventDetailPage = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [isActivated, setIsActivated] = useState(false); // events are active by default
+  const [isDeactivated, setIsDeactivated] = useState(false); // events are active by default
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [userDetail, setUserDetail] = useState(BLANK_USER_DETAILS);
@@ -67,13 +67,10 @@ const EventDetailPage = () => {
         draft[name] = value;
       })
     );
-    if (name === 'is_activated') {
-      setIsActivated(!isActivated);
-    }
   };
 
   const displaySecondaryMenuBar = (event) => {
-    if (event.is_activated) {
+    if (event.deactivated) {
       return true;
     }
     return false;
@@ -202,7 +199,7 @@ const EventDetailPage = () => {
       const attendees = selectedEvent.attendees;
       const comments = selectedEvent.comments;
       const id = selectedEvent.id;
-      const is_activated = selectedEvent.is_activated;
+      const deactivated = selectedEvent.deactivated;
       const location = {
         boundingbox: selectedEvent.boundingbox,
         class: selectedEvent.class,
@@ -226,7 +223,7 @@ const EventDetailPage = () => {
       userDetailsDraft.location = location;
       userDetailsDraft.comments = comments;
       userDetailsDraft.id = id;
-      setIsActivated(is_activated);
+      setIsDeactivated(deactivated);
       setIsChecked(userHasRsvp);
       if (uploadedImage) {
         const reader = new FileReader();
@@ -268,7 +265,8 @@ const EventDetailPage = () => {
         <Grid item xs={12}>
           <EventDetailsCard
             userDetail={userDetail}
-            isActivated={isActivated}
+            isDeactivated={isDeactivated}
+            setIsDeactivated={setIsDeactivated}
             handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
             setSelectedImage={setSelectedImage}

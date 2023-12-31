@@ -84,7 +84,7 @@ const ViewEventListDetails = (props) => {
       const filteredEvent = currentEvents?.filter((v) => v.id === searchValue.id);
       setFilteredOptions(filteredEvent);
     } else {
-      const filteredEventByActivation = currentEvents?.filter((v) => !v.is_activated); // is_activated should have been is_deactivated
+      const filteredEventByActivation = currentEvents?.filter((v) => !v.deactivated);
       setFilteredOptions(filteredEventByActivation);
     }
   }, [searchValue, currentEvents]);

@@ -32,7 +32,7 @@ type Event struct {
 	MaxAttendees      int       `json:"max_attendees"`
 	Attendees         []string  `json:"attendees"`
 	TotalManHours     int       `json:"required_total_man_hours"`
-	IsActivated       bool      `json:"is_activated"`
+	Deactivated       bool      `json:"deactivated"`
 	DeactivatedReason string    `json:"deactivated_reason"`
 	StartDate         time.Time `json:"start_date"`
 	CreatedAt         time.Time `json:"created_at"`

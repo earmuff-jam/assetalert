@@ -1,6 +1,8 @@
 import React from 'react';
-import { Box, FormControlLabel, InputAdornment, Switch, TextField, makeStyles } from '@material-ui/core';
-import { EventNoteRounded, FaceRounded } from '@material-ui/icons';
+import Alert from '@material-ui/lab/Alert';
+import classNames from 'classnames';
+import { Box, Chip, InputAdornment, TextField, makeStyles } from '@material-ui/core';
+import { EventNoteRounded, EventRounded, FaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -12,11 +14,25 @@ const useStyles = makeStyles((theme) => ({
     justifyItems: 'center',
     gap: theme.spacing(2),
   },
+  activatedChip: {
+    color: theme.palette.error.dark,
+    fontSize: '0.825rem',
+    letterSpacing: '0.0125rem',
+  },
+  deactivatedChip: {
+    color: theme.palette.primary.main,
+    fontSize: '0.825rem',
+    letterSpacing: '0.0125rem',
+  },
+  text: {
+    fontSize: '0.825rem',
+    letterSpacing: '0.0125rem',
+    marginBottom: theme.spacing(1),
+  },
 }));
 
-const EditCommunityEvent = ({ userDetail, handleUserDetail, isActivated }) => {
+const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIsDeactivated }) => {
   const classes = useStyles();
-
   return (
     <Box className={classes.formInputContainer}>
       <TextField
@@ -27,7 +43,7 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isActivated }) => {
         label={'Event title'}
         value={userDetail.title}
         variant={'outlined'}
-        placeholder={userDetail.title}
+        placeholder={userDetail.title || 'Edit event details to add title'}
         onChange={handleUserDetail}
         InputProps={{
           startAdornment: (
@@ -63,7 +79,7 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isActivated }) => {
         label={'Event description'}
         value={userDetail.description || ''}
         variant={'outlined'}
-        placeholder={userDetail.description}
+        placeholder={userDetail.description || 'Edit event details to add description'}
         onChange={handleUserDetail}
         multiline={userDetail.multiline}
         maxRows={4}
@@ -75,18 +91,26 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isActivated }) => {
           ),
         }}
       />
-      <FormControlLabel
-        control={
-          <Switch
-            onChange={handleUserDetail}
-            size="small"
-            value={!isActivated}
-            name="is_activated"
-            inputProps={{ 'aria-label': 'toggle event activation' }}
-          />
-        }
-        label={`${!isActivated ? 'Deactivate Event' : 'Activate Event'}`}
-      />
+      <Box>
+        <Alert
+          severity="info"
+          className={classNames(classes.text, isDeactivated ? classes.activatedChip : classes.deactivatedChip)}
+        >
+          {!isDeactivated
+            ? 'Current event is active. Save to process changes.'
+            : 'Current event is deactive. save to process changes.'}
+        </Alert>
+        <Chip
+          icon={<EventRounded className={`${!isDeactivated ? classes.activatedChip : classes.deactivatedChip}`} />}
+          label={`${!isDeactivated ? 'Deactivate Event' : 'Activate Event'}`}
+          clickable
+          size="small"
+          name="deactivated"
+          value={isDeactivated}
+          onClick={() => setIsDeactivated(!isDeactivated)}
+          className={`${!isDeactivated ? classes.activatedChip : classes.deactivatedChip}`}
+        />
+      </Box>
     </Box>
   );
 };

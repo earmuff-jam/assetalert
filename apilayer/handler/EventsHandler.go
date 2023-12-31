@@ -226,7 +226,7 @@ func GetAllItems(rw http.ResponseWriter, r *http.Request, user string) {
 //   - name: max_attendees
 //     in: query
 //     description: The maximum number of attendees estimated by the creator.
-//     type: int
+//     type: string
 //     required: true
 //   - name: attendees
 //     in: query
@@ -238,10 +238,10 @@ func GetAllItems(rw http.ResponseWriter, r *http.Request, user string) {
 //     description: The total estimated man hours for the event
 //     type: int
 //     required: true
-//   - name: is_activated
+//   - name: deactivated
 //     in: query
 //     description: The state of the event - activated and deactivated events
-//     type: int
+//     type: boolean
 //     required: false
 //   - name: deactivated_reason
 //     in: query

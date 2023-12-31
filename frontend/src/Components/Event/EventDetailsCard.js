@@ -66,7 +66,8 @@ const EventDetailsCard = ({
   userDetail,
   handleUserDetail,
   eventID,
-  isActivated,
+  isDeactivated,
+  setIsDeactivated,
   selectedEvent,
   reports,
   onLeave,
@@ -94,13 +95,25 @@ const EventDetailsCard = ({
       }
       // userID is retrieved from local storage
       const userID = localStorage.getItem('userID');
-      console.log(isActivated);
+      // flushGeneralEventDetails updates only selected event reducer
+      // homeActions.updateEvent will update the db, this gives us ability to view
+      // data as a two way binding mechanism.
+      dispatch(
+        eventActions.flushGeneralEventDetails({
+          id: userDetail.id,
+          title: userDetail.title,
+          deactivated: isDeactivated,
+          comments: userDetail.comments,
+          max_attendees: userDetail.totalAllocatedMembers,
+          updated_by: userID,
+        })
+      );
       dispatch(
         homeActions.updateEvent({
           ...userDetail,
           id: userDetail.id,
           title: userDetail.title,
-          is_activated: isActivated,
+          deactivated: isDeactivated,
           comments: userDetail.comments,
           max_attendees: userDetail.totalAllocatedMembers,
           updated_by: userID,
@@ -195,7 +208,12 @@ const EventDetailsCard = ({
           <Button onClick={handleViewItems}>View Items</Button>
         </CardActions>
         {editMode && (
-          <EditCommunityEvent userDetail={userDetail} handleUserDetail={handleUserDetail} isActivated={isActivated} />
+          <EditCommunityEvent
+            userDetail={userDetail}
+            handleUserDetail={handleUserDetail}
+            isDeactivated={isDeactivated}
+            setIsDeactivated={setIsDeactivated}
+          />
         )}
       </CardContent>
       <EventItemDrawer
