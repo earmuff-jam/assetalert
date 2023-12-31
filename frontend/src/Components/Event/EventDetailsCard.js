@@ -109,7 +109,6 @@ const EventDetailsCard = ({
       enqueueSnackbar('Sucessfully updated event', {
         variant: 'success',
       });
-      return;
     }
     setEditMode(!editMode);
   };
