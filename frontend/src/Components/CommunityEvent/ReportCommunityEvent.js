@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from './constants';
+import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from '../Organization/constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReportCommunityEvent = ({ events, onClose }) => {
+const ReportCommunityEvent = ({ events, setDisplayMode }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -64,11 +64,13 @@ const ReportCommunityEvent = ({ events, onClose }) => {
         event_location: true,
         organizer_name: true,
       }));
+
+      // if location is empty during prefil, require the user to upload it
       setErrors((prev) => ({
         ...prev,
         id: false,
-        event_location: false,
-        organizer_name: false,
+        event_location: filteredEvents?.display_name?.length <= 0 ? 'Event location is required' : false,
+        organizer_name: filteredEvents?.creator_name?.length <= 0 ? 'Organizer Name is required' : false,
       }));
     }
   };
@@ -83,9 +85,10 @@ const ReportCommunityEvent = ({ events, onClose }) => {
       ...prevTouched,
       [field]: true,
     }));
+
     // Validate the field
-    validateField(field, value);
     prefil(field, value);
+    validateField(field, value);
   };
 
   const validateField = (field, value) => {
@@ -102,7 +105,7 @@ const ReportCommunityEvent = ({ events, onClose }) => {
         }
         break;
       case 'event_location':
-        if (!value) {
+        if (value.length <= 0 || !value) {
           error = 'Event Location is required';
         }
         break;
@@ -152,7 +155,7 @@ const ReportCommunityEvent = ({ events, onClose }) => {
     enqueueSnackbar('Successfully submitted report.', {
       variant: 'warning',
     });
-    onClose();
+    setDisplayMode(0);
   };
 
   return (
@@ -196,8 +199,6 @@ const ReportCommunityEvent = ({ events, onClose }) => {
             onChange={(_, value) => handleInputChange('id', value ? value.id : '')}
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="Event" variant="standard" />}
-            error={touched.event_location && !!errors.event_location}
-            helperText={touched.event_location && errors.event_location}
           />
         </div>
         <TextField

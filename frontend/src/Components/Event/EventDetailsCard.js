@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { LowPriorityRounded, SettingsRounded, CloseRounded, GroupRounded, BugReportRounded } from '@material-ui/icons';
+import { LowPriorityRounded, SettingsRounded, GroupRounded, BugReportRounded } from '@material-ui/icons';
 import {
   Box,
   Card,
@@ -22,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import Title from '../DialogComponent/Title';
 import EventItemDrawer from './EventItemDrawer';
-import ReportCommunityEvent from '../Organization/ReportCommunityEvent';
+import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,9 +116,8 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
           <Box>
             <Button
               data-tour="3"
-              className={classes.btnRoot}
               variant="text"
-              color={userDetail?.userIsMember ? 'error' : 'primary'}
+              className={classes.btnRoot}
               onClick={userDetail?.userIsMember ? onLeave : onJoin}
             >
               {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
@@ -127,7 +125,7 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
 
             <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
               <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
-                <Badge badgeContent={reports?.length || 0} color="error">
+                <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
                   <BugReportRounded />
                 </Badge>
               </IconButton>
@@ -149,8 +147,8 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
           </Tooltip>
         </Box>
         <Box className={classes.rowContainer}>
-          {userDetail?.requiredSkills.map((v) => (
-            <Chip size="small" icon={<LowPriorityRounded />} label={v} />
+          {userDetail?.requiredSkills.map((v, index) => (
+            <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}
         </Box>
       </CardContent>
@@ -166,13 +164,13 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
         shouldDisableViewItemList={shouldDisableViewItemList}
       />
       {display === 'Add' && (
-        <Dialog open={display} width={'md'} fullWidth={true}>
+        <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>
           <AddItemDetail eventID={eventID} userID={userDetail.userID} setDisplayMode={setDisplay} />
         </Dialog>
       )}
       {display === 'Report' && (
-        <Dialog open={display} width={'md'} fullWidth={true}>
+        <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Report Unusual Activity</Title>
           <ReportCommunityEvent events={[selectedEvent]} setDisplayMode={setDisplay} />
         </Dialog>

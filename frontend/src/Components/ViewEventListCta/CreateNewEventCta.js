@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import Title from '../DialogComponent/Title';
 import { Box, Button, Dialog, Typography, makeStyles } from '@material-ui/core';
-import AddCommunityEvent from '../AddCommunityEvent/AddCommunityEvent';
-import { useSelector } from 'react-redux';
+import AddCommunityEvent from '../CommunityEvent/AddCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const CreateNewEventCta = () => {
   const classes = useStyles();
 
-  const { loading, username } = useSelector((state) => state.home);
+  const { username } = useSelector((state) => state.home);
 
   const [editMode, setEditMode] = useState(false);
   const handleClick = () => setEditMode(!editMode);

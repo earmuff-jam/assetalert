@@ -25,8 +25,8 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
 
   const { loading, storageLocations } = useSelector((state) => state.event);
 
-  const [value, setValue] = useState({});
   const [options, setOptions] = useState([]);
+  const [storageLocation, setStorageLocation] = useState({});
   const [formFields, setFormFields] = useState(ADD_ITEM_FORM_FIELDS);
 
   const handleInput = (event) => {
@@ -57,7 +57,8 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    if (containsErr || isRequiredFieldsEmpty || Object.keys(value).length <= 0) {
+    // ensure that the storage location is not empty
+    if (containsErr || isRequiredFieldsEmpty || storageLocation === null || Object.keys(storageLocation).length <= 0) {
       enqueueSnackbar('Cannot update user profile details.', {
         variant: 'error',
       });
@@ -74,7 +75,8 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
       }
       return acc;
     }, {});
-    const storageLocationID = storageLocations.find((v) => v.location === value.location)?.id || value.location;
+    const storageLocationID =
+      storageLocations.find((v) => v.location === storageLocation.location)?.id || storageLocation.location;
     const postFillLocation = {
       ...formattedData,
       location: storageLocationID,
@@ -113,25 +115,25 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
           onChange={handleInput}
           required={v.required}
           fullWidth={v.fullWidth}
-          error={v.errorMsg}
+          error={!!v.errorMsg}
           helperText={v.errorMsg}
         />
       ))}
       <Autocomplete
-        value={value}
+        value={storageLocation}
         forcePopupIcon
         onChange={(event, newValue) => {
           if (typeof newValue === 'string') {
-            setValue({
-              location: newValue,
+            setStorageLocation({
+              storageLocation: newValue,
             });
           } else if (newValue && newValue.inputValue) {
-            setValue({
-              location: newValue.inputValue,
+            setStorageLocation({
+              storageLocation: newValue.inputValue,
             });
           } else {
-            setValue(newValue);
           }
+          setStorageLocation(newValue);
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);

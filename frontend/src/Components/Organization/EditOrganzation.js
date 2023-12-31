@@ -26,7 +26,7 @@ import { EVENT_TYPES } from './constants';
 import SearchAllEvents from './SearchAllEvents';
 import DeactivateEvent from './DeactivateEvent';
 import AddCommunityEvent from './AddCommunityEvent';
-import ReportCommunityEvent from './ReportCommunityEvent';
+import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 import { ArrowDropDownCircleRounded } from '@material-ui/icons';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 

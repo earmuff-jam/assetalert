@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-
-import Title from '../DialogComponent/Title';
-import { Box, Button, Dialog, Typography, makeStyles } from '@material-ui/core';
-import AddCommunityEvent from '../AddCommunityEvent/AddCommunityEvent';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {

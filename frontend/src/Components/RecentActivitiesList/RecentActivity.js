@@ -1,9 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-
-import { ArrowRightRounded, DoneRounded } from '@material-ui/icons';
-import { Avatar, Badge, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
-import classNames from 'classnames';
+import { Box, Badge, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,23 +45,23 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
         {activity.title}
       </Typography>
       {activity?.comments && <Typography className={classes.activityDescription}>{activity.comments}</Typography>}
-      <Typography>
+      <Box>
         {activity.volunteer_hours && (
-          <>
+          <Box>
             <Typography variant="h5" className={classes.textColor} gutterBottom>
               Volunteered on
             </Typography>
             <Tooltip title={`${activity.volunteer_hours} hrs volunteered`}>
-              <Badge variant="dot" color="primary">
+              <Badge variant="dot" color="primary" overlap="rectangular">
                 <Chip className={classes.chip} size="small" label={activity.volunteeringActivity} />
               </Badge>
             </Tooltip>
-          </>
+          </Box>
         )}
-      </Typography>
+      </Box>
       <div>
         {activity?.skills_required?.length > 1 ? (
-          <>
+          <Box>
             <Typography variant="h5" className={classes.textColor} gutterBottom>
               Requested help on
             </Typography>
@@ -73,7 +70,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
                 <Chip size="small" className={classes.chip} key={index} label={v} />
               ))}
             </div>
-          </>
+          </Box>
         ) : null}
       </div>
     </div>

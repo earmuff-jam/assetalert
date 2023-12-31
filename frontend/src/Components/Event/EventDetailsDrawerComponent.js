@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
-import Host from '../HostComponent/Host';
-import CommunityMsg from '../ChatComponent/CommunityMsg';
-import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import MapComponentFn from '../Map/Map';
-import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
+import { Box, List, ListItem, ListItemText, Paper, makeStyles } from '@material-ui/core';
+
 import classNames from 'classnames';
+import MapComponentFn from '../Map/Map';
+import Host from '../HostComponent/Host';
 import PieChart from '../PieChart/PieChart';
+import CommunityMsg from '../ChatComponent/CommunityMsg';
+import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
+import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +70,7 @@ export const NavigationTabBar = ({ value, handleChange }) => {
   return (
     <Box className={classes.rowContainer}>
       {NAVIGATION_TABS.map((v, index) => (
-        <List>
+        <List key={index}>
           <ListItem button>
             <ListItemText
               onClick={() => handleChange(index)}
