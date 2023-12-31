@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReportCommunityEvent = ({ events, onClose }) => {
+const ReportCommunityEvent = ({ events, setDisplayMode }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -155,7 +155,7 @@ const ReportCommunityEvent = ({ events, onClose }) => {
     enqueueSnackbar('Successfully submitted report.', {
       variant: 'warning',
     });
-    onClose();
+    setDisplayMode(0);
   };
 
   return (

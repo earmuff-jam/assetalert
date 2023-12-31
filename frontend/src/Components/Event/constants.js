@@ -1,3 +1,5 @@
+import { Chip } from '@material-ui/core';
+import { GroupWorkRounded } from '@material-ui/icons';
 import moment from 'moment/moment';
 
 export const LABELS = [
@@ -27,9 +29,14 @@ export const LABELS = [
   },
   {
     id: 5,
-    label: 'Skills Required',
+    label: 'Requested help on',
     colName: 'skills_required',
-    modifier: (value) => value.join(', '),
+    modifier: (value) => {
+      return value
+        .join(', ')
+        .split(',')
+        .map((v) => <Chip size="small" key={v} icon={<GroupWorkRounded />} label={v} />);
+    },
   },
   {
     id: 6,
@@ -45,7 +52,7 @@ export const LABELS = [
   },
   {
     id: 8,
-    label: 'Last Updated by',
+    label: 'Updator',
     colName: 'updator_name',
     modifier: (value) => value || 'N/A',
   },

@@ -109,7 +109,7 @@ const eventSlice = createSlice({
       state.error = '';
     },
     createNewReportAgainstEventSuccess: (state, action) => {
-      state.reports = action.payload;
+      state.reports = [...state.reports, action.payload];
       state.loading = false;
       state.error = '';
     },
