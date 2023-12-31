@@ -69,8 +69,8 @@ const ReportCommunityEvent = ({ events, onClose }) => {
       setErrors((prev) => ({
         ...prev,
         id: false,
-        event_location: filteredEvents?.display_name?.length <= 0 ? true : false,
-        organizer_name: filteredEvents?.creator_name?.length <= 0 ? true : false,
+        event_location: filteredEvents?.display_name?.length <= 0 ? 'Event location is required' : false,
+        organizer_name: filteredEvents?.creator_name?.length <= 0 ? 'Organizer Name is required' : false,
       }));
     }
   };
@@ -105,7 +105,6 @@ const ReportCommunityEvent = ({ events, onClose }) => {
         }
         break;
       case 'event_location':
-        console.log(value);
         if (value.length <= 0 || !value) {
           error = 'Event Location is required';
         }
@@ -200,7 +199,6 @@ const ReportCommunityEvent = ({ events, onClose }) => {
             onChange={(_, value) => handleInputChange('id', value ? value.id : '')}
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="Event" variant="standard" />}
-            error={touched.event_location && errors.event_location ? errors.event_location : undefined}
           />
         </div>
         <TextField
