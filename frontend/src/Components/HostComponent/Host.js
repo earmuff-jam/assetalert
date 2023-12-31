@@ -1,6 +1,7 @@
 import React from 'react';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
 import { Table, TableBody, TableCell, TableRow, makeStyles, CircularProgress } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -11,7 +12,24 @@ const useStyles = makeStyles((theme) => ({
   },
   blueTableCell: {
     color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
+  },
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  text: {
+    fontSize: '0.925rem',
+  },
+  tableRow: {
+    '& td': {
+      borderBottom: 'none',
+    },
+  },
+  emptyGap: {
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: theme.spacing(1),
   },
   spinnerContainer: {
     display: 'flex',
@@ -35,9 +53,14 @@ const Host = ({ selectedEvent }) => {
     <Table className={classes.container}>
       <TableBody>
         {BUILD_TABLE_CONSTANTS(selectedEvent).map((row) => (
-          <TableRow key={row.label}>
-            <TableCell className={classes.blueTableCell}>{row.label}</TableCell>
-            <TableCell>{row.value}</TableCell>
+          <TableRow key={row.id} className={classes.tableRow}>
+            <TableCell className={classNames(classes.text, classes.blueTableCell)}>{row.id}</TableCell>
+            <TableCell className={classNames(classes.text)}>{row.label}</TableCell>
+            <TableCell
+              className={classNames(classes.text, classes.columnContainer, { [classes.emptyGap]: row.id === 5 })}
+            >
+              {row.value}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

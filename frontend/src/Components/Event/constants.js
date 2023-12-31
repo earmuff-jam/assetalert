@@ -2,30 +2,31 @@ import { Chip } from '@material-ui/core';
 import { GroupWorkRounded } from '@material-ui/icons';
 import moment from 'moment/moment';
 
+export const UNKNOWN_LABEL = 'Unknown';
 export const LABELS = [
   {
     id: 1,
     label: 'Organizer',
     colName: 'creator_name',
-    modifier: (value) => value || 'N/A',
+    modifier: (value) => value || UNKNOWN_LABEL,
   },
   {
     id: 2,
     label: 'Cause',
     colName: 'cause',
-    modifier: (value) => value || 'N/A',
+    modifier: (value) => value || UNKNOWN_LABEL,
   },
   {
     id: 3,
     label: 'City',
     colName: 'city',
-    modifier: (value) => value || 'N/A',
+    modifier: (value) => value || UNKNOWN_LABEL,
   },
   {
     id: 4,
     label: 'Description',
     colName: 'comments',
-    modifier: (value) => value || 'N/A',
+    modifier: (value) => value || UNKNOWN_LABEL,
   },
   {
     id: 5,
@@ -58,18 +59,27 @@ export const LABELS = [
   },
 ];
 
-export const BUILD_TABLE_CONSTANTS = (eventDetail) => {
-  if (!eventDetail) {
+/**
+ * combines the config for host details based on the eventObj parameter. returns a
+ * list of tableRows derieved from the eventObj object. If modifier function is passed
+ * in, we build the table in accordance to it as well.
+ * @param {Object} eventObj - the current selected event to build the table for
+ * @returns {Array} tableRows - the combined row with modifiers applied if passed in.
+ */
+export const BUILD_TABLE_CONSTANTS = (eventObj) => {
+  if (!eventObj) {
     return [];
   }
-  const tableRows = LABELS.map(({ colName, label, modifier }) => {
-    let value = eventDetail[colName];
+  const tableRows = LABELS.map(({ id, colName, label, modifier }) => {
+    let value = eventObj[colName];
     if (modifier) {
       value = modifier(value, { colName, label });
     } else {
       value = value || 'N/A';
     }
     return {
+      id,
+      colName,
       label,
       value,
     };
