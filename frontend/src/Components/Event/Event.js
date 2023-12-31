@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles, Box, Button, Tooltip, Typography, IconButton, Dialog, Chip, Badge } from '@material-ui/core';
-
 import { AddCircleRounded, ViewListRounded, BugReportRounded, FaceRounded } from '@material-ui/icons';
 
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
-import EventItemDrawer from './EventItemDrawer';
 import EventSplashDetails from './EventSplashDetails';
 import { Title } from '../Organization/EditOrganzation';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import ReportCommunityEvent from '../Organization/ReportCommunityEvent';
+import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -135,13 +133,6 @@ const Event = (props) => {
         setUploadedImage={setUploadedImage}
         toggleEditMode={toggleEditMode}
       />
-      {/* <EventItemDrawer
-        display={display}
-        disabled={disabled}
-        userDetail={userDetail}
-        toggleDrawer={toggleDrawer}
-        shouldDisableViewItemList={shouldDisableViewItemList}
-      /> */}
       <Box className={classes.container}>
         <Box className={classes.formContainer}>
           <Tooltip title={location} placement="top-start">

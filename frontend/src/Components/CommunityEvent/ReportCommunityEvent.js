@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from './constants';
+import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from '../Organization/constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -196,8 +196,7 @@ const ReportCommunityEvent = ({ events, onClose }) => {
             onChange={(_, value) => handleInputChange('id', value ? value.id : '')}
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="Event" variant="standard" />}
-            error={touched.event_location && !!errors.event_location}
-            helperText={touched.event_location && errors.event_location}
+            error={touched.event_location && errors.event_location ? errors.event_location : undefined}
           />
         </div>
         <TextField
