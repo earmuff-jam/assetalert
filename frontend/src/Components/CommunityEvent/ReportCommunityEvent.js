@@ -64,11 +64,13 @@ const ReportCommunityEvent = ({ events, onClose }) => {
         event_location: true,
         organizer_name: true,
       }));
+
+      // if location is empty during prefil, require the user to upload it
       setErrors((prev) => ({
         ...prev,
         id: false,
-        event_location: false,
-        organizer_name: false,
+        event_location: filteredEvents?.display_name?.length <= 0 ? true : false,
+        organizer_name: filteredEvents?.creator_name?.length <= 0 ? true : false,
       }));
     }
   };
@@ -83,9 +85,10 @@ const ReportCommunityEvent = ({ events, onClose }) => {
       ...prevTouched,
       [field]: true,
     }));
+
     // Validate the field
-    validateField(field, value);
     prefil(field, value);
+    validateField(field, value);
   };
 
   const validateField = (field, value) => {
@@ -102,7 +105,8 @@ const ReportCommunityEvent = ({ events, onClose }) => {
         }
         break;
       case 'event_location':
-        if (!value) {
+        console.log(value);
+        if (value.length <= 0 || !value) {
           error = 'Event Location is required';
         }
         break;
