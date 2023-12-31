@@ -14,6 +14,16 @@ export function* fetchAllEvents() {
   }
 }
 
+export function* fetchUsername() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `/profile/${USER_ID}/username`);
+    yield put(homeActions.getUsernameSuccess(response.data || ''));
+  } catch (e) {
+    yield put(homeActions.getUsernameFailure(e));
+  }
+}
+
 export function* createNewEvent(action) {
   try {
     const { draftEvent } = action.payload;
@@ -90,6 +100,10 @@ export function* fetchAllUsaStateOptions() {
   }
 }
 
+export function* watchFetchUsername() {
+  yield takeLatest(`home/getUsername`, fetchUsername);
+}
+
 export function* watchFetchAllEvents() {
   yield takeLatest(`home/getEvents`, fetchAllEvents);
 }
@@ -116,6 +130,7 @@ export function* watchFetchAllUsaStateOptions() {
 
 // eslint-disable-next-line
 export default [
+  watchFetchUsername,
   watchFetchAllEvents,
   watchCreateNewEvent,
   watchUpdateExistingEvent,

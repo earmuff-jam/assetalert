@@ -4,9 +4,9 @@ import { Container, makeStyles, CircularProgress, Grid } from '@material-ui/core
 import { enqueueSnackbar } from 'notistack';
 import { profileActions } from './profileSlice';
 import { homeActions } from '../Home/homeSlice';
+import { USER_PROFILE_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
-import { USER_PROFILE_FORM_FIELDS } from '../../Components/ViewProfileDetails/constants';
 import RecentActivitiesList from '../../Components/RecentActivitiesList/RecentActivitiesList';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +48,7 @@ const ProfileDetailPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
+
   const [formFields, setFormFields] = useState(USER_PROFILE_FORM_FIELDS);
 
   const handleInput = (event) => {
@@ -68,9 +69,21 @@ const ProfileDetailPage = () => {
     });
   };
 
+  const removeSelectedImage = () => {
+    setSelectedImage(null);
+    setUploadedImage(null);
+    const input = document.querySelector('input[type="file"]');
+    if (input) {
+      input.value = ''; // Reset the value of the input to clear the selected file (if possible)
+    }
+  };
+
   const handleToggle = () => setEditMode(!editMode);
   const toggleEditImage = () => {
     setEditImage(!editImage);
+    if (uploadedImage) {
+      removeSelectedImage();
+    }
   };
 
   const handleSubmit = () => {
@@ -108,15 +121,6 @@ const ProfileDetailPage = () => {
     dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
     toggleEditImage();
     setEditImage(!editImage);
-  };
-
-  const handleRemove = () => {
-    setSelectedImage(null);
-    setUploadedImage(null);
-    const input = document.querySelector('input[type="file"]');
-    if (input) {
-      input.value = ''; // Reset the value of the input to clear the selected file (if possible)
-    }
   };
 
   useEffect(() => {

@@ -1,14 +1,9 @@
-import {
-  AddCircleOutlineRounded,
-  FlagRounded,
-  RemoveCircleOutlineRounded,
-} from '@material-ui/icons';
+import { AddCircleOutlineRounded, FlagRounded, RemoveCircleOutlineRounded } from '@material-ui/icons';
 
 export const EXISTING_PROJECTS_MSG =
   'By deactivating the project, all associated content and features will be disabled. This action cannot be undone.';
 
-export const EXISTING_PROJECTS_NOT_FOUND_MSG =
-  'Hmm.. Seems like you have no active events created.';
+export const EXISTING_PROJECTS_NOT_FOUND_MSG = 'Hmm.. Seems like you have no active events created.';
 
 export const SKILLS_REQUIRED_OPTIONS = [
   'Event Planning',
@@ -74,7 +69,6 @@ export const EVENT_FORM_TOUCHED = {
   eventID: false,
   reason: false,
 };
-
 
 export const BLANK_REPORT_FORM = {
   subject: '',

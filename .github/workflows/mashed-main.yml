@@ -1,0 +1,39 @@
+name: CI
+
+on: [push]
+
+env:
+  GO111MODULE: 'on' # Enable Go modules
+  DOCKER_DRIVER: overlay
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Go code
+        uses: docker://golang:latest
+        with:
+          args: |
+            echo "Attempting to build go code."
+            go version
+            cd apilayer && go mod download
+            CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+            echo "Go build successful."
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build frontend
+        uses: docker://node:latest
+        with:
+          args: |
+            echo "Attempting to build frontend."
+            cd frontend && yarn
+            CI=false yarn build # stop build failure for warnings.
+            echo "Frontend build successful."

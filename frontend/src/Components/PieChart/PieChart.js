@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   aside: {
     display: 'flex',
     flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
   emptyGap: {
     flexGrow: 1,

@@ -44,7 +44,7 @@ const AuthHome = () => {
   const classes = useStyles();
 
   const { loading, error } = useSelector((state) => state.auth);
-  const hasError = !loading && error;
+  const hasServerError = !loading && error;
 
   return (
     <>
@@ -63,7 +63,7 @@ const AuthHome = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Box className={classes.auth}>
-              <Login error={hasError} />
+              <Login hasServerError={hasServerError} />
             </Box>
           </Grid>
         </Grid>

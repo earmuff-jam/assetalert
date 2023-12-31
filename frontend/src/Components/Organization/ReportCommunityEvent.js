@@ -51,7 +51,6 @@ const ReportCommunityEvent = ({ events, onClose }) => {
   const prefil = (field, value) => {
     if (field === 'id') {
       const filteredEvents = events.filter((v) => v.id === value).find((v) => true);
-
       setReport((prev) =>
         produce(prev, (draft) => {
           draft.event_location = filteredEvents?.display_name || '';
@@ -197,6 +196,8 @@ const ReportCommunityEvent = ({ events, onClose }) => {
             onChange={(_, value) => handleInputChange('id', value ? value.id : '')}
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="Event" variant="standard" />}
+            error={touched.event_location && !!errors.event_location}
+            helperText={touched.event_location && errors.event_location}
           />
         </div>
         <TextField

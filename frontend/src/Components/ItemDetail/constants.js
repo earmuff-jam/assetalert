@@ -32,7 +32,12 @@ export const ADD_ITEM_FORM_FIELDS = {
     errorMsg: '',
     required: false,
     fullWidth: true,
-    validators: [],
+    validators: [
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'Description should be less than 50 characters',
+      },
+    ],
     ...GENERIC_FORM_FIELDS,
   },
   quantity: {

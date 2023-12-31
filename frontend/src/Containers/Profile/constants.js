@@ -45,11 +45,15 @@ export const USER_PROFILE_FORM_FIELDS = {
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'User name is required',
+        message: 'Username is required',
+      },
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'Username should be less than 50 characters',
       },
       {
         validate: (value) => value.trim().length < 3,
-        message: 'User name cannot be less than three characters',
+        message: 'Username cannot be less than three characters',
       },
     ],
     ...GENERIC_FORM_FIELDS,
@@ -67,6 +71,10 @@ export const USER_PROFILE_FORM_FIELDS = {
       {
         validate: (value) => value.trim().length === 0,
         message: 'Phone Number is required',
+      },
+      {
+        validate: (value) => value.trim().length < 9,
+        message: 'Phone Number should be more than 9 characters',
       },
       {
         validate: (value) => value.trim().length > 15,

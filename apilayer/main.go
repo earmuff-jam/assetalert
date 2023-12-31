@@ -34,8 +34,10 @@ func main() {
 
 	// routes below here are treated as they are secure routes
 	router.Handle("/api/v1/health", CustomRequestHandler(handler.GetEventHealthCheck)).Methods(http.MethodGet)
+
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.GetProfile)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.UpdateProfile)).Methods(http.MethodPut)
+	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/states", CustomRequestHandler(handler.GetAllStates)).Methods(http.MethodGet)
@@ -45,15 +47,13 @@ func main() {
 
 	router.Handle("/api/v1/events", CustomRequestHandler(handler.GetAllEvents)).Methods(http.MethodGet)
 	router.Handle("/api/v1/events", CustomRequestHandler(handler.CreateNewEvent)).Methods(http.MethodPost)
+	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.GetEvent)).Methods(http.MethodGet)
+	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.UpdateExistingEvent)).Methods(http.MethodPut)
+	router.Handle("/api/v1/event/{id}/updateAvatar", CustomRequestHandler(handler.UpdateEventAvatar)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.GetAllItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.UpdateItemDetails)).Methods(http.MethodPut)
-
 	router.Handle("/api/v1/item", CustomRequestHandler(handler.AddItemToEvent)).Methods(http.MethodPost)
-	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.GetEvent)).Methods(http.MethodGet)
-
-	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.UpdateExistingEvent)).Methods(http.MethodPut)
-	router.Handle("/api/v1/event/{id}/updateAvatar", CustomRequestHandler(handler.UpdateEventAvatar)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/report/{id}", CustomRequestHandler(handler.GetAllEventReports)).Methods(http.MethodGet)
 	router.Handle("/api/v1/report", CustomRequestHandler(handler.CreateNewReport)).Methods(http.MethodPost)
