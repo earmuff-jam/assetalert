@@ -113,7 +113,7 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
           onChange={handleInput}
           required={v.required}
           fullWidth={v.fullWidth}
-          error={v.errorMsg}
+          error={!!v.errorMsg}
           helperText={v.errorMsg}
         />
       ))}
