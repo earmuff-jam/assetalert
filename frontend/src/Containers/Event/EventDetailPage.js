@@ -55,9 +55,22 @@ const EventDetailPage = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [isActivated, setIsActivated] = useState(false); // events are active by default
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [userDetail, setUserDetail] = useState(BLANK_USER_DETAILS);
+
+  const handleUserDetail = (event) => {
+    const { name, value } = event.target;
+    setUserDetail(
+      produce((draft) => {
+        draft[name] = value;
+      })
+    );
+    if (name === 'is_activated') {
+      setIsActivated(!isActivated);
+    }
+  };
 
   const displaySecondaryMenuBar = (event) => {
     if (event.is_activated) {
@@ -187,6 +200,9 @@ const EventDetailPage = () => {
       const requiredSkills = selectedEvent?.skills_required;
       const sharableGroups = selectedEvent?.sharable_groups;
       const attendees = selectedEvent.attendees;
+      const comments = selectedEvent.comments;
+      const id = selectedEvent.id;
+      const is_activated = selectedEvent.is_activated;
       const location = {
         boundingbox: selectedEvent.boundingbox,
         class: selectedEvent.class,
@@ -208,6 +224,9 @@ const EventDetailPage = () => {
       userDetailsDraft.title = title;
       userDetailsDraft.totalAllocatedMembers = totalAllocatedMembers;
       userDetailsDraft.location = location;
+      userDetailsDraft.comments = comments;
+      userDetailsDraft.id = id;
+      setIsActivated(is_activated);
       setIsChecked(userHasRsvp);
       if (uploadedImage) {
         const reader = new FileReader();
@@ -248,12 +267,14 @@ const EventDetailPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <EventDetailsCard
+            userDetail={userDetail}
+            isActivated={isActivated}
+            handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
             setSelectedImage={setSelectedImage}
             selectedImage={selectedImage}
             uploadedImage={uploadedImage}
             setUploadedImage={setUploadedImage}
-            userDetail={userDetail}
             eventID={eventID}
             selectedEvent={selectedEvent}
             reports={reports}

@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { CheckRounded, EditRounded, CancelRounded } from '@material-ui/icons';
-import { Box, Card, CardContent, IconButton, Avatar, Divider } from '@material-ui/core';
-
+import { Box, Card, CardContent, IconButton } from '@material-ui/core';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
 

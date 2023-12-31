@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-import { LowPriorityRounded, SettingsRounded, GroupRounded, BugReportRounded } from '@material-ui/icons';
+import { LowPriorityRounded, GroupRounded, BugReportRounded, EditRounded, DoneRounded } from '@material-ui/icons';
 import {
   Box,
   Card,
@@ -22,6 +22,9 @@ import { eventActions } from '../../Containers/Event/eventSlice';
 import Title from '../DialogComponent/Title';
 import EventItemDrawer from './EventItemDrawer';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
+import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
+import { enqueueSnackbar } from 'notistack';
+import { homeActions } from '../../Containers/Home/homeSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,26 +61,67 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, reports, onLeave, onJoin }) => {
+const EventDetailsCard = ({
+  disabled,
+  userDetail,
+  handleUserDetail,
+  eventID,
+  isActivated,
+  selectedEvent,
+  reports,
+  onLeave,
+  onJoin,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [display, setDisplay] = useState(0);
+  const [editMode, setEditMode] = useState(false); // editing general fields for select event
 
+  const toggleEditMode = () => {
+    if (editMode) {
+      const editingTitleLength = userDetail.title.length || 0;
+      const editingAllocatedMembersCount = userDetail.totalAllocatedMembers.length || 0;
+      if (
+        editingTitleLength <= 0 ||
+        editingTitleLength >= 100 ||
+        (isNaN(editingAllocatedMembersCount) && Number(editingAllocatedMembersCount) > 0)
+      ) {
+        enqueueSnackbar('Unable to update event', {
+          variant: 'error',
+        });
+        return;
+      }
+      // userID is retrieved from local storage
+      const userID = localStorage.getItem('userID');
+      console.log(isActivated);
+      dispatch(
+        homeActions.updateEvent({
+          ...userDetail,
+          id: userDetail.id,
+          title: userDetail.title,
+          is_activated: isActivated,
+          comments: userDetail.comments,
+          max_attendees: userDetail.totalAllocatedMembers,
+          updated_by: userID,
+        })
+      );
+      enqueueSnackbar('Sucessfully updated event', {
+        variant: 'success',
+      });
+      return;
+    }
+    setEditMode(!editMode);
+  };
   const handleViewItems = () => {
     setDisplay('View');
     dispatch(eventActions.getItemList({ eventID }));
   };
-
   const handleAddItem = () => {
     setDisplay('Add');
     dispatch(eventActions.getStorageLocations(eventID));
   };
-
-  const handleReportEvent = () => {
-    setDisplay('Report');
-  };
-
+  const handleReportEvent = () => setDisplay('Report');
   const toggleDrawer = (event) => {
     setDisplay(event);
     // only fetch api data first time load
@@ -85,15 +129,12 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
       dispatch(eventActions.getItemList({ eventID }));
     }
   };
-
   const shouldDisableViewItemList = (disabled, userDetail) => {
     if (disabled) {
       return true;
     }
-
     const user = userDetail?.userID;
     const sharableGroups = userDetail?.sharable_groups || [];
-
     if (sharableGroups.includes(user)) {
       return false;
     }
@@ -130,10 +171,9 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Configure event with custom settings">
-              <IconButton>
-                {/* settings to show the ability to leave event and / or volunteer event. */}
-                <SettingsRounded />
+            <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
+              <IconButton onClick={toggleEditMode}>
+                {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
               </IconButton>
             </Tooltip>
           </Box>
@@ -151,11 +191,14 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
             <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}
         </Box>
+        <CardActions>
+          <Button onClick={handleAddItem}>Add Item</Button>
+          <Button onClick={handleViewItems}>View Items</Button>
+        </CardActions>
+        {editMode && (
+          <EditCommunityEvent userDetail={userDetail} handleUserDetail={handleUserDetail} isActivated={isActivated} />
+        )}
       </CardContent>
-      <CardActions>
-        <Button onClick={handleAddItem}>Add Item</Button>
-        <Button onClick={handleViewItems}>View Items</Button>
-      </CardActions>
       <EventItemDrawer
         open={display === 'View'}
         disabled={disabled}
@@ -163,6 +206,12 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
         toggleDrawer={toggleDrawer}
         shouldDisableViewItemList={shouldDisableViewItemList}
       />
+      {display === 'Save' && (
+        <Dialog open width={'md'} fullWidth={true}>
+          <Title onClose={() => setDisplay(0)}>Add New Item</Title>
+          <AddItemDetail eventID={eventID} userID={userDetail.userID} setDisplayMode={setDisplay} />
+        </Dialog>
+      )}
       {display === 'Add' && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>

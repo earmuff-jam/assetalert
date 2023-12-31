@@ -629,18 +629,25 @@ func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 		id, _ := uuid.Parse(draftEvent.ID)
 		updateFields["id"] = id
 	}
+	if draftEvent.Title != "" {
+		updateFields["title"] = draftEvent.Title
+	}
 	if draftEvent.DeactivatedReason != "" {
 		updateFields["deactivated_reason"] = draftEvent.DeactivatedReason
 	}
 	if draftEvent.IsActivated {
 		updateFields["is_activated"] = draftEvent.IsActivated
 	}
-
+	if len(draftEvent.Comments) > 0 {
+		updateFields["comments"] = draftEvent.Comments
+	}
+	if draftEvent.MaxAttendees > 0 {
+		updateFields["max_attendees"] = draftEvent.MaxAttendees
+	}
 	// prevents the creator from leaving the group
 	if len(draftEvent.Attendees) != 0 {
 		updateFields["attendees"] = draftEvent.Attendees
 	}
-
 	// prevents the creator from leaving the group
 	if len(draftEvent.SharableGroups) != 0 {
 		updateFields["sharable_groups"] = draftEvent.SharableGroups
@@ -664,7 +671,7 @@ func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 	}
 
 	// Build the psql depending on the type and event item that is passed in
-	for _, field := range []string{"deactivated_reason", "is_activated", "attendees", "sharable_groups", "updated_at", "updated_by"} {
+	for _, field := range []string{"title", "deactivated_reason", "is_activated", "comments", "max_attendees", "attendees", "sharable_groups", "updated_at", "updated_by"} {
 		if value, ok := updateFields[field]; ok {
 			// since these are slices, we want to handle them differently
 			if field == "attendees" || field == "sharable_groups" {
