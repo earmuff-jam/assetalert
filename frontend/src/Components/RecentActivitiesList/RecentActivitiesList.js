@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, makeStyles } from '@material-ui/core';
-
-import { produce } from 'immer';
 import RecentActivity from './RecentActivity';
 import EmptyComponent from '../../util/EmptyComponent';
 

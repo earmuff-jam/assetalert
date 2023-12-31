@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { FiberManualRecordRounded } from '@material-ui/icons';
-import { Box, Divider, TextField, Typography, makeStyles } from '@material-ui/core';
+import { Box, TextField, Typography, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   emptyGap: {
     flexGrow: 1,
-  }
+  },
 }));
 
 const SearchAllEvents = ({ events, setSearchValue }) => {
@@ -76,13 +76,13 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
       getOptionLabel={(option) => option.title}
       renderOption={(params) => (
         <Box className={classes.columnContainer}>
-        <Box className={classes.rowContainer}>
-          <Typography className={classes.optionText}>{params.title}</Typography>
-          <Box className={classes.emptyGap}></Box>
-          <FiberManualRecordRounded
-            className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.is_activated })}
-          />
-        </Box>
+          <Box className={classes.rowContainer}>
+            <Typography className={classes.optionText}>{params.title}</Typography>
+            <Box className={classes.emptyGap}></Box>
+            <FiberManualRecordRounded
+              className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.is_activated })}
+            />
+          </Box>
         </Box>
       )}
       renderInput={(params) => (

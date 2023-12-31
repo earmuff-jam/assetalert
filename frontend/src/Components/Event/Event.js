@@ -177,7 +177,7 @@ const Event = (props) => {
                 data-tour="4"
                 onClick={() => toggleDisplayMode({ status: !display.status, value: '' })}
               >
-                <Badge badgeContent={reports?.length || 0} color="error">
+                <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
                   <BugReportRounded />
                 </Badge>
               </IconButton>

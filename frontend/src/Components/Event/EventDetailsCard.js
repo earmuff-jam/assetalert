@@ -117,9 +117,8 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
           <Box>
             <Button
               data-tour="3"
-              className={classes.btnRoot}
               variant="text"
-              color={userDetail?.userIsMember ? 'error' : 'primary'}
+              className={classes.btnRoot}
               onClick={userDetail?.userIsMember ? onLeave : onJoin}
             >
               {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
@@ -127,7 +126,7 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
 
             <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
               <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
-                <Badge badgeContent={reports?.length || 0} color="error">
+                <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
                   <BugReportRounded />
                 </Badge>
               </IconButton>
@@ -149,8 +148,8 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
           </Tooltip>
         </Box>
         <Box className={classes.rowContainer}>
-          {userDetail?.requiredSkills.map((v) => (
-            <Chip size="small" icon={<LowPriorityRounded />} label={v} />
+          {userDetail?.requiredSkills.map((v, index) => (
+            <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}
         </Box>
       </CardContent>

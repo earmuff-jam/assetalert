@@ -226,7 +226,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
             }}
             getOptionLabel={(option) => option.type}
             renderInput={(params) => <TextField {...params} label="Project Type" variant="standard" />}
-            error={touched.project_type && !!errors.project_type ? true : undefined}
           />
         </Box>
         <TextField
@@ -253,7 +252,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
             helperText={touched.city && errors.city}
           />
           <Autocomplete
-            id="project-type-autocomplete"
+            id="states-list-autocomplete"
             fullWidth
             options={allStatesList}
             onChange={(e, value) => {
@@ -262,8 +261,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
             }}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => <TextField {...params} label="US State" variant="standard" />}
-            error={touched.project_type && !!errors.project_type}
-            helperText={touched.project_type && errors.project_type}
           />
         </Box>
         <Box className={classnames(classes.rowContainer, classes.marginBottom)}>
@@ -306,7 +303,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
             id="selected-event"
             multiple
             fullWidth
-            forcePopup
             options={SKILLS_REQUIRED_OPTIONS}
             onChange={(e, value) => {
               // value here is an array of items
@@ -314,8 +310,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
             }}
             getOptionLabel={(option) => option}
             renderInput={(params) => <TextField {...params} label="Volunteering" variant="standard" />}
-            error={touched.skills_required && !!errors.skills_required}
-            helperText={touched.skills_required && errors.skills_required}
+            // error={touched.skills_required && !!errors.skills_required}
           />
         </Box>
         <Box className={classes.rowContainer}>
