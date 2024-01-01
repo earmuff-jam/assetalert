@@ -56,8 +56,6 @@ const EventDetailPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isDeactivated, setIsDeactivated] = useState(false); // events are active by default
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
   const [userDetail, setUserDetail] = useState(BLANK_USER_DETAILS);
   const [userDetailError, setUserDetailError] = useState(BLANK_USER_ERROR_DETAILS);
 
@@ -233,22 +231,12 @@ const EventDetailPage = () => {
       userDetailsDraft.location = location;
       userDetailsDraft.comments = comments;
       userDetailsDraft.id = id;
+      userDetailsDraft.imageUrl = imageUrl;
       setIsDeactivated(deactivated);
       setIsChecked(userHasRsvp);
-      if (uploadedImage) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result.split(',')[1];
-          setSelectedImage(base64String);
-        };
-        reader.readAsDataURL(selectedImage);
-      } else {
-        setSelectedImage(imageUrl);
-      }
       setUserDetail(userDetailsDraft);
     }
     setEditMode(false);
-    // we don't need image on the render cycle ( uploadedImage || selectedImage )
     // eslint-disable-next-line
   }, [
     loadingProfileDetails,
@@ -274,19 +262,14 @@ const EventDetailPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <EventDetailsCard
+            eventID={eventID}
+            reports={reports}
             userDetail={userDetail}
             isDeactivated={isDeactivated}
             userDetailError={userDetailError}
             setIsDeactivated={setIsDeactivated}
             handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
-            setSelectedImage={setSelectedImage}
-            selectedImage={selectedImage}
-            uploadedImage={uploadedImage}
-            setUploadedImage={setUploadedImage}
-            eventID={eventID}
-            selectedEvent={selectedEvent}
-            reports={reports}
             onLeave={() => {
               handleLeave(userDetail.sharable_groups, userDetail.userID);
             }}

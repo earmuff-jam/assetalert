@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Box, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { Avatar, Box, Typography, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import EditProfileImage from '../EditProfileImage/EditProfileImage';
 import { useDispatch } from 'react-redux';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { eventActions } from '../../Containers/Event/eventSlice';
+import EditEventImage from './EditEventImage';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
   errorText: {
     color: theme.palette.error.dark,
@@ -35,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = ({ formFields, profileDetails }) => {
+const EventProfile = ({ userDetail }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -51,59 +54,50 @@ const UserProfile = ({ formFields, profileDetails }) => {
     }
   };
 
-  const handleSubmitImage = async (userID) => {
-    dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
+  const handleSubmitImage = async (id) => {
+    dispatch(eventActions.updateEventImage({ selectedImage: uploadedImage, eventID: id }));
     toggleEditImage();
     setEditImage(!editImage);
   };
 
   useEffect(() => {
-    if (profileDetails?.avatar_url) {
-      setSelectedImage(profileDetails?.avatar_url);
+    if (userDetail?.imageUrl) {
+      setSelectedImage(userDetail?.imageUrl);
     }
-  }, [profileDetails?.avatar_url]);
+  }, [userDetail?.imageUrl]);
 
   return (
-    <Box>
+    <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
       <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
         {editImage ? (
-          <EditProfileImage
+          <EditEventImage
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
             uploadedImage={uploadedImage}
             setUploadedImage={setUploadedImage}
             toggleEditImage={toggleEditImage}
             submit={handleSubmitImage}
-            profileDetails={profileDetails}
+            eventID={userDetail.id}
           />
         ) : (
           <Avatar
-            alt="your avatar"
+            alt="event avatar"
             src={selectedImage && `data:image/png;base64,${selectedImage}`}
             className={classes.avatar}
             onClick={toggleEditImage}
           />
         )}
-
-        <Box>
-          <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
-            {formFields.name.value || 'Anonymous'}
-          </Typography>
-          <Typography className={classes.aboutMe} gutterBottom>
-            {formFields.aboutMe.value || 'Edit profile details to add description'}
-          </Typography>
-          <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
-            <Tooltip title="Your username in the application">
-              <Chip size="small" icon={formFields.username.icon} label={formFields.username.value} />
-            </Tooltip>
-            <Tooltip title="Your mobile phone information">
-              <Chip size="small" icon={formFields.phone.icon} label={formFields.phone.value} />
-            </Tooltip>
-          </Box>
-        </Box>
+      </Box>
+      <Box>
+        <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
+          {userDetail?.title || ''}
+        </Typography>
+        <Typography className={classes.text} gutterBottom>
+          {userDetail?.description || 'Edit event details to add description'}
+        </Typography>
       </Box>
     </Box>
   );
 };
 
-export default UserProfile;
+export default EventProfile;

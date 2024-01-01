@@ -25,24 +25,21 @@ import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import { enqueueSnackbar } from 'notistack';
 import { homeActions } from '../../Containers/Home/homeSlice';
+import EventProfile from './EventProfile';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
   },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+  },
+  columnVariantSm: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
   emptyGap: {
     flexGrow: 1,
@@ -160,14 +157,7 @@ const EventDetailsCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classes.rowContainer}>
-          <Box>
-            <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
-              {userDetail?.title || ''}
-            </Typography>
-            <Typography className={classes.text} gutterBottom>
-              {userDetail?.description || 'Edit event details to add description'}
-            </Typography>
-          </Box>
+          <EventProfile userDetail={userDetail} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             <Button
@@ -201,7 +191,7 @@ const EventDetailsCard = ({
             <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0} attendees `} />
           </Tooltip>
         </Box>
-        <Box className={classes.rowContainer}>
+        <Box className={classNames((classes.rowContainer, classes.columnVariantSm))}>
           {userDetail?.requiredSkills.map((v, index) => (
             <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}
