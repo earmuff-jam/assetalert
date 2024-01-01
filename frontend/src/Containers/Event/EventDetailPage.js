@@ -8,7 +8,7 @@ import { produce } from 'immer';
 import '../../Components/Map/styles.css';
 import { eventActions } from './eventSlice';
 import { homeActions } from '../Home/homeSlice';
-import { BLANK_USER_DETAILS } from './constants';
+import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
 import { profileActions } from '../Profile/profileSlice';
 import SecondaryAppBar from '../../Components/AppBar/SecondaryAppBar';
 import EventDetailsCard from '../../Components/Event/EventDetailsCard';
@@ -55,12 +55,30 @@ const EventDetailPage = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [isDeactivated, setIsDeactivated] = useState(false); // events are active by default
   const [userDetail, setUserDetail] = useState(BLANK_USER_DETAILS);
+  const [userDetailError, setUserDetailError] = useState(BLANK_USER_ERROR_DETAILS);
+
+  const handleUserDetail = (event) => {
+    const { name, value } = event.target;
+    setUserDetail(
+      produce((draft) => {
+        draft[name] = value;
+      })
+    );
+    setUserDetailError(
+      produce((draft) => {
+        if (!value || value.length <= 0 || value.length >= 100) {
+          draft[name] = 'Invalid value';
+        } else {
+          draft[name] = false;
+        }
+      })
+    );
+  };
 
   const displaySecondaryMenuBar = (event) => {
-    if (event.is_activated) {
+    if (event.deactivated) {
       return true;
     }
     return false;
@@ -183,10 +201,13 @@ const EventDetailPage = () => {
       const imageUrl = selectedEvent?.image_url;
       const userHasRsvp = selectedEvent?.attendees?.includes(profileDetails.id);
       const userIsMember = selectedEvent?.sharable_groups?.includes(profileDetails.id);
-      const totalAllocatedMembers = selectedEvent?.required_total_man_hours;
+      const totalAllocatedMembers = selectedEvent?.max_attendees;
       const requiredSkills = selectedEvent?.skills_required;
       const sharableGroups = selectedEvent?.sharable_groups;
       const attendees = selectedEvent.attendees;
+      const comments = selectedEvent.comments;
+      const id = selectedEvent.id;
+      const deactivated = selectedEvent.deactivated;
       const location = {
         boundingbox: selectedEvent.boundingbox,
         class: selectedEvent.class,
@@ -208,21 +229,14 @@ const EventDetailPage = () => {
       userDetailsDraft.title = title;
       userDetailsDraft.totalAllocatedMembers = totalAllocatedMembers;
       userDetailsDraft.location = location;
+      userDetailsDraft.comments = comments;
+      userDetailsDraft.id = id;
+      userDetailsDraft.imageUrl = imageUrl;
+      setIsDeactivated(deactivated);
       setIsChecked(userHasRsvp);
-      if (uploadedImage) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result.split(',')[1];
-          setSelectedImage(base64String);
-        };
-        reader.readAsDataURL(selectedImage);
-      } else {
-        setSelectedImage(imageUrl);
-      }
       setUserDetail(userDetailsDraft);
     }
     setEditMode(false);
-    // we don't need image on the render cycle ( uploadedImage || selectedImage )
     // eslint-disable-next-line
   }, [
     loadingProfileDetails,
@@ -248,15 +262,14 @@ const EventDetailPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <EventDetailsCard
-            disabled={shouldDisplaySecondMenuBar}
-            setSelectedImage={setSelectedImage}
-            selectedImage={selectedImage}
-            uploadedImage={uploadedImage}
-            setUploadedImage={setUploadedImage}
-            userDetail={userDetail}
             eventID={eventID}
-            selectedEvent={selectedEvent}
             reports={reports}
+            userDetail={userDetail}
+            isDeactivated={isDeactivated}
+            userDetailError={userDetailError}
+            setIsDeactivated={setIsDeactivated}
+            handleUserDetail={handleUserDetail}
+            disabled={shouldDisplaySecondMenuBar}
             onLeave={() => {
               handleLeave(userDetail.sharable_groups, userDetail.userID);
             }}

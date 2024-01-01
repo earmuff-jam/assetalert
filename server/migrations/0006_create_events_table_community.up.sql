@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS projects
     max_attendees            INT,
     attendees                UUID[]                   NOT NULL,
     required_total_man_hours INT                      NOT NULL,
-    is_activated             TEXT                     NOT NULL DEFAULT true,
+    deactivated              BOOLEAN                  NOT NULL DEFAULT false,
     deactivated_reason       TEXT                     NULL,
     start_date               TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at               TIMESTAMP WITH TIME ZONE          DEFAULT CURRENT_TIMESTAMP,

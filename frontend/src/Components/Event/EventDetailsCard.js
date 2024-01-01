@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-import { LowPriorityRounded, SettingsRounded, GroupRounded, BugReportRounded } from '@material-ui/icons';
+import { LowPriorityRounded, GroupRounded, BugReportRounded, EditRounded, DoneRounded } from '@material-ui/icons';
 import {
   Box,
   Card,
@@ -11,7 +11,6 @@ import {
   CardActions,
   Button,
   Chip,
-  Typography,
   IconButton,
   Dialog,
   Tooltip,
@@ -22,24 +21,33 @@ import { eventActions } from '../../Containers/Event/eventSlice';
 import Title from '../DialogComponent/Title';
 import EventItemDrawer from './EventItemDrawer';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
+import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
+import { enqueueSnackbar } from 'notistack';
+import { homeActions } from '../../Containers/Home/homeSlice';
+import EventProfile from './EventProfile';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
   },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+  },
+  columnVariant: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      gap: theme.spacing(0),
+    },
+  },
+  chipContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
   },
   emptyGap: {
     flexGrow: 1,
@@ -58,26 +66,82 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, reports, onLeave, onJoin }) => {
+const EventDetailsCard = ({
+  disabled,
+  userDetail,
+  handleUserDetail,
+  userDetailError,
+  eventID,
+  isDeactivated,
+  setIsDeactivated,
+  selectedEvent,
+  reports,
+  onLeave,
+  onJoin,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [display, setDisplay] = useState(0);
+  const [editMode, setEditMode] = useState(false); // editing general fields for select event
 
+  const toggleEditMode = () => {
+    if (editMode) {
+      const editingTitleLength = userDetail.title.length || 0;
+      const editingAllocatedMembersCount = userDetail.totalAllocatedMembers.length || 0;
+      if (
+        editingTitleLength <= 0 ||
+        editingTitleLength >= 100 ||
+        isNaN(userDetail.totalAllocatedMembers) ||
+        (isNaN(editingAllocatedMembersCount) && Number(editingAllocatedMembersCount) > 0) ||
+        Object.values(userDetailError).filter(Boolean).length > 0
+      ) {
+        enqueueSnackbar('Unable to update event.', {
+          variant: 'error',
+        });
+        return;
+      }
+      // userID is retrieved from local storage
+      const userID = localStorage.getItem('userID');
+      // flushGeneralEventDetails updates only selected event reducer
+      // homeActions.updateEvent will update the db, this gives us ability to view
+      // data as a two way binding mechanism.
+      dispatch(
+        eventActions.flushGeneralEventDetails({
+          id: userDetail.id,
+          title: userDetail.title,
+          deactivated: isDeactivated,
+          comments: userDetail.comments,
+          max_attendees: Number(userDetail.totalAllocatedMembers),
+          updated_by: userID,
+        })
+      );
+      dispatch(
+        homeActions.updateEvent({
+          ...userDetail,
+          id: userDetail.id,
+          title: userDetail.title,
+          deactivated: isDeactivated,
+          comments: userDetail.comments,
+          max_attendees: Number(userDetail.totalAllocatedMembers),
+          updated_by: userID,
+        })
+      );
+      enqueueSnackbar('Sucessfully updated event', {
+        variant: 'success',
+      });
+    }
+    setEditMode(!editMode);
+  };
   const handleViewItems = () => {
     setDisplay('View');
     dispatch(eventActions.getItemList({ eventID }));
   };
-
   const handleAddItem = () => {
     setDisplay('Add');
     dispatch(eventActions.getStorageLocations(eventID));
   };
-
-  const handleReportEvent = () => {
-    setDisplay('Report');
-  };
-
+  const handleReportEvent = () => setDisplay('Report');
   const toggleDrawer = (event) => {
     setDisplay(event);
     // only fetch api data first time load
@@ -85,15 +149,12 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
       dispatch(eventActions.getItemList({ eventID }));
     }
   };
-
   const shouldDisableViewItemList = (disabled, userDetail) => {
     if (disabled) {
       return true;
     }
-
     const user = userDetail?.userID;
     const sharableGroups = userDetail?.sharable_groups || [];
-
     if (sharableGroups.includes(user)) {
       return false;
     }
@@ -103,15 +164,8 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Box className={classes.rowContainer}>
-          <Box>
-            <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
-              {userDetail?.title || ''}
-            </Typography>
-            <Typography className={classes.text} gutterBottom>
-              {userDetail?.description || 'Edit event details to add description'}
-            </Typography>
-          </Box>
+        <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
+          <EventProfile userDetail={userDetail} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             <Button
@@ -130,10 +184,9 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Configure event with custom settings">
-              <IconButton>
-                {/* settings to show the ability to leave event and / or volunteer event. */}
-                <SettingsRounded />
+            <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
+              <IconButton onClick={toggleEditMode}>
+                {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
               </IconButton>
             </Tooltip>
           </Box>
@@ -146,16 +199,24 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
             <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0} attendees `} />
           </Tooltip>
         </Box>
-        <Box className={classes.rowContainer}>
+        <Box className={classNames((classes.rowContainer, classes.chipContainer))}>
           {userDetail?.requiredSkills.map((v, index) => (
             <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}
         </Box>
+        <CardActions>
+          <Button onClick={handleAddItem}>Add Item</Button>
+          <Button onClick={handleViewItems}>View Items</Button>
+        </CardActions>
+        {editMode && (
+          <EditCommunityEvent
+            userDetail={userDetail}
+            handleUserDetail={handleUserDetail}
+            isDeactivated={isDeactivated}
+            setIsDeactivated={setIsDeactivated}
+          />
+        )}
       </CardContent>
-      <CardActions>
-        <Button onClick={handleAddItem}>Add Item</Button>
-        <Button onClick={handleViewItems}>View Items</Button>
-      </CardActions>
       <EventItemDrawer
         open={display === 'View'}
         disabled={disabled}
@@ -163,6 +224,12 @@ const EventDetailsCard = ({ disabled, userDetail, eventID, selectedEvent, report
         toggleDrawer={toggleDrawer}
         shouldDisableViewItemList={shouldDisableViewItemList}
       />
+      {display === 'Save' && (
+        <Dialog open width={'md'} fullWidth={true}>
+          <Title onClose={() => setDisplay(0)}>Add New Item</Title>
+          <AddItemDetail eventID={eventID} userID={userDetail.userID} setDisplayMode={setDisplay} />
+        </Dialog>
+      )}
       {display === 'Add' && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>

@@ -171,6 +171,19 @@ const eventSlice = createSlice({
         updated_by,
       };
     },
+    // flushGeneralEventDetails fn is used to only update the reducer
+    // no saga action is involved
+    flushGeneralEventDetails: (state, action) => {
+      const { title, deactivated, comments, max_attendees, updated_by } = action.payload;
+      state.selectedEvent = {
+        ...state.selectedEvent,
+        title,
+        deactivated,
+        comments,
+        max_attendees,
+        updated_by,
+      };
+    },
   },
 });
 

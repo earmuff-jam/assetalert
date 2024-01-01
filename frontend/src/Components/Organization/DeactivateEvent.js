@@ -52,14 +52,13 @@ const DeactivateEvent = ({ events }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // we should change is_activated to is_deactivated. TODO
     const userID = localStorage.getItem('userID');
     dispatch(
       homeActions.updateEvent({
         ...event,
         id: event.eventID,
         deactivated_reason: event.reason,
-        is_activated: true,
+        deactivated: true,
         updated_by: userID,
       })
     );

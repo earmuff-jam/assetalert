@@ -12,7 +12,9 @@ import {
   Tooltip,
   CardActions,
   Chip,
+  Avatar,
 } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -22,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(1),
   },
   cardMedia: {
-    height: 140,
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   contentHeader: {
     display: 'flex',
@@ -37,15 +40,30 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     lineHeight: '1.5rem',
     color: theme.palette.primary.main,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   textDetails: {
-    fontSize: '0.925rem',
+    fontSize: '0.825rem',
     lineHeight: '1.5rem',
+  },
+  active: {
+    color: theme.palette.primary.main,
   },
   rowAlign: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacing(1),
+  },
+  gutterBottom: {
+    marginBottom: theme.spacing(1),
+  },
+  presetWidth: {
+    width: theme.spacing(14),
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(20),
+    },
   },
   buttonContainer: {
     borderRadius: theme.spacing(0),
@@ -67,20 +85,33 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
         const formattedDate = moment(event.start_date).fromNow();
         const formattedDay = moment(event.start_date).format('dd');
         return (
-          <Grid item xs={12} sm={3} key={event.id}>
+          <Grid item xs={12} md={3} key={event.id}>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <Box className={classes.contentHeader}>
-                  <Typography className={classes.headerText}>{event.title}</Typography>
-                  <Tooltip title={`Start Date: ${formattedDate}`}>
+                  <Box className={classNames(classes.rowAlign, classes.gutterBottom)}>
+                    <Avatar
+                      alt="Event Image"
+                      className={classes.cardMedia}
+                      src={
+                        event?.image_url
+                          ? event.image_url && `data:image/png;base64,${event.image_url}`
+                          : `${process.env.PUBLIC_URL}/blank-canvas.png`
+                      }
+                    />
+                    <Box className={classes.presetWidth}>
+                      <Typography className={classes.headerText}>{event.title}</Typography>
+                      <Typography className={classes.textDetails} gutterBottom>
+                        {event.cause}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Tooltip title={`Start Date: ${formattedDate}`} placement='top'>
                     <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
                   </Tooltip>
                 </Box>
-                <Typography className={classes.textDetails} gutterBottom>
-                  {event.cause}
-                </Typography>
                 <Box className={classes.rowAlign}>
-                  <Typography className={classes.textDetails} gutterBottom>
+                  <Typography className={classNames(classes.textDetails, classes.active)} gutterBottom>
                     {`${event?.skills_required?.map((v) => v).length} active skills`}
                   </Typography>
                   <Chip label={formattedDate} />

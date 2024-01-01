@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import EmptyComponent from '../../util/EmptyComponent';
 import ViewFilteredEventList from './ViewFilteredEventList';
-import SearchAllEvents from '../Organization/SearchAllEvents';
+import SearchAllEvents from '../Event/SearchAllEvents';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -84,7 +84,7 @@ const ViewEventListDetails = (props) => {
       const filteredEvent = currentEvents?.filter((v) => v.id === searchValue.id);
       setFilteredOptions(filteredEvent);
     } else {
-      const filteredEventByActivation = currentEvents?.filter((v) => !v.is_activated); // is_activated should have been is_deactivated
+      const filteredEventByActivation = currentEvents?.filter((v) => !v.deactivated);
       setFilteredOptions(filteredEventByActivation);
     }
   }, [searchValue, currentEvents]);

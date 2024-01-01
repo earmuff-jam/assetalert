@@ -6,7 +6,7 @@ INSERT INTO auth.users(email, role, encrypted_password) values ('test@gmail.com'
 
 -- ADD EVENTS SQL TEST DATA --
 
-INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, is_activated, start_date, created_by, updated_by, sharable_groups)
+INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
 values (
 'SCFT Inventory List',
 'South Carolina Football Team Inventory List',
@@ -23,7 +23,7 @@ array [(select id from profiles p2 limit 1)::UUID]
 );
 
 
-INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, is_activated, start_date, created_by, updated_by, sharable_groups)
+INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
 values (
 'North Carolina Football Team',
 'North Carolina football team',
@@ -40,7 +40,7 @@ array [(select id from profiles p2 limit 1)::UUID]
 );
 
 -- since this is deactivated by default, you will not be able to see this event --
-INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, is_activated, start_date, created_by, updated_by, sharable_groups)
+INSERT INTO community.projects(title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
 values (
 'Worthington Football Team',
 'Worthington Football Team',

@@ -80,7 +80,7 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
             <Typography className={classes.optionText}>{params.title}</Typography>
             <Box className={classes.emptyGap}></Box>
             <FiberManualRecordRounded
-              className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.is_activated })}
+              className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.deactivated })}
             />
           </Box>
         </Box>
