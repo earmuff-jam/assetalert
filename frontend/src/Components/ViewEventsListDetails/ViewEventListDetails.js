@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import EmptyComponent from '../../util/EmptyComponent';
 import ViewFilteredEventList from './ViewFilteredEventList';
-import SearchAllEvents from '../Organization/SearchAllEvents';
+import SearchAllEvents from '../Event/SearchAllEvents';
 
 const useStyles = makeStyles((theme) => ({
   container: {
