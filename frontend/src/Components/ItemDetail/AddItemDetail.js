@@ -59,7 +59,7 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
 
     // ensure that the storage location is not empty
     if (containsErr || isRequiredFieldsEmpty || storageLocation === null || Object.keys(storageLocation).length <= 0) {
-      enqueueSnackbar('Cannot update user profile details.', {
+      enqueueSnackbar('Cannot add new item.', {
         variant: 'error',
       });
       return;
