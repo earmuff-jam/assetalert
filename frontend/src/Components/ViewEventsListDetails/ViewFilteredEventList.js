@@ -12,6 +12,8 @@ import {
   Tooltip,
   CardActions,
   Chip,
+  CardMedia,
+  Avatar,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(1),
   },
   cardMedia: {
-    height: 140,
+    width: theme.spacing(6),
+    height: theme.spacing(6),
   },
   contentHeader: {
     display: 'flex',
@@ -39,9 +42,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   textDetails: {
-    fontSize: '0.925rem',
+    fontSize: '0.825rem',
     lineHeight: '1.5rem',
   },
+  smallVariant: {},
   rowAlign: {
     display: 'flex',
     flexDirection: 'row',
@@ -71,14 +75,28 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <Box className={classes.contentHeader}>
-                  <Typography className={classes.headerText}>{event.title}</Typography>
+                  <Box className={classes.rowAlign}>
+                    <Avatar
+                      alt="Empty image for selected event."
+                      className={classes.cardMedia}
+                      src={
+                        event?.image_url
+                          ? event.image_url && `data:image/png;base64,${event.image_url}`
+                          : `${process.env.PUBLIC_URL}/blank-canvas.png`
+                      }
+                    />
+                    <Box>
+                      <Typography className={classes.headerText}>{event.title}</Typography>
+                      <Typography className={classes.textDetails} gutterBottom>
+                        {event.cause}
+                      </Typography>
+                    </Box>
+                  </Box>
                   <Tooltip title={`Start Date: ${formattedDate}`}>
                     <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
                   </Tooltip>
                 </Box>
-                <Typography className={classes.textDetails} gutterBottom>
-                  {event.cause}
-                </Typography>
+
                 <Box className={classes.rowAlign}>
                   <Typography className={classes.textDetails} gutterBottom>
                     {`${event?.skills_required?.map((v) => v).length} active skills`}

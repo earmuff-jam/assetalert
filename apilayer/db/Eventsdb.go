@@ -26,7 +26,10 @@ func RetrieveAllEvents(user string) ([]model.Event, error) {
 	ev.title,
 	ev.description,
 	ev.cause,
-	ev.image_url,
+	CASE 
+	   	WHEN ev.image_url IS NOT NULL THEN ENCODE(ev.image_url::bytea,'base64')
+		ELSE ''
+	END AS base64,
 	ev.street,
 	ev.city,
 	ev.state,
