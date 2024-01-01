@@ -65,6 +65,7 @@ const EventDetailsCard = ({
   disabled,
   userDetail,
   handleUserDetail,
+  userDetailError,
   eventID,
   isDeactivated,
   setIsDeactivated,
@@ -86,9 +87,11 @@ const EventDetailsCard = ({
       if (
         editingTitleLength <= 0 ||
         editingTitleLength >= 100 ||
-        (isNaN(editingAllocatedMembersCount) && Number(editingAllocatedMembersCount) > 0)
+        isNaN(userDetail.totalAllocatedMembers) ||
+        (isNaN(editingAllocatedMembersCount) && Number(editingAllocatedMembersCount) > 0) ||
+        Object.values(userDetailError).filter(Boolean).length > 0
       ) {
-        enqueueSnackbar('Unable to update event', {
+        enqueueSnackbar('Unable to update event.', {
           variant: 'error',
         });
         return;
@@ -104,7 +107,7 @@ const EventDetailsCard = ({
           title: userDetail.title,
           deactivated: isDeactivated,
           comments: userDetail.comments,
-          max_attendees: userDetail.totalAllocatedMembers,
+          max_attendees: Number(userDetail.totalAllocatedMembers),
           updated_by: userID,
         })
       );
@@ -115,7 +118,7 @@ const EventDetailsCard = ({
           title: userDetail.title,
           deactivated: isDeactivated,
           comments: userDetail.comments,
-          max_attendees: userDetail.totalAllocatedMembers,
+          max_attendees: Number(userDetail.totalAllocatedMembers),
           updated_by: userID,
         })
       );

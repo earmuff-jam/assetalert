@@ -13,3 +13,9 @@ export const BLANK_USER_DETAILS = {
   attendees: [],
   location: {},
 };
+
+export const BLANK_USER_ERROR_DETAILS = {
+  title: '',
+  comments: '',
+  totalAllocatedMembers: '',
+};
