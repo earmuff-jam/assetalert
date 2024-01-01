@@ -61,9 +61,7 @@ const EventProfile = ({ userDetail }) => {
   };
 
   useEffect(() => {
-    if (userDetail?.imageUrl) {
-      setSelectedImage(userDetail?.imageUrl);
-    }
+    setSelectedImage(userDetail?.imageUrl);
   }, [userDetail?.imageUrl]);
 
   return (

@@ -77,7 +77,7 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                 <Box className={classes.contentHeader}>
                   <Box className={classes.rowAlign}>
                     <Avatar
-                      alt="Empty image for selected event."
+                      alt="Empty image for selected event"
                       className={classes.cardMedia}
                       src={
                         event?.image_url
