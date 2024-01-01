@@ -1,7 +1,9 @@
-import React from 'react';
-import { Avatar, Box, Chip, Divider, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Box, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import EditProfileImage from '../EditProfileImage/EditProfileImage';
+import { useDispatch } from 'react-redux';
+import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,19 +44,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = ({
-  formFields,
-  avatarSrc,
-  selectedImage,
-  setSelectedImage,
-  uploadedImage,
-  submit,
-  profileDetails,
-  setUploadedImage,
-  editImage,
-  toggleEditImage,
-}) => {
+const UserProfile = ({ formFields, profileDetails }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [editImage, setEditImage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+  const toggleEditImage = () => {
+    setEditImage(!editImage);
+    const input = document.querySelector('input[type="file"]');
+    if (input) {
+      input.value = ''; // Reset the value of the input to clear the selected file (if possible)
+    }
+  };
+
+  const handleSubmitImage = async (userID) => {
+    dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
+    toggleEditImage();
+    setEditImage(!editImage);
+  };
+
+  useEffect(() => {
+    if (profileDetails?.avatar_url) {
+      setSelectedImage(profileDetails?.avatar_url);
+    }
+  }, [profileDetails?.avatar_url]);
 
   return (
     <Box>
@@ -66,13 +82,13 @@ const UserProfile = ({
             uploadedImage={uploadedImage}
             setUploadedImage={setUploadedImage}
             toggleEditImage={toggleEditImage}
-            submit={submit}
+            submit={handleSubmitImage}
             profileDetails={profileDetails}
           />
         ) : (
           <Avatar
             alt="your avatar"
-            src={avatarSrc && `data:image/png;base64,${avatarSrc}`}
+            src={selectedImage && `data:image/png;base64,${selectedImage}`}
             className={classes.avatar}
             onClick={toggleEditImage}
           />

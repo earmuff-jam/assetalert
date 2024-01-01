@@ -44,11 +44,7 @@ const ProfileDetailPage = () => {
   const userCreatedEvents = events?.filter((v) => v.created_by === profileDetails.id);
   const usernameOrFullName = profileDetails.username || profileDetails.full_name || 'Anonymous';
 
-  const [editImage, setEditImage] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
-
   const [formFields, setFormFields] = useState(USER_PROFILE_FORM_FIELDS);
 
   const handleInput = (event) => {
@@ -69,23 +65,7 @@ const ProfileDetailPage = () => {
     });
   };
 
-  const removeSelectedImage = () => {
-    setSelectedImage(null);
-    setUploadedImage(null);
-    const input = document.querySelector('input[type="file"]');
-    if (input) {
-      input.value = ''; // Reset the value of the input to clear the selected file (if possible)
-    }
-  };
-
   const handleToggle = () => setEditMode(!editMode);
-  const toggleEditImage = () => {
-    setEditImage(!editImage);
-    if (uploadedImage) {
-      removeSelectedImage();
-    }
-  };
-
   const handleSubmit = () => {
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {
@@ -117,12 +97,6 @@ const ProfileDetailPage = () => {
     }
   };
 
-  const submit = async (userID) => {
-    dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
-    toggleEditImage();
-    setEditImage(!editImage);
-  };
-
   useEffect(() => {
     dispatch(homeActions.getEvents());
     dispatch(profileActions.getProfileDetails());
@@ -140,9 +114,6 @@ const ProfileDetailPage = () => {
     updatedFormFields.objective.value = profileDetails?.goal || '';
     updatedFormFields.aboutMe.value = profileDetails?.about_me || '';
     setFormFields(updatedFormFields);
-    if (profileDetails.avatar_url) {
-      setSelectedImage(profileDetails?.avatar_url);
-    }
     // eslint-disable-next-line
   }, [profileDetails]);
 
@@ -160,18 +131,11 @@ const ProfileDetailPage = () => {
         <Grid item xs={12}>
           <ProfileDetailsCard
             editMode={editMode}
-            editImage={editImage}
             formFields={formFields}
-            avatarSrc={selectedImage}
             handleInput={handleInput}
             handleSubmit={handleSubmit}
             handleToggle={handleToggle}
-            uploadedImage={uploadedImage}
-            toggleEditImage={toggleEditImage}
-            setUploadedImage={setUploadedImage}
-            setSelectedImage={setSelectedImage}
             profileDetails={profileDetails}
-            submit={submit}
           />
         </Grid>
         <Grid item xs={12} data-tour="11">
