@@ -1,5 +1,5 @@
-import { Chip } from '@material-ui/core';
-import { GroupWorkRounded } from '@material-ui/icons';
+import { Chip, Tooltip } from '@material-ui/core';
+import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
 import moment from 'moment/moment';
 
 export const UNKNOWN_LABEL = 'Unknown';
@@ -33,10 +33,16 @@ export const LABELS = [
     label: 'Requested help on',
     colName: 'skills_required',
     modifier: (value) => {
-      return value
-        .join(', ')
-        .split(',')
-        .map((v) => <Chip size="small" key={v} icon={<GroupWorkRounded />} label={v} />);
+      return value.length > 1 ? (
+        value
+          .join(', ')
+          .split(',')
+          .map((v) => <Chip size="small" key={v} icon={<GroupWorkRounded />} label={v} />)
+      ) : (
+        <Tooltip title="No assistance was requested">
+          <Chip size="small" icon={<AssignmentTurnedInRounded />} label={'No Assistance'} />
+        </Tooltip>
+      );
     },
   },
   {

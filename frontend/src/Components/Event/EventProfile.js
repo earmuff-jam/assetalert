@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing(1),
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   rowContainer: {
     display: 'flex',
@@ -22,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
+  },
+  adjustMaxWidth: {
+    maxWidth: '20rem',
   },
   errorText: {
     color: theme.palette.error.dark,
@@ -86,7 +91,7 @@ const EventProfile = ({ userDetail }) => {
           />
         )}
       </Box>
-      <Box>
+      <Box className={classes.adjustMaxWidth}>
         <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
           {userDetail?.title || ''}
         </Typography>

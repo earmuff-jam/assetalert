@@ -11,7 +11,6 @@ import {
   CardActions,
   Button,
   Chip,
-  Typography,
   IconButton,
   Dialog,
   Tooltip,
@@ -36,8 +35,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
-  columnVariantSm: {
-    [theme.breakpoints.down('sm')]: {
+  columnVariant: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      gap: theme.spacing(0),
+    },
+  },
+  chipContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
   },
@@ -156,7 +164,7 @@ const EventDetailsCard = ({
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Box className={classes.rowContainer}>
+        <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
           <EventProfile userDetail={userDetail} />
           <Box className={classes.emptyGap}></Box>
           <Box>
@@ -191,7 +199,7 @@ const EventDetailsCard = ({
             <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0} attendees `} />
           </Tooltip>
         </Box>
-        <Box className={classNames((classes.rowContainer, classes.columnVariantSm))}>
+        <Box className={classNames((classes.rowContainer, classes.chipContainer))}>
           {userDetail?.requiredSkills.map((v, index) => (
             <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
           ))}

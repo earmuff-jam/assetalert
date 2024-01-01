@@ -12,9 +12,9 @@ import {
   Tooltip,
   CardActions,
   Chip,
-  CardMedia,
   Avatar,
 } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(1),
   },
   cardMedia: {
-    width: theme.spacing(6),
-    height: theme.spacing(6),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   contentHeader: {
     display: 'flex',
@@ -45,11 +45,17 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.825rem',
     lineHeight: '1.5rem',
   },
-  smallVariant: {},
+  active: {
+    color: theme.palette.primary.main,
+  },
   rowAlign: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacing(1),
+  },
+  gutterBottom: {
+    marginBottom: theme.spacing(1),
   },
   buttonContainer: {
     borderRadius: theme.spacing(0),
@@ -71,13 +77,13 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
         const formattedDate = moment(event.start_date).fromNow();
         const formattedDay = moment(event.start_date).format('dd');
         return (
-          <Grid item xs={12} sm={3} key={event.id}>
+          <Grid item xs={12} md={3} key={event.id}>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <Box className={classes.contentHeader}>
-                  <Box className={classes.rowAlign}>
+                  <Box className={classNames(classes.rowAlign, classes.gutterBottom)}>
                     <Avatar
-                      alt="Empty image for selected event"
+                      alt="Event Image"
                       className={classes.cardMedia}
                       src={
                         event?.image_url
@@ -92,13 +98,12 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                       </Typography>
                     </Box>
                   </Box>
-                  <Tooltip title={`Start Date: ${formattedDate}`}>
+                  <Tooltip title={`Start Date: ${formattedDate}`} placement='top'>
                     <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
                   </Tooltip>
                 </Box>
-
                 <Box className={classes.rowAlign}>
-                  <Typography className={classes.textDetails} gutterBottom>
+                  <Typography className={classNames(classes.textDetails, classes.active)} gutterBottom>
                     {`${event?.skills_required?.map((v) => v).length} active skills`}
                   </Typography>
                   <Chip label={formattedDate} />
