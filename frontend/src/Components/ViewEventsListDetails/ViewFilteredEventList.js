@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     lineHeight: '1.5rem',
     color: theme.palette.primary.main,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   textDetails: {
     fontSize: '0.825rem',
@@ -56,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
   },
   gutterBottom: {
     marginBottom: theme.spacing(1),
+  },
+  presetWidth: {
+    width: theme.spacing(14),
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(20),
+    },
   },
   buttonContainer: {
     borderRadius: theme.spacing(0),
@@ -91,7 +99,7 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                           : `${process.env.PUBLIC_URL}/blank-canvas.png`
                       }
                     />
-                    <Box>
+                    <Box className={classes.presetWidth}>
                       <Typography className={classes.headerText}>{event.title}</Typography>
                       <Typography className={classes.textDetails} gutterBottom>
                         {event.cause}
