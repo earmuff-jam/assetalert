@@ -36,12 +36,11 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
   return (
     <Box className={classes.formInputContainer}>
       <TextField
-        key={userDetail.title}
         size={'small'}
         id={userDetail.id}
         name={'title'}
         label={'Event title'}
-        value={userDetail.title}
+        value={userDetail.title || ''}
         variant={'outlined'}
         placeholder={userDetail.title || 'Edit event details to add title'}
         onChange={handleUserDetail}
@@ -54,12 +53,11 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
         }}
       />
       <TextField
-        key={userDetail.totalAllocatedMembers}
         size={'small'}
         id={userDetail.id}
         name={'totalAllocatedMembers'}
         label={'Max attendees'}
-        value={userDetail.totalAllocatedMembers}
+        value={userDetail.totalAllocatedMembers || ''}
         variant={'outlined'}
         placeholder={'Total allocated members'}
         onChange={handleUserDetail}
@@ -72,7 +70,6 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
         }}
       />
       <TextField
-        key={userDetail.id}
         size={'small'}
         id={userDetail.id}
         name={'description'}
