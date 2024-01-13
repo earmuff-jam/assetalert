@@ -1,15 +1,12 @@
 const LANDING_PAGE_TOUR_STEPS = [
   {
-    title:
-      'Welcome to Community Care Application Tutorial. Learn how to navigate the application in thorough detail.',
+    title: 'Welcome to Mashed Application Tutorial. Learn how to navigate the application in thorough detail.',
   },
   {
-    title:
-      'We aim to bring the community together by assisting them in simple auditory tasks',
+    title: 'We aim to bring the community together by assisting them in simple auditory tasks',
   },
   {
-    title:
-      'Map displays the location of every event even if they are deactivated.',
+    title: 'Map displays the location of every event even if they are deactivated.',
   },
   {
     title: 'Buttons help you create, deactivate or even report an event.',
@@ -18,15 +15,13 @@ const LANDING_PAGE_TOUR_STEPS = [
     title: 'You can even search any event through our quick sort and filter',
   },
   {
-    title:
-      'View all existing events that are in active status regardless of who created the event',
+    title: 'View all existing events that are in active status regardless of who created the event',
   },
 ];
 
 const ADD_FORM_TOUR_STEPS = [
   {
-    title:
-      'Ready to create your first event ? Press on the add form to continue.',
+    title: 'Ready to create your first event ? Press on the add form to continue.',
   },
   {
     title:
@@ -48,16 +43,13 @@ const ABOUT_US_TOUR_STEPS = [
 
 const PROFILE_TOUR_STEPS = [
   {
-    title:
-      'A brief description and your avatar. This is required to chat during an event.',
+    title: 'A brief description and your avatar. This is required to chat during an event.',
   },
   {
-    title:
-      'Skills and volunteering hours that you have spent on any project regardless of the status of the event.',
+    title: 'Skills and volunteering hours that you have spent on any project regardless of the status of the event.',
   },
   {
-    title:
-      'A list of all the events that you have created regardless of the status of the project.',
+    title: 'A list of all the events that you have created regardless of the status of the project.',
   },
 ];
 

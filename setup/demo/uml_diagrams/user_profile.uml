@@ -1,6 +1,6 @@
 @startuml
 
-title Community Care User Profile Process
+title Mashed User Profile Process
 
 USER -> UserProfilePage: View the User Profile Page details.
 note over UserProfilePage: user can update full profile details.

@@ -54,7 +54,7 @@ To simply use the application as intended, log in or sign up with the provided s
 - Run `-e` again before `-m` so that the migration scripts can run.
 
 - Use `main.sh` to run test instance.
-  - This test instance will have no data. Assumption is that you view community care app from the scratch.
+  - This test instance will have no data. Assumption is that you view mashed app from the scratch.
   - ./main.sh -e
   - ./main.sh -t
   - ./main.sh -e
