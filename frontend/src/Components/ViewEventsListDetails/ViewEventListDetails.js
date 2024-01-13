@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(7, 0),
   },
   divider: {
-    width: '100%',
     margin: theme.spacing(2),
   },
 }));

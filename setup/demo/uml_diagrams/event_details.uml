@@ -1,6 +1,6 @@
 @startuml
 
-title Community Care Event Details process
+title Mashed Event Details process
 
 LandingPage -> SelectedEvent: View the selected event details and update general information
 SelectedEvent -> EventService: PATCH update join, leave or rsvp

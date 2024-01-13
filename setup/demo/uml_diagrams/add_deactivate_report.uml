@@ -1,6 +1,6 @@
 @startuml
 
-title Community Care Add, Deactivate and Report Process
+title Mashed Add, Deactivate and Report Process
 
 USER -> LandingPage: ADD EVENT FLOW: GET request to view list of existing projects
 note over LandingPage: View existing projects if exists

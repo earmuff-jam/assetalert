@@ -15,22 +15,39 @@ import AuthHome from './Containers/Auth/AuthHome';
 import { ThemeProvider } from '@material-ui/styles';
 import EventPage from './Containers/Event/EventPage';
 import ProfilePage from './Containers/Profile/ProfilePage';
+import { makeStyles } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+
+const useSpookyStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.grey,
+    height: '100%',
+    width: '100%',
+  },
+}));
+
+const SkeletonLoader = () => {
+  const classes = useSpookyStyles();
+  return <Skeleton className={classes.root} />;
+};
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    // loader: rootLoader,
+    loader: () => <SkeletonLoader />,
+    errorElement: <SkeletonLoader />,
     children: [],
   },
   {
     path: 'profile',
     element: <ProfilePage />,
-    // loader: teamLoader,
+    errorElement: <SkeletonLoader />,
   },
   {
     path: ':eventID',
     element: <EventPage />,
+    errorElement: <SkeletonLoader />,
   },
 ]);
 

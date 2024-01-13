@@ -9,13 +9,11 @@ import PrimaryAppBar from './Components/AppBar/PrimaryAppBar';
 const App = () => {
   return (
     <ThemeProvider theme={primary_theme}>
-      <>
-        <Container maxWidth="lg">
-          <CssBaseline />
-          <PrimaryAppBar selectedID={1} />
-          <HomePage />
-        </Container>
-      </>
+      <Container maxWidth="lg">
+        <CssBaseline />
+        <PrimaryAppBar selectedID={1} />
+        <HomePage />
+      </Container>
     </ThemeProvider>
   );
 };

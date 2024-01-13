@@ -1,6 +1,6 @@
 @startuml
 
-title Community Care Login and Signup Process
+title Mashed Login and Signup Process
 
 USER -> ApplicationContainer: POST login user (id, email, pwd)
 note over ApplicationContainer: Determine if the user can login

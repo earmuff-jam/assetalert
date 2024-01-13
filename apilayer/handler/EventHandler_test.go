@@ -64,7 +64,7 @@ func Test_GetAllItemsApi(t *testing.T) {
 
 func Test_CreateNewEvent(t *testing.T) {
 	draftEvent := &model.Event{
-		Title:          "Test Event for Community Care",
+		Title:          "Test Event",
 		Cause:          "Celebrations",          // Celebrations
 		ProjectType:    "Community Development", // Community Development
 		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
@@ -108,7 +108,7 @@ func Test_CreateNewEvent(t *testing.T) {
 func Test_CreateNewReport(t *testing.T) {
 
 	draftEvent := &model.Event{
-		Title:          "Test Event for Community Care",
+		Title:          "Test Event",
 		Cause:          "Celebrations",          // Celebrations
 		ProjectType:    "Community Development", // Community Development
 		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},

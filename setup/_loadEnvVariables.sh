@@ -15,7 +15,7 @@ POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="home"
 POSTGRES_HOST=5432
 
-# general users for community care application
+# general users
 CLIENT_USER="community_public"
 CLIENT_PASSWORD="password"
 DATABASE_DOCKER_CONTAINER_NAME="community-backend-1"
@@ -24,7 +24,7 @@ DATABASE_DOCKER_CONTAINER_IP_ADDRESS="localhost"
 DATABASE_DOCKER_CONTAINER_PORT=8089
 TOKEN_VALIDITY_TIME=2
 
-# test users for community care application
+# test users
 COMMUNITY_TEST_USER="community_test"
 
 # UI localhost uri
