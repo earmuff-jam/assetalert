@@ -205,7 +205,9 @@ const EventDetailsCard = ({
           ))}
         </Box>
         <CardActions>
-          <Button onClick={handleAddItem}>Add Item</Button>
+          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem}>
+            Add Item
+          </Button>
           <Button onClick={handleViewItems}>View Items</Button>
         </CardActions>
         {editMode && (
@@ -224,12 +226,6 @@ const EventDetailsCard = ({
         toggleDrawer={toggleDrawer}
         shouldDisableViewItemList={shouldDisableViewItemList}
       />
-      {display === 'Save' && (
-        <Dialog open width={'md'} fullWidth={true}>
-          <Title onClose={() => setDisplay(0)}>Add New Item</Title>
-          <AddItemDetail eventID={eventID} userID={userDetail.userID} setDisplayMode={setDisplay} />
-        </Dialog>
-      )}
       {display === 'Add' && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>

@@ -100,13 +100,15 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                       }
                     />
                     <Box className={classes.presetWidth}>
-                      <Typography className={classes.headerText}>{event.title}</Typography>
+                      <Tooltip title={event.title}>
+                        <Typography className={classes.headerText}>{event.title}</Typography>
+                      </Tooltip>
                       <Typography className={classes.textDetails} gutterBottom>
                         {event.cause}
                       </Typography>
                     </Box>
                   </Box>
-                  <Tooltip title={`Start Date: ${formattedDate}`} placement='top'>
+                  <Tooltip title={`Start Date: ${formattedDate}`} placement="top">
                     <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
                   </Tooltip>
                 </Box>

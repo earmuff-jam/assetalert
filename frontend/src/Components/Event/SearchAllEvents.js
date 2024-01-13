@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   optionText: {
     fontSize: '0.825rem',
     letterSpacing: '0.0125rem',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
   },
   columnContainer: {
     display: 'flex',
