@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Typography, Button, TextField, makeStyles, Chip, InputAdornment, Box } from '@material-ui/core';
 
 import { produce } from 'immer';
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
 import { LOGIN_SIGN_UP_FORM_FIELDS } from './constants';
 import { authActions } from '../../Containers/Auth/authSlice';
@@ -75,19 +74,6 @@ const Login = ({ hasServerError }) => {
     setEditing(true);
   };
 
-  const fetchLoginOrSignupFn = (formattedData) => {
-    if (signUpView) {
-      dispatch(authActions.getSignup(formattedData));
-      return;
-    }
-    dispatch(authActions.getUserID(formattedData));
-  };
-
-  const fetchLoginOrSignupDebouncedFn = useCallback(
-    debounce((formattedData) => fetchLoginOrSignupFn(formattedData), 1000),
-    []
-  );
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -112,7 +98,12 @@ const Login = ({ hasServerError }) => {
       }, {});
 
       setEditing(false);
-      fetchLoginOrSignupDebouncedFn(formattedData);
+
+      if (signUpView) {
+        dispatch(authActions.getSignup(formattedData));
+        return;
+      }
+      dispatch(authActions.getUserID(formattedData));
     }
   };
 
