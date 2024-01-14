@@ -25,7 +25,7 @@ func SetupDB(user string) (*sql.DB, error) {
 
 	port := os.Getenv("DATABASE_DOCKER_CONTAINER_PORT")
 	if len(port) == 0 {
-		port = "8089"
+		port = "5432"
 	}
 
 	appEnv := os.Getenv("ENVIRONMENT")
