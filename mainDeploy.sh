@@ -16,8 +16,8 @@ help() {
 
 loadEnv() {
     echo "envOnly flag provided. only loading env variables."
-    chmod +x setup/_loadEnvVariables.sh
-    ./setup/_loadEnvVariables.sh
+    chmod +x setup/_loadProdEnvVariables.sh
+    ./setup/_loadProdEnvVariables.sh
 }
 
 loadProdEnv() {

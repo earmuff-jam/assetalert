@@ -20,7 +20,7 @@ func SetupDB(user string) (*sql.DB, error) {
 
 	host := os.Getenv("DATABASE_DOCKER_CONTAINER_IP_ADDRESS")
 	if len(host) == 0 {
-		host = "home@backend"
+		host = "localhost"
 	}
 
 	port := os.Getenv("DATABASE_DOCKER_CONTAINER_PORT")
@@ -29,7 +29,7 @@ func SetupDB(user string) (*sql.DB, error) {
 	}
 
 	appEnv := os.Getenv("ENVIRONMENT")
-	pool, err := startSqlDb(user, pwd, port, host, appEnv) // appEnv is to just toggle for production
+	pool, err := startSqlDb(user, pwd, host, port, appEnv) // appEnv is to just toggle for production
 	if err != nil {
 		fmt.Printf("unable to ping. error: +%v", err)
 		return nil, err
@@ -47,11 +47,11 @@ func PreloadAllTestVariables() {
 
 func startSqlDb(user string, pwd string, host string, port string, appEnv string) (*sql.DB, error) {
 
-	psqlStr := fmt.Sprintf("postgres://%s:%s@%s:%s/community?sslmode=disable", user, pwd, port, host)
+	psqlStr := fmt.Sprintf("postgres://%s:%s@%s:%s/community?sslmode=disable", user, pwd, host, port)
 
 	// if the env is production, we switch the port but still keep the same user context
 	if len(appEnv) != 0 && appEnv == "PRODUCTION" {
-		psqlStr = fmt.Sprintf("postgres://%s:home@backend:%s/community?sslmode=disable", port, user)
+		psqlStr = fmt.Sprintf("postgres://%s:%s@%s:%s/community?sslmode=disable", user, pwd, host, port)
 	}
 
 	var db, err = sql.Open("postgres", psqlStr)
