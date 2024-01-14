@@ -200,9 +200,11 @@ const EventDetailsCard = ({
           </Tooltip>
         </Box>
         <Box className={classNames((classes.rowContainer, classes.chipContainer))}>
-          {userDetail?.requiredSkills.map((v, index) => (
-            <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
-          ))}
+          {userDetail?.requiredSkills.length > 0 &&
+            userDetail?.requiredSkills[0] !== '' &&
+            userDetail?.requiredSkills.map((v, index) => (
+              <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
+            ))}
         </Box>
         <CardActions>
           <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem}>

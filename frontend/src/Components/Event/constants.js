@@ -33,7 +33,8 @@ export const LABELS = [
     label: 'Requested help on',
     colName: 'skills_required',
     modifier: (value) => {
-      return value.length > 1 ? (
+      // the array should not also have empty string
+      return value.length > 0 && value[0] !== '' ? (
         value
           .join(', ')
           .split(',')

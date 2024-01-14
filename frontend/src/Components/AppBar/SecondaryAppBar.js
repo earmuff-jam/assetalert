@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.error.main,
     display: 'flex',
+    width: 'inherit',
     justifyContent: 'center',
     alignItems: 'center',
   },
