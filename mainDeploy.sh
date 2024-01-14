@@ -8,7 +8,7 @@ help() {
     echo "Usage: $0 [option...] {loadEnv, loadDb, loadMigration}" >&2
     echo
     echo "   -e, --loadEnv              Loads the environment variables only"
-    echo "   -t, --loadProdEnv          Allows to load all containers and start with new fresh data. This is production env. Does not erase data"
+    echo "   -p, --loadProdEnv          Allows to load all containers and start with new fresh data. This is production env. Does not erase data"
     echo "   -m, --loadMigration        Allows to load the migration in sequence. Does not erase data but requires container to be up"
     echo
     exit 1
@@ -41,8 +41,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -h|--help) help; shift ;;
         -e|--loadEnv) loadEnv; shift ;;
-        -f|--loadDb) loadDb; shift ;;
-        -t|--loadProdEnv) loadProdEnv; shift ;;
+        -p|--loadProdEnv) loadProdEnv; shift ;;
         -m|--loadMigration) loadMigration; shift ;;
         *) help; echo "Unknown parameter passed: $1" ;;
     esac

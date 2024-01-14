@@ -18,9 +18,6 @@ POSTGRES_HOST=5432
 # general users
 CLIENT_USER="community_public"
 CLIENT_PASSWORD="password"
-DATABASE_DOCKER_CONTAINER_NAME="community-backend-1"
-DATABASE_DOCKER_CONTAINER_IP_ADDRESS="localhost"
-DATABASE_DOCKER_CONTAINER_PORT=8089
 TOKEN_VALIDITY_TIME=2
 
 # test users
@@ -29,10 +26,14 @@ COMMUNITY_TEST_USER="community_test"
 # UI localhost uri
 REACT_APP_LOCALHOST_URL=http://localhost:8087
 
-
-# for production we comment this out since docker can know itself
-# DATABASE_DOCKER_CONTAINER_IP_ADDRESS=localhost
+DATABASE_DOCKER_CONTAINER_NAME="community-backend-1"
+# for all other instances turn this on
+# DATABASE_DOCKER_CONTAINER_IP_ADDRESS="localhost"
 # DATABASE_DOCKER_CONTAINER_PORT=8089
+
+# for production instance turn this on
+DATABASE_DOCKER_CONTAINER_IP_ADDRESS=$(sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $DATABASE_DOCKER_CONTAINER_NAME)
+DATABASE_DOCKER_CONTAINER_PORT=8089
 
 # Create .env file and set parameters
 cat <<EOF > .env

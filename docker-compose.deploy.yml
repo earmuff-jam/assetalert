@@ -7,7 +7,7 @@ services:
       context: ./frontend
       dockerfile: prod.Dockerfile
     ports:
-      - '80:80'
+      - '3000:3000'
     environment:
       NODE_ENV: PRODUCTION
   backend:
@@ -24,6 +24,15 @@ services:
       ENVIRONMENT: PRODUCTION
     volumes:
       - pg_data:/var/lib/postgresql/data
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - migrations:/server/migrations
+    command: ["-path", "/server/migrations", "-database",  "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOCKER_CONTAINER_IP_ADDRESS}:${DATABASE_DOCKER_CONTAINER_PORT}/${POSTGRES_DB}?sslmode=disable", "up", "3"]
+    links:
+      - backend
+    depends_on:
+      - backend
   apilayer:
     build:
       context: ./apilayer
@@ -43,3 +52,4 @@ services:
 volumes:
   pg_data:
   api_layer:
+  migrations:
