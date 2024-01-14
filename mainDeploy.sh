@@ -24,7 +24,7 @@ loadProdEnv() {
 
     echo "loadProdEnv flag provided. building all containers in production mode."
 
-    docker-compose down 
+    docker-compose down
     docker-compose -f docker-compose.deploy.yml up --build -d
 
 }
