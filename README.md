@@ -42,26 +42,6 @@ To simply use the application as intended, log in or sign up with the provided s
 - Dockerized containers. Seperate instances for database, apilayer and frontend.
 - Each section of the app contains their own dev setup guide.
 
-## Deployment Guide
-
-- Deployed to the cloud with scripts.
-- Use `main.sh` to run development instances.
-  - ./main.sh -e
-  - ./main.sh -f
-  - ./main.sh -e
-  - ./main.sh -m
-- Run `-e` command first to get all .env variables for build.
-- Run `-e` again before `-m` so that the migration scripts can run.
-
-- Use `main.sh` to run test instance.
-  - This test instance will have no data. Assumption is that you view mashed app from the scratch.
-  - ./main.sh -e
-  - ./main.sh -t
-  - ./main.sh -e
-  - ./main.sh -m
-- Run `-e` command first to get all .env variables for build.
-- Run `-e` again before `-m` so that the migration scripts can run.
-
 ## Contact
 
 If you have any questions or need support, feel free to reach out to us at earmuffjam@gmail.com
