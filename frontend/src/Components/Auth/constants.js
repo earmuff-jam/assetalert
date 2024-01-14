@@ -4,6 +4,10 @@ export const GENERIC_TEXTFIELD_VARIANT = {
   variant: 'outlined',
 };
 
+export const AUTOCOMPLETE_PASSWORD_PROPS = {
+  autocomplete: 'true',
+};
+
 export const LOGIN_SIGN_UP_FORM_FIELDS = {
   email: {
     label: 'Email Address',
@@ -48,5 +52,6 @@ export const LOGIN_SIGN_UP_FORM_FIELDS = {
       },
     ],
     ...GENERIC_TEXTFIELD_VARIANT,
+    ...AUTOCOMPLETE_PASSWORD_PROPS,
   },
 };

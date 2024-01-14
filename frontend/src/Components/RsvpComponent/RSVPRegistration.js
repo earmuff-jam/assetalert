@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Checkbox,
-  FormControlLabel,
-  Tooltip,
-  FormLabel,
-  FormControl,
-  FormHelperText,
-  Box,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, Tooltip, FormControl, Box, makeStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +29,7 @@ const RSVPRegistration = ({ isChecked, handleRSVP, disabled }) => {
       </Typography>
 
       <Tooltip
-        title="Place a checkmark to agree to RSVP to the event. RSVP does not infer the participant will be on the event but gives reason to believe they will attend the event."
+        title="Place a checkmark to RSVP to the event. RSVP does not infer the participant will be on the event but gives reason to believe they will attend the event."
         placement="top-end"
       >
         <FormControl>

@@ -74,6 +74,14 @@ const Login = ({ hasServerError }) => {
     setEditing(true);
   };
 
+  const fetchLoginOrSignupFn = (formattedData) => {
+    if (signUpView) {
+      dispatch(authActions.getSignup(formattedData));
+      return;
+    }
+    dispatch(authActions.getUserID(formattedData));
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -98,12 +106,7 @@ const Login = ({ hasServerError }) => {
       }, {});
 
       setEditing(false);
-
-      if (signUpView) {
-        dispatch(authActions.getSignup(formattedData));
-        return;
-      }
-      dispatch(authActions.getUserID(formattedData));
+      fetchLoginOrSignupFn(formattedData);
     }
   };
 
@@ -116,32 +119,35 @@ const Login = ({ hasServerError }) => {
       </Typography>
       <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
       <div className={classes.form}>
-        {Object.values(formFields).map((v, index) => (
-          <TextField
-            className={classes.text}
-            key={index}
-            id={v.name}
-            name={v.name}
-            label={v.label}
-            value={v.value}
-            type={v.type}
-            variant={v.variant}
-            placeholder={v.placeholder}
-            onChange={handleInput}
-            required={v.required}
-            fullWidth={v.fullWidth}
-            error={!!v.errorMsg}
-            helperText={v.errorMsg}
-            onKeyDown={(e) => {
-              if (e.code === 'Enter') {
-                handleFormSubmit(e);
-              }
-            }}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
-            }}
-          />
-        ))}
+        <form>
+          {Object.values(formFields).map((v, index) => (
+            <TextField
+              className={classes.text}
+              key={index}
+              id={v.name}
+              name={v.name}
+              label={v.label}
+              value={v.value}
+              type={v.type}
+              variant={v.variant}
+              autoComplete={v.autocomplete}
+              placeholder={v.placeholder}
+              onChange={handleInput}
+              required={v.required}
+              fullWidth={v.fullWidth}
+              error={!!v.errorMsg}
+              helperText={v.errorMsg}
+              onKeyDown={(e) => {
+                if (e.code === 'Enter') {
+                  handleFormSubmit(e);
+                }
+              }}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
+              }}
+            />
+          ))}
+        </form>
         <Typography variant="body1" className={classes.text}>
           {signUpView ? `Already have an account ?` : `Do not have an account ?`}
         </Typography>
@@ -157,7 +163,7 @@ const Login = ({ hasServerError }) => {
           />
           <Button onClick={handleFormSubmit}>Submit</Button>
         </div>
-        <span className={classes.warningText}>{!editing && hasServerError}</span>
+        <span className={classes.warningText}>{!editing ? hasServerError : null}</span>
       </div>
     </Box>
   );

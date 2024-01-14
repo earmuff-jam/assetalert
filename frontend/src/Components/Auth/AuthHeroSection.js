@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography, Paper } from '@material-ui/core';
-import { EmojiPeopleRounded, LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
+import { LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   text: {
