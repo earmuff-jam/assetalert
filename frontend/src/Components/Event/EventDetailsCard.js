@@ -191,7 +191,7 @@ const EventDetailsCard = ({
             </Tooltip>
           </Box>
         </Box>
-        <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
+        <Box className={classNames(classes.rowContainer, classes.gutterBottom)} data-tour="5">
           <Tooltip title="Users who join the event are members of the event.">
             <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.sharable_groups.length || 0} members `} />
           </Tooltip>
@@ -199,14 +199,20 @@ const EventDetailsCard = ({
             <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0} attendees `} />
           </Tooltip>
         </Box>
-        <Box className={classNames((classes.rowContainer, classes.chipContainer))}>
-          {userDetail?.requiredSkills.map((v, index) => (
-            <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
-          ))}
+        <Box className={classNames((classes.rowContainer, classes.chipContainer))} data-tour="6">
+          {userDetail?.requiredSkills.length > 0 &&
+            userDetail?.requiredSkills[0] !== '' &&
+            userDetail?.requiredSkills.map((v, index) => (
+              <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
+            ))}
         </Box>
         <CardActions>
-          <Button onClick={handleAddItem}>Add Item</Button>
-          <Button onClick={handleViewItems}>View Items</Button>
+          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7">
+            Add Item
+          </Button>
+          <Button onClick={handleViewItems} data-tour="8">
+            View Items
+          </Button>
         </CardActions>
         {editMode && (
           <EditCommunityEvent
@@ -224,12 +230,6 @@ const EventDetailsCard = ({
         toggleDrawer={toggleDrawer}
         shouldDisableViewItemList={shouldDisableViewItemList}
       />
-      {display === 'Save' && (
-        <Dialog open width={'md'} fullWidth={true}>
-          <Title onClose={() => setDisplay(0)}>Add New Item</Title>
-          <AddItemDetail eventID={eventID} userID={userDetail.userID} setDisplayMode={setDisplay} />
-        </Dialog>
-      )}
       {display === 'Add' && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>

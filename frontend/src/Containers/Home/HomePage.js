@@ -51,18 +51,18 @@ const HomePage = () => {
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} data-tour="0">
           <Paper>
-            <CreateNewEventCta />
+            <CreateNewEventCta/>
           </Paper>
           <Paper>
             <NavigateProfileFromEventCta />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} data-tour="2">
           <HomePageHeaderMap eventList={currentEvents} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} >
           <ViewEventListDetails currentEvents={currentEvents} loading={loading} />
         </Grid>
       </Grid>

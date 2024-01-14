@@ -97,7 +97,7 @@ const ViewEventListDetails = (props) => {
   }
 
   return (
-    <Box className={classes.container}>
+    <Box className={classes.container} data-tour="4">
       <Typography gutterBottom className={classNames(classes.header, classes.errorText)}>
         View all active events
       </Typography>
