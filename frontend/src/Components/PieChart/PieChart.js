@@ -102,7 +102,7 @@ const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {
   }, [volunteeringActivities, totalSkillLimit]);
 
   return (
-    <Box className={classes.container}>
+    <Box className={classes.container} data-tour="10">
       <Typography variant="h5" className={classes.headerText}>
         Main Goal Progress
       </Typography>

@@ -68,7 +68,6 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
 
   return (
     <Autocomplete
-      data-tour="4"
       id="search-events-autocomplete"
       fullWidth
       options={options}

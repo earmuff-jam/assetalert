@@ -35,7 +35,7 @@ const CreateNewEventCta = () => {
   const handleClick = () => setEditMode(!editMode);
 
   return (
-    <Box className={classes.container}>
+    <Box className={classes.container} data-tour="1">
       <Typography className={classes.headerText} gutterBottom>
         {username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
       </Typography>
@@ -43,7 +43,7 @@ const CreateNewEventCta = () => {
         You can create new events or browse all existing events. Existing events can be volunteered upon. Browse other
         events around you, or jump right in.
       </Typography>
-      <Button onClick={handleClick}> Create Event </Button>
+      <Button onClick={handleClick} data-tour="3"> Create Event </Button>
 
       {editMode && (
         <Dialog open={editMode} width={'md'} fullWidth={true}>

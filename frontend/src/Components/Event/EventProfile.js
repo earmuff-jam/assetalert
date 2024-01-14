@@ -84,6 +84,7 @@ const EventProfile = ({ userDetail }) => {
           />
         ) : (
           <Avatar
+            data-tour="0"
             alt="event avatar"
             src={selectedImage && `data:image/png;base64,${selectedImage}`}
             className={classes.avatar}
@@ -92,10 +93,10 @@ const EventProfile = ({ userDetail }) => {
         )}
       </Box>
       <Box className={classes.adjustMaxWidth}>
-        <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
+        <Typography className={classNames(classes.header, classes.errorText)} gutterBottom data-tour="1">
           {userDetail?.title || ''}
         </Typography>
-        <Typography className={classes.text} gutterBottom>
+        <Typography className={classes.text} gutterBottom data-tour="2">
           {userDetail?.description || 'Edit event details to add description'}
         </Typography>
       </Box>

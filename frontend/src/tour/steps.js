@@ -3,32 +3,19 @@ const LANDING_PAGE_TOUR_STEPS = [
     title: 'Welcome to Mashed Application Tutorial. Learn how to navigate the application in thorough detail.',
   },
   {
-    title: 'We aim to bring the community together by assisting them in simple auditory tasks',
+    title: 'We aim to bring the community together by assisting them in simple auditory tasks.',
   },
   {
     title: 'Map displays the location of every event even if they are deactivated.',
   },
   {
-    title: 'Buttons help you create, deactivate or even report an event.',
+    title: 'Create a new event for your local community.',
   },
   {
     title: 'You can even search any event through our quick sort and filter',
   },
   {
     title: 'View all existing events that are in active status regardless of who created the event',
-  },
-];
-
-const ADD_FORM_TOUR_STEPS = [
-  {
-    title: 'Ready to create your first event ? Press on the add form to continue.',
-  },
-  {
-    title:
-      'The details about your event that you would like to create. Filling out all the information helps you better manage your event in the long run.',
-  },
-  {
-    title: 'Press the close button to move on to the next step',
   },
 ];
 
@@ -43,13 +30,12 @@ const ABOUT_US_TOUR_STEPS = [
 
 const PROFILE_TOUR_STEPS = [
   {
-    title: 'A brief description and your avatar. This is required to chat during an event.',
+    title:
+      'Details about yourself and your interests. You can edit your profile details as well. Required to chat with other members of any community.',
   },
   {
-    title: 'Skills and volunteering hours that you have spent on any project regardless of the status of the event.',
-  },
-  {
-    title: 'A list of all the events that you have created regardless of the status of the project.',
+    title:
+      'Volunteering hours on required skills are displayed here. If you do not have any such event, feel feel to create one or volunteer on your local events nearby.',
   },
 ];
 
@@ -59,16 +45,13 @@ const SINGLE_EVENT_TOUR_STEPS = [
       'The avatar for the selected event. Adding avatar to your project will help your readily label your project.',
   },
   {
-    title:
-      'The title of the selected event. Hovering over the event allows you to view the approximate location of the event.',
+    title: 'The title of the selected event. Hover over the event to view the approximate location of the event.',
   },
   {
-    title:
-      'The number of people that have accepted to join the selected event and the number of people who have rsvp to the selected event.',
+    title: 'The description of the event.',
   },
   {
-    title:
-      'Button allows you to leave the event. Leaving the event will result in loss of participation within the event.',
+    title: 'Select option to join the event or leave the event',
   },
   {
     title:
@@ -76,7 +59,14 @@ const SINGLE_EVENT_TOUR_STEPS = [
   },
   {
     title:
-      'Add items to the selected event. Certain names and elements can be altered once entered in the system, however we advise to only do such to log changes since it changes the audit logs as well.',
+      'The number of people that have accepted to join the selected event and the number of people who have rsvp to the selected event.',
+  },
+  {
+    title:
+      'Displays the required skills for each project.',
+  },
+  {
+    title: 'select option to add a new item to the inventory list. participant must join the event before adding items to the event.',
   },
   {
     title:
@@ -92,19 +82,7 @@ const SINGLE_EVENT_TOUR_STEPS = [
   },
   {
     title:
-      'A zoomed in telescopic map of the location. Data is generated from Openlayers and geocoding API is provided to the public, for free, as a community service by Map Maker. ',
-  },
-  {
-    title:
-      'The details of the selected event including the organizer and skills that are required as presented by the creator of the event.',
-  },
-  {
-    title:
-      'Chat with the team members within the selected event. All messages and history persists, please refrain from using inappropriate speech as it will have you possibly removed from the system.',
-  },
-  {
-    title:
-      'Checkbox to allow users to RSVP to any event. In order to chat with other members, users are required to RSVP on the event.',
+      'Select options to volunteer, chat with online members or view details about the selected event.',
   },
 ];
 
@@ -125,16 +103,6 @@ const derieveAboutUsTourSteps = (preprendIndex = 0) => {
 };
 const derieveProfileTourSteps = (preprendIndex = 0) => {
   return PROFILE_TOUR_STEPS.map((skeleton, index) => ({
-    id: index + preprendIndex,
-    selector: `[data-tour="${index + preprendIndex}"]`,
-    content: skeleton.title,
-  }));
-};
-
-// ADD FORM STEPS
-// eslint-disable-next-line
-const derieveAddFormTourSteps = (preprendIndex = 0) => {
-  return ADD_FORM_TOUR_STEPS.map((skeleton, index) => ({
     id: index + preprendIndex,
     selector: `[data-tour="${index + preprendIndex}"]`,
     content: skeleton.title,

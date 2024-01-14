@@ -68,7 +68,7 @@ export const NavigationTabBar = ({ value, handleChange }) => {
     },
   ];
   return (
-    <Box className={classes.rowContainer}>
+    <Box className={classes.rowContainer}  data-tour="11">
       {NAVIGATION_TABS.map((v, index) => (
         <List key={index}>
           <ListItem button>
@@ -110,7 +110,7 @@ const EventDetailsDrawerComponent = ({
         return (
           <Box>
             <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
-              <Box>
+              <Box data-tour="9">
                 <RSVPRegistration
                   disabled={disabled}
                   handleRSVP={handleRSVP}

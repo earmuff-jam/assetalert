@@ -284,7 +284,7 @@ const EventDetailPage = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} data-tour="11">
+        <Grid item xs={12}>
           <EventDetailsDrawerComponent
             eventID={eventID}
             selectedEvent={selectedEvent}
