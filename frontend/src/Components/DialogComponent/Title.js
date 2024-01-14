@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: '1.2rem',
     fontWeight: 'lighter',
     fontSize: '2.0rem',
     fontFamily: 'Poppins, sans-serif',
