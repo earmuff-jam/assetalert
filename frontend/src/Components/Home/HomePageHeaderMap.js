@@ -17,7 +17,7 @@ import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
 import PopupContent from './PopupContent';
 import { Attribution, defaults as defaultControls } from 'ol/control.js';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const center = proj.fromLonLat([-92.0369, 38.9072]);
 

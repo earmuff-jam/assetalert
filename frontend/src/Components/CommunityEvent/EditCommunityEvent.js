@@ -1,7 +1,8 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import classNames from 'classnames';
-import { Box, Chip, InputAdornment, TextField, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Chip, InputAdornment, TextField } from '@material-ui/core';
 import { EventNoteRounded, EventRounded, FaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Avatar, Box, Button, Input, makeStyles } from '@material-ui/core';
-import EventDetailsCard from './EventDetailsCard';
+import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, Box, Button, Input } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {

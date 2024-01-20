@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, TextField, Tooltip, Typography } from '@material-ui/core';
 
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';

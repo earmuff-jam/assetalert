@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, makeStyles, FormControl, FormHelperText, CircularProgress, Link } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { TextField, Button, FormControl, FormHelperText, CircularProgress, Link } from '@material-ui/core';
 
 import {
   EVENT_FORM,

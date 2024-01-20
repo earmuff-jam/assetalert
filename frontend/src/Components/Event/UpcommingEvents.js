@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Box, IconButton, makeStyles } from "@material-ui/core";
-import {
-  TurnedInRounded,
-  TurnedInNotRounded,
-  PersonAddRounded,
-  DoneRounded,
-} from "@material-ui/icons";
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, IconButton } from '@material-ui/core';
+import { TurnedInRounded, TurnedInNotRounded, PersonAddRounded, DoneRounded } from '@material-ui/icons';
 
-import moment from "moment";
-import { useDispatch } from "react-redux";
-import { updateCommunityEventDetails } from "../../actions";
-import classNames from "classnames";
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { updateCommunityEventDetails } from '../../actions';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   eventBar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: theme.spacing(2),
     border: `1px solid ${theme.palette.grey[300]}`,
     borderRadius: theme.shape.borderRadius,
     marginBottom: theme.spacing(2),
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   eventBarOnSelection: {
-    transition: "box-shadow 0.3s ease",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+    transition: 'box-shadow 0.3s ease',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.5)',
   },
   eventName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: theme.spacing(2.2),
     marginRight: theme.spacing(2),
   },
@@ -37,13 +33,12 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   teaser: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
 }));
 
 const UpcommingEvents = (props) => {
-  const { event, selectedUserEmail, handleSelectedEvent, selectedEvent } =
-    props;
+  const { event, selectedUserEmail, handleSelectedEvent, selectedEvent } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -56,12 +51,10 @@ const UpcommingEvents = (props) => {
     setIsJoined(!isJoined);
   };
 
-  const handleSetIsUserRegisteredEvent = () =>
-    setIsUserRegisteredEvent(!isUserRegisteredEvent);
+  const handleSetIsUserRegisteredEvent = () => setIsUserRegisteredEvent(!isUserRegisteredEvent);
 
   useEffect(() => {
-    const found =
-      event.attendees?.filter((v) => v === selectedUserEmail).length > 0;
+    const found = event.attendees?.filter((v) => v === selectedUserEmail).length > 0;
     setIsJoined(found);
   }, [selectedUserEmail, event.attendees]);
 
@@ -81,26 +74,11 @@ const UpcommingEvents = (props) => {
         <span className={classes.teaser}> {event.teaser}</span>
       </div>
       <Box>
-        <IconButton
-          className={classes.iconButton}
-          disabled={isJoined}
-          onClick={() => handleSetIsJoined()}
-        >
-          {isJoined ? (
-            <DoneRounded color="primary" />
-          ) : (
-            <PersonAddRounded color="primary" />
-          )}
+        <IconButton className={classes.iconButton} disabled={isJoined} onClick={() => handleSetIsJoined()}>
+          {isJoined ? <DoneRounded color="primary" /> : <PersonAddRounded color="primary" />}
         </IconButton>
-        <IconButton
-          className={classes.iconButton}
-          onClick={() => handleSetIsUserRegisteredEvent()}
-        >
-          {isUserRegisteredEvent ? (
-            <TurnedInRounded color="primary" />
-          ) : (
-            <TurnedInNotRounded color="primary" />
-          )}
+        <IconButton className={classes.iconButton} onClick={() => handleSetIsUserRegisteredEvent()}>
+          {isUserRegisteredEvent ? <TurnedInRounded color="primary" /> : <TurnedInNotRounded color="primary" />}
         </IconButton>
       </Box>
     </div>

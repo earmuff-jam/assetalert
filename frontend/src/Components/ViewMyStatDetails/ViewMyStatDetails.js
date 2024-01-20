@@ -1,5 +1,6 @@
 import React from 'react';
-import { Badge, Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Badge, Typography } from '@material-ui/core';
 import { EmojiPeopleRounded, EventRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({

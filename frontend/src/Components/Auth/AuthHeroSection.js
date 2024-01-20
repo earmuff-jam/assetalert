@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Typography, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Paper } from '@material-ui/core';
 import { LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({

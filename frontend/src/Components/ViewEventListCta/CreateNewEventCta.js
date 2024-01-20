@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Title from '../DialogComponent/Title';
+import { makeStyles } from '@material-ui/core/styles';
 import AddCommunityEvent from '../CommunityEvent/AddCommunityEvent';
-import { Box, Button, Dialog, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, Dialog, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,7 +44,10 @@ const CreateNewEventCta = () => {
         You can create new events or browse all existing events. Existing events can be volunteered upon. Browse other
         events around you, or jump right in.
       </Typography>
-      <Button onClick={handleClick} data-tour="3"> Create Event </Button>
+      <Button onClick={handleClick} data-tour="3">
+        {' '}
+        Create Event{' '}
+      </Button>
 
       {editMode && (
         <Dialog open={editMode} width={'md'} fullWidth={true}>

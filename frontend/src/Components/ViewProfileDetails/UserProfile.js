@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Box, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, Box, Chip, Tooltip, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import EditProfileImage from '../EditProfileImage/EditProfileImage';
 import { useDispatch } from 'react-redux';

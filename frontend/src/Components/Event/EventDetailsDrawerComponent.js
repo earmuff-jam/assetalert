@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, List, ListItem, ListItemText, Paper, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, List, ListItem, ListItemText, Paper } from '@material-ui/core';
 
 import classNames from 'classnames';
 import MapComponentFn from '../Map/Map';
@@ -68,7 +69,7 @@ export const NavigationTabBar = ({ value, handleChange }) => {
     },
   ];
   return (
-    <Box className={classes.rowContainer}  data-tour="11">
+    <Box className={classes.rowContainer} data-tour="11">
       {NAVIGATION_TABS.map((v, index) => (
         <List key={index}>
           <ListItem button>

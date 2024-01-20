@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles, Box, CircularProgress, Grid, Container, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, CircularProgress, Grid, Container, Paper } from '@material-ui/core';
 
 import { homeActions } from './homeSlice';
 import HomePageHeaderMap from '../../Components/Home/HomePageHeaderMap';
@@ -53,7 +54,7 @@ const HomePage = () => {
       <Grid container>
         <Grid item xs={12} md={6} data-tour="0">
           <Paper>
-            <CreateNewEventCta/>
+            <CreateNewEventCta />
           </Paper>
           <Paper>
             <NavigateProfileFromEventCta />
@@ -62,7 +63,7 @@ const HomePage = () => {
         <Grid item xs={12} md={6} data-tour="2">
           <HomePageHeaderMap eventList={currentEvents} />
         </Grid>
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <ViewEventListDetails currentEvents={currentEvents} loading={loading} />
         </Grid>
       </Grid>

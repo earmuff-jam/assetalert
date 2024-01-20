@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, makeStyles, CircularProgress, Grid } from '@material-ui/core';
-
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, CircularProgress, Grid } from '@material-ui/core';
 import { enqueueSnackbar } from 'notistack';
 import { profileActions } from './profileSlice';
 import { homeActions } from '../Home/homeSlice';

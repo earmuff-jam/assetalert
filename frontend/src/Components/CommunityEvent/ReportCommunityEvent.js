@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   TextField,
   Button,
-  makeStyles,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submitButton: {
     marginTop: theme.spacing(2),
+  },
+  caption: {
+    fontSize: '0.985rem',
   },
 }));
 
@@ -232,7 +235,8 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
                 color="primary"
               />
             }
-            label="I acknowledge that we take your report seriously and will review the situation."
+            label="Submit for review."
+            classes={{ label: classes.caption }}
           />
           {errors.reason && <FormHelperText>Checkbox must be selected</FormHelperText>}
         </FormControl>

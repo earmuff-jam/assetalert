@@ -4,7 +4,7 @@ import OSM from 'ol/source/OSM';
 import * as proj from 'ol/proj';
 import classNames from 'classnames';
 import TileLayer from 'ol/layer/Tile';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { defaults as defaultControls } from 'ol/control.js';
 
 const useStyles = makeStyles((theme) => ({

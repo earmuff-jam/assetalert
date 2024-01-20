@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Grid, Box, Container, Paper, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Box, Container, Paper, Typography } from '@material-ui/core';
 
 import { useSelector } from 'react-redux';
 import Login from '../../Components/Auth/Login';

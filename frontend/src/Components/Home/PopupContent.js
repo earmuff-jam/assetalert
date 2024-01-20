@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MobileStepper from '@material-ui/core/MobileStepper';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
