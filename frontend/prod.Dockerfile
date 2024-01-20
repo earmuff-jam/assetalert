@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . .
 
 # Install node packages
-RUN yarn
+RUN yarn network-timeout 100000
 
 # Build the app
-RUN yarn build
+RUN NODE_OPTIONS="--max-old-space-size=4096" yarn build --network-timeout 600000
 
 # prod environment
 FROM nginx:stable-alpine
