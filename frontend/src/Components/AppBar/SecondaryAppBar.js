@@ -1,6 +1,6 @@
 import React from 'react';
-// import { makeStyles } from '@material-ui/styles';
-import { Box, Typography, makeStyles } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,9 +22,7 @@ const SecondaryAppBar = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography className={classes.text}>
-        Deactivated Event. Editing is prohibited.
-      </Typography>
+      <Typography className={classes.text}>Deactivated Event. Editing is prohibited.</Typography>
     </Box>
   );
 };

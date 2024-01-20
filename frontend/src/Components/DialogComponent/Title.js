@@ -2,7 +2,8 @@ import React from 'react';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import { IconButton, Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { IconButton, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {

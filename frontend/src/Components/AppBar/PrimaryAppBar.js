@@ -3,16 +3,14 @@ import classNames from 'classnames';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import { Box, List, ListItem, Paper, Tooltip } from '@material-ui/core';
+import { Box, List, ListItem, Paper, Tooltip, Typography } from '@material-ui/core';
 
 import steps from '../../tour/steps';
 import { useTour } from '@reactour/tour';
 import { useDispatch } from 'react-redux';
 
 import { authActions } from '../../Containers/Auth/authSlice';
-import { HelpRounded, LockOpenRounded } from '@material-ui/icons';
+import { LiveHelpRounded, LockOpenRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,11 +85,25 @@ const PrimaryAppBar = (props) => {
     },
     {
       id: 3,
-      displayName: <HelpRounded />,
+      displayName: <LiveHelpRounded />,
       description: 'Help with this page',
       display: selectedID === 1,
     },
+    {
+      id: 4,
+      displayName: <LockOpenRounded />,
+      description: 'Logout',
+      to: '/out',
+    },
   ];
+
+  const handleNavigation = (el) => {
+    if (el?.to === '/out') {
+      handleLogout();
+    } else {
+      el?.to ? redirect(el.to) : setTour();
+    }
+  };
 
   const redirect = (to) => {
     navigate(to);
@@ -127,12 +139,7 @@ const PrimaryAppBar = (props) => {
         <Box className={classes.leftAside}></Box>
         {NAVIGATION_MENU_BAR.map((el) => (
           <List key={el.id} component="nav" aria-labelledby="nested-list-subheader">
-            <ListItem
-              button
-              onClick={() => {
-                el?.to ? redirect(el.to) : setTour();
-              }}
-            >
+            <ListItem button onClick={() => handleNavigation(el)}>
               <Tooltip title={el.description || el.displayName}>
                 <Typography
                   className={classNames(classes.fontVariation, {
@@ -145,9 +152,6 @@ const PrimaryAppBar = (props) => {
             </ListItem>
           </List>
         ))}
-        <IconButton onClick={() => handleLogout()}>
-          <LockOpenRounded />
-        </IconButton>
       </Paper>
     </div>
   );

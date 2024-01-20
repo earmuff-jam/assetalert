@@ -42,10 +42,9 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "env-cmd -f .env.development react-scripts start && echo 'This seems like a mistake. Are you trying to run yarn dev?'",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "dev": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test"
   },
   "eslintConfig": {
     "extends": [
@@ -64,5 +63,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1"
   }
 }

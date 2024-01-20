@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Table,
   TableBody,
@@ -12,7 +13,6 @@ import {
   CircularProgress,
   Typography,
   Box,
-  makeStyles,
   Container,
 } from '@material-ui/core';
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Typography, Button, TextField, makeStyles, Chip, InputAdornment, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Button, TextField, Chip, InputAdornment, Box } from '@material-ui/core';
 
 import { produce } from 'immer';
 import classNames from 'classnames';

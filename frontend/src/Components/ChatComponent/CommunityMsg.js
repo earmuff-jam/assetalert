@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TextField, Button, makeStyles, Container, Paper, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { TextField, Button, Container, Paper, Typography } from '@material-ui/core';
 
 import useWebSocket from 'react-use-websocket';
 import EmptyComponent from '../../util/EmptyComponent';

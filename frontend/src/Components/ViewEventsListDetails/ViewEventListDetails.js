@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Grid, makeStyles, CircularProgress, Box, Divider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
 
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';

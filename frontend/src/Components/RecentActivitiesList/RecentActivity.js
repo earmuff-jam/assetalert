@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import { Box, Badge, Chip, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Badge, Chip, Tooltip, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -10,13 +10,14 @@ import steps from './tour/steps';
 import { primary_theme } from './util/Theme';
 import { TourProvider } from '@reactour/tour';
 
+import { Skeleton } from '@material-ui/lab';
 import { SnackbarProvider } from 'notistack';
 import AuthHome from './Containers/Auth/AuthHome';
 import { ThemeProvider } from '@material-ui/styles';
+
 import EventPage from './Containers/Event/EventPage';
+import { makeStyles } from '@material-ui/core/styles';
 import ProfilePage from './Containers/Profile/ProfilePage';
-import { makeStyles } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
 
 const useSpookyStyles = makeStyles((theme) => ({
   root: {

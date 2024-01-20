@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, IconButton, makeStyles, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Typography, TextField, IconButton, CircularProgress } from '@material-ui/core';
 
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';

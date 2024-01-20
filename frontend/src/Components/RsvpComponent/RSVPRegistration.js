@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, FormControlLabel, Tooltip, FormControl, Box, makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Checkbox, FormControlLabel, Tooltip, FormControl, Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,7 @@ const RSVPRegistration = ({ isChecked, handleRSVP, disabled }) => {
       </Typography>
 
       <Typography className={classes.text} gutterBottom>
-        Attending an event allows you to log volunteering hours for that event.
+        Attending an event allows you to log volunteering hours.
       </Typography>
 
       <Tooltip
