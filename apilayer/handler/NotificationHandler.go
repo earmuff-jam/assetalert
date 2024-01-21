@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
 )
 
@@ -40,7 +41,18 @@ func GetNotificationHealthCheck(rw http.ResponseWriter, r *http.Request, user st
 // 404: Message
 // 500: Message
 func GetAllNotifications(rw http.ResponseWriter, r *http.Request, user string) {
-	resp, err := db.RetrieveAllNotifications(user)
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve event with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveAllNotifications(user, userID)
 	if err != nil {
 		log.Printf("Unable to retrieve all existing notifications. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

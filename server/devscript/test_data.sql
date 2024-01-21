@@ -182,3 +182,31 @@ VALUES (
     (SELECT id FROM community.profiles p LIMIT 1)
 );
 
+
+-- ADD TEST DATA TO NOTIFICATION SERVICE --
+INSERT INTO community.community.notifications( project_id, title, isviewed, isresolved, created_by, updated_by) VALUES (
+	(SELECT id FROM community.community.projects LIMIT 1),
+	'Garbage bags from walmart added',
+	false,
+	false,
+	(SELECT id FROM community.community.profiles LIMIT 1),
+	(SELECT id FROM community.community.profiles LIMIT 1)
+);
+
+INSERT INTO community.community.notifications( project_id, title, isviewed, isresolved, created_by, updated_by) VALUES (
+	(SELECT id FROM community.community.projects LIMIT 1),
+	'Laundry bags from target added',
+	false,
+	true,
+	(SELECT id FROM community.community.profiles LIMIT 1),
+	(SELECT id FROM community.community.profiles LIMIT 1)
+);
+
+INSERT INTO community.community.notifications( project_id, title, isviewed, isresolved, created_by, updated_by) VALUES (
+	(SELECT id FROM community.community.projects LIMIT 1),
+	'Old laundry bags from target removed',
+	false,
+	true,
+	(SELECT id FROM community.community.profiles LIMIT 1),
+	(SELECT id FROM community.community.profiles LIMIT 1)
+);

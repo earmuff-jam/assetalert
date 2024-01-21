@@ -5,7 +5,7 @@ import (
 )
 
 // RetrieveAllNotifications ...
-func RetrieveAllNotifications(user string) ([]model.Notification, error) {
+func RetrieveAllNotifications(user string, userID string) ([]model.Notification, error) {
 
 	db, err := SetupDB(user)
 	if err != nil {
@@ -14,27 +14,29 @@ func RetrieveAllNotifications(user string) ([]model.Notification, error) {
 	defer db.Close()
 
 	sqlStr := `SELECT
-	n.id ,
-	n.project_id ,
-	n.title ,
-	n.isviewed ,
-	n.isresolved ,
-	n.created_by ,
-	COALESCE (cp.username, cp.full_name) AS creator_name,
-	n.created_at ,
-	n.updated_by ,
-	COALESCE (up.username, up.full_name) AS updater_name,
-	n.updated_at
+    n.id,
+    n.project_id,
+    n.title,
+    n.isviewed,
+    n.isresolved,
+    n.created_by,
+    COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
+    n.created_at,
+    n.updated_by,
+    COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
+    n.updated_at
 FROM
-	community.notifications n
-LEFT JOIN community.profiles cp ON
-	n.created_by = cp.id 
-LEFT JOIN community.profiles up ON
-	n.updated_by = up.id 
-ORDER BY n.isviewed asc 
+    community.notifications n
+LEFT JOIN community.projects p ON n.project_id = p.id
+LEFT JOIN community.profiles cp ON n.created_by = cp.id
+LEFT JOIN community.profiles up ON n.updated_by = up.id
+WHERE
+    n.created_by = $1
+ORDER BY
+    n.isviewed ASC
 LIMIT 10;
 	`
-	rows, err := db.Query(sqlStr)
+	rows, err := db.Query(sqlStr, userID)
 	if err != nil {
 		return nil, err
 	}

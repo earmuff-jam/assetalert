@@ -18,6 +18,69 @@ CREATE TABLE IF NOT EXISTS notifications
 
 COMMENT ON TABLE notifications IS 'list of notifications for each user';
 
+-- -- trigger to update notification table if the change is in events table --
+
+-- DROP FUNCTION IF EXISTS community.handle_notification_from_events_trigger() CASCADE;
+-- CREATE FUNCTION community.handle_notification_from_events()
+--     RETURNS TRIGGER AS
+-- $$
+-- BEGIN
+--     INSERT INTO community.notifications (
+--         id,
+--         project_id,
+--         title,
+--         created_by,
+--         updated_by
+--         )
+--     VALUES (
+--         new.id,
+--         new.email,
+--         new.phone
+--     );
+
+-- RETURN NEW;
+-- END;
+
+-- $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- CREATE TRIGGER handle_notification_from_events_trigger
+--     AFTER INSERT, UPDATE, DELETE
+-- 	ON community.projects
+--     FOR EACH ROW
+-- EXECUTE PROCEDURE community.handle_notification_from_events();
+
+
+-- -- trigger to update notification table if the change is in profiles table --
+
+-- DROP FUNCTION IF EXISTS community.handle_notification_from_profiles_trigger() CASCADE;
+-- CREATE FUNCTION community.handle_notification_from_profiles()
+--     RETURNS TRIGGER AS
+-- $$
+-- BEGIN
+--     INSERT INTO community.notifications (
+--         id,
+--         project_id,
+--         title,
+--         created_by,
+--         updated_by
+--         )
+--     VALUES (
+--         new.id,
+--         new.email,
+--         new.phone
+--     );
+
+-- RETURN NEW;
+-- END;
+
+-- $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- CREATE TRIGGER handle_notification_from_profiles_trigger
+--     AFTER INSERT, UPDATE, DELETE
+-- 	ON community.projects
+--     FOR EACH ROW
+-- EXECUTE PROCEDURE community.handle_notification_from_profiles();
+
 ALTER TABLE community.notifications
     OWNER TO community_admin;
 

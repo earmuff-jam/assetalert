@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Divider, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
-import { DoneRounded, InfoRounded } from '@material-ui/icons';
+import { Box, List, ListItem, ListItemText } from '@material-ui/core';
+import { InfoRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
