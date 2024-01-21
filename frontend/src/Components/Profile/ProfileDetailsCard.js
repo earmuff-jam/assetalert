@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { CheckRounded, EditRounded, CancelRounded } from '@material-ui/icons';
-import { Box, Card, CardContent, IconButton } from '@material-ui/core';
+import { CheckRounded, EditRounded, CancelRounded, CallToActionRounded } from '@material-ui/icons';
+import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
 
@@ -40,7 +40,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileDetailsCard = ({ editMode, formFields, handleInput, handleSubmit, handleToggle, profileDetails }) => {
+const ProfileDetailsCard = ({
+  editMode,
+  formFields,
+  handleInput,
+  handleSubmit,
+  handleToggle,
+  profileDetails,
+  notifications,
+  handleClickNotificationBar,
+}) => {
   const classes = useStyles();
 
   return (
@@ -55,6 +64,11 @@ const ProfileDetailsCard = ({ editMode, formFields, handleInput, handleSubmit, h
             </IconButton>
             <IconButton onClick={handleToggle} className={classes.buttonSecondary}>
               {!editMode ? <EditRounded /> : <CancelRounded />}
+            </IconButton>
+            <IconButton onClick={handleClickNotificationBar} className={classes.buttonSecondary}>
+              <Badge badgeContent={notifications?.length || 0} color="error" overlap="rectangular">
+                <CallToActionRounded />
+              </Badge>
             </IconButton>
           </Box>
         </Box>

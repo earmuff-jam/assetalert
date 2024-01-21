@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, CircularProgress, Grid } from '@material-ui/core';
+import { Container, CircularProgress, Grid, Popover } from '@material-ui/core';
 import { enqueueSnackbar } from 'notistack';
 import { profileActions } from './profileSlice';
 import { homeActions } from '../Home/homeSlice';
@@ -8,6 +8,7 @@ import { USER_PROFILE_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import RecentActivitiesList from '../../Components/RecentActivitiesList/RecentActivitiesList';
+import Notification from '../../Components/Profile/Notification';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -39,13 +40,31 @@ const ProfileDetailPage = () => {
   const dispatch = useDispatch();
 
   const { loading: eventsLoading, events } = useSelector((state) => state.home);
-  const { profileDetails, volunteeringDetails } = useSelector((state) => state.profile);
+  const {
+    loading: profileStateLoading,
+    profileDetails,
+    volunteeringDetails,
+    notifications: notificationsDetails,
+  } = useSelector((state) => state.profile);
 
   const userCreatedEvents = events?.filter((v) => v.created_by === profileDetails.id);
   const usernameOrFullName = profileDetails.username || profileDetails.full_name || 'Anonymous';
 
   const [editMode, setEditMode] = useState(false);
   const [formFields, setFormFields] = useState(USER_PROFILE_FORM_FIELDS);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const handleClickNotificationBar = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseNotificationBar = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -100,8 +119,16 @@ const ProfileDetailPage = () => {
   useEffect(() => {
     dispatch(homeActions.getEvents());
     dispatch(profileActions.getProfileDetails());
+    dispatch(profileActions.getProfileNotifications());
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(notificationsDetails) && notificationsDetails?.length >= 0) {
+      setNotifications([...notificationsDetails]);
+    }
+    // eslint-disable-next-line
+  }, [profileStateLoading]);
 
   useEffect(() => {
     if (profileDetails.id) {
@@ -124,7 +151,6 @@ const ProfileDetailPage = () => {
       </div>
     );
   }
-
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container>
@@ -136,7 +162,25 @@ const ProfileDetailPage = () => {
             handleSubmit={handleSubmit}
             handleToggle={handleToggle}
             profileDetails={profileDetails}
+            notifications={notifications}
+            handleClickNotificationBar={handleClickNotificationBar}
           />
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleCloseNotificationBar}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <Notification notifications={notifications} />
+          </Popover>
         </Grid>
         <Grid item xs={12} data-tour="1">
           <RecentActivitiesList

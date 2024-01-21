@@ -15,6 +15,16 @@ export function* fetchExistingUserDetails() {
   }
 }
 
+export function* fetchExistingNotificationsUserDetails() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/notifications`);
+    yield put(profileActions.getProfileNotificationsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getProfileNotificationsFailure(e));
+  }
+}
+
 export function* updateExistingUserDetails(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -59,6 +69,10 @@ export function* fetchUpdateProfileImage(action) {
   }
 }
 
+export function* watchExistingNotificationsUserDetails() {
+  yield takeLatest(`profile/getProfileNotifications`, fetchExistingNotificationsUserDetails);
+}
+
 export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
@@ -77,6 +91,7 @@ export function* watchFetchUpdateProfileImage() {
 
 // eslint-disable-next-line
 export default [
+  watchExistingNotificationsUserDetails,
   watchFetchExistingUserDetails,
   watchUpdateExistingUserDetails,
   watchFetchVolunteeringDetails,

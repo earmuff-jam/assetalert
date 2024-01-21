@@ -40,6 +40,8 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
 
+	router.Handle("/api/v1/profile/{id}/notifications", CustomRequestHandler(handler.GetAllNotifications)).Methods(http.MethodGet)
+
 	router.Handle("/api/v1/states", CustomRequestHandler(handler.GetAllStates)).Methods(http.MethodGet)
 	router.Handle("/api/v1/causes", CustomRequestHandler(handler.GetAllEventCauses)).Methods(http.MethodGet)
 	router.Handle("/api/v1/types", CustomRequestHandler(handler.GetAllProjectTypes)).Methods(http.MethodGet)

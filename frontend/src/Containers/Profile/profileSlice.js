@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: '',
   profileDetails: {},
+  notifications: [],
   volunteeringDetails: [],
 };
 
@@ -25,6 +26,21 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.profileDetails = {};
+    },
+    getProfileNotifications: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.notifications = [];
+    },
+    getProfileNotificationsSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = action.payload;
+    },
+    getProfileNotificationsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = [];
     },
     updateProfileDetails: (state) => {
       state.loading = true;
