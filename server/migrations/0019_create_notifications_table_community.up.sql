@@ -1,5 +1,5 @@
 
--- File: 0018_create_notifications_table_community.up.sql
+-- File: 0019_create_notifications_table_community.up.sql
 -- Description: Create the notifications table
 
 SET search_path TO community, public;
