@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button, TextField, Chip, InputAdornment, Box } from '@material-ui/core';
-
 import { produce } from 'immer';
-import classNames from 'classnames';
+import { Button, InputAdornment, TextField } from '@material-ui/core';
+import { LOGIN_FORM_FIELDS } from './constants';
 import { useDispatch } from 'react-redux';
-import { LOGIN_SIGN_UP_FORM_FIELDS } from './constants';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { EmojiPeopleRounded, FaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,14 +45,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ hasServerError }) => {
+const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // editing state is set to handle touch during error handling
-  const [editing, setEditing] = useState(false);
-  const [signUpView, setSignUpView] = useState(false);
-  const [formFields, setFormFields] = useState(LOGIN_SIGN_UP_FORM_FIELDS);
+  const [formFields, setFormFields] = useState(LOGIN_FORM_FIELDS);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -72,14 +66,9 @@ const Login = ({ hasServerError }) => {
         }
       })
     );
-    setEditing(true);
   };
 
-  const fetchLoginOrSignupFn = (formattedData) => {
-    if (signUpView) {
-      dispatch(authActions.getSignup(formattedData));
-      return;
-    }
+  const fetchLoginFn = (formattedData) => {
     dispatch(authActions.getUserID(formattedData));
   };
 
@@ -97,6 +86,7 @@ const Login = ({ hasServerError }) => {
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
     if (containsErr || isRequiredFieldsEmpty) {
+      console.log('Empty form fields. Unable to proceed.');
       return;
     } else {
       const formattedData = Object.values(formFields).reduce((acc, el) => {
@@ -106,67 +96,43 @@ const Login = ({ hasServerError }) => {
         return acc;
       }, {});
 
-      setEditing(false);
-      fetchLoginOrSignupFn(formattedData);
+      fetchLoginFn(formattedData);
     }
   };
 
   return (
-    <Box className={classes.root}>
-      <Typography className={classNames(classes.header, classes.errorText)}>Find meaning to volunteer</Typography>
-      <Typography className={classes.text}>
-        Sign up to be updated with events around your community. You can lend a hand, or even ask for one.
-        <EmojiPeopleRounded />
-      </Typography>
-      <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
-      <div className={classes.form}>
-        <form>
-          {Object.values(formFields).map((v, index) => (
-            <TextField
-              className={classes.text}
-              key={index}
-              id={v.name}
-              name={v.name}
-              label={v.label}
-              value={v.value}
-              type={v.type}
-              variant={v.variant}
-              autoComplete={v.autocomplete}
-              placeholder={v.placeholder}
-              onChange={handleInput}
-              required={v.required}
-              fullWidth={v.fullWidth}
-              error={!!v.errorMsg}
-              helperText={v.errorMsg}
-              onKeyDown={(e) => {
-                if (e.code === 'Enter') {
-                  handleFormSubmit(e);
-                }
-              }}
-              InputProps={{
-                startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
-              }}
-            />
-          ))}
-        </form>
-        <Typography variant="body1" className={classes.text}>
-          {signUpView ? `Already have an account ?` : `Do not have an account ?`}
-        </Typography>
-        <div className={classes.row}>
-          <Chip
-            icon={<FaceRounded />}
-            label={signUpView ? `Login` : `Create Account`}
-            onClick={() => {
-              setEditing(true);
-              setSignUpView(!signUpView);
+    <div className={classes.form}>
+      <form>
+        {Object.values(formFields).map((v, index) => (
+          <TextField
+            className={classes.text}
+            key={index}
+            id={v.name}
+            name={v.name}
+            label={v.label}
+            value={v.value}
+            type={v.type}
+            variant={v.variant}
+            autoComplete={v.autocomplete}
+            placeholder={v.placeholder}
+            onChange={handleInput}
+            required={v.required}
+            fullWidth={v.fullWidth}
+            error={!!v.errorMsg}
+            helperText={v.errorMsg}
+            onKeyDown={(e) => {
+              if (e.code === 'Enter') {
+                handleFormSubmit(e);
+              }
             }}
-            variant="outlined"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
+            }}
           />
-          <Button onClick={handleFormSubmit}>Submit</Button>
-        </div>
-        <span className={classes.warningText}>{!editing ? hasServerError : null}</span>
-      </div>
-    </Box>
+        ))}
+      </form>
+      <Button onClick={handleFormSubmit}>Submit</Button>
+    </div>
   );
 };
 
