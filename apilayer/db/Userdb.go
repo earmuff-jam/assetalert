@@ -30,8 +30,8 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	}
 
 	sqlStr := `
-	INSERT INTO auth.users(email, encrypted_password, role)
-	VALUES ($1, $2, $3)
+	INSERT INTO auth.users(email, birthdate, encrypted_password, role)
+	VALUES ($1, $2, $3, $4)
 	RETURNING id
 	`
 
@@ -39,6 +39,7 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	err = db.QueryRow(
 		sqlStr,
 		draftUser.Email,
+		draftUser.Birthday,
 		string(hashedPassword),
 		draftUser.Role,
 	).Scan(&draftUserID)

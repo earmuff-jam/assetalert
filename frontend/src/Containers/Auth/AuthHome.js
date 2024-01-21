@@ -1,10 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box, Container, Paper, Typography } from '@material-ui/core';
-
-import { useSelector } from 'react-redux';
-import Login from '../../Components/Auth/Login';
 import AuthFooter from '../../Components/Auth/AuthFooter';
+import Authenticator from '../../Components/Auth/Authenticator';
 import AuthHeroSection from '../../Components/Auth/AuthHeroSection';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,9 +42,6 @@ const useStyles = makeStyles((theme) => ({
 const AuthHome = () => {
   const classes = useStyles();
 
-  const { loading, error } = useSelector((state) => state.auth);
-  const hasServerError = !loading && error;
-
   return (
     <>
       <Container maxWidth="lg">
@@ -64,7 +59,7 @@ const AuthHome = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Box className={classes.auth}>
-              <Login hasServerError={hasServerError} />
+              <Authenticator />
             </Box>
           </Grid>
         </Grid>

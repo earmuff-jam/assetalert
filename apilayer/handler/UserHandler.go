@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -53,6 +54,20 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 
 	if len(draftUser.Role) <= 0 {
 		draftUser.Role = "USER"
+	}
+
+	t, err := time.Parse("2006-01-02", draftUser.Birthday)
+	if err != nil {
+		fmt.Printf("Error parsing birthdate. Error: %+v", err)
+		return
+	}
+
+	// Calculate the age
+	age := time.Now().Year() - t.Year()
+	// Check if the user is at least 13 years old
+	if age <= 13 {
+		fmt.Println("unable to sign up user. verification failed. ")
+		return
 	}
 
 	backendClientUsr := os.Getenv("CLIENT_USER")

@@ -2,7 +2,7 @@
 SET SEARCH_PATH TO community, auth;
 
 -- AUTHENTICATION --
-INSERT INTO auth.users(email, role, encrypted_password) values ('test@gmail.com', 'TESTER', '$2a$08$z3ncDl2TrGl8iaC3pUuYPO8Td3gR5cJTgV5x8Q6Fu73uwMNiKZsIW');
+INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');
 
 -- ADD EVENTS SQL TEST DATA --
 
