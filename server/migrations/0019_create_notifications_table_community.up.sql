@@ -18,68 +18,54 @@ CREATE TABLE IF NOT EXISTS notifications
 
 COMMENT ON TABLE notifications IS 'list of notifications for each user';
 
--- -- trigger to update notification table if the change is in events table --
+CREATE OR REPLACE FUNCTION community.handle_notification_from_items()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    -- Check if the operation is an INSERT or UPDATE
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO community.notifications (
+            project_id,
+            title,
+            created_by,
+            updated_by
+        ) VALUES (
+            NEW.project_id,
+             'Added new ' || NEW.item_detail,
+            NEW.created_by,
+            NEW.updated_by
+        );
+    ELSEIF TG_OP = 'UPDATE' THEN
+    	INSERT INTO community.notifications (
+            project_id,
+            title,
+            created_by,
+            updated_by
+        ) VALUES (
+            NEW.project_id,
+             'Updated ' || NEW.item_detail,
+            NEW.created_by,
+            NEW.updated_by
+        );
+    ELSIF TG_OP = 'DELETE' THEN
+        -- Delete all notifications with the corresponding project_id from items
+        DELETE FROM community.notifications
+        WHERE project_id = OLD.project_id;
+    END IF;
 
--- DROP FUNCTION IF EXISTS community.handle_notification_from_events_trigger() CASCADE;
--- CREATE FUNCTION community.handle_notification_from_events()
---     RETURNS TRIGGER AS
--- $$
--- BEGIN
---     INSERT INTO community.notifications (
---         id,
---         project_id,
---         title,
---         created_by,
---         updated_by
---         )
---     VALUES (
---         new.id,
---         new.email,
---         new.phone
---     );
-
--- RETURN NEW;
--- END;
-
--- $$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- CREATE TRIGGER handle_notification_from_events_trigger
---     AFTER INSERT, UPDATE, DELETE
--- 	ON community.projects
---     FOR EACH ROW
--- EXECUTE PROCEDURE community.handle_notification_from_events();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
--- -- trigger to update notification table if the change is in profiles table --
+DROP TRIGGER IF EXISTS handle_notification_from_items_trigger ON community.items;
 
--- DROP FUNCTION IF EXISTS community.handle_notification_from_profiles_trigger() CASCADE;
--- CREATE FUNCTION community.handle_notification_from_profiles()
---     RETURNS TRIGGER AS
--- $$
--- BEGIN
---     INSERT INTO community.notifications (
---         id,
---         project_id,
---         title,
---         created_by,
---         updated_by
---         )
---     VALUES (
---         new.id,
---         new.email,
---         new.phone
---     );
-
--- RETURN NEW;
--- END;
-
--- $$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- CREATE TRIGGER handle_notification_from_profiles_trigger
---     AFTER INSERT, UPDATE, DELETE
--- 	ON community.projects
---     FOR EACH ROW
--- EXECUTE PROCEDURE community.handle_notification_from_profiles();
+-- Create the new trigger for community.items
+CREATE TRIGGER handle_notification_from_items_trigger
+    AFTER INSERT OR UPDATE OR DELETE
+    ON community.items
+    FOR EACH ROW
+    EXECUTE FUNCTION community.handle_notification_from_items();
 
 ALTER TABLE community.notifications
     OWNER TO community_admin;

@@ -33,7 +33,7 @@ LEFT JOIN community.profiles up ON n.updated_by = up.id
 WHERE
     n.created_by = $1
 ORDER BY
-    n.isviewed ASC
+    n.created_at  DESC , n.isviewed ASC
 LIMIT 10;
 	`
 	rows, err := db.Query(sqlStr, userID)

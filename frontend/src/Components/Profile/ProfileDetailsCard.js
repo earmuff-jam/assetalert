@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
+  buttonSecondary: {},
   emptyGap: {
     flexGrow: 1,
   },
@@ -66,7 +67,7 @@ const ProfileDetailsCard = ({
               {!editMode ? <EditRounded /> : <CancelRounded />}
             </IconButton>
             <IconButton onClick={handleClickNotificationBar} className={classes.buttonSecondary}>
-              <Badge badgeContent={notifications?.length || 0} color="error" overlap="rectangular">
+              <Badge badgeContent={notifications?.length || 0} variant="dot" color="error" overlap="rectangular">
                 <CallToActionRounded />
               </Badge>
             </IconButton>
