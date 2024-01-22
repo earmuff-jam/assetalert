@@ -173,7 +173,6 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	// Assuming you have a function like db.UpdateUserProfile
 	resp, err := db.UpdateUserProfile(user, userID, updatedProfile)
 	if err != nil {
 		log.Printf("Unable to update profile details. error: +%v", err)

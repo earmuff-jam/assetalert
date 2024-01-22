@@ -3,17 +3,23 @@ import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import { InfoRounded } from '@material-ui/icons';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(1),
-    width: '20rem',
+    width: '16rem',
     maxHeight: '20rem',
   },
   text: {
     fontSize: '0.725rem',
     fontWeight: 'lighter',
     marginBottom: theme.spacing(1),
+    color: theme.palette.text.secondary,
+  },
+  captionText: {
+    fontSize: '0.625rem',
+    fontWeight: 'lighter',
     color: theme.palette.text.secondary,
   },
   subtitle: {
@@ -47,26 +53,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotificationCard = ({ notifications }) => {
+const NotificationCard = ({ notifications, handleNotificationMenuSelect }) => {
   const classes = useStyles();
 
-  const handleClick = () => {
-    // should set the isViewed to true in the db
-  };
   return (
     <Box className={classes.root}>
       <List dense={true}>
         {notifications?.map((v) => (
-          <ListItem key={v.id} className={classes.list} button onClick={handleClick}>
+          <ListItem key={v.id} className={classes.list} button onClick={() => handleNotificationMenuSelect(v.id)}>
             <InfoRounded className={classNames(classes.icon, { [classes.notificationViewed]: v.is_viewed })} />
             <ListItemText
               classes={{
                 primary: classNames(classes.text, classes.bold),
-                secondary: classNames(classes.text, classes.italics),
+                secondary: classNames(classes.captionText, classes.italics),
                 root: classNames(classes.listItem),
               }}
               primary={v.title}
-              secondary={`${v.creator_name} at ${v.created_at}`}
+              secondary={`${v.creator_name || 'Viewed'} around ${moment(v.updated_at).fromNow()}`}
             />
           </ListItem>
         ))}

@@ -1,6 +1,8 @@
 package db
 
 import (
+	"time"
+
 	"github.com/mohit2530/communityCare/model"
 )
 
@@ -74,4 +76,50 @@ LIMIT 10;
 		return make([]model.Notification, 0), nil
 	}
 	return data, nil
+}
+
+// UpdateSelectedNotification ...
+func UpdateSelectedNotification(user string, userID string, draftNotification model.Notification) (*model.Notification, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `
+	UPDATE community.notifications 
+	SET isviewed = $2, isresolved = $3, updated_by = $4, updated_at = $5
+	WHERE id = $1 
+	RETURNING id, project_id, title, isviewed, isresolved, created_by, created_at, updated_by, updated_at;
+	`
+
+	var updatedNotification model.Notification
+
+	// Use QueryRow instead of Exec to get the updated row
+	row := db.QueryRow(sqlStr,
+		draftNotification.ID,
+		draftNotification.IsViewed,
+		draftNotification.IsResolved,
+		draftNotification.UpdatedBy,
+		time.Now(),
+	)
+
+	err = row.Scan(
+		&updatedNotification.ID,
+		&updatedNotification.EventID,
+		&updatedNotification.Title,
+		&updatedNotification.IsViewed,
+		&updatedNotification.IsResolved,
+		&updatedNotification.CreatedBy,
+		&updatedNotification.CreatedAt,
+		&updatedNotification.UpdatedBy,
+		&updatedNotification.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedNotification, nil
 }

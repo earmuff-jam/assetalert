@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import RecentActivitiesList from '../../Components/RecentActivitiesList/RecentActivitiesList';
 import Notification from '../../Components/Profile/Notification';
+import { produce } from 'immer';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -65,6 +66,14 @@ const ProfileDetailPage = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  const handleNotificationMenuSelect = (id) => {
+    const selectedNotification = notifications.filter((v) => v.id === id).find((v) => true);
+    const draftNotification = produce(selectedNotification, (draft) => {
+      draft.is_viewed = true;
+    });
+    dispatch(profileActions.updateProfileNotification({ data: draftNotification }));
+  };
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -179,7 +188,7 @@ const ProfileDetailPage = () => {
               horizontal: 'right',
             }}
           >
-            <Notification notifications={notifications} />
+            <Notification notifications={notifications} handleNotificationMenuSelect={handleNotificationMenuSelect} />
           </Popover>
         </Grid>
         <Grid item xs={12} data-tour="1">

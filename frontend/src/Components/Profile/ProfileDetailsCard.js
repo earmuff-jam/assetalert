@@ -52,7 +52,6 @@ const ProfileDetailsCard = ({
   handleClickNotificationBar,
 }) => {
   const classes = useStyles();
-
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -67,7 +66,12 @@ const ProfileDetailsCard = ({
               {!editMode ? <EditRounded /> : <CancelRounded />}
             </IconButton>
             <IconButton onClick={handleClickNotificationBar} className={classes.buttonSecondary}>
-              <Badge badgeContent={notifications?.length || 0} variant="dot" color="error" overlap="rectangular">
+              <Badge
+                badgeContent={notifications.map((v) => !v.is_viewed).filter(Boolean).length}
+                variant="dot"
+                color="error"
+                overlap="rectangular"
+              >
                 <CallToActionRounded />
               </Badge>
             </IconButton>

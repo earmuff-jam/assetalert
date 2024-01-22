@@ -77,7 +77,9 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
       return acc;
     }, {});
     const storageLocationID =
-      storageLocations.find((v) => v.location === storageLocation.location)?.id || storageLocation.location;
+      storageLocations.find((v) => v.location === storageLocation.storageLocation)?.id ||
+      storageLocation.storageLocation;
+
     const postFillLocation = {
       ...formattedData,
       location: storageLocationID,
@@ -121,7 +123,7 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
         />
       ))}
       <Autocomplete
-        value={storageLocation}
+        value={storageLocation.inputValue}
         forcePopupIcon
         onChange={(event, newValue) => {
           if (typeof newValue === 'string') {
@@ -132,9 +134,7 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
             setStorageLocation({
               storageLocation: newValue.inputValue,
             });
-          } else {
           }
-          setStorageLocation(newValue);
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
