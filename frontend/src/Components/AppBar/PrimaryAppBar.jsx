@@ -134,7 +134,7 @@ const PrimaryAppBar = (props) => {
       <Paper className={classes.appBar}>
         <Typography variant="h6" className={classes.headerText}>
           Mashed
-          <img src={`${import.meta.env.PUBLIC_URL}/mashed-logo.png`} className={classes.logo} alt="company logo" />
+          <img src={'mashed-logo.png'} className={classes.logo} alt="company logo" />
         </Typography>
         <Box className={classes.leftAside}></Box>
         {NAVIGATION_MENU_BAR.map((el) => (

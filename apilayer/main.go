@@ -69,7 +69,7 @@ func main() {
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),
 		handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete}),
 		handlers.AllowCredentials(),
-		handlers.AllowedOrigins([]string{"http://localhost", "http://localhost:3000", "http://localhost:8081"}),
+		handlers.AllowedOrigins([]string{"http://localhost", "http://localhost:5173", "http://localhost:5173"}),
 		handlers.ExposedHeaders([]string{"Authorization2", "Role2"}),
 	)
 
