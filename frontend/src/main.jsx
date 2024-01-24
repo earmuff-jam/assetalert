@@ -5,7 +5,7 @@ import * as ReactDOM from 'react-dom/client';
 import { Provider, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import App from '../src/App';
+import App from './App';
 import steps from './tour/steps';
 import { primary_theme } from './util/Theme';
 import { TourProvider } from '@reactour/tour';

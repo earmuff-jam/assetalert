@@ -156,7 +156,7 @@ const addMarkers = (vectorLayer, events) => {
     });
     const markerStyle = new Style({
       image: new Icon({
-        src: `${process.env.PUBLIC_URL}/reddot.svg`,
+        src: `${import.meta.env.PUBLIC_URL}/reddot.svg`,
         scale: 0.4,
         anchor: [0.5, 0.5],
         anchorXUnits: 'fraction',
