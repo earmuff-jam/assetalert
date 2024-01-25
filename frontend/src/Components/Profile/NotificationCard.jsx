@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import { InfoRounded } from '@material-ui/icons';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotificationCard = ({ notifications, handleNotificationMenuSelect }) => {
   const classes = useStyles();
+  dayjs.extend(relativeTime);
 
   return (
     <Box className={classes.root}>

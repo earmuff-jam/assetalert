@@ -1,6 +1,8 @@
 import { Chip, Tooltip } from '@material-ui/core';
 import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 export const UNKNOWN_LABEL = 'Unknown';
 export const LABELS = [

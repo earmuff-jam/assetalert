@@ -23,6 +23,7 @@ import DownloadExcelButton from './DownloadExcelButton';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   tableWrapper: {
@@ -61,6 +62,8 @@ const useStyles = makeStyles((theme) => ({
 const ViewItemDetail = ({ disabled }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  dayjs.extend(relativeTime);
+
   const { loading, items } = useSelector((state) => state.event);
   const { loading: userDetailsLoading, profileDetails } = useSelector((state) => state.profile);
 

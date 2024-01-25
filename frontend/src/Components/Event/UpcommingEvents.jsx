@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { updateCommunityEventDetails } from '../../actions';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   eventBar: {
@@ -41,6 +42,7 @@ const UpcommingEvents = (props) => {
   const { event, selectedUserEmail, handleSelectedEvent, selectedEvent } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
+  dayjs.extend(relativeTime);
 
   const [isJoined, setIsJoined] = useState(false);
   const [isUserRegisteredEvent, setIsUserRegisteredEvent] = useState(false);

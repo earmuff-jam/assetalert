@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -78,6 +79,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
   const classes = useStyles();
+  dayjs.extend(relativeTime);
+
   return (
     <>
       {filteredOptions?.map((event) => {

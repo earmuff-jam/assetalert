@@ -25,15 +25,15 @@ To simply use the application as intended, log in or sign up with the provided s
 
 **A. Log in to view the application**
 
-![Application Overview](setup/demo/gifs/log-in.gif)
+![Application Overview](setup/demo/gifs/v1/log-in.gif)
 
 **B. View home page and sample event**
 
-![Event Overview](setup/demo/gifs/select-event-sample-items.gif)
+![Event Overview](setup/demo/gifs/v1/select-event-sample-items.gif)
 
 **C. View profile page**
 
-![Profile Overview](setup/demo/gifs/select-profile-sample.gif)
+![Profile Overview](setup/demo/gifs/v1/select-profile-sample.gif)
 
 ## Developer Guide
 

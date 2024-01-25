@@ -8,6 +8,7 @@ import { Box, Tooltip, Typography } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
 export default function PopupContent({ selectedEvent }) {
   const classes = useStyles();
   const theme = useTheme();
+  dayjs.extend(relativeTime);
+
   const [activeStep, setActiveStep] = useState(0);
 
   const {
