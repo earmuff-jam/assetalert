@@ -43,7 +43,7 @@ const AuthFooter = () => {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`${encodeURI('https://github.com/mohit2530/communityCare/blob/master/LICENSE.md')}`}
+          href={`${encodeURI('https://github.com/earmuff-jam/mashed/blob/main/PRIVACY_POLICY.md')}`}
           className={classes.privacyLink}
         >
           Privacy

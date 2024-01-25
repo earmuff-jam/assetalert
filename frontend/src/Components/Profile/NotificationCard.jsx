@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import { InfoRounded } from '@material-ui/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotificationCard = ({ notifications, handleNotificationMenuSelect }) => {
   const classes = useStyles();
+  dayjs.extend(relativeTime);
 
   return (
     <Box className={classes.root}>
@@ -69,7 +71,7 @@ const NotificationCard = ({ notifications, handleNotificationMenuSelect }) => {
                 root: classNames(classes.listItem),
               }}
               primary={v.title}
-              secondary={`${v.creator_name || 'Viewed'} around ${moment(v.updated_at).fromNow()}`}
+              secondary={`${v.creator_name || 'Viewed'} around ${dayjs(v.updated_at).fromNow()}`}
             />
           </ListItem>
         ))}

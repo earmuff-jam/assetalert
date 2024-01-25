@@ -11,7 +11,6 @@ import {
   Checkbox,
 } from '@material-ui/core';
 
-import moment from 'moment';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from '../Organization/constants';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -143,7 +143,7 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formattedDate = moment();
+    const formattedDate = dayjs();
     const formattedReport = {
       ...report,
       event_id: report.id,

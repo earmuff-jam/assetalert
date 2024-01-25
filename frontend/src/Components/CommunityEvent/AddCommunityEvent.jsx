@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Box, Tooltip } from '@material-ui/core';
 
-import moment from 'moment';
 import classnames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@material-ui/lab';
@@ -13,6 +12,7 @@ import { SKILLS_REQUIRED_OPTIONS } from '../Organization/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED } from './constants';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -157,12 +157,12 @@ const AddCommunityEvent = ({ setEditMode }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const currentDate = moment().toISOString();
+    const currentDate = dayjs().toISOString();
     const draftEvent = {
       ...project,
       max_attendees: parseInt(project.max_attendees),
       required_total_man_hours: parseInt(project.required_total_man_hours),
-      start_date: moment(project.start_date, 'YYYY-MM-DDTHH:mm').format(),
+      start_date: dayjs(project.start_date, 'YYYY-MM-DDTHH:mm').format(),
       created_at: currentDate,
       updated_at: currentDate,
       created_by: userID,

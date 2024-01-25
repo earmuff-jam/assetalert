@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { CakeRounded, EmailRounded, VisibilityRounded } from '@material-ui/icons';
 
 export const GENERIC_TEXTFIELD_VARIANT = {
@@ -130,11 +130,11 @@ export const SIGN_UP_FORM_FIELDS = {
     validators: [
       {
         validate: (birthdate) => {
-          const currentYear = moment().year();
-          const birthdateMoment = moment(birthdate, 'YYYY-MM-DD');
+          const currentYear = dayjs().year();
+          const dob = dayjs(birthdate, 'YYYY-MM-DD');
 
-          if (birthdateMoment.isValid()) {
-            const age = currentYear - birthdateMoment.year() - moment().isBefore(birthdateMoment, 'year');
+          if (dob.isValid()) {
+            const age = currentYear - dob.year() - dayjs().isBefore(dob, 'year');
             return age <= 13;
           }
           return false;

@@ -48,7 +48,7 @@ const AuthHome = () => {
         <Paper className={classes.appBar}>
           <Typography variant="h6" className={classes.text}>
             Mashed
-            <img src={`${import.meta.env.PUBLIC_URL}/mashed-logo.png`} className={classes.logo} alt="company logo" />
+            <img src={'mashed-logo.png'} className={classes.logo} alt="company logo" />
           </Typography>
         </Paper>
         <Grid container className={classes.root}>

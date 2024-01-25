@@ -72,9 +72,8 @@ export const NavigationTabBar = ({ value, handleChange }) => {
     <Box className={classes.rowContainer} data-tour="11">
       {NAVIGATION_TABS.map((v, index) => (
         <List key={index}>
-          <ListItem button>
+          <ListItem button onClick={() => handleChange(index)}>
             <ListItemText
-              onClick={() => handleChange(index)}
               className={classNames(classes.fontVariation, {
                 [classes.underline]: value === index,
               })}

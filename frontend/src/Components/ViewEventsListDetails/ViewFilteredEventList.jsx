@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   Typography,
   Button,
@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -78,12 +79,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
   const classes = useStyles();
+  dayjs.extend(relativeTime);
+
   return (
     <>
       {filteredOptions?.map((event) => {
         const eventID = event.id;
-        const formattedDate = moment(event.start_date).fromNow();
-        const formattedDay = moment(event.start_date).format('dd');
+        const formattedDate = dayjs(event.start_date).fromNow();
+        const formattedDay = dayjs(event.start_date).format('dd');
         return (
           <Grid item xs={12} md={3} key={event.id}>
             <Card className={classes.card}>

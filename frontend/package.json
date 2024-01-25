@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "analyzer": "npx vite-bundle-visualizer",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "vite:start": "vite",
@@ -27,7 +28,6 @@
     "env-cmd": "^10.1.0",
     "immer": "^10.0.3",
     "lodash": "^4.17.21",
-    "moment": "^2.29.4",
     "notistack": "^3.0.1",
     "ol": "^8.1.0",
     "react": "^18.2.0",
@@ -55,6 +55,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "dayjs": "^1.11.10",
     "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

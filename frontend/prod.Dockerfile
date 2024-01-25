@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Install node packages
-RUN yarn network-timeout 100000
+RUN yarn --network-timeout 600000
 
 # Build the app
 RUN NODE_OPTIONS="--max-old-space-size=4096" yarn build --network-timeout 600000

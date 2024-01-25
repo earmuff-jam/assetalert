@@ -1,7 +1,8 @@
 import React from 'react';
-import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Badge, Chip, Tooltip, Typography } from '@material-ui/core';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,10 +38,12 @@ const useStyles = makeStyles((theme) => ({
 
 const RecentActivity = ({ activity, usernameOrFullName }) => {
   const classes = useStyles();
+  dayjs.extend(relativeTime);
+
   return (
     <div className={classes.root}>
       <Typography className={classes.textColor}>
-        {usernameOrFullName || 'Anonymous'} - {moment(activity.start_date || activity.created_at).fromNow()}
+        {usernameOrFullName || 'Anonymous'} - {dayjs(activity.start_date || activity.created_at).fromNow()}
       </Typography>
       <Typography variant="h6" className={classes.activityTitle}>
         {activity.title}
