@@ -76,6 +76,25 @@ type ReportEvent struct {
 	SharableGroups []string  `json:"sharable_groups"`
 }
 
+// Expense ...
+type Expense struct {
+	ID               string    `json:"id"`
+	EventID          string    `json:"eventID"`
+	ItemName         string    `json:"item_name"`
+	ItemCost         string    `json:"item_cost"`
+	CategoryID       string    `json:"category_id"`
+	Category         string    `json:"category_name"`
+	PurchaseLocation string    `json:"purchase_location"`
+	Notes            string    `json:"notes"`
+	CreatedAt        time.Time `json:"created_at"`
+	CreatedBy        string    `json:"created_by"`
+	CreatorName      string    `json:"creator_name,omitempty"`
+	UpdatedAt        time.Time `json:"updated_at"`
+	UpdatedBy        string    `json:"updated_by"`
+	UpdatorName      string    `json:"updator_name,omitempty"`
+	SharableGroups   []string  `json:"sharable_groups"`
+}
+
 // State ...
 type State struct {
 	ID           string `json:"id"`
@@ -127,6 +146,17 @@ type Item struct {
 type StorageLocation struct {
 	ID             string    `json:"id"`
 	Location       string    `json:"location"`
+	CreatedBy      string    `json:"created_by"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedBy      string    `json:"updated_by"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	SharableGroups []string  `json:"sharable_groups"`
+}
+
+// Category ...
+type Category struct {
+	ID             string    `json:"id"`
+	CategoryName   string    `json:"category_name"`
 	CreatedBy      string    `json:"created_by"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedBy      string    `json:"updated_by"`

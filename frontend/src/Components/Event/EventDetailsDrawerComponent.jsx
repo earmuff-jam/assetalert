@@ -9,6 +9,8 @@ import PieChart from '../PieChart/PieChart';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
+import { isEditingAllowed } from './constants';
+import ExpenseTab from './ExpenseTab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +66,11 @@ export const NavigationTabBar = ({ value, handleChange }) => {
     },
     {
       id: 3,
+      displayName: 'Expenses',
+      subtitle: 'Expenses tab and settings',
+    },
+    {
+      id: 4,
       displayName: 'Details',
       subtitle: 'Event details and settings',
     },
@@ -99,6 +106,7 @@ const EventDetailsDrawerComponent = ({
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
+  const editingAllowed = isEditingAllowed(disabled, userDetail);
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -142,6 +150,14 @@ const EventDetailsDrawerComponent = ({
           />
         );
       case 2:
+        return (
+          <Box>
+            <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>
+              <ExpenseTab eventID={eventID} userID={userDetail.userID} editingAllowed={editingAllowed} />
+            </Box>
+          </Box>
+        );
+      case 3:
         return (
           <Box>
             <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>

@@ -16,6 +16,15 @@ export function* fetchEvent(action) {
   }
 }
 
+export function* fetchCategoryList() {
+  try {
+    const response = yield call(instance.get, `${BASEURL}/categories`);
+    yield put(eventActions.getCategoryListSuccess(response.data));
+  } catch (e) {
+    yield put(eventActions.getCategoryListFailure(e));
+  }
+}
+
 export function* addItem(action) {
   try {
     const response = yield call(instance.post, `${BASEURL}/item`, { ...action.payload });
@@ -47,6 +56,16 @@ export function* fetchItemList(action) {
   }
 }
 
+export function* fetchExpenseList(action) {
+  try {
+    const { eventID } = action.payload;
+    const response = yield call(instance.get, `${BASEURL}/expenses/${eventID}`);
+    yield put(eventActions.getExpenseListSuccess(response.data));
+  } catch (e) {
+    yield put(eventActions.getExpenseListFailure(e));
+  }
+}
+
 export function* fetchUpdateItemDetails(action) {
   try {
     const { eventID } = action.payload;
@@ -54,6 +73,16 @@ export function* fetchUpdateItemDetails(action) {
     yield put(eventActions.updateItemDetailsSuccess(response.data));
   } catch (e) {
     yield put(eventActions.updateItemDetailsFailure(e));
+  }
+}
+
+export function* addExpense(action) {
+  try {
+    const { postFormattedData } = action.payload;
+    const response = yield call(instance.post, `${BASEURL}/expenses`, { ...postFormattedData });
+    yield put(eventActions.addExpenseListSuccess(response.data));
+  } catch (e) {
+    yield put(eventActions.addExpenseListFailure(e));
   }
 }
 
@@ -107,30 +136,51 @@ export function* fetchReportForSelectedEvent(action) {
 export function* watchFetchEvent() {
   yield takeLatest(`event/getSelectedEvent`, fetchEvent);
 }
+
 export function* watchAddItem() {
   yield takeLatest(`event/addItem`, addItem);
 }
+
+export function* watchGetCategoryList() {
+  yield takeLatest(`event/getCategoryList`, fetchCategoryList);
+}
+
+export function* watchFetchExpenseList() {
+  yield takeLatest(`event/getExpenseList`, fetchExpenseList);
+}
+
+export function* watchUpdateExpenseList() {
+  yield takeLatest(`event/addExpenseList`, addExpense);
+}
+
 export function* watchFetchItemList() {
   yield takeLatest(`event/getItemList`, fetchItemList);
 }
+
 export function* watchUpdateItemDetails() {
   yield takeLatest(`event/updateItemDetails`, fetchUpdateItemDetails);
 }
+
 export function* watchUpdateEventImage() {
   yield takeLatest(`event/updateEventImage`, updateEventImage);
 }
+
 export function* watchFetchStorageLocations() {
   yield takeLatest(`event/getStorageLocations`, fetchStorageLocations);
 }
+
 export function* watchFetchAllVolunteeringHours() {
   yield takeLatest(`event/getVolunteeringActivities`, fetchAllVolunteeringHours);
 }
+
 export function* watchAddVolunteeringHours() {
   yield takeLatest(`event/addVolunteeringHours`, addVolunteeringHours);
 }
+
 export function* watchCreateNewReportAgainstEvent() {
   yield takeLatest(`event/createNewReportAgainstEvent`, createNewReportAgainstEvent);
 }
+
 export function* watchFetchReportForSelectedEvent() {
   yield takeLatest(`event/getReportsForSelectedEvent`, fetchReportForSelectedEvent);
 }
@@ -139,6 +189,9 @@ export function* watchFetchReportForSelectedEvent() {
 export default [
   watchAddItem,
   watchFetchEvent,
+  watchFetchExpenseList,
+  watchUpdateExpenseList,
+  watchGetCategoryList,
   watchFetchItemList,
   watchUpdateEventImage,
   watchUpdateItemDetails,

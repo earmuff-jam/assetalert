@@ -5,12 +5,13 @@
 # Description: Loads the database layer for the application
 
 help() {
-    echo "Usage: $0 [option...] {loadEnv, loadDb, loadTestEnv, loadMigration}" >&2
+    echo "Usage: $0 [Choose any of the following options...] {loadEnv, loadDb, loadTestEnv, loadMigration, uninstall}" >&2
     echo
-    echo "   -e, --loadEnv              Loads the environment variables only"
-    echo "   -f, --loadDb               Allows to build the db from scratch erasing all data"
-    echo "   -t, --loadTestEnv          Allows to load all containers and start with new fresh data. This is like a test environment similar to deployment env."
-    echo "   -m, --loadMigration        Allows to load the migration in sequence. Does not erase data but requires container to be up"
+    echo "   -e --loadEnv              Loads the environment variables only"
+    echo "   -f --loadDb               Allows to build the db from scratch erasing all data"
+    echo "   -t --loadTestEnv          Allows to load all containers and start with new fresh data. This is like a test environment similar to deployment env."
+    echo "   -m --loadMigration        Allows to load the migration in sequence. Does not erase data but requires container to be up"
+    echo "   -u --uninstall            Uninstall the application erasing all data"
     echo
     exit 1
 }
@@ -46,6 +47,12 @@ loadMigration() {
     ./setup/_loadMigration.sh
 }
 
+uninstall() {
+
+    echo "uninstalling software. removing all data..."
+    docker-compose down --remove-orphans --volumes
+}
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -h|--help) help; shift ;;
@@ -53,6 +60,7 @@ while [[ "$#" -gt 0 ]]; do
         -f|--loadDb) loadDb; shift ;;
         -t|--loadTestEnv) loadTestEnv; shift ;;
         -m|--loadMigration) loadMigration; shift ;;
+        -u|--uninstall) uninstall; shift ;;
         *) help; echo "Unknown parameter passed: $1" ;;
     esac
     shift

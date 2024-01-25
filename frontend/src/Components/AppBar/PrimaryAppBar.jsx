@@ -42,21 +42,30 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.black,
     backgroundColor: theme.palette.common.white,
   },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   headerText: {
     fontSize: '2.0rem',
     letterSpacing: '0.125rem',
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: '0.925rem',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
     },
   },
   logo: {
     marginLeft: theme.spacing(0.1),
+    marginTop: theme.spacing(1),
     width: '1rem',
     height: '1rem',
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(1),
+      width: '2rem',
+      height: '2rem',
+    },
   },
 }));
 
@@ -132,10 +141,12 @@ const PrimaryAppBar = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={classes.appBar}>
-        <Typography variant="h6" className={classes.headerText}>
-          Mashed
+        <Box className={classes.header}>
+          <Typography variant="h6" className={classes.headerText}>
+            Mashed
+          </Typography>
           <img src={'mashed-logo.png'} className={classes.logo} alt="company logo" />
-        </Typography>
+        </Box>
         <Box className={classes.leftAside}></Box>
         {NAVIGATION_MENU_BAR.map((el) => (
           <List key={el.id} component="nav" aria-labelledby="nested-list-subheader">

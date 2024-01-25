@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'lighter',
     marginBottom: theme.spacing(2),
   },
+  titleText: {
+    fontSize: '1.2rem',
+    fontWeight: 'lighter',
+  },
   header: {
     fontSize: '1.6rem',
     letterSpacing: '0.0125rem',
@@ -42,9 +46,6 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     padding: theme.spacing(0, 2),
   },
-  warningText: {
-    color: theme.palette.error.main,
-  },
 }));
 
 const Authenticator = () => {
@@ -64,9 +65,10 @@ const Authenticator = () => {
       </Typography>
       <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
       {signUpView ? <Signup /> : <Login />}
-      <Typography variant="body1" className={classes.text}>
+      <Typography className={classes.titleText}>
         {signUpView ? `Already have an account ?` : `Do not have an account ?`}
       </Typography>
+      {hasServerError ? <span className={classes.errorText}>Error</span> : null}
       <div className={classes.row}>
         <Chip
           icon={<FaceRounded />}
@@ -76,7 +78,6 @@ const Authenticator = () => {
           }}
           variant="outlined"
         />
-        {hasServerError ? <span>Error</span> : null}
       </div>
     </Box>
   );
