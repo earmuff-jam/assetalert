@@ -15,6 +15,16 @@ export function* fetchExistingUserDetails() {
   }
 }
 
+export function* fetchExistingNotificationsUserDetails() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/notifications`);
+    yield put(profileActions.getProfileNotificationsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getProfileNotificationsFailure(e));
+  }
+}
+
 export function* updateExistingUserDetails(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -33,6 +43,20 @@ export function* updateExistingUserDetails(action) {
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileDetailsFailure(e));
+  }
+}
+
+export function* fetchUpdateProfileNotification(action) {
+  try {
+    const { data } = action.payload;
+    const notificationID = data.id;
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/notifications/${notificationID}`, {
+      ...data,
+    });
+    yield put(profileActions.updateProfileNotificationSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.updateProfileNotificationFailure(e));
   }
 }
 
@@ -59,6 +83,14 @@ export function* fetchUpdateProfileImage(action) {
   }
 }
 
+export function* watchExistingNotificationsUserDetails() {
+  yield takeLatest(`profile/getProfileNotifications`, fetchExistingNotificationsUserDetails);
+}
+
+export function* watchUpdateProfileNotification() {
+  yield takeEvery(`profile/updateProfileNotification`, fetchUpdateProfileNotification);
+}
+
 export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
@@ -77,6 +109,8 @@ export function* watchFetchUpdateProfileImage() {
 
 // eslint-disable-next-line
 export default [
+  watchExistingNotificationsUserDetails,
+  watchUpdateProfileNotification,
   watchFetchExistingUserDetails,
   watchUpdateExistingUserDetails,
   watchFetchVolunteeringDetails,

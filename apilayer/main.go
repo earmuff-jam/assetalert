@@ -40,6 +40,9 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
 
+	router.Handle("/api/v1/profile/{id}/notifications", CustomRequestHandler(handler.GetAllNotifications)).Methods(http.MethodGet)
+	router.Handle("/api/v1/profile/{id}/notifications/{notificationID}", CustomRequestHandler(handler.UpdateSingleNotification)).Methods(http.MethodPut)
+
 	router.Handle("/api/v1/states", CustomRequestHandler(handler.GetAllStates)).Methods(http.MethodGet)
 	router.Handle("/api/v1/causes", CustomRequestHandler(handler.GetAllEventCauses)).Methods(http.MethodGet)
 	router.Handle("/api/v1/types", CustomRequestHandler(handler.GetAllProjectTypes)).Methods(http.MethodGet)
@@ -66,7 +69,7 @@ func main() {
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),
 		handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete}),
 		handlers.AllowCredentials(),
-		handlers.AllowedOrigins([]string{"http://localhost", "http://localhost:3000", "http://localhost:8081"}),
+		handlers.AllowedOrigins([]string{"http://localhost", "http://localhost:5173", "http://localhost:5173"}),
 		handlers.ExposedHeaders([]string{"Authorization2", "Role2"}),
 	)
 

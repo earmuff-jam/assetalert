@@ -181,4 +181,3 @@ VALUES (
     (SELECT id FROM community.profiles p LIMIT 1),
     (SELECT id FROM community.profiles p LIMIT 1)
 );
-

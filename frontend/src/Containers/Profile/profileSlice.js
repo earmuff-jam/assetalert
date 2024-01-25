@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: '',
   profileDetails: {},
+  notifications: [],
   volunteeringDetails: [],
 };
 
@@ -25,6 +26,38 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.profileDetails = {};
+    },
+    getProfileNotifications: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.notifications = [];
+    },
+    getProfileNotificationsSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = action.payload;
+    },
+    getProfileNotificationsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = [];
+    },
+    updateProfileNotification: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateProfileNotificationSuccess: (state, action) => {
+      const updatedNotification = action.payload;
+      const filteredNotificationList = [...state.notifications].filter((v) => {
+        return v.id !== updatedNotification.id;
+      });
+      state.loading = false;
+      state.error = '';
+      state.notifications = [...filteredNotificationList, updatedNotification];
+    },
+    updateProfileNotificationFailure: (state) => {
+      state.loading = false;
+      state.error = '';
     },
     updateProfileDetails: (state) => {
       state.loading = true;
