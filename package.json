@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "dayjs": "^1.11.10"
+  }
+}

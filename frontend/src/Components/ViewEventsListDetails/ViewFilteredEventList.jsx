@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   Typography,
   Button,
@@ -82,8 +82,8 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
     <>
       {filteredOptions?.map((event) => {
         const eventID = event.id;
-        const formattedDate = moment(event.start_date).fromNow();
-        const formattedDay = moment(event.start_date).format('dd');
+        const formattedDate = dayjs(event.start_date).fromNow();
+        const formattedDay = dayjs(event.start_date).format('dd');
         return (
           <Grid item xs={12} md={3} key={event.id}>
             <Card className={classes.card}>

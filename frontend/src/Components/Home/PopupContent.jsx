@@ -3,11 +3,11 @@ import MobileStepper from '@material-ui/core/MobileStepper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 
-import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -85,8 +85,8 @@ export default function PopupContent({ selectedEvent }) {
             <Typography className={classes.text}>{`Event Type : ${type}`}</Typography>
             <Typography className={classes.text}>{`Location : ${location}`}</Typography>
             <div className={classes.row}>
-              <Typography className={classes.text}>{`Last updated : ${moment(changed).fromNow()}`}</Typography>
-              <Typography className={classes.text}>{`Active Since: ${moment(created_at).fromNow()}`}</Typography>
+              <Typography className={classes.text}>{`Last updated : ${dayjs(changed).fromNow()}`}</Typography>
+              <Typography className={classes.text}>{`Active Since: ${dayjs(created_at).fromNow()}`}</Typography>
             </div>
           </Box>
         </Tooltip>

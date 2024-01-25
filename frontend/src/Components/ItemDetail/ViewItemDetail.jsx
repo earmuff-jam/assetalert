@@ -18,11 +18,11 @@ import {
 
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
 
-import moment from 'moment/moment';
 import EasyEdit, { Types } from 'react-easy-edit';
 import DownloadExcelButton from './DownloadExcelButton';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   tableWrapper: {
@@ -89,7 +89,7 @@ const ViewItemDetail = ({ disabled }) => {
   const formatRow = (row, column, rowIndex) => {
     // if any of the row includes timestamp we modify it
     if (['created_at', 'updated_at'].includes(column)) {
-      return moment(row[column]).fromNow();
+      return dayjs(row[column]).fromNow();
     }
     const inputColumns = ['bought_at', 'unit_price', 'quantity', 'name', 'description'];
     // if the selected event is disabled, no edit for items

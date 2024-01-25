@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, IconButton } from '@material-ui/core';
 import { TurnedInRounded, TurnedInNotRounded, PersonAddRounded, DoneRounded } from '@material-ui/icons';
 
-import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { updateCommunityEventDetails } from '../../actions';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   eventBar: {
@@ -68,7 +68,7 @@ const UpcommingEvents = (props) => {
       <div>
         <div className={classes.eventName}>{event.name}</div>
         <span>
-          Starts {moment(event.date).fromNow()} • {event.location}
+          Starts {dayjs(event.date).fromNow()} • {event.location}
         </span>
         <br />
         <span className={classes.teaser}> {event.teaser}</span>

@@ -1,6 +1,6 @@
 import { Chip, Tooltip } from '@material-ui/core';
 import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
-import moment from 'moment/moment';
+import dayjs from 'dayjs';
 
 export const UNKNOWN_LABEL = 'Unknown';
 export const LABELS = [
@@ -50,7 +50,7 @@ export const LABELS = [
     id: 6,
     label: 'Start Date',
     colName: 'start_date',
-    modifier: (value) => moment(value).fromNow() || 'N/A',
+    modifier: (value) => dayjs(value).fromNow() || 'N/A',
   },
   {
     id: 7,
