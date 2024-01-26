@@ -64,6 +64,7 @@ func RetrieveAllEvents(user string) ([]model.Event, error) {
 	FROM community.projects ev
 	LEFT JOIN community.project_skills ps ON ev.id = ps.project_id
 	GROUP BY ev.id, ev.updated_at
+	ORDER BY ev.updated_at DESC
 	`
 	rows, err := db.Query(sqlStr)
 	if err != nil {
@@ -329,6 +330,8 @@ LEFT JOIN community.storage_locations sl on sl.id = it.storage_location_id
 LEFT JOIN community.profiles cp on cp.id  = it.created_by
 LEFT JOIN community.profiles up on up.id  = it.updated_by
 WHERE project_id =$1
+ORDER BY it.updated_at DESC
+
 	`
 	rows, err := db.Query(sqlStr, eventID)
 	if err != nil {
@@ -453,6 +456,102 @@ func AddItem(user string, draftItem *model.Item) (*model.Item, error) {
 	return draftItem, nil
 }
 
+// AddExpense ...
+func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	sqlStr := `
+        INSERT INTO community.expenses(
+			event_id,
+			item_name, 
+			item_cost, 
+			category_id, 
+			purchase_location, 
+			notes,
+			created_by, 
+			created_at, 
+			updated_by, 
+			updated_at,
+			sharable_groups
+		) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
+
+	parsedEventID, err := uuid.Parse(draftExpense.EventID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	parsedCategoryID, err := uuid.Parse(draftExpense.CategoryID)
+	if err != nil {
+		// if the location is not a uuid type, then it should resemble a new storage location
+		emptyLocationID := ""
+		err := addNewCategoryLocation(user, draftExpense.CategoryID, draftExpense.CreatedBy, &emptyLocationID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		parsedCategoryID, err = uuid.Parse(emptyLocationID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		// Update draftExpense with the new LocationID
+		draftExpense.CategoryID = emptyLocationID
+	}
+
+	parsedCreatorID, err := uuid.Parse(draftExpense.CreatedBy)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	currentTime := time.Now()
+	draftExpense.CreatedAt = currentTime
+	draftExpense.UpdatedAt = currentTime
+
+	var sharableGroups = make([]uuid.UUID, 0)
+	sharableGroups = append(sharableGroups, parsedCreatorID)
+
+	var draftExpenseID uuid.UUID
+	err = tx.QueryRow(
+		sqlStr,
+		parsedEventID,
+		draftExpense.ItemName,
+		draftExpense.ItemCost,
+		parsedCategoryID,
+		draftExpense.PurchaseLocation,
+		draftExpense.Notes,
+		parsedCreatorID,
+		currentTime,
+		parsedCreatorID,
+		currentTime,
+		pq.Array(sharableGroups),
+	).Scan(&draftExpenseID)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	draftExpense.ID = draftExpenseID.String()
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return draftExpense, nil
+}
+
 // UpdateItem ...
 func UpdateItem(user string, draftItem *model.ItemToUpdate) (*model.Item, error) {
 	db, err := SetupDB(user)
@@ -565,55 +664,6 @@ func UpdateItem(user string, draftItem *model.ItemToUpdate) (*model.Item, error)
 	return &item, nil
 }
 
-// addNewStorageLocation ... adds new storage location if not existing
-func addNewStorageLocation(user string, draftLocation string, created_by string, emptyLocationID *string) error {
-	db, err := SetupDB(user)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-
-	sqlStr := `INSERT INTO community.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
-
-	var sharableGroups = make([]uuid.UUID, 0)
-
-	userID, err := uuid.Parse(created_by)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	sharableGroups = append(sharableGroups, userID)
-
-	row := tx.QueryRow(
-		sqlStr,
-		draftLocation,
-		created_by,
-		created_by,
-		time.Now(),
-		time.Now(),
-		pq.Array(sharableGroups),
-	)
-
-	err = row.Scan(emptyLocationID)
-
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := tx.Commit(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // UpdateEvent ...
 func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 	db, err := SetupDB(user)
@@ -694,8 +744,7 @@ func RetrieveAllReports(user string, eventID string) ([]model.ReportEvent, error
 	}
 	defer db.Close()
 
-	sqlStr := `
-	SELECT 
+	sqlStr := `SELECT 
 	cr.id,
 	cr.project_id, 
 	cr.subject,
@@ -712,6 +761,7 @@ func RetrieveAllReports(user string, eventID string) ([]model.ReportEvent, error
 	LEFT JOIN community.profiles cp on cp.id  = cr.created_by
 	LEFT JOIN community.profiles up on up.id  = cr.updated_by
 	WHERE cr.project_id = $1
+	ORDER BY cr.updated_at DESC
 	`
 	rows, err := db.Query(sqlStr, eventID)
 	if err != nil {
@@ -932,6 +982,95 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	event.SharableGroups = sharableGroups
 
 	return &event, nil
+}
+
+// RetrieveAllExpenses ...
+func RetrieveAllExpenses(user string, eventID uuid.UUID) ([]model.Expense, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
+	sqlStr := `
+	SELECT e.id,
+        e.event_id,
+        e.item_name,
+        e.item_cost,
+        e.category_id,
+        cc.item_name AS category_name,
+        e.purchase_location,
+        e.notes,
+        e.created_at,
+        e.created_by,
+        COALESCE(cp.full_name, cp.username, cp.email_address) AS creator_name,
+        e.updated_at,
+        e.updated_by,
+        COALESCE(up.full_name, up.username, up.email_address) AS updator_name,
+        e.sharable_groups
+FROM community.expenses e
+		LEFT JOIN community.category cc ON e.category_id = cc.id 
+         LEFT JOIN community.profiles cp ON e.created_by = cp.id
+         LEFT JOIN community.profiles up ON e.updated_by = cp.id
+WHERE e.event_id = $1
+GROUP BY category_name, e.event_id, e.id, e.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address
+ORDER BY e.updated_at DESC;
+`
+	rows, err := tx.Query(sqlStr, eventID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	defer rows.Close()
+
+	var draftExpenses []model.Expense
+
+	for rows.Next() {
+		var itemName sql.NullString
+		var itemCost sql.NullString
+		var categoryID sql.NullString
+		var category sql.NullString
+		var purchaseLocation sql.NullString
+		var notes sql.NullString
+		var creator sql.NullString
+		var updater sql.NullString
+
+		var sharableGroups pq.StringArray
+
+		var expense model.Expense
+		if err := rows.Scan(&expense.ID, &expense.EventID, &itemName, &itemCost, &categoryID, &category, &purchaseLocation, &notes, &expense.CreatedAt, &expense.CreatedBy, &creator, &expense.UpdatedAt, &expense.UpdatedBy, &updater, &sharableGroups); err != nil {
+			return nil, err
+		}
+		// Assign values to the struct
+		expense.ItemName = itemName.String
+		expense.ItemCost = itemCost.String
+		expense.CategoryID = categoryID.String
+		expense.Category = category.String
+		expense.PurchaseLocation = purchaseLocation.String
+		expense.Notes = notes.String
+		expense.CreatorName = creator.String
+		expense.UpdatorName = updater.String
+		expense.SharableGroups = sharableGroups
+
+		draftExpenses = append(draftExpenses, expense)
+	}
+
+	if err := rows.Err(); err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return draftExpenses, nil
 }
 
 // RetrieveVolunteerHours ...
@@ -1170,7 +1309,7 @@ func RetrieveAllProjectType(user string) ([]model.ProjectType, error) {
 	return data, nil
 }
 
-// RetrieveAllStorageLocations ...
+// RetrieveAllStorageLocation ...
 func RetrieveAllStorageLocation(user string) ([]model.StorageLocation, error) {
 	db, err := SetupDB(user)
 	if err != nil {
@@ -1218,4 +1357,162 @@ func RetrieveAllStorageLocation(user string) ([]model.StorageLocation, error) {
 	}
 
 	return data, nil
+}
+
+// RetrieveAllCategories ...
+func RetrieveAllCategories(user string) ([]model.Category, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := "SELECT id, item_name, created_at, created_by, updated_at, updated_by, sharable_groups FROM community.category"
+	rows, err := db.Query(sqlStr)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.Category
+
+	var categoryID sql.NullString
+	var categoryName sql.NullString
+	var createdBy sql.NullString
+	var createdAt sql.NullTime
+	var updatedBy sql.NullString
+	var updatedAt sql.NullTime
+	var sharableGroups pq.StringArray
+
+	for rows.Next() {
+		var ec model.Category
+		if err := rows.Scan(&categoryID, &categoryName, &createdAt, &createdBy, &updatedAt, &updatedBy, &sharableGroups); err != nil {
+			return nil, err
+		}
+
+		// Assign values to the struct
+		ec.ID = categoryID.String
+		ec.CategoryName = categoryName.String
+		ec.CreatedAt = createdAt.Time
+		ec.CreatedBy = createdBy.String
+		ec.UpdatedAt = updatedAt.Time
+		ec.UpdatedBy = updatedBy.String
+		ec.SharableGroups = sharableGroups
+
+		data = append(data, ec)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+// addNewStorageLocation ...
+//
+// adds new storage location if not existing
+func addNewStorageLocation(user string, draftLocation string, created_by string, emptyLocationID *string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	sqlStr := `INSERT INTO community.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+
+	var sharableGroups = make([]uuid.UUID, 0)
+
+	userID, err := uuid.Parse(created_by)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	sharableGroups = append(sharableGroups, userID)
+
+	row := tx.QueryRow(
+		sqlStr,
+		draftLocation,
+		created_by,
+		created_by,
+		time.Now(),
+		time.Now(),
+		pq.Array(sharableGroups),
+	)
+
+	err = row.Scan(emptyLocationID)
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// addNewCategoryLocation ...
+//
+// adds new storage location if not existing
+func addNewCategoryLocation(user string, draftCategoryID string, created_by string, emptyLocationID *string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	sqlStr := `INSERT INTO community.category(
+		item_name, 
+		created_by, 
+		updated_by, 
+		created_at, 
+		updated_at, 
+		sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+
+	var sharableGroups = make([]uuid.UUID, 0)
+
+	userID, err := uuid.Parse(created_by)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	sharableGroups = append(sharableGroups, userID)
+
+	row := tx.QueryRow(
+		sqlStr,
+		draftCategoryID,
+		created_by,
+		created_by,
+		time.Now(),
+		time.Now(),
+		pq.Array(sharableGroups),
+	)
+
+	err = row.Scan(emptyLocationID)
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
 }

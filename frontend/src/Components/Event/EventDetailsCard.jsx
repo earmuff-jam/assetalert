@@ -19,12 +19,14 @@ import {
 import { useDispatch } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import Title from '../DialogComponent/Title';
-import EventItemDrawer from './EventItemDrawer';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import { enqueueSnackbar } from 'notistack';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import EventProfile from './EventProfile';
+import { isEditingAllowed } from './constants';
+import ViewItemDetail from '../ItemDetail/ViewItemDetail';
+import Drawer from '../DrawerListComponent/Drawer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +83,7 @@ const EventDetailsCard = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const editingAllowed = isEditingAllowed(disabled, userDetail);
 
   const [display, setDisplay] = useState(0);
   const [editMode, setEditMode] = useState(false); // editing general fields for select event
@@ -149,17 +152,6 @@ const EventDetailsCard = ({
       dispatch(eventActions.getItemList({ eventID }));
     }
   };
-  const shouldDisableViewItemList = (disabled, userDetail) => {
-    if (disabled) {
-      return true;
-    }
-    const user = userDetail?.userID;
-    const sharableGroups = userDetail?.sharable_groups || [];
-    if (sharableGroups.includes(user)) {
-      return false;
-    }
-    return true;
-  };
 
   return (
     <Card className={classes.root}>
@@ -184,11 +176,13 @@ const EventDetailsCard = ({
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
-              <IconButton onClick={toggleEditMode}>
-                {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
-              </IconButton>
-            </Tooltip>
+            {!editingAllowed && (
+              <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
+                <IconButton onClick={toggleEditMode}>
+                  {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
         </Box>
         <Box className={classNames(classes.rowContainer, classes.gutterBottom)} data-tour="5">
@@ -223,13 +217,9 @@ const EventDetailsCard = ({
           />
         )}
       </CardContent>
-      <EventItemDrawer
-        open={display === 'View'}
-        disabled={disabled}
-        userDetail={userDetail}
-        toggleDrawer={toggleDrawer}
-        shouldDisableViewItemList={shouldDisableViewItemList}
-      />
+      <Drawer open={display === 'View'} toggleDrawer={toggleDrawer}>
+        <ViewItemDetail disabled={editingAllowed} />
+      </Drawer>
       {display === 'Add' && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setDisplay(0)}>Add New Item</Title>

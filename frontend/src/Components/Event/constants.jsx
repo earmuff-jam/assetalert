@@ -96,3 +96,21 @@ export const BUILD_TABLE_CONSTANTS = (eventObj) => {
 
   return tableRows;
 };
+
+/**
+ * validates if the user is allowed to add item and edit the event
+ * @param {boolean} disabled
+ * @param {object} userDetail
+ * @returns
+ */
+export const isEditingAllowed = (disabled, userDetail) => {
+  if (disabled) {
+    return true;
+  }
+  const user = userDetail?.userID;
+  const sharableGroups = userDetail?.sharable_groups || [];
+  if (sharableGroups.includes(user)) {
+    return false;
+  }
+  return true;
+};

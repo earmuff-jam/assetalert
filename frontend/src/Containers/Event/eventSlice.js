@@ -5,8 +5,10 @@ const initialState = {
   selectedEvent: {},
   volunteeringActivities: [],
   storageLocations: [],
+  categories: [],
   items: [],
   reports: [],
+  expenses: [],
   loading: false,
   error: '',
 };
@@ -117,6 +119,49 @@ const eventSlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    getExpenseList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.expenses = [];
+    },
+    getExpenseListSuccess: (state, action) => {
+      state.expenses = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getExpenseListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.expenses = [];
+    },
+    addExpenseList: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    addExpenseListSuccess: (state, action) => {
+      state.expenses = [...state.expenses, action.payload];
+      state.loading = false;
+      state.error = '';
+    },
+    addExpenseListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    getCategoryList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.categories = [];
+    },
+    getCategoryListSuccess: (state, action) => {
+      state.categories = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getCategoryListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.categories = [];
+    },
     getItemList: (state) => {
       state.loading = true;
       state.error = '';
@@ -135,6 +180,7 @@ const eventSlice = createSlice({
     addItem: (state) => {
       state.loading = true;
       state.error = '';
+      state.items = [];
     },
     addItemSuccess: (state, action) => {
       state.items = [...state.items, action.payload];

@@ -23,7 +23,6 @@ func main() {
 	if err != nil {
 		log.Printf("No env file detected. Using os system configuration.")
 	}
-
 	router := mux.NewRouter()
 	// these routes are treated as they are public routes
 	router.HandleFunc("/api/v1/signup", handler.Signup).Methods("POST", "OPTIONS")
@@ -47,12 +46,16 @@ func main() {
 	router.Handle("/api/v1/causes", CustomRequestHandler(handler.GetAllEventCauses)).Methods(http.MethodGet)
 	router.Handle("/api/v1/types", CustomRequestHandler(handler.GetAllProjectTypes)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
+	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 
 	router.Handle("/api/v1/events", CustomRequestHandler(handler.GetAllEvents)).Methods(http.MethodGet)
 	router.Handle("/api/v1/events", CustomRequestHandler(handler.CreateNewEvent)).Methods(http.MethodPost)
 	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.GetEvent)).Methods(http.MethodGet)
 	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.UpdateExistingEvent)).Methods(http.MethodPut)
 	router.Handle("/api/v1/event/{id}/updateAvatar", CustomRequestHandler(handler.UpdateEventAvatar)).Methods(http.MethodPost)
+
+	router.Handle("/api/v1/expenses/{id}", CustomRequestHandler(handler.GetAllExpenses)).Methods(http.MethodGet)
+	router.Handle("/api/v1/expenses", CustomRequestHandler(handler.AddExpenseToEvent)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.GetAllItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.UpdateItemDetails)).Methods(http.MethodPut)
@@ -123,7 +126,6 @@ func validateCredsWithAuthorizedDbUser() string {
 //
 // to validate the user jwt token. the cookie string is the unique id for the oauth table
 func validateJwtTokenWithUser(currentUser string, cookie string) (bool, error) {
-
 	err := db.ValidateCredentials(currentUser, cookie)
 	if err != nil {
 		return false, err

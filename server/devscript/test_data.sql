@@ -181,3 +181,117 @@ VALUES (
     (SELECT id FROM community.profiles p LIMIT 1),
     (SELECT id FROM community.profiles p LIMIT 1)
 );
+
+-- EXPENSES SQL TEST DATA ---
+
+INSERT INTO community.expenses (event_id, item_name, item_cost, category_id, purchase_location, notes, created_by, updated_by, sharable_groups)
+VALUES
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Catering Services',
+        500.00,
+        (SELECT id FROM community.category LIMIT 1),
+        'Local Caterers', 
+        'Food for the event', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Venue Rental',
+        1000.00,
+        (SELECT id FROM community.category LIMIT 1),
+        'City Hall', 
+        'Renting space for the event', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Decorations', 
+        200.00,
+        (SELECT id FROM community.category LIMIT 1),
+        'Party Supplies Co.', 
+        'Decorations for the event', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Sound System Rental', 
+        300.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Audio Solutions', 
+        'Renting sound equipment for the event', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Photography Services', 
+        400.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Capture Moments Studio', 
+        'Hiring a photographer for the event', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Transportation', 
+        150.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'City Limos', 
+        'Transportation for guests', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Gifts for Attendees', 
+        250.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Gifts R Us', 
+        'Small tokens of appreciation for attendees', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Event Staff Payment', 
+        600.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Event Services Agency', 
+        'Payment for event staff', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Promotional Materials', 
+        75.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Print Shop', 
+        'Printing flyers and banners', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID]),
+
+    (
+        (SELECT id from community.projects LIMIT 1),
+        'Security Services', 
+        350.00, 
+        (SELECT id FROM community.category LIMIT 1),
+        'Secure Events Co.', 
+        'Hiring security personnel', 
+        (SELECT id from community.profiles LIMIT 1),
+        (SELECT id from community.profiles LIMIT 1), 
+        ARRAY[(SELECT id from community.profiles LIMIT 1)::UUID])

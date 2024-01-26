@@ -362,6 +362,66 @@ func AddItemToEvent(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// AddExpenseToEvent ...
+// swagger:route POST /api/v1/expense
+//
+// # Update an existing event
+//
+// Parameters:
+//   - name: name
+//     in: query
+//     description: The name of the item to add to the event storage list
+//     type: string
+//     required: true
+//   - name: eventID
+//     in: query
+//     description: The eventID of the project that the item belongs to
+//     type: string
+//     required: true
+//   - name: description
+//     in: query
+//     description: The description of the item
+//     type: string
+//     required: true
+//   - name: quantity
+//     in: query
+//     description: The quantity of the item to add into the storage container
+//     type: int
+//     required: true
+//   - name: location
+//     in: query
+//     description: The location of the item to add into the storage container.
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: Event
+// 400: Message
+// 404: Message
+// 500: Message
+func AddExpenseToEvent(rw http.ResponseWriter, r *http.Request, user string) {
+
+	draftExpense := &model.Expense{}
+	err := json.NewDecoder(r.Body).Decode(draftExpense)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	resp, err := db.AddExpense(user, draftExpense)
+	if err != nil {
+		log.Printf("Unable to add expense. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // UpdateExistingEvent ...
 // swagger:route POST /api/v1/events
 //
@@ -869,6 +929,52 @@ func GetEvent(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetAllExpenses ...
+// swagger:route GET /api/v1/expenses/{id}
+//
+// # Retrieves the list of expenses for a selected event
+//
+// Parameters:
+//   - name: id
+//     in: query
+//     description: The id of the selected event
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: []Expense
+// 400: Message
+// 404: Message
+// 500: Message
+func GetAllExpenses(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	eventID, ok := vars["id"]
+	if !ok || len(eventID) <= 0 {
+		log.Printf("Unable to retrieve expense without event id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(eventID)
+	if err != nil {
+		log.Printf("Unable to retrieve expenses with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+	resp, err := db.RetrieveAllExpenses(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve expenses. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // GetAllStates ...
 // swagger:route GET /api/v1/states
 //
@@ -959,6 +1065,31 @@ func GetAllStorageLocations(rw http.ResponseWriter, r *http.Request, user string
 	resp, err := db.RetrieveAllStorageLocation(user)
 	if err != nil {
 		log.Printf("Unable to retrieve storage locations. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// GetAllCategories ...
+// swagger:route GET /api/v1/categories
+//
+// # Retrieves the list of categories that can be associated with each project
+//
+// Responses:
+// 200: []Categories
+// 400: Message
+// 404: Message
+// 500: Message
+func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
+
+	resp, err := db.RetrieveAllCategories(user)
+	if err != nil {
+		log.Printf("Unable to retrieve categories. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return

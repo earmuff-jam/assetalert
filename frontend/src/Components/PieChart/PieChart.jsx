@@ -110,7 +110,7 @@ const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {
       <Box className={classes.aside}>
         <Typography className={classes.largeText}>{progressPercent}%</Typography>
         <Box className={classes.emptyGap}></Box>
-        <Box className={classes.chart}>
+        <Box>
           <Pie data={data} options={options} width={300} height={150} />
         </Box>
       </Box>
