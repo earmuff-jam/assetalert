@@ -27,7 +27,7 @@ const NavigateProfileFromEventCta = () => {
   return (
     <Box className={classes.container}>
       <Typography className={classes.text} gutterBottom>
-        Explore the profile page for customization for reports. You can also change your settings in the profile page.
+        Explore options to change your profile and avatars.
       </Typography>
       <Button onClick={() => navigate('/profile')}> View profile </Button>
     </Box>

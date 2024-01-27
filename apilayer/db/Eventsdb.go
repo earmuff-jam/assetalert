@@ -472,7 +472,7 @@ func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error
 
 	sqlStr := `
         INSERT INTO community.expenses(
-			event_id,
+			project_id,
 			item_name, 
 			item_cost, 
 			category_id, 
@@ -999,7 +999,7 @@ func RetrieveAllExpenses(user string, eventID uuid.UUID) ([]model.Expense, error
 
 	sqlStr := `
 	SELECT e.id,
-        e.event_id,
+        e.project_id,
         e.item_name,
         e.item_cost,
         e.category_id,
@@ -1017,8 +1017,8 @@ FROM community.expenses e
 		LEFT JOIN community.category cc ON e.category_id = cc.id 
          LEFT JOIN community.profiles cp ON e.created_by = cp.id
          LEFT JOIN community.profiles up ON e.updated_by = cp.id
-WHERE e.event_id = $1
-GROUP BY category_name, e.event_id, e.id, e.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address
+WHERE e.project_id = $1
+GROUP BY category_name, e.project_id, e.id, e.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address
 ORDER BY e.updated_at DESC;
 `
 	rows, err := tx.Query(sqlStr, eventID)

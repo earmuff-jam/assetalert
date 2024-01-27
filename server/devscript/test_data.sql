@@ -61,7 +61,7 @@ VALUES
 
 -- EXPENSES SQL TEST DATA ---
 
-INSERT INTO community.expenses (event_id, item_name, item_cost, category_id, purchase_location, notes, created_by, updated_by, sharable_groups)
+INSERT INTO community.expenses (project_id, item_name, item_cost, category_id, purchase_location, notes, created_by, updated_by, sharable_groups)
 VALUES
     ((SELECT id FROM community.projects LIMIT 1), 'Catering Services', 500.00, (SELECT id FROM community.category LIMIT 1), 'Local Caterers', 'Food for the event', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles LIMIT 1)::UUID]),
 
