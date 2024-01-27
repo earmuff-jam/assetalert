@@ -4,6 +4,7 @@ import { Box, Typography } from '@material-ui/core';
 
 import 'chart.js/auto'; // do not remove this
 import { Bar } from 'react-chartjs-2';
+import EmptyComponent from '../../util/EmptyComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ExpenseChart = ({ expenses, totalSkillLimit }) => {
+const ExpenseChart = ({ expenses }) => {
   const classes = useStyles();
   const [datasets, setDatasets] = useState([]);
 
@@ -96,7 +97,7 @@ const ExpenseChart = ({ expenses, totalSkillLimit }) => {
       }, []);
       setDatasets(formattedData);
     }
-  }, [expenses, totalSkillLimit]);
+  }, [expenses]);
 
   return (
     <Box className={classes.container}>
@@ -108,9 +109,7 @@ const ExpenseChart = ({ expenses, totalSkillLimit }) => {
       </Typography>
       <Box className={classes.aside}>
         <Box className={classes.emptyGap}></Box>
-        <Box>
-          <Bar data={data} options={options} width={400} height={200} />
-        </Box>
+        <Box>{totalIncurred != 0 && <Bar data={data} options={options} width={400} height={200} />}</Box>
       </Box>
     </Box>
   );
