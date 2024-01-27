@@ -8,7 +8,7 @@ startserver:
 	go run main.go
 
 # api unit tests
-rununittest:
+unit-test:
 	cd apilayer/handler && go test
 
 # load data
