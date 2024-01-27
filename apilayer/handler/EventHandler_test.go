@@ -45,6 +45,23 @@ func Test_GetAllEventsApi(t *testing.T) {
 	t.Logf("response = %+v", string(data))
 }
 
+func Test_GetAllExpensesApi(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/expenses/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllExpenses(w, req, config.DB_TEST_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+}
+
 func Test_GetAllItemsApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})

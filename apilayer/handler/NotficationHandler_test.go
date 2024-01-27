@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,14 +9,13 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/config"
 	"github.com/mohit2530/communityCare/db"
-	"github.com/mohit2530/communityCare/model"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_GetProfileHealthCheck(t *testing.T) {
+func Test_GetNotificationHealthCheck(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/health", nil)
 	w := httptest.NewRecorder()
-	GetProfileHealthCheck(w, req, config.DB_TEST_USER)
+	GetNotificationHealthCheck(w, req, config.DB_TEST_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -28,25 +26,12 @@ func Test_GetProfileHealthCheck(t *testing.T) {
 	assert.Equal(t, 200, res.StatusCode)
 }
 
-func Test_GetProfileApi(t *testing.T) {
-
-	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
-	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
-		Role:              "TESTER",
-		EncryptedPassword: "1231231",
-	}
-
-	db.PreloadAllTestVariables()
-	prevUser, err := db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
-
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), nil)
-	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
+func Test_GetAllNotifications(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0902c692-b8e2-4824-a870-e52f4a0cccf8/notifications", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
-	GetProfile(w, req, config.DB_TEST_USER)
+	db.PreloadAllTestVariables()
+	GetAllNotifications(w, req, config.DB_TEST_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)

@@ -4,6 +4,15 @@ SET SEARCH_PATH TO community, auth;
 -- AUTHENTICATION --
 INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');
 
+-- UPDATE PROFILE TABLE WITH USER DETAILS --
+
+UPDATE community.profiles SET 
+username = 'cypress_test_user',
+full_name = 'cypress user',
+phone_number = '1234567890',
+about_me = 'falling skies are blue'
+WHERE email_address = 'test@gmail.com';
+
 -- ADD EVENTS SQL TEST DATA --
 INSERT INTO community.projects
     (title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
@@ -60,7 +69,6 @@ VALUES
     ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Costco Milk and Shake', 1, 'Costco', 'Shaking jar from Costco', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1));
 
 -- EXPENSES SQL TEST DATA ---
-
 INSERT INTO community.expenses (project_id, item_name, item_cost, category_id, purchase_location, notes, created_by, updated_by, sharable_groups)
 VALUES
     ((SELECT id FROM community.projects LIMIT 1), 'Catering Services', 500.00, (SELECT id FROM community.category LIMIT 1), 'Local Caterers', 'Food for the event', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles LIMIT 1)::UUID]),
