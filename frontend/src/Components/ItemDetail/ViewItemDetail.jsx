@@ -66,7 +66,7 @@ const ViewItemDetail = ({ disabled }) => {
             save(value, rowIndex, VIEW_ITEMS_COLUMN_HEADERS[column].key);
           }}
           onCancel={(o) => o}
-          placeholder={row[column]}
+          placeholder={row[column].toString()}
           saveButtonLabel={<DoneRounded />}
           cancelButtonLabel={<CancelRounded />}
           attributes={{ name: 'awesome-input', id: 1 }}
