@@ -13,9 +13,7 @@ import { authActions } from '../../Containers/Auth/authSlice';
 import { LiveHelpRounded, LockOpenRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
+  root: {},
   rootPaddingLeft: {
     paddingLeft: theme.spacing(4),
   },
@@ -37,9 +35,8 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     display: 'flex',
     flexDirection: 'row',
-    padding: theme.spacing(1),
+    padding: theme.spacing(0, 1),
     marginBottom: theme.spacing(3),
-    color: theme.palette.common.black,
     backgroundColor: theme.palette.common.white,
   },
   header: {

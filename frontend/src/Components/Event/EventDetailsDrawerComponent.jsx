@@ -24,12 +24,16 @@ const useStyles = makeStyles((theme) => ({
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
+    gap: theme.spacing(2),
   },
   fontVariation: {
     color: theme.palette.primary.main,
     fontSize: '1.125rem',
     fontFamily: 'Poppins, sans-serif',
-    textDecoration: 'none',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.825rem',
+      fontFamily: 'Poppins, sans-serif',
+    },
   },
   smallVariant: {
     [theme.breakpoints.down('sm')]: {
@@ -79,11 +83,10 @@ export const NavigationTabBar = ({ value, handleChange }) => {
     <Box className={classes.rowContainer} data-tour="11">
       {NAVIGATION_TABS.map((v, index) => (
         <List key={index}>
-          <ListItem button onClick={() => handleChange(index)}>
+          <ListItem button onClick={() => handleChange(index)} disableGutters>
             <ListItemText
-              className={classNames(classes.fontVariation, {
-                [classes.underline]: value === index,
-              })}
+              classes={{ primary: classes.fontVariation }}
+              className={classNames({ [classes.underline]: value === index })}
             >
               {v.displayName}
             </ListItemText>

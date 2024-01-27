@@ -44,6 +44,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  chartContainer: {
+    position: ' relative',
+    height: '40vh',
+    width: '40vw',
+    [theme.breakpoints.down('sm')]: {
+      width: '80vw',
+    },
+  },
 }));
 
 const ExpenseChart = ({ expenses }) => {
@@ -64,7 +72,7 @@ const ExpenseChart = ({ expenses }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         display: false,
@@ -105,11 +113,15 @@ const ExpenseChart = ({ expenses }) => {
         Expense Report
       </Typography>
       <Typography className={classes.text}>
-        {`Incurred Expenses:`} <span className={classes.highlight}> ${totalIncurred}</span>
+        {`Incurred Expenses:`} <span className={classes.highlight}> {totalIncurred ? `$${totalIncurred}` : 'NA'} </span>
       </Typography>
       <Box className={classes.aside}>
         <Box className={classes.emptyGap}></Box>
-        <Box>{totalIncurred != 0 && <Bar data={data} options={options} width={400} height={200} />}</Box>
+        {totalIncurred > 0 && (
+          <div className={classes.chartContainer}>
+            <Bar data={data} options={options} />
+          </div>
+        )}
       </Box>
     </Box>
   );

@@ -21,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   appBar: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(0, 1),
     marginBottom: theme.spacing(3),
-    color: theme.palette.common.black,
     backgroundColor: theme.palette.common.white,
   },
   text: {
