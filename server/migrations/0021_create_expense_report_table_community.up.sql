@@ -51,7 +51,7 @@ GRANT ALL PRIVILEGES ON TABLE community.category TO community_admin;
 CREATE TABLE IF NOT EXISTS community.expenses
 (
     id                  UUID PRIMARY KEY         NOT NULL DEFAULT gen_random_uuid(),
-    event_id            UUID                     NOT NULL REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    project_id          UUID                     NOT NULL REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
     item_name           VARCHAR(50)              NOT NULL,
     item_cost           NUMERIC(15, 2)           NOT NULL DEFAULT 0.00,
     category_id         UUID                     NOT NULL REFERENCES category(id) ON UPDATE CASCADE ON DELETE CASCADE,

@@ -64,7 +64,7 @@ const Authenticator = () => {
         <EmojiPeopleRounded />
       </Typography>
       <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
-      {signUpView ? <Signup /> : <Login />}
+      {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
       <Typography className={classes.titleText}>
         {signUpView ? `Already have an account ?` : `Do not have an account ?`}
       </Typography>

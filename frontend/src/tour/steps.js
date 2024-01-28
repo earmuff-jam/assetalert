@@ -62,11 +62,11 @@ const SINGLE_EVENT_TOUR_STEPS = [
       'The number of people that have accepted to join the selected event and the number of people who have rsvp to the selected event.',
   },
   {
-    title:
-      'Displays the required skills for each project.',
+    title: 'Displays the required skills for each project if it exists.',
   },
   {
-    title: 'select option to add a new item to the inventory list. participant must join the event before adding items to the event.',
+    title:
+      'select option to add a new item to the inventory list. participant must join the event before adding items to the event.',
   },
   {
     title:
@@ -74,15 +74,7 @@ const SINGLE_EVENT_TOUR_STEPS = [
   },
   {
     title:
-      'Add volunteering hours against the selected event. Added volunteering hours are displayed in your profile page.',
-  },
-  {
-    title:
-      'View the pie chart details of each skill that people have volunteered against. An empty chart suggests that no one has volunteered in any activity. ',
-  },
-  {
-    title:
-      'Select options to volunteer, chat with online members or view details about the selected event.',
+      'Select options to volunteer, chat with online members, options for expense reports or view details about the selected event.',
   },
 ];
 

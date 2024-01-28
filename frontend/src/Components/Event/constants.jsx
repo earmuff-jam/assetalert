@@ -69,6 +69,32 @@ export const LABELS = [
 ];
 
 /**
+ * Navigation tabs for EventDetailsDrawerComponent
+ */
+export const NAVIGATION_TABS = [
+  {
+    id: 1,
+    displayName: 'Volunteering',
+    subtitle: 'Volunteering details',
+  },
+  {
+    id: 2,
+    displayName: 'Message',
+    subtitle: 'Message online members',
+  },
+  {
+    id: 3,
+    displayName: 'Expenses',
+    subtitle: 'Expenses tab and settings',
+  },
+  {
+    id: 4,
+    displayName: 'Details',
+    subtitle: 'Event details and settings',
+  },
+];
+
+/**
  * combines the config for host details based on the eventObj parameter. returns a
  * list of tableRows derieved from the eventObj object. If modifier function is passed
  * in, we build the table in accordance to it as well.

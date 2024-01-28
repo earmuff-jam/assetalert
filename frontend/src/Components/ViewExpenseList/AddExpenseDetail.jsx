@@ -126,7 +126,7 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
           error={!!v.errorMsg}
           helperText={v.errorMsg}
           multiline={v.multiline || false}
-          rows={v.rows || 4}
+          minRows={v.rows || 4}
         />
       ))}
       <Autocomplete

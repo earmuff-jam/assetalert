@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { produce } from 'immer';
-import { Button, InputAdornment, TextField } from '@material-ui/core';
-import { SIGN_UP_FORM_FIELDS } from './constants';
 import { useDispatch } from 'react-redux';
+import { SIGN_UP_FORM_FIELDS } from './constants';
+import { makeStyles } from '@material-ui/core/styles';
 import { authActions } from '../../Containers/Auth/authSlice';
+import { Button, Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,11 +45,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup = () => {
+const Signup = ({ setSignUpView }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [formFields, setFormFields] = useState(SIGN_UP_FORM_FIELDS);
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -72,6 +73,9 @@ const Signup = () => {
     dispatch(authActions.getSignup(formattedData));
   };
 
+  const requiredFormFields = Object.values(formFields).filter((v) => v.required);
+  const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '') || !isChecked;
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -85,7 +89,7 @@ const Signup = () => {
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    if (containsErr || isRequiredFieldsEmpty) {
+    if (containsErr || isRequiredFieldsEmpty || !isChecked) {
       console.log('Empty form fields. Unable to proceed.');
       return;
     } else {
@@ -95,8 +99,8 @@ const Signup = () => {
         }
         return acc;
       }, {});
-
       fetchSignupFn(formattedData);
+      setSignUpView(false);
     }
   };
 
@@ -131,7 +135,16 @@ const Signup = () => {
           />
         ))}
       </form>
-      <Button onClick={handleFormSubmit}>Submit</Button>
+      <FormControl fullWidth>
+        <FormControlLabel
+          control={<Checkbox checked={isChecked} onChange={() => setIsChecked(!isChecked)} color="primary" />}
+          label="Accept terms and conditions."
+          classes={{ label: classes.caption }}
+        />
+      </FormControl>
+      <Button disabled={isRequiredFieldsEmpty} onClick={handleFormSubmit}>
+        Submit
+      </Button>
     </div>
   );
 };

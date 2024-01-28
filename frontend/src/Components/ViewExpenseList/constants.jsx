@@ -111,7 +111,7 @@ export const ADD_EXPENSE_FORM_FIELDS = {
   },
   notes: {
     label: 'Notes',
-    placeholder: 'Fragile items. Handle with care ...',
+    placeholder: 'Bought to draw chalk marks ...',
     value: '',
     name: 'notes',
     errorMsg: '',

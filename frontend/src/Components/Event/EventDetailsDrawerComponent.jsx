@@ -9,7 +9,7 @@ import PieChart from '../PieChart/PieChart';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import { isEditingAllowed } from './constants';
+import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import ExpenseTab from './ExpenseTab';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,15 +21,23 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     borderRight: `1px solid ${theme.palette.error.dark}`,
   },
+  listItem: {
+    borderRadius: theme.spacing(1),
+    padding: theme.spacing(0.5),
+  },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
+    gap: theme.spacing(2),
   },
   fontVariation: {
     color: theme.palette.primary.main,
     fontSize: '1.125rem',
     fontFamily: 'Poppins, sans-serif',
-    textDecoration: 'none',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.825rem',
+      fontFamily: 'Poppins, sans-serif',
+    },
   },
   smallVariant: {
     [theme.breakpoints.down('sm')]: {
@@ -53,37 +61,15 @@ const useStyles = makeStyles((theme) => ({
 
 export const NavigationTabBar = ({ value, handleChange }) => {
   const classes = useStyles();
-  const NAVIGATION_TABS = [
-    {
-      id: 1,
-      displayName: 'Volunteering',
-      subtitle: 'Volunteering details',
-    },
-    {
-      id: 2,
-      displayName: 'Message',
-      subtitle: 'Message online members',
-    },
-    {
-      id: 3,
-      displayName: 'Expenses',
-      subtitle: 'Expenses tab and settings',
-    },
-    {
-      id: 4,
-      displayName: 'Details',
-      subtitle: 'Event details and settings',
-    },
-  ];
+
   return (
-    <Box className={classes.rowContainer} data-tour="11">
+    <Box className={classes.rowContainer} data-tour="9">
       {NAVIGATION_TABS.map((v, index) => (
         <List key={index}>
-          <ListItem button onClick={() => handleChange(index)}>
+          <ListItem button className={classes.listItem} onClick={() => handleChange(index)} disableGutters>
             <ListItemText
-              className={classNames(classes.fontVariation, {
-                [classes.underline]: value === index,
-              })}
+              classes={{ primary: classes.fontVariation }}
+              className={classNames({ [classes.underline]: value === index })}
             >
               {v.displayName}
             </ListItemText>
@@ -118,7 +104,7 @@ const EventDetailsDrawerComponent = ({
         return (
           <Box>
             <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
-              <Box data-tour="9">
+              <Box>
                 <RSVPRegistration
                   disabled={disabled}
                   handleRSVP={handleRSVP}

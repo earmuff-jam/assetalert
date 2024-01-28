@@ -4,6 +4,7 @@ import { Box, Typography } from '@material-ui/core';
 
 import 'chart.js/auto'; // do not remove this
 import { Bar } from 'react-chartjs-2';
+import EmptyComponent from '../../util/EmptyComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,9 +44,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  chartContainer: {
+    position: ' relative',
+    height: '40vh',
+    width: '40vw',
+    [theme.breakpoints.down('sm')]: {
+      width: '80vw',
+    },
+  },
 }));
 
-const ExpenseChart = ({ expenses, totalSkillLimit }) => {
+const ExpenseChart = ({ expenses }) => {
   const classes = useStyles();
   const [datasets, setDatasets] = useState([]);
 
@@ -63,7 +72,7 @@ const ExpenseChart = ({ expenses, totalSkillLimit }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         display: false,
@@ -96,7 +105,7 @@ const ExpenseChart = ({ expenses, totalSkillLimit }) => {
       }, []);
       setDatasets(formattedData);
     }
-  }, [expenses, totalSkillLimit]);
+  }, [expenses]);
 
   return (
     <Box className={classes.container}>
@@ -104,13 +113,15 @@ const ExpenseChart = ({ expenses, totalSkillLimit }) => {
         Expense Report
       </Typography>
       <Typography className={classes.text}>
-        {`Incurred Expenses:`} <span className={classes.highlight}> ${totalIncurred}</span>
+        {`Incurred Expenses:`} <span className={classes.highlight}> {totalIncurred ? `$${totalIncurred}` : 'NA'} </span>
       </Typography>
       <Box className={classes.aside}>
         <Box className={classes.emptyGap}></Box>
-        <Box>
-          <Bar data={data} options={options} width={400} height={200} />
-        </Box>
+        {totalIncurred > 0 && (
+          <div className={classes.chartContainer}>
+            <Bar data={data} options={options} />
+          </div>
+        )}
       </Box>
     </Box>
   );
