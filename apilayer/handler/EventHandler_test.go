@@ -201,7 +201,7 @@ func Test_CreateNewReport(t *testing.T) {
 	db.DeleteReport(config.DB_TEST_USER, selectedReport.ID)
 }
 
-func XTest_CreateNewItem(t *testing.T) {
+func Test_CreateNewItem(t *testing.T) {
 	draftEvent := &model.Event{
 		Title:          "Test Event",
 		Cause:          "Celebrations",          // Celebrations
@@ -239,6 +239,19 @@ func XTest_CreateNewItem(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
+	// profiles are automatically derieved from loggin in
+	// db.RetrieveUser method is used to populate existing cred on draftUserCredentials struct
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err = db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
 	draftItem := &model.Item{
 		Name:        "Water Bottle",
 		EventID:     selectedEvent.ID,
@@ -248,8 +261,8 @@ func XTest_CreateNewItem(t *testing.T) {
 		BoughtAt:    "Walmart",
 		LocationID:  "31e5dc66-c7ce-427d-901d-bc1316127384",
 		Location:    "31e5dc66-c7ce-427d-901d-bc1316127384", // db expects a uuid if existing location is passed in
-		CreatedBy:   selectedEvent.CreatedBy,
-		UpdatedBy:   selectedEvent.CreatedBy,
+		CreatedBy:   draftUserCredentials.ID.String(),
+		UpdatedBy:   draftUserCredentials.ID.String(),
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -260,7 +273,7 @@ func XTest_CreateNewItem(t *testing.T) {
 
 	req = httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
 	w = httptest.NewRecorder()
-	db.PreloadAllTestVariables()
+
 	AddItemToEvent(w, req, config.DB_TEST_USER)
 	res = w.Result()
 	defer res.Body.Close()
