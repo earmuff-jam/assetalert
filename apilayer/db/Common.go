@@ -37,12 +37,33 @@ func SetupDB(user string) (*sql.DB, error) {
 	return pool, nil
 }
 
+// PreloadAllTestVariables ...
+//
+// load environment variables
 func PreloadAllTestVariables() {
-	// load environment variables
 	err := godotenv.Load(filepath.Join("..", "..", ".env"))
 	if err != nil {
 		log.Printf("No env file detected. Using os system configuration.")
 	}
+}
+
+// RetriveTestUser ...
+//
+// retrieve the test user that can be used to test
+func RetriveTestUser(user string, eventID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT id FROM community.profiles FETCH FIRST ROW ONLY;`
+	_, err = db.Exec(sqlStr, eventID)
+	if err != nil {
+		log.Printf("unable to delete event ID %+v", eventID)
+		return err
+	}
+	return nil
 }
 
 func startSqlDb(user string, pwd string, host string, port string, appEnv string) (*sql.DB, error) {
