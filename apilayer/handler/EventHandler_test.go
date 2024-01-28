@@ -3,6 +3,7 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -291,4 +292,148 @@ func Test_CreateNewItem(t *testing.T) {
 	}
 
 	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+}
+
+func Test_UpdateExistingEvent(t *testing.T) {
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.DB_TEST_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftUpdateEvent := &model.Event{
+		ID:             selectedEvent.ID,
+		Title:          "testing update title",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+	// Marshal the draftUpdateEvent into JSON bytes
+	updateEventReq, err := json.Marshal(draftUpdateEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/events/%s", selectedEvent.ID), bytes.NewBuffer(updateEventReq))
+	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
+	w = httptest.NewRecorder()
+	UpdateExistingEvent(w, req, config.DB_TEST_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var updatedEvent model.Event
+	err = json.Unmarshal(data, &updatedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "testing update title", updatedEvent.Title)
+
+	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+}
+
+func Test_GetAllEventReportsApi(t *testing.T) {
+
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.DB_TEST_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/report/%s", selectedEvent.ID), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
+	w = httptest.NewRecorder()
+	GetAllEventReports(w, req, config.DB_TEST_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	// cleanup
+	var selectedReport model.ReportEvent
+	err = json.Unmarshal(data, &selectedReport)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteReport(config.DB_TEST_USER, selectedReport.ID)
 }
