@@ -200,3 +200,95 @@ func Test_CreateNewReport(t *testing.T) {
 	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
 	db.DeleteReport(config.DB_TEST_USER, selectedReport.ID)
 }
+
+func Test_CreateNewItem(t *testing.T) {
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.DB_TEST_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	// profiles are automatically derieved from loggin in
+	// db.RetrieveUser method is used to populate existing cred on draftUserCredentials struct
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err = db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftItem := &model.Item{
+		Name:        "Water Bottle",
+		EventID:     selectedEvent.ID,
+		Description: "Stanley water bottle",
+		Quantity:    1,
+		UnitPrice:   2,
+		BoughtAt:    "Walmart",
+		LocationID:  "31e5dc66-c7ce-427d-901d-bc1316127384",
+		Location:    "31e5dc66-c7ce-427d-901d-bc1316127384", // db expects a uuid if existing location is passed in
+		CreatedBy:   draftUserCredentials.ID.String(),
+		UpdatedBy:   draftUserCredentials.ID.String(),
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftItem)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+
+	AddItemToEvent(w, req, config.DB_TEST_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	// cleanup
+	var selectedItem model.Item
+	err = json.Unmarshal(data, &selectedItem)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+}
