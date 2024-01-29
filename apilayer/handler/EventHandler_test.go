@@ -261,7 +261,7 @@ func Test_CreateNewItem(t *testing.T) {
 		UnitPrice:   2,
 		BoughtAt:    "Walmart",
 		LocationID:  "31e5dc66-c7ce-427d-901d-bc1316127384",
-		Location:    "31e5dc66-c7ce-427d-901d-bc1316127384", // db expects a uuid if existing location is passed in
+		Location:    "Test Location", // db expects a uuid if existing location is passed in
 		CreatedBy:   draftUserCredentials.ID.String(),
 		UpdatedBy:   draftUserCredentials.ID.String(),
 	}
