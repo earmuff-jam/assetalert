@@ -199,7 +199,6 @@ func Test_CreateNewReport(t *testing.T) {
 	}
 
 	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
-	db.DeleteReport(config.DB_TEST_USER, selectedReport.ID)
 }
 
 func Test_CreateNewItem(t *testing.T) {
@@ -291,6 +290,7 @@ func Test_CreateNewItem(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
+	db.DeleteStorageLocation(config.DB_TEST_USER, selectedItem.LocationID)
 	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
 }
 
@@ -435,5 +435,4 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 	}
 
 	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
-	db.DeleteReport(config.DB_TEST_USER, selectedReport.ID)
 }
