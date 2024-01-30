@@ -83,6 +83,11 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	sqlStr := `
 		UPDATE community.profiles 
 		SET username=$2, full_name=$3, phone_number=$4, goal=$5, about_me=$6, onlinestatus=$7, role=$8
@@ -93,7 +98,7 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	var updatedProfile model.Profile
 
 	// Use QueryRow instead of Exec to get the updated row
-	row := db.QueryRow(sqlStr,
+	row := tx.QueryRow(sqlStr,
 		userID,
 		draftProfile.Username,
 		draftProfile.FullName,
@@ -116,6 +121,13 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	)
 
 	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
+		return nil, err
+	}
+
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 
@@ -130,6 +142,11 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	var updatedProfile model.Profile
 
 	sqlStr := `
@@ -142,7 +159,7 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 	// Use QueryRow instead of Exec to get the updated row
 	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
 
-	row := db.QueryRow(sqlStr, userID, fileBytes)
+	row := tx.QueryRow(sqlStr, userID, fileBytes)
 
 	err = row.Scan(
 		&updatedProfile.ID,
@@ -157,6 +174,8 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 	)
 
 	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
 		return nil, err
 	}
 
@@ -165,6 +184,11 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		updatedProfile.AvatarUrl = avatarUrl.String // Assign if the value is not null
 	} else {
 		updatedProfile.AvatarUrl = "" // Or handle the null case accordingly
+	}
+
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
+		return nil, err
 	}
 
 	return &updatedProfile, nil

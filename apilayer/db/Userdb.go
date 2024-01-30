@@ -29,6 +29,11 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 		return nil, err
 	}
 
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	sqlStr := `
 	INSERT INTO auth.users(email, birthdate, encrypted_password, role)
 	VALUES ($1, $2, $3, $4)
@@ -36,7 +41,7 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	`
 
 	var draftUserID string
-	err = db.QueryRow(
+	err = tx.QueryRow(
 		sqlStr,
 		draftUser.Email,
 		draftUser.Birthday,
@@ -45,11 +50,22 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	).Scan(&draftUserID)
 
 	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
 		return nil, err
 	}
 
-	// parse fn returns err, we supress the error. the draftUserID is generated from server.
-	draftUser.ID, _ = uuid.Parse(draftUserID)
+	// the draftUserID is generated from server.
+	draftUser.ID, err = uuid.Parse(draftUserID)
+	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
+		return nil, err
+	}
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
 	return draftUser, nil
 }
 
