@@ -258,6 +258,23 @@ func DeleteEvent(user string, eventID string) error {
 	return nil
 }
 
+// DeleteStorageLocation
+func DeleteStorageLocation(user string, locationID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.storage_locations WHERE id=$1`
+	_, err = db.Exec(sqlStr, locationID)
+	if err != nil {
+		log.Printf("unable to delete event ID %+v", locationID)
+		return err
+	}
+	return nil
+}
+
 // UpdateEventAvatar ...
 func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader, fileBytes []byte) (*model.Event, error) {
 	db, err := SetupDB(user)
