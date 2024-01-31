@@ -59,6 +59,26 @@ VALUES
      (SELECT id FROM community.profiles LIMIT 1),
      ARRAY [(SELECT id FROM community.profiles p2 LIMIT 1)::UUID]);
 
+-- ADD REPORT SQL TEST DATA --
+INSERT INTO community.reports (
+	project_id , subject , description , event_location , organizer_name , created_at , created_by , updated_at , updated_by , sharable_groups
+) VALUES (
+	(SELECT id FROM community.projects LIMIT 1),
+	'Test report', 'Testing report by cypress user', 'North Pacific Road',
+	'Cypress test user', now(), (SELECT id FROM community.profiles LIMIT 1),
+	now(), (SELECT id FROM community.profiles LIMIT 1), 
+	ARRAY [(SELECT id FROM community.profiles LIMIT 1)::UUID]);
+
+INSERT INTO community.reports (
+	project_id , subject , description , event_location , organizer_name , created_at , created_by , updated_at , updated_by , sharable_groups
+) VALUES (
+	(SELECT id FROM community.projects LIMIT 1),
+	'Test report', 'Testing report by cypress user', 'North Pacific Road',
+	'Cypress test user', now(), (SELECT id FROM community.profiles LIMIT 1),
+	now(), (SELECT id FROM community.profiles LIMIT 1), 
+	ARRAY [(SELECT id FROM community.profiles LIMIT 1)::UUID]);
+
+
 -- ADD ITEM SQL TEST DATA ---
 INSERT INTO community.items (project_id, storage_location_id, item_detail, quantity, bought_at, item_description, created_by, updated_by)
 VALUES
