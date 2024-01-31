@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # File: _main.sh
@@ -23,35 +22,31 @@ loadEnv() {
 }
 
 loadDb() {
-
     echo "loadDb flag provided. building psql docker image and running migrations."
-
     docker-compose down 
     docker-compose -f docker-compose-db.yml up --build -d
-
 }
 
 loadTestEnv() {
-
     echo "load test environment flag provided. building all containers. please wait"
-
     docker-compose down --remove-orphans --volumes
     docker-compose -f docker-compose.yml up --build -d
 }
 
 loadMigration() {
-
     echo "migration flag provided. running migration in sequence."
-
     chmod +x setup/_loadMigration.sh
     ./setup/_loadMigration.sh
 }
 
 uninstall() {
-
     echo "uninstalling software. removing all data..."
     docker-compose down --remove-orphans --volumes
 }
+
+if [ "$#" -eq 0 ]; then
+    help
+fi
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in

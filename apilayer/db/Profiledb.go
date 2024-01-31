@@ -72,6 +72,7 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 		return nil, err
 	}
 
+	draftProfile.Validate()
 	return &draftProfile, nil
 }
 
@@ -131,6 +132,7 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 		return nil, err
 	}
 
+	updatedProfile.Validate()
 	return &updatedProfile, nil
 }
 
@@ -191,5 +193,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		return nil, err
 	}
 
+	updatedProfile.Validate()
 	return &updatedProfile, nil
 }

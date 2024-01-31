@@ -6,7 +6,7 @@ import Signup from './Signup';
 import Login from './Login';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { EmojiPeopleRounded, FaceRounded } from '@material-ui/icons';
+import { EmojiPeopleRounded, FaceRounded, PersonAddRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +71,7 @@ const Authenticator = () => {
       {hasServerError ? <span className={classes.errorText}>Error</span> : null}
       <div className={classes.row}>
         <Chip
-          icon={<FaceRounded />}
+          icon={signUpView ? <FaceRounded /> : <PersonAddRounded />}
           label={signUpView ? `Login` : `Create Account`}
           onClick={() => {
             setSignUpView(!signUpView);

@@ -1,6 +1,10 @@
 package model
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 // Profile ...
 type Profile struct {
@@ -14,4 +18,14 @@ type Profile struct {
 	AboutMe      string    `json:"about_me"`
 	OnlineStatus bool      `json:"online_status"`
 	Role         string    `json:"role"`
+}
+
+// Validate ...
+//
+// used to validate the profile fields
+func (p *Profile) Validate() error {
+	if len(p.Username) == 0 || len(p.FullName) == 0 || len(p.EmailAddress) == 0 || len(p.PhoneNumber) == 0 {
+		return errors.New("empty required field")
+	}
+	return nil
 }

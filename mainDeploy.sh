@@ -44,6 +44,10 @@ uninstall() {
     docker-compose down --remove-orphans --volumes
 }
 
+if [ "$#" -eq 0 ]; then
+    help
+fi
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -h|--help) help; shift ;;

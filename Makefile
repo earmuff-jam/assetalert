@@ -11,8 +11,11 @@ startserver:
 gotests:
 	cd apilayer/handler && go test -coverprofile=../logs/coverage.out ./... && go tool cover -func=../logs/coverage.out
 
+gotests-details:
+	cd apilayer/handler && go test -coverprofile=../logs/coverage.out ./... && go tool cover -html=../logs/coverage.out
+
 # load data
-data-mini:
+datagen:
 	cd server && \
 	./_addTestData.sh ${COMMUNITY_TEST_USER} ${DATABASE_DOCKER_CONTAINER_PORT} ${POSTGRES_DB} ${DATABASE_DOCKER_CONTAINER_IP_ADDRESS}
 

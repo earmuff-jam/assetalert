@@ -20,7 +20,7 @@ import (
 func Test_GetEventHealthCheck(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/health", nil)
 	w := httptest.NewRecorder()
-	GetEventHealthCheck(w, req, config.DB_TEST_USER)
+	GetEventHealthCheck(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -35,7 +35,7 @@ func Test_GetAllEventsApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/events", nil)
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAllEvents(w, req, config.DB_TEST_USER)
+	GetAllEvents(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -44,6 +44,12 @@ func Test_GetAllEventsApi(t *testing.T) {
 	}
 	assert.Equal(t, 200, res.StatusCode)
 	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllEvents(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_GetAllExpensesApi(t *testing.T) {
@@ -51,7 +57,30 @@ func Test_GetAllExpensesApi(t *testing.T) {
 	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAllExpenses(w, req, config.DB_TEST_USER)
+	GetAllExpenses(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllExpenses(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllItemsApi_Success(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllItems(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -63,21 +92,29 @@ func Test_GetAllExpensesApi(t *testing.T) {
 	t.Logf("response = %+v", string(data))
 }
 
-func Test_GetAllItemsApi(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
-	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
+func Test_GetAllItemsApi_Failure_Incorrect_ItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAllItems(w, req, config.DB_TEST_USER)
+	GetAllItems(w, req, config.CTO_USER)
 	res := w.Result()
-	defer res.Body.Close()
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
+
 	assert.Equal(t, 200, res.StatusCode)
-	assert.Greater(t, len(data), 0)
-	t.Logf("response = %+v", string(data))
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetAllItemsApi_Failure(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllItems(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+
 }
 
 func Test_CreateNewEvent(t *testing.T) {
@@ -103,7 +140,7 @@ func Test_CreateNewEvent(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewEvent(w, req, config.DB_TEST_USER)
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -120,7 +157,7 @@ func Test_CreateNewEvent(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
 func Test_CreateNewReport(t *testing.T) {
@@ -147,7 +184,7 @@ func Test_CreateNewReport(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewEvent(w, req, config.DB_TEST_USER)
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -182,7 +219,7 @@ func Test_CreateNewReport(t *testing.T) {
 	req = httptest.NewRequest(http.MethodPost, "/api/v1/report", bytes.NewBuffer(requestBody))
 	w = httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewReport(w, req, config.DB_TEST_USER)
+	CreateNewReport(w, req, config.CTO_USER)
 	res = w.Result()
 	defer res.Body.Close()
 	data, err = io.ReadAll(res.Body)
@@ -198,7 +235,7 @@ func Test_CreateNewReport(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
 func Test_CreateNewItem(t *testing.T) {
@@ -224,7 +261,7 @@ func Test_CreateNewItem(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewEvent(w, req, config.DB_TEST_USER)
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -247,7 +284,7 @@ func Test_CreateNewItem(t *testing.T) {
 		EncryptedPassword: "1231231",
 	}
 
-	_, err = db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	_, err = db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
@@ -274,7 +311,7 @@ func Test_CreateNewItem(t *testing.T) {
 	req = httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
 	w = httptest.NewRecorder()
 
-	AddItemToEvent(w, req, config.DB_TEST_USER)
+	AddItemToEvent(w, req, config.CTO_USER)
 	res = w.Result()
 	defer res.Body.Close()
 	data, err = io.ReadAll(res.Body)
@@ -290,8 +327,8 @@ func Test_CreateNewItem(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	db.DeleteStorageLocation(config.DB_TEST_USER, selectedItem.LocationID)
-	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteStorageLocation(config.CTO_USER, selectedItem.LocationID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
 func Test_UpdateExistingEvent(t *testing.T) {
@@ -317,7 +354,7 @@ func Test_UpdateExistingEvent(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewEvent(w, req, config.DB_TEST_USER)
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -354,7 +391,7 @@ func Test_UpdateExistingEvent(t *testing.T) {
 	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/events/%s", selectedEvent.ID), bytes.NewBuffer(updateEventReq))
 	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
 	w = httptest.NewRecorder()
-	UpdateExistingEvent(w, req, config.DB_TEST_USER)
+	UpdateExistingEvent(w, req, config.CTO_USER)
 	res = w.Result()
 	defer res.Body.Close()
 	data, err = io.ReadAll(res.Body)
@@ -371,7 +408,7 @@ func Test_UpdateExistingEvent(t *testing.T) {
 
 	assert.Equal(t, "testing update title", updatedEvent.Title)
 
-	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
 func Test_GetAllEventReportsApi(t *testing.T) {
@@ -398,7 +435,7 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	CreateNewEvent(w, req, config.DB_TEST_USER)
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -416,7 +453,7 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/report/%s", selectedEvent.ID), nil)
 	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
 	w = httptest.NewRecorder()
-	GetAllEventReports(w, req, config.DB_TEST_USER)
+	GetAllEventReports(w, req, config.CTO_USER)
 	res = w.Result()
 	defer res.Body.Close()
 	data, err = io.ReadAll(res.Body)
@@ -434,5 +471,121 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	db.DeleteEvent(config.DB_TEST_USER, selectedEvent.ID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
+
+	w = httptest.NewRecorder()
+	GetAllEventReports(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllStates(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/states", nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllStates(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllStates(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllEventCauses(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/causes", nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllStates(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllEventCauses(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllProjectTypes(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/types", nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllProjectTypes(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllProjectTypes(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllStorageLocations(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/locations", nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllStorageLocations(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllStorageLocations(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllCategories(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/categories", nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllCategories(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllCategories(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }

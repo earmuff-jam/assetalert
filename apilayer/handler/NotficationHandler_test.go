@@ -15,7 +15,7 @@ import (
 func Test_GetNotificationHealthCheck(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/health", nil)
 	w := httptest.NewRecorder()
-	GetNotificationHealthCheck(w, req, config.DB_TEST_USER)
+	GetNotificationHealthCheck(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -31,7 +31,7 @@ func Test_GetAllNotifications(t *testing.T) {
 	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAllNotifications(w, req, config.DB_TEST_USER)
+	GetAllNotifications(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -41,4 +41,10 @@ func Test_GetAllNotifications(t *testing.T) {
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
 	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetAllNotifications(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }

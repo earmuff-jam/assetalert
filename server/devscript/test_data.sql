@@ -7,7 +7,7 @@ INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test
 -- UPDATE PROFILE TABLE WITH USER DETAILS --
 
 UPDATE community.profiles SET 
-username = 'cypress_test_user',
+username = 'Test User',
 full_name = 'cypress user',
 phone_number = '1234567890',
 about_me = 'falling skies are blue'

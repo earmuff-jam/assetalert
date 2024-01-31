@@ -19,7 +19,7 @@ import (
 func Test_GetProfileHealthCheck(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/health", nil)
 	w := httptest.NewRecorder()
-	GetProfileHealthCheck(w, req, config.DB_TEST_USER)
+	GetProfileHealthCheck(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -40,7 +40,7 @@ func Test_GetProfileApi(t *testing.T) {
 	}
 
 	db.PreloadAllTestVariables()
-	prevUser, err := db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
@@ -48,7 +48,7 @@ func Test_GetProfileApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), nil)
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w := httptest.NewRecorder()
-	GetProfile(w, req, config.DB_TEST_USER)
+	GetProfile(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -58,6 +58,12 @@ func Test_GetProfileApi(t *testing.T) {
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
 	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetProfile(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_GetUsernameApi(t *testing.T) {
@@ -70,7 +76,7 @@ func Test_GetUsernameApi(t *testing.T) {
 	}
 
 	db.PreloadAllTestVariables()
-	prevUser, err := db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
@@ -78,7 +84,7 @@ func Test_GetUsernameApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/username", prevUser.ID), nil)
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w := httptest.NewRecorder()
-	GetUsername(w, req, config.DB_TEST_USER)
+	GetUsername(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -94,8 +100,14 @@ func Test_GetUsernameApi(t *testing.T) {
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	assert.Equal(t, "cypress_test_user", userName)
+	assert.Equal(t, "Test User", userName)
 	t.Logf("response = %+v", string(data))
+
+	w = httptest.NewRecorder()
+	GetUsername(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_UpdateProfileApi(t *testing.T) {
@@ -108,7 +120,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 	}
 
 	db.PreloadAllTestVariables()
-	prevUser, err := db.RetrieveUser(config.DB_TEST_USER, &draftUserCredentials)
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
@@ -126,7 +138,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w := httptest.NewRecorder()
-	UpdateProfile(w, req, config.DB_TEST_USER)
+	UpdateProfile(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -146,7 +158,10 @@ func Test_UpdateProfileApi(t *testing.T) {
 
 	// cleanup
 	cleanUpProfile := model.Profile{
-		Username: "cypress_test_user",
+		Username:    "Test User",
+		FullName:    "cypress user",
+		PhoneNumber: "1234567890",
+		AboutMe:     "falling skies are blue",
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -158,7 +173,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w = httptest.NewRecorder()
-	UpdateProfile(w, req, config.DB_TEST_USER)
+	UpdateProfile(w, req, config.CTO_USER)
 	res = w.Result()
 	defer res.Body.Close()
 	data, err = io.ReadAll(res.Body)
@@ -172,6 +187,12 @@ func Test_UpdateProfileApi(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	assert.Equal(t, prevProfile.Username, "cypress_test_user")
+	assert.Equal(t, prevProfile.Username, "Test User")
+
+	w = httptest.NewRecorder()
+	UpdateProfile(w, req, config.CEO_USER)
+	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 
 }
