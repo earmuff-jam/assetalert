@@ -13,8 +13,8 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: community
         ports:
           - 5432:5432
@@ -32,9 +32,9 @@ jobs:
       - name: Build Server Code
         run: |
           echo "Attempting to build test container and run migrations..."
-          migrate -database "postgres://testuser:testpassword@localhost:5432/community?sslmode=disable" -path ./server/migrations up
+          migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
           echo "Attempting to insert test data into container ..."
-          make data-mini
+          cd server && ./_addTestData.sh runner 5432 community localhost
 
       - name: Build Go code
         uses: docker://golang:latest
@@ -48,7 +48,9 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          make gotest
+          echo "Attempting to build go code."
+          go version
+          cd apilayer/handler && go test -cover ./...
 
   build-frontend:
     runs-on: ubuntu-latest
