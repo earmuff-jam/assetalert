@@ -9,9 +9,26 @@ env:
 jobs:
   build-backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: community
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Build Server Code
+        run: |
+          echo "Attempting to build test container and run migrations..."
+          migrate -database "postgres://$testuser:$testpassword@$DATABASE_DOCKER_CONTAINER_IP_ADDRESS:$POSTGRES_HOST/$community?sslmode=disable" -path ./server/migrations up
+          echo "Attempting to insert test data into container ..."
+          make data-mini
 
       - name: Build Go code
         uses: docker://golang:latest
@@ -22,6 +39,10 @@ jobs:
             cd apilayer && go mod download
             CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
             echo "Go build successful."
+
+      - name: Run Unit Tests
+        run: |
+          make gotest
 
   build-frontend:
     runs-on: ubuntu-latest

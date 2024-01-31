@@ -8,9 +8,8 @@ startserver:
 	go run main.go
 
 # api unit tests
-gotests:
+gotest:
 	cd apilayer/handler && go test -cover ./... 
-	
 
 # load data
 data-mini:
