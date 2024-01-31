@@ -9,8 +9,7 @@ startserver:
 
 # api unit tests
 gotests:
-	cd apilayer/handler && go test -cover ./... 
-	
+	cd apilayer/handler && go test -coverprofile=../logs/coverage.out ./... && go tool cover -func=../logs/coverage.out
 
 # load data
 data-mini:

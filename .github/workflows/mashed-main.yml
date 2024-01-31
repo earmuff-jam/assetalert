@@ -9,9 +9,32 @@ env:
 jobs:
   build-backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: community
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install Golang migrate dependency
+        run: |
+          curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
+          sudo apt-get update
+          sudo apt-get install -y migrate
+
+      - name: Build Server Code
+        run: |
+          echo "Attempting to build test container and run migrations..."
+          migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
+          echo "Attempting to insert test data into container ..."
+          cd server && ./_addTestData.sh runner 5432 community localhost
 
       - name: Build Go code
         uses: docker://golang:latest
@@ -22,6 +45,12 @@ jobs:
             cd apilayer && go mod download
             CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
             echo "Go build successful."
+
+      - name: Run Unit Tests
+        run: |
+          echo "Attempting to build go code."
+          go version
+          cd apilayer/handler && go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out
 
   build-frontend:
     runs-on: ubuntu-latest
