@@ -23,6 +23,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Golang migrate dependency
+        run: |
+          curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
+          apt-get update
+          apt-get install -y migrate
+
       - name: Build Server Code
         run: |
           echo "Attempting to build test container and run migrations..."
