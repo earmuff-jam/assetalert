@@ -8,8 +8,8 @@ startserver:
 	go run main.go
 
 # api unit tests
-gotest:
-	cd apilayer/handler && go test -cover ./... 
+gotests:
+	cd apilayer/handler && go test -coverprofile=../logs/coverage.out ./... && go tool cover -func=../logs/coverage.out
 
 # load data
 data-mini:

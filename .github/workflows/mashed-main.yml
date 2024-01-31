@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "Attempting to build go code."
           go version
-          cd apilayer/handler && go test -cover ./...
+          cd apilayer/handler && go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out
 
   build-frontend:
     runs-on: ubuntu-latest
