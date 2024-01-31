@@ -3,6 +3,6 @@
 - Using Dockerfile to interpret the postgres database
 - Provide configurations from Dockerfile alongside environmental variables.
 - Provide a starter script to load mashed application into the system.
-- To simply run the psql container `docker compose up`.
-- To build and re-pull the image please follow docker docs setup.
-- Depending on your requirement, we have both the traditional approach and the newer approach with docker compose.
+- Install postgres as a docker application with `./main.sh` file. `./main.sh -h` to guide you through.
+- Load configurations with `./main.sh -e` to add a `.env` file to house environment variables.
+- Default selection will choose a previous working port if `.env` variables are not provided.

@@ -283,8 +283,12 @@ func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader,
 	}
 	defer db.Close()
 
-	var updatedEvent model.Event
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
 
+	var updatedEvent model.Event
 	sqlStr := `
 		UPDATE community.projects
 		SET image_url = $2
@@ -295,7 +299,7 @@ func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader,
 	// Use QueryRow instead of Exec to get the updated row
 	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
 
-	row := db.QueryRow(sqlStr, userID, fileBytes)
+	row := tx.QueryRow(sqlStr, userID, fileBytes)
 
 	err = row.Scan(
 		&updatedEvent.ID,
@@ -303,6 +307,8 @@ func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader,
 	)
 
 	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
 		return nil, err
 	}
 
@@ -311,6 +317,11 @@ func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader,
 		updatedEvent.ImageURL = avatarUrl.String // Assign if the value is not null
 	} else {
 		updatedEvent.ImageURL = "" // Or handle the null case accordingly
+	}
+
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
+		return nil, err
 	}
 
 	return &updatedEvent, nil
@@ -1009,11 +1020,6 @@ func RetrieveAllExpenses(user string, eventID uuid.UUID) ([]model.Expense, error
 	}
 	defer db.Close()
 
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
 	sqlStr := `
 	SELECT e.id,
         e.project_id,
@@ -1038,9 +1044,8 @@ WHERE e.project_id = $1
 GROUP BY category_name, e.project_id, e.id, e.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address
 ORDER BY e.updated_at DESC;
 `
-	rows, err := tx.Query(sqlStr, eventID)
+	rows, err := db.Query(sqlStr, eventID)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 	defer rows.Close()
@@ -1078,12 +1083,6 @@ ORDER BY e.updated_at DESC;
 	}
 
 	if err := rows.Err(); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	// Commit the transaction if everything is successful
-	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 

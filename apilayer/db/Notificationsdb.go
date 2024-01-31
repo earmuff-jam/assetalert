@@ -87,6 +87,11 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	sqlStr := `
 	UPDATE community.notifications 
 	SET isviewed = $2, isresolved = $3, updated_by = $4, updated_at = $5
@@ -97,7 +102,7 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 	var updatedNotification model.Notification
 
 	// Use QueryRow instead of Exec to get the updated row
-	row := db.QueryRow(sqlStr,
+	row := tx.QueryRow(sqlStr,
 		draftNotification.ID,
 		draftNotification.IsViewed,
 		draftNotification.IsResolved,
@@ -118,6 +123,13 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 	)
 
 	if err != nil {
+		// Rollback the transaction if there is an error
+		tx.Rollback()
+		return nil, err
+	}
+
+	// Commit the transaction if everything is successful
+	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 
