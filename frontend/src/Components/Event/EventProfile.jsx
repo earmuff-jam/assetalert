@@ -87,7 +87,7 @@ const EventProfile = ({ userDetail }) => {
           <Avatar
             data-tour="0"
             alt="event avatar"
-            src={selectedImage && `data:image/png;base64,${selectedImage}`}
+            src={selectedImage && `data:image/png;base64,${selectedImage}` || 'blank_canvas.png'}
             className={classes.avatar}
             onClick={toggleEditImage}
           />

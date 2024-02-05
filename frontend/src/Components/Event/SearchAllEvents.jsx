@@ -89,7 +89,7 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
         </Box>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Search ... " variant="standard" className={classes.text} />
+        <TextField {...params} label="Search events... " variant="standard" className={classes.text} />
       )}
     />
   );

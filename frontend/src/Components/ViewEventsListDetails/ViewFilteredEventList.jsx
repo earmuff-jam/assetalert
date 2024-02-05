@@ -99,7 +99,7 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                       src={
                         event?.image_url
                           ? event.image_url && `data:image/png;base64,${event.image_url}`
-                          : `${import.meta.env.PUBLIC_URL}/blank-canvas.png`
+                          : 'blank_canvas.png'
                       }
                     />
                     <Box className={classes.presetWidth}>

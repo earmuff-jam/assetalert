@@ -108,6 +108,38 @@ func RetrieveUser(user string, draftUser *model.UserCredentials) (*model.UserCre
 	return draftUser, nil
 }
 
+// RemoveUser ...
+//
+// Restricted usage. elevated permissions are required
+func RemoveUser(user string, id uuid.UUID) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM auth.users WHERE id = $1`
+	result, err := db.Exec(sqlStr, id)
+	if err != nil {
+		log.Printf("Error deleting user with ID %s: %v", id.String(), err)
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Printf("Error getting rows affected after deleting user: %v", err)
+		return err
+	}
+
+	if rowsAffected == 0 {
+		log.Printf("No user found with ID %s", id.String())
+		// You might want to return a custom error here if needed
+		return nil
+	}
+
+	return nil
+}
+
 // ValidateCredentials ...
 func ValidateCredentials(user string, ID string) error {
 	db, err := SetupDB(user)
