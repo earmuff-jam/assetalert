@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
 	"github.com/mohit2530/communityCare/model"
@@ -197,7 +198,6 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //
-// Responses:
 // 200: UserDetails
 // 400: Message
 // 404: Message
@@ -205,7 +205,6 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	if len(userID) <= 0 {
 		log.Printf("Unable to retrieve profile with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
@@ -245,4 +244,46 @@ func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode(resp)
+}
+
+// GetUserRecentActivities ...
+// swagger:route GET /api/profile/recent/{id}
+//
+// # Retrieves the list of recent activities the user has commenced. The api is responsible for
+// create / update event, create / update volunteering, create / update expense report.
+//
+// Responses:
+// 200: []RecentActivitiesDetails
+// 400: Message
+// 404: Message
+// 500: Message
+func GetUserRecentActivities(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok || len(id) <= 0 {
+		log.Printf("Unable to retrieve details without an id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(id)
+	if err != nil {
+		log.Printf("Unable to retrieve details with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveRecentActivity(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve recent activities. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+
 }

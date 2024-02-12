@@ -14,9 +14,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   headerText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: '1.725rem',
   },
   aside: {
     display: 'flex',
@@ -29,8 +29,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   largeText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
+    fontSize: '1.685rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
   },
   spinnerContainer: {
     display: 'flex',
@@ -104,7 +105,7 @@ const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {
 
   return (
     <Box className={classes.container}>
-      <Typography variant="h5" className={classes.headerText}>
+      <Typography variant="h5" className={classes.headerText} gutterBottom>
         Main Goal Progress
       </Typography>
       <Box className={classes.aside}>

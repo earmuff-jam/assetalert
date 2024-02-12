@@ -67,6 +67,7 @@ func main() {
 	router.Handle("/api/v1/volunteering", CustomRequestHandler(handler.CreateVolunteerHours)).Methods(http.MethodPost)
 	router.Handle("/api/v1/volunteering/{id}", CustomRequestHandler(handler.GetVolunteerHours)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/volunteering/{id}", CustomRequestHandler(handler.GetUserVolunteerDetails)).Methods(http.MethodGet)
+	router.Handle("/api/v1/profile/recent/{id}", CustomRequestHandler(handler.GetUserRecentActivities)).Methods(http.MethodGet)
 
 	cors := handlers.CORS(
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),

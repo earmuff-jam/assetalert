@@ -20,12 +20,21 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   text: {
-    fontSize: '0.925rem',
+    fontSize: '0.825rem',
+    fontFamily: 'Roboto',
+  },
+  bolderText: {
+    fontWeight: 'bold',
   },
   tableRow: {
     '& td': {
+      padding: theme.spacing(1.25),
       borderBottom: 'none',
     },
+  },
+  darkbackgroundColor: {
+    color: theme.palette.common.black,
+    backgroundColor: theme.palette.grey[100],
   },
   emptyGap: {
     justifyContent: 'space-between',
@@ -56,9 +65,20 @@ const Host = ({ selectedEvent }) => {
         {BUILD_TABLE_CONSTANTS(selectedEvent).map((row) => (
           <TableRow key={row.id} className={classes.tableRow}>
             <TableCell className={classNames(classes.text, classes.blueTableCell)}>{row.id}</TableCell>
-            <TableCell className={classNames(classes.text)}>{row.label}</TableCell>
             <TableCell
-              className={classNames(classes.text, classes.columnContainer, { [classes.emptyGap]: row.id === 5 })}
+              className={classNames(classes.text, classes.bolderText, {
+                [classes.darkbackgroundColor]: row.id % 2 === 0,
+              })}
+            >
+              {row.label}
+            </TableCell>
+            <TableCell
+              className={classNames(
+                classes.text,
+                classes.columnContainer,
+                { [classes.emptyGap]: row.id === 5 },
+                { [classes.darkbackgroundColor]: row.id % 2 === 0 }
+              )}
             >
               {row.value}
             </TableCell>

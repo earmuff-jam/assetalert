@@ -129,6 +129,7 @@ const ProfileDetailPage = () => {
     dispatch(homeActions.getEvents());
     dispatch(profileActions.getProfileDetails());
     dispatch(profileActions.getProfileNotifications());
+    dispatch(profileActions.getRecentActivitiesList());
     // eslint-disable-next-line
   }, []);
 

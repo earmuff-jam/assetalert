@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   text: {
-    fontSize: '0.925rem',
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
   },
   aside: {
     display: 'flex',
@@ -115,7 +117,6 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
           renderInput={(params) => <TextField {...params} label="Volunteering on" variant="outlined" />}
         />
         <TextField
-          className={classes.text}
           id="volunteerHours"
           disabled={disabled}
           variant="standard"

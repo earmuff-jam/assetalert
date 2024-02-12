@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import { Box, List, ListItem, ListItemText, Paper, Typography } from '@material-ui/core';
 
 import classNames from 'classnames';
 import MapComponentFn from '../Map/Map';
@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     borderRight: `1px solid ${theme.palette.error.dark}`,
   },
   listItem: {
-    borderRadius: theme.spacing(1),
-    padding: theme.spacing(0.5),
+    borderRadius: theme.spacing(0.25),
+    padding: theme.spacing(0.25),
   },
   rowContainer: {
     display: 'flex',
@@ -32,12 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
   fontVariation: {
     color: theme.palette.primary.main,
-    fontSize: '1.125rem',
-    fontFamily: 'Poppins, sans-serif',
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '0.825rem',
-      fontFamily: 'Poppins, sans-serif',
-    },
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Roboto',
   },
   smallVariant: {
     [theme.breakpoints.down('sm')]: {

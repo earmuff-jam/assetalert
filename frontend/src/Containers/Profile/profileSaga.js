@@ -15,6 +15,16 @@ export function* fetchExistingUserDetails() {
   }
 }
 
+export function* fetchRecentActivitiesList() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/recent/${USER_ID}`);
+    yield put(profileActions.getRecentActivitiesListSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getRecentActivitiesListFailure(e));
+  }
+}
+
 export function* fetchExistingNotificationsUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -95,6 +105,10 @@ export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
 
+export function* watchFetchRecentActivitiesList() {
+  yield takeLatest(`profile/getRecentActivitiesList`, fetchRecentActivitiesList);
+}
+
 export function* watchUpdateExistingUserDetails() {
   yield takeLatest(`profile/updateProfileDetails`, updateExistingUserDetails);
 }
@@ -110,6 +124,7 @@ export function* watchFetchUpdateProfileImage() {
 // eslint-disable-next-line
 export default [
   watchExistingNotificationsUserDetails,
+  watchFetchRecentActivitiesList,
   watchUpdateProfileNotification,
   watchFetchExistingUserDetails,
   watchUpdateExistingUserDetails,

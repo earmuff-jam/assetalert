@@ -64,7 +64,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   text: {
-    fontSize: '0.925rem',
+    color: theme.palette.primary.main,
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Roboto',
   },
 }));
 
@@ -201,10 +205,10 @@ const EventDetailsCard = ({
             ))}
         </Box>
         <CardActions>
-          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7">
+          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7" className={classes.text}>
             Add Item
           </Button>
-          <Button onClick={handleViewItems} data-tour="8">
+          <Button onClick={handleViewItems} data-tour="8" className={classes.text}>
             View Items
           </Button>
         </CardActions>
