@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(20),
     },
   },
+  badgeFont: {
+    fontSize: '0.625rem',
+  },
   buttonContainer: {
     fontSize: '0.725rem',
     fontWeight: 'bold',
@@ -113,7 +116,12 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                     </Box>
                   </Box>
                   <Tooltip title={`Start Date: ${formattedDate}`} placement="top">
-                    <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
+                    <Badge
+                      badgeContent={formattedDay}
+                      color="primary"
+                      overlap="rectangular"
+                      classes={{ anchorOriginTopRightRectangular: classes.badgeFont }}
+                    />
                   </Tooltip>
                 </Box>
                 <Box className={classes.rowAlign}>

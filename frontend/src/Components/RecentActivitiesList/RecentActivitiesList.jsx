@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import RecentActivity from './RecentActivity';
 import EmptyComponent from '../../util/EmptyComponent';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
   tableContainer: {
     padding: theme.spacing(0, 3),
   },
+  spinnerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
 }));
 
 const RecentActivitiesList = ({ usernameOrFullName }) => {
@@ -30,7 +35,14 @@ const RecentActivitiesList = ({ usernameOrFullName }) => {
 
   const { loading, recentActivities } = useSelector((state) => state.profile);
 
-  console.log(recentActivities);
+  if (loading) {
+    return (
+      <Box className={classes.spinnerContainer}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (recentActivities?.length <= 0) {
     return <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />;
   }

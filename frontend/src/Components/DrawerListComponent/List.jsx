@@ -38,12 +38,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
 }));
 
 const List = ({

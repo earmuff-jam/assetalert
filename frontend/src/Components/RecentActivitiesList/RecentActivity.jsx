@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Badge, Chip, Tooltip, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Chip, Tooltip, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     borderRadius: theme.spacing(0.4),
   },
-  textColor: {
+  extraPaddingTop: {
     paddingTop: theme.spacing(1),
+  },
+  subtitleTextHeader: {
     color: theme.palette.primary.main,
     fontSize: theme.spacing(1.5),
   },
@@ -43,7 +46,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
 
   return (
     <Box className={classes.root}>
-      <Typography className={classes.textColor}>
+      <Typography className={classNames(classes.subtitleTextHeader, classes.extraPaddingTop)}>
         {usernameOrFullName || 'Anonymous'} - {dayjs(activity.updated_at).fromNow()}
       </Typography>
       <Typography variant="h6" className={classes.activityTitle}>
@@ -53,7 +56,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
       <Box>
         {activity.volunteering_hours > 0 && (
           <Box>
-            <Typography variant="h5" className={classes.textColor} gutterBottom>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
               Volunteered on
             </Typography>
             <Tooltip title={`Total ${activity.volunteering_hours} hrs volunteered`} placement="top-start">
@@ -69,7 +72,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
       <Box>
         {activity?.skills_required?.length > 1 ? (
           <Box>
-            <Typography variant="h5" className={classes.textColor} gutterBottom>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
               Requested help on
             </Typography>
             <Box className={classes.chipContainer}>
@@ -83,7 +86,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
       <Box>
         {activity?.expense_name?.length > 1 ? (
           <Box>
-            <Typography variant="h5" className={classes.textColor} gutterBottom>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
               Expense listed on
             </Typography>
             <Tooltip title={`Total ${activity.expense_amount} expenses accured`} placement="top-start">

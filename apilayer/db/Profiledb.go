@@ -161,6 +161,7 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 
 	// Use QueryRow instead of Exec to get the updated row
 	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
+	var goal sql.NullString
 
 	row := tx.QueryRow(sqlStr, userID, fileBytes)
 
@@ -170,26 +171,29 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		&updatedProfile.FullName,
 		&avatarUrl, // Use & for nullable columns
 		&updatedProfile.PhoneNumber,
-		&updatedProfile.Goal,
+		&goal,
 		&updatedProfile.AboutMe,
 		&updatedProfile.OnlineStatus,
 		&updatedProfile.Role,
 	)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
 	// Handle null values safely
 	if avatarUrl.Valid {
-		updatedProfile.AvatarUrl = avatarUrl.String // Assign if the value is not null
+		updatedProfile.AvatarUrl = avatarUrl.String
 	} else {
-		updatedProfile.AvatarUrl = "" // Or handle the null case accordingly
+		updatedProfile.AvatarUrl = ""
+	}
+	if goal.Valid {
+		updatedProfile.Goal = goal.String
+	} else {
+		updatedProfile.Goal = ""
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -198,7 +202,9 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 	return &updatedProfile, nil
 }
 
-// RetrieveRecentActivity retrieves recent activities for a given user.
+// RetrieveRecentActivity ...
+//
+// retrieves recent activities for a given user.
 func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivity, error) {
 	db, err := SetupDB(user)
 	if err != nil {
@@ -215,12 +221,12 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
         ARRAY_AGG(DISTINCT COALESCE(ps.skill, '')) AS skill_list,
 		p.updated_at AS latest_updated_date
     FROM
-        projects p
+        community.projects p
     LEFT JOIN expenses e ON
         p.id = e.project_id
-    LEFT JOIN projects_volunteer pv ON
+    LEFT JOIN community.projects_volunteer pv ON
         pv.project_id = p.id
-    LEFT JOIN project_skills ps ON
+    LEFT JOIN community.project_skills ps ON
         pv.project_skills_id = ps.id
     WHERE
         p.created_by = $1
@@ -231,7 +237,7 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
     GROUP BY
         p.id, p.title
     ORDER BY
-        p.updated_at;`
+        p.updated_at DESC;`
 
 	rows, err := db.Query(sqlStr, userID)
 	if err != nil {

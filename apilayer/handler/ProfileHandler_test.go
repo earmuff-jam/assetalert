@@ -224,14 +224,15 @@ func Test_GetUserRecentActivities(t *testing.T) {
 	}
 
 	// cleanup
-	var recentActivity []model.RecentActivity
-	err = json.Unmarshal(data, &recentActivity)
+	var recentActivities []model.RecentActivity
+	err = json.Unmarshal(data, &recentActivities)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
+	assert.Equal(t, len(recentActivities), 3)
 	t.Logf("response = %+v", string(data))
 
 }

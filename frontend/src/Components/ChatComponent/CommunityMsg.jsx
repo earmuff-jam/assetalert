@@ -6,12 +6,6 @@ import useWebSocket from 'react-use-websocket';
 import EmptyComponent from '../../util/EmptyComponent';
 
 const useStyles = makeStyles((theme) => ({
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
   btnContainer: {
     display: 'flex',
     flexDirection: 'row',
