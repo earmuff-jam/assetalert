@@ -203,7 +203,9 @@ const EventDetailPage = () => {
       const userHasRsvp = selectedEvent?.attendees?.includes(profileDetails.id);
       const userIsMember = selectedEvent?.sharable_groups?.includes(profileDetails.id);
       const totalAllocatedMembers = selectedEvent?.max_attendees;
-      const requiredSkills = selectedEvent?.skills_required;
+      // filter empty required skills
+      const requiredSkills =
+        selectedEvent.skills_required.filter((v) => Boolean(v)).length != 0 ? selectedEvent?.skills_required : [];
       const sharableGroups = selectedEvent?.sharable_groups;
       const attendees = selectedEvent.attendees;
       const comments = selectedEvent.comments;
