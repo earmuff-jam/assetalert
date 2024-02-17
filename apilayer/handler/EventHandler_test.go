@@ -150,7 +150,6 @@ func Test_CreateNewEvent(t *testing.T) {
 	assert.Equal(t, 200, res.StatusCode)
 
 	// cleanup
-
 	var selectedEvent model.Event
 	err = json.Unmarshal(data, &selectedEvent)
 	if err != nil {

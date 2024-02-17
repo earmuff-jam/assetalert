@@ -58,7 +58,7 @@ export const LABELS = [
     id: 7,
     label: 'Street',
     colName: 'street',
-    modifier: (value) => value || 'N/A',
+    modifier: (value) => value || 'Unknown location',
   },
   {
     id: 8,

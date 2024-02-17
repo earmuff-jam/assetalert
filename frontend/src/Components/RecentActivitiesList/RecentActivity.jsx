@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Badge, Chip, Tooltip, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Chip, Tooltip, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     borderRadius: theme.spacing(0.4),
   },
-  textColor: {
+  extraPaddingTop: {
     paddingTop: theme.spacing(1),
+  },
+  subtitleTextHeader: {
     color: theme.palette.primary.main,
     fontSize: theme.spacing(1.5),
   },
@@ -23,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+    overflow: 'auto',
     paddingBottom: theme.spacing(1.2),
   },
   chip: {
@@ -41,43 +45,61 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
   dayjs.extend(relativeTime);
 
   return (
-    <div className={classes.root}>
-      <Typography className={classes.textColor}>
-        {usernameOrFullName || 'Anonymous'} - {dayjs(activity.start_date || activity.created_at).fromNow()}
+    <Box className={classes.root}>
+      <Typography className={classNames(classes.subtitleTextHeader, classes.extraPaddingTop)}>
+        {usernameOrFullName || 'Anonymous'} - {dayjs(activity.updated_at).fromNow()}
       </Typography>
       <Typography variant="h6" className={classes.activityTitle}>
         {activity.title}
       </Typography>
       {activity?.comments && <Typography className={classes.activityDescription}>{activity.comments}</Typography>}
       <Box>
-        {activity.volunteer_hours && (
+        {activity.volunteering_hours > 0 && (
           <Box>
-            <Typography variant="h5" className={classes.textColor} gutterBottom>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
               Volunteered on
             </Typography>
-            <Tooltip title={`${activity.volunteer_hours} hrs volunteered`}>
-              <Badge variant="dot" color="primary" overlap="rectangular">
-                <Chip className={classes.chip} size="small" label={activity.volunteeringActivity} />
-              </Badge>
+            <Tooltip title={`Total ${activity.volunteering_hours} hrs volunteered`} placement="top-start">
+              <Box className={classes.chipContainer}>
+                {activity?.volunteering_skill?.map((v) => (
+                  <Chip className={classes.chip} size="small" label={v} />
+                ))}
+              </Box>
             </Tooltip>
           </Box>
         )}
       </Box>
-      <div>
+      <Box>
         {activity?.skills_required?.length > 1 ? (
           <Box>
-            <Typography variant="h5" className={classes.textColor} gutterBottom>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
               Requested help on
             </Typography>
-            <div className={classes.chipContainer}>
+            <Box className={classes.chipContainer}>
               {activity?.skills_required.map((v, index) => (
                 <Chip size="small" className={classes.chip} key={index} label={v} />
               ))}
-            </div>
+            </Box>
           </Box>
         ) : null}
-      </div>
-    </div>
+      </Box>
+      <Box>
+        {activity?.expense_name?.length > 1 ? (
+          <Box>
+            <Typography className={classes.subtitleTextHeader} gutterBottom>
+              Expense listed on
+            </Typography>
+            <Tooltip title={`Total ${activity.expense_amount} expenses accured`} placement="top-start">
+              <Box className={classes.chipContainer}>
+                {activity?.expense_name.map((v, index) => (
+                  <Chip size="small" className={classes.chip} key={index} label={v} />
+                ))}
+              </Box>
+            </Tooltip>
+          </Box>
+        ) : null}
+      </Box>
+    </Box>
   );
 };
 

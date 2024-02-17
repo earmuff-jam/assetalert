@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, TextField, IconButton, CircularProgress } from '@material-ui/core';
+import { Box, Typography, TextField, IconButton } from '@material-ui/core';
 
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
@@ -17,19 +17,15 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     padding: theme.spacing(1),
   },
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
   headerText: {
     fontSize: '2.0rem',
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
   },
   text: {
-    fontSize: '0.925rem',
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
   },
   aside: {
     display: 'flex',
@@ -83,14 +79,6 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
     }
   }, [requiredSkills]);
 
-  if (requiredSkills?.length <= 0) {
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress />
-      </div>
-    );
-  }
-
   if (!isChecked) {
     return (
       <>
@@ -115,7 +103,6 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
           renderInput={(params) => <TextField {...params} label="Volunteering on" variant="outlined" />}
         />
         <TextField
-          className={classes.text}
           id="volunteerHours"
           disabled={disabled}
           variant="standard"

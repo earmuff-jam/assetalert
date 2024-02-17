@@ -4,6 +4,8 @@ import { CheckRounded, EditRounded, CancelRounded, CallToActionRounded } from '@
 import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
+import classNames from 'classnames';
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
-  buttonSecondary: {},
+  iconButton: {
+    padding: theme.spacing(0.6),
+  },
+  greenColor: {
+    color: theme.palette.primary.main,
+  },
   emptyGap: {
     flexGrow: 1,
   },
@@ -59,13 +66,17 @@ const ProfileDetailsCard = ({
           <UserProfile formFields={formFields} profileDetails={profileDetails} />
           <Box className={classes.emptyGap}></Box>
           <Box>
-            <IconButton disabled={!editMode} onClick={handleSubmit} className={classes.buttonSecondary}>
+            <IconButton
+              disabled={!editMode}
+              onClick={handleSubmit}
+              className={classNames(classes.iconButton, { [classes.greenColor]: editMode })}
+            >
               <CheckRounded />
             </IconButton>
-            <IconButton onClick={handleToggle} className={classes.buttonSecondary}>
+            <IconButton onClick={handleToggle} className={classes.iconButton}>
               {!editMode ? <EditRounded /> : <CancelRounded />}
             </IconButton>
-            <IconButton onClick={handleClickNotificationBar} className={classes.buttonSecondary}>
+            <IconButton onClick={handleClickNotificationBar} className={classes.iconButton}>
               <Badge
                 badgeContent={notifications.map((v) => !v.is_viewed).filter(Boolean).length}
                 variant="dot"

@@ -32,7 +32,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   text: {
-    fontSize: '0.925rem',
+    color: theme.palette.primary.main,
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Roboto',
   },
   aside: {
     display: 'flex',
@@ -55,6 +59,7 @@ const ExpenseDetails = ({ eventID, userID, editingAllowed }) => {
       <Box className={classes.rowContainer}>
         <Button
           disabled={editingAllowed}
+          className={classes.text}
           onClick={() => {
             setOpenDialog(true);
             dispatch(eventActions.getCategoryList());
@@ -62,7 +67,9 @@ const ExpenseDetails = ({ eventID, userID, editingAllowed }) => {
         >
           Add Expense
         </Button>
-        <Button onClick={() => setOpenDrawer(true)}>View Expense</Button>
+        <Button onClick={() => setOpenDrawer(true)} className={classes.text}>
+          View Expense
+        </Button>
       </Box>
       <Drawer open={openDrawer} toggleDrawer={toggleDrawer} disabled={editingAllowed}>
         <ViewExpenseList disabled={true} />

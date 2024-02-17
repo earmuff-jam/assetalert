@@ -7,13 +7,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   headerText: {
-    fontSize: '2.0rem',
+    fontSize: '1.725rem',
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.error.dark,
   },
   text: {
     fontSize: '0.925rem',
-    fontFamily: 'Poppins, sans-serif',
   },
 }));
 

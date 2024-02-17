@@ -34,7 +34,10 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Poppins, sans-serif',
   },
   text: {
-    fontSize: '0.985rem',
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Roboto',
   },
   highlight: {
     color: theme.palette.primary.main,
@@ -113,7 +116,8 @@ const ExpenseChart = ({ expenses }) => {
         Expense Report
       </Typography>
       <Typography className={classes.text}>
-        {`Incurred Expenses:`} <span className={classes.highlight}> {totalIncurred ? `$${totalIncurred}` : 'NA'} </span>
+        {`Incurred Expenses:`}{' '}
+        <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
       </Typography>
       <Box className={classes.aside}>
         <Box className={classes.emptyGap}></Box>

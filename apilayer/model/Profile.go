@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -28,4 +29,18 @@ func (p *Profile) Validate() error {
 		return errors.New("empty required field")
 	}
 	return nil
+}
+
+// RecentActivity ...
+type RecentActivity struct {
+	Type              string    `json:"type"`
+	EventID           string    `json:"id"`
+	Title             string    `json:"title"`
+	ExpenseID         string    `json:"expenseID"`
+	ExpenseName       []string  `json:"expense_name"`
+	ExpenseAmount     string    `json:"expense_amount"`
+	VolunteeringID    string    `json:"volunteering_id"`
+	VolunteeringSkill []string  `json:"volunteering_skill"`
+	VolunteeringHours string    `json:"volunteering_hours"`
+	UpdatedAt         time.Time `json:"updated_at"`
 }

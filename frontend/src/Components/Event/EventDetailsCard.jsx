@@ -3,7 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-import { LowPriorityRounded, GroupRounded, BugReportRounded, EditRounded, DoneRounded } from '@material-ui/icons';
+import {
+  LowPriorityRounded,
+  GroupRounded,
+  BugReportRounded,
+  EditRounded,
+  DoneRounded,
+  CardMembership,
+  CardMembershipRounded,
+} from '@material-ui/icons';
 import {
   Box,
   Card,
@@ -46,10 +54,15 @@ const useStyles = makeStyles((theme) => ({
   chipContainer: {
     display: 'flex',
     flexDirection: 'row',
-    gap: theme.spacing(2),
+    gap: theme.spacing(1),
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
+  },
+  chip: {
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    backgroundColor: theme.palette.grey[100],
   },
   emptyGap: {
     flexGrow: 1,
@@ -64,7 +77,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   text: {
-    fontSize: '0.925rem',
+    color: theme.palette.primary.main,
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Roboto',
   },
 }));
 
@@ -176,7 +193,7 @@ const EventDetailsCard = ({
                 </Badge>
               </IconButton>
             </Tooltip>
-            {!editingAllowed && (
+            {userDetail?.userIsMember && (
               <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
                 <IconButton onClick={toggleEditMode}>
                   {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
@@ -186,25 +203,25 @@ const EventDetailsCard = ({
           </Box>
         </Box>
         <Box className={classNames(classes.rowContainer, classes.gutterBottom)} data-tour="5">
-          <Tooltip title="Users who join the event are members of the event.">
-            <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.sharable_groups.length || 0} members `} />
+          <Tooltip title="Current members">
+            <Chip size="small" icon={<CardMembershipRounded />} label={` ${userDetail?.sharable_groups.length || 0}`} />
           </Tooltip>
-          <Tooltip title="Users who agree to participate in the event.">
-            <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0} attendees `} />
+          <Tooltip title="Anticipated members">
+            <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0}`} />
           </Tooltip>
         </Box>
         <Box className={classNames((classes.rowContainer, classes.chipContainer))} data-tour="6">
           {userDetail?.requiredSkills.length > 0 &&
             userDetail?.requiredSkills[0] !== '' &&
             userDetail?.requiredSkills.map((v, index) => (
-              <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} />
+              <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} className={classes.chip} />
             ))}
         </Box>
         <CardActions>
-          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7">
+          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7" className={classes.text}>
             Add Item
           </Button>
-          <Button onClick={handleViewItems} data-tour="8">
+          <Button onClick={handleViewItems} data-tour="8" className={classes.text}>
             View Items
           </Button>
         </CardActions>

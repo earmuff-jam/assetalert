@@ -589,7 +589,7 @@ func UpdateEventAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 
 	resp, err := db.UpdateEventAvatar(user, userID, header, fileBytes)
 	if err != nil {
-		log.Printf("Unable to update profile avatar. error: +%v", err)
+		log.Printf("Unable to update event avatar. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}

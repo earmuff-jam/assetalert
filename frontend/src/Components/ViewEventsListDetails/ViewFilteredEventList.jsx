@@ -45,8 +45,9 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
   },
   textDetails: {
-    fontSize: '0.825rem',
-    lineHeight: '1.5rem',
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
   },
   active: {
     color: theme.palette.primary.main,
@@ -66,10 +67,13 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(20),
     },
   },
+  badgeFont: {
+    fontSize: '0.625rem',
+  },
   buttonContainer: {
-    borderRadius: theme.spacing(0),
-    color: theme.palette.common.black,
-    backgroundColor: theme.palette.secondary.light,
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
     '&:hover': {
       color: theme.palette.common.black,
       boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
@@ -112,14 +116,19 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                     </Box>
                   </Box>
                   <Tooltip title={`Start Date: ${formattedDate}`} placement="top">
-                    <Badge badgeContent={formattedDay} color="primary" overlap="rectangular" />
+                    <Badge
+                      badgeContent={formattedDay}
+                      color="primary"
+                      overlap="rectangular"
+                      classes={{ anchorOriginTopRightRectangular: classes.badgeFont }}
+                    />
                   </Tooltip>
                 </Box>
                 <Box className={classes.rowAlign}>
-                  <Typography className={classNames(classes.textDetails, classes.active)} gutterBottom>
+                  <Typography className={classNames(classes.textDetails, classes.active)}>
                     {`${event?.skills_required?.map((v) => v).length} active skills`}
                   </Typography>
-                  <Chip label={formattedDate} />
+                  <Chip label={formattedDate} classes={{ label: classes.textDetails }} />
                 </Box>
                 <Typography className={classes.textDetails} gutterBottom>
                   {`${event.street.length ? event.street : 'Unknown location'}`}
