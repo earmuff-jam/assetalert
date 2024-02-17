@@ -5,35 +5,6 @@ export const EXISTING_PROJECTS_MSG =
 
 export const EXISTING_PROJECTS_NOT_FOUND_MSG = 'Hmm.. Seems like you have no active events created.';
 
-export const SKILLS_REQUIRED_OPTIONS = [
-  'Event Planning',
-  'Volunteer Coordination',
-  'Fundraising',
-  'Public Speaking',
-  'Social Media Management',
-  'Graphic Design',
-  'Photography',
-  'Videography',
-  'Community Outreach',
-  'Project Management',
-  'Writing',
-  'Marketing',
-  'Event Promotion',
-  'Logistics',
-  'Catering',
-  'Decorations',
-  'Tech Support',
-  'Sponsorship',
-  'First Aid',
-  'Education',
-  'Entertainment',
-  'Environmental Conservation',
-  'Art and Crafts',
-  'Music',
-  'Dance',
-  'Other',
-];
-
 export const EVENT_TYPES = [
   {
     id: 1,

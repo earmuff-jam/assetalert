@@ -23,13 +23,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  statsNumber: {
-    borderStyle: 'solid',
-    borderRadius: '50%',
-    borderColor: 'red',
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-  },
 }));
 
 const ViewMyStatDetails = ({ createdEventsCount, volunteeringDetailsCount }) => {

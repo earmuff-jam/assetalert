@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
 import RecentActivity from './RecentActivity';
 import EmptyComponent from '../../util/EmptyComponent';
-import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,13 +16,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     margin: theme.spacing(2, 0),
     color: '#555555',
-  },
-  header: {
-    backgroundColor: theme.palette.primary.light,
-    color: '#fff',
-  },
-  tableContainer: {
-    padding: theme.spacing(0, 3),
   },
   spinnerContainer: {
     display: 'flex',

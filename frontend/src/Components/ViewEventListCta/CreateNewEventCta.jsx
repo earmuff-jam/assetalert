@@ -20,11 +20,6 @@ const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: '0.925rem',
   },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 }));
 
 const CreateNewEventCta = () => {

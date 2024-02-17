@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import classNames from 'classnames';
-import AddItemDetail from '../ItemDetail/AddItemDetail';
-import {
-  LowPriorityRounded,
-  GroupRounded,
-  BugReportRounded,
-  EditRounded,
-  DoneRounded,
-  CardMembership,
-  CardMembershipRounded,
-} from '@material-ui/icons';
 import {
   Box,
   Card,
@@ -24,17 +13,29 @@ import {
   Tooltip,
   Badge,
 } from '@material-ui/core';
+
+import {
+  LowPriorityRounded,
+  GroupRounded,
+  BugReportRounded,
+  EditRounded,
+  DoneRounded,
+  CardMembershipRounded,
+} from '@material-ui/icons';
+
+import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
-import Title from '../DialogComponent/Title';
-import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
-import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
-import { enqueueSnackbar } from 'notistack';
-import { homeActions } from '../../Containers/Home/homeSlice';
 import EventProfile from './EventProfile';
+import { enqueueSnackbar } from 'notistack';
+import Title from '../DialogComponent/Title';
 import { isEditingAllowed } from './constants';
-import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import Drawer from '../DrawerListComponent/Drawer';
+import AddItemDetail from '../ItemDetail/AddItemDetail';
+import ViewItemDetail from '../ItemDetail/ViewItemDetail';
+import { homeActions } from '../../Containers/Home/homeSlice';
+import { eventActions } from '../../Containers/Event/eventSlice';
+import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
+import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,13 +68,10 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
-  errorText: {
-    color: theme.palette.error.dark,
-  },
   gutterBottom: {
     marginBottom: theme.spacing(1),
   },
-  btnRoot: {
+  buttonContainer: {
     color: theme.palette.primary.main,
   },
   text: {
@@ -180,7 +178,7 @@ const EventDetailsCard = ({
             <Button
               data-tour="3"
               variant="text"
-              className={classes.btnRoot}
+              className={classes.buttonContainer}
               onClick={userDetail?.userIsMember ? onLeave : onJoin}
             >
               {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}

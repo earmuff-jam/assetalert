@@ -25,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '8px',
     display: 'inline-block',
   },
-  textDetails: {
-    fontSize: theme.spacing(1.5),
-  },
 }));
 
 const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) => {

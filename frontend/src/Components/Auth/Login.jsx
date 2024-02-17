@@ -1,47 +1,23 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { produce } from 'immer';
 import { Button, InputAdornment, TextField } from '@material-ui/core';
-import { LOGIN_FORM_FIELDS } from './constants';
+
+import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
+import { LOGIN_FORM_FIELDS } from './constants';
 import { authActions } from '../../Containers/Auth/authSlice';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-  },
   text: {
     fontSize: '1.2rem',
     fontWeight: 'lighter',
     marginBottom: theme.spacing(2),
-  },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
-  errorText: {
-    color: theme.palette.error.dark,
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
     padding: theme.spacing(0, 2),
-  },
-  warningText: {
-    color: theme.palette.error.main,
   },
 }));
 
@@ -68,10 +44,6 @@ const Login = () => {
     );
   };
 
-  const fetchLoginFn = (formattedData) => {
-    dispatch(authActions.getUserID(formattedData));
-  };
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -95,8 +67,7 @@ const Login = () => {
         }
         return acc;
       }, {});
-
-      fetchLoginFn(formattedData);
+      dispatch(authActions.getUserID(formattedData));
     }
   };
 

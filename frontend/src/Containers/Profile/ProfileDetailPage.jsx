@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, CircularProgress, Grid, Popover } from '@material-ui/core';
+
+import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { profileActions } from './profileSlice';
 import { homeActions } from '../Home/homeSlice';
-import { USER_PROFILE_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { USER_PROFILE_FORM_FIELDS } from './constants';
+import Notification from '../../Components/Profile/Notification';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import RecentActivitiesList from '../../Components/RecentActivitiesList/RecentActivitiesList';
-import Notification from '../../Components/Profile/Notification';
-import { produce } from 'immer';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -25,14 +26,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '1rem auto',
     minHeight: '100%',
     backgroundColor: theme.palette.secondary.main,
-  },
-  profileContainer: {
-    margin: theme.spacing(0, 2),
-  },
-  aside: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(1),
   },
 }));
 

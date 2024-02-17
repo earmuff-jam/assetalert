@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box, Typography } from '@material-ui/core';
+
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
 import EditEventImage from './EditEventImage';
+import { eventActions } from '../../Containers/Event/eventSlice';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -87,7 +88,7 @@ const EventProfile = ({ userDetail }) => {
           <Avatar
             data-tour="0"
             alt="event avatar"
-            src={selectedImage && `data:image/png;base64,${selectedImage}` || 'blank_canvas.png'}
+            src={(selectedImage && `data:image/png;base64,${selectedImage}`) || 'blank_canvas.png'}
             className={classes.avatar}
             onClick={toggleEditImage}
           />

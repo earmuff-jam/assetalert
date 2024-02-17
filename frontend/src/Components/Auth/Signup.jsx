@@ -7,41 +7,16 @@ import { authActions } from '../../Containers/Auth/authSlice';
 import { Button, Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-  },
   text: {
     fontSize: '1.2rem',
     fontWeight: 'lighter',
     marginBottom: theme.spacing(2),
-  },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
-  errorText: {
-    color: theme.palette.error.dark,
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
     padding: theme.spacing(0, 2),
-  },
-  warningText: {
-    color: theme.palette.error.main,
   },
 }));
 

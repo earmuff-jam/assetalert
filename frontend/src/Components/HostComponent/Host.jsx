@@ -1,8 +1,8 @@
 import React from 'react';
-import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
-import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableBody, TableCell, TableRow, CircularProgress } from '@material-ui/core';
 import classNames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
+import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
+import { Table, TableBody, TableCell, TableRow, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {

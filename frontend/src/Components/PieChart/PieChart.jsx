@@ -33,11 +33,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 }));
 
 const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {

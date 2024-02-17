@@ -1,15 +1,16 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { CancelRounded, DoneRounded } from '@material-ui/icons';
+import { CircularProgress, Container } from '@material-ui/core';
+
+import dayjs from 'dayjs';
+import List from '../DrawerListComponent/List';
+import EasyEdit, { Types } from 'react-easy-edit';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
-import { makeStyles } from '@material-ui/core/styles';
-import { CircularProgress, Container } from '@material-ui/core';
-import { CancelRounded, DoneRounded } from '@material-ui/icons';
-import EasyEdit, { Types } from 'react-easy-edit';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import List from '../DrawerListComponent/List';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {

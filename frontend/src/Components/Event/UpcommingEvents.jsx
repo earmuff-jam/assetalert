@@ -3,11 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, IconButton } from '@material-ui/core';
 import { TurnedInRounded, TurnedInNotRounded, PersonAddRounded, DoneRounded } from '@material-ui/icons';
 
-import { useDispatch } from 'react-redux';
-import { updateCommunityEventDetails } from '../../actions';
-import classNames from 'classnames';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { updateCommunityEventDetails } from '../../actions';
 
 const useStyles = makeStyles((theme) => ({
   eventBar: {

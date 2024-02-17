@@ -4,7 +4,6 @@ import { Box, Typography } from '@material-ui/core';
 
 import 'chart.js/auto'; // do not remove this
 import { Bar } from 'react-chartjs-2';
-import EmptyComponent from '../../util/EmptyComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
-  largeText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
-  },
   text: {
     fontSize: '0.725rem',
     fontWeight: 'bold',
@@ -41,11 +36,6 @@ const useStyles = makeStyles((theme) => ({
   },
   highlight: {
     color: theme.palette.primary.main,
-  },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   chartContainer: {
     position: ' relative',

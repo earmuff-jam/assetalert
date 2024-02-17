@@ -30,14 +30,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100%',
     backgroundColor: theme.palette.secondary.main,
   },
-  profileContainer: {
-    margin: theme.spacing(0, 2),
-  },
-  aside: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(1),
-  },
 }));
 
 const EventDetailPage = () => {
