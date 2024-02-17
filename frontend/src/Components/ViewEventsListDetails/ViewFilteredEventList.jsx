@@ -17,6 +17,7 @@ import {
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { WhatshotRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -80,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
     },
   },
+  iconSm: {
+    height: theme.spacing(3),
+  },
 }));
 
 const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
@@ -126,9 +130,13 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                   </Tooltip>
                 </Box>
                 <Box className={classes.rowAlign}>
-                  <Typography className={classNames(classes.textDetails, classes.active)}>
-                    {`${event?.skills_required?.map((v) => v).length} active skills`}
-                  </Typography>
+                  <Tooltip title={`${event.skills_required.length} in demand skills`}>
+                    <Box>
+                      {event.skills_required.map(() => (
+                        <WhatshotRounded className={classNames(classes.iconSm, classes.active)} />
+                      ))}
+                    </Box>
+                  </Tooltip>
                   <Chip label={formattedDate} classes={{ label: classes.textDetails }} />
                 </Box>
                 <Typography className={classes.textDetails} gutterBottom>
