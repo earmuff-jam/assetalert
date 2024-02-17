@@ -193,7 +193,7 @@ const EventDetailsCard = ({
                 </Badge>
               </IconButton>
             </Tooltip>
-            {!editingAllowed && (
+            {userDetail?.userIsMember && (
               <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
                 <IconButton onClick={toggleEditMode}>
                   {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
