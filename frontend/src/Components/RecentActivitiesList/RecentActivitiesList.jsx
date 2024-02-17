@@ -43,19 +43,19 @@ const RecentActivitiesList = ({ usernameOrFullName }) => {
     );
   }
 
-  if (recentActivities?.length <= 0) {
-    return <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />;
-  }
-
   return (
     <Box className={classes.root}>
       <Typography variant="h5" className={classes.title}>
         Recent Activity
       </Typography>
       <Box>
-        {recentActivities?.map((event, index) => (
-          <RecentActivity key={index} activity={event} usernameOrFullName={usernameOrFullName} />
-        ))}
+        {recentActivities && recentActivities.length > 0 ? (
+          recentActivities?.map((event, index) => (
+            <RecentActivity key={index} activity={event} usernameOrFullName={usernameOrFullName} />
+          ))
+        ) : (
+          <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />
+        )}
       </Box>
     </Box>
   );
