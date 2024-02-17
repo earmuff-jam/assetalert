@@ -72,3 +72,30 @@ export const BLANK_NEW_EVENT_TOUCHED = {
   skills_required: false,
   start_date: false,
 };
+
+export const BLANK_REPORT_FORM = {
+  subject: '',
+  description: '',
+  id: '',
+  event_location: '',
+  organizer_name: '',
+  is_checked: false,
+};
+
+export const BLANK_REPORT_FORM_ERROR = {
+  subject: '',
+  description: '',
+  id: '',
+  event_location: '',
+  organizer_name: '',
+  is_checked: '',
+};
+
+export const BLANK_REPORT_FORM_TOUCHED = {
+  subject: false,
+  description: false,
+  id: false,
+  event_location: false,
+  organizer_name: false,
+  is_checked: false,
+};

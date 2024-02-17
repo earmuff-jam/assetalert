@@ -15,10 +15,9 @@ import dayjs from 'dayjs';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from '../Organization/constants';
+import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
