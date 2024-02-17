@@ -17,11 +17,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     padding: theme.spacing(1),
   },
-  headerText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
-    color: theme.palette.primary.main,
-  },
   text: {
     fontSize: '0.725rem',
     fontWeight: 'bold',

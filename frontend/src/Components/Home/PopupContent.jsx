@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: '0.925rem',
     fontWeight: 'bold',
-    lineHeight: '1.5rem',
+    margin: '0.2rem 0rem',
     color: theme.palette.text.disabled,
     textOverflow: 'ellipsis',
     overflow: 'hidden',

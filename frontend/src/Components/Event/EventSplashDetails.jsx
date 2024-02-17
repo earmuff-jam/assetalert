@@ -1,12 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box, Button, Input } from '@material-ui/core';
+import { Box, Button, Input } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-  },
   editContainer: {
     display: 'flex',
     flexDirection: 'column',

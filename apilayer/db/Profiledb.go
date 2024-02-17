@@ -212,32 +212,60 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
 	}
 	defer db.Close()
 
-	sqlStr := `SELECT
-        p.id,
-        p.title,
-        ARRAY_AGG(DISTINCT COALESCE(e.item_name, '')) AS expense_items,
-        SUM(DISTINCT e.item_cost) AS total_cost,
-        SUM(DISTINCT pv.volunteer_hours) AS total_volunteering_hours,
-        ARRAY_AGG(DISTINCT COALESCE(ps.skill, '')) AS skill_list,
-		p.updated_at AS latest_updated_date
-    FROM
-        community.projects p
-    LEFT JOIN expenses e ON
-        p.id = e.project_id
-    LEFT JOIN community.projects_volunteer pv ON
-        pv.project_id = p.id
-    LEFT JOIN community.project_skills ps ON
-        pv.project_skills_id = ps.id
-    WHERE
-        p.created_by = $1
-        OR e.created_by = $1
-        OR e.updated_by = $1
-        OR pv.created_by = $1
+	sqlStr := `SELECT 
+	p.id AS project_id,
+    p.title AS project_title,
+    COALESCE(ps.volunteer_skills, NULL) AS volunteer_skills,
+    COALESCE(pv.volunteer_hours, 0) AS volunteer_hours,
+    COALESCE(e.expense_item_names, NULL) AS expense_item_names,
+    COALESCE(e.expense_item_cost, 0) AS expense_item_cost,
+	p.updated_at
+FROM 
+    community.projects p
+LEFT JOIN (
+    SELECT 
+        pv.project_id,
+        array_agg(DISTINCT skill) AS volunteer_skills
+    FROM 
+		community.projects_volunteer pv
+    JOIN 
+		community.project_skills ps ON pv.project_skills_id = ps.id
+    WHERE 
+        pv.created_by = $1
         OR pv.updated_by = $1
-    GROUP BY
-        p.id, p.title
-    ORDER BY
-        p.updated_at DESC;`
+    GROUP BY 
+        pv.project_id
+) ps ON p.id = ps.project_id
+LEFT JOIN (
+    SELECT 
+        project_id,
+        SUM(volunteer_hours) AS volunteer_hours
+    FROM 
+		community.projects_volunteer
+    WHERE 
+        created_by = $1
+        OR updated_by = $1
+    GROUP BY 
+        project_id
+) pv ON p.id = pv.project_id
+LEFT JOIN (
+    SELECT 
+        project_id,
+        array_agg(DISTINCT item_name) AS expense_item_names,
+        SUM(item_cost) AS expense_item_cost
+    FROM 
+		community.expenses
+    WHERE 
+        created_by = $1
+        OR updated_by = $1
+    GROUP BY 
+        project_id
+) e ON p.id = e.project_id
+WHERE 
+    p.created_by = $1
+    OR p.updated_by = $1
+ORDER BY p.updated_at DESC;
+`
 
 	rows, err := db.Query(sqlStr, userID)
 	if err != nil {
@@ -256,7 +284,7 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
 		var volunteeringHours sql.NullString
 		var volunteeringActivityList pq.StringArray
 
-		if err := rows.Scan(&eventID, &eventTitle, &expenseItemNameList, &expenseItemCost, &volunteeringHours, &volunteeringActivityList, &recentActivity.UpdatedAt); err != nil {
+		if err := rows.Scan(&eventID, &eventTitle, &volunteeringActivityList, &volunteeringHours, &expenseItemNameList, &expenseItemCost, &recentActivity.UpdatedAt); err != nil {
 			return nil, err
 		}
 

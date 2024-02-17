@@ -5,8 +5,8 @@ import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/c
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import EmptyComponent from '../../util/EmptyComponent';
-import ViewFilteredEventList from './ViewFilteredEventList';
 import SearchAllEvents from '../Event/SearchAllEvents';
+import ViewFilteredEventList from './ViewFilteredEventList';
 
 const useStyles = makeStyles((theme) => ({
   container: {

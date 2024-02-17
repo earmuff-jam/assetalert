@@ -1,9 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
-import { InfoRounded } from '@material-ui/icons';
+
 import dayjs from 'dayjs';
+import classNames from 'classnames';
+import { InfoRounded } from '@material-ui/icons';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,12 +22,6 @@ const useStyles = makeStyles((theme) => ({
   captionText: {
     fontSize: '0.625rem',
     fontWeight: 'lighter',
-    color: theme.palette.text.secondary,
-  },
-  subtitle: {
-    fontSize: '0.925rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
     color: theme.palette.text.secondary,
   },
   bold: {

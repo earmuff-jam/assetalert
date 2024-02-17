@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Box, Tooltip } from '@material-ui/core';
 
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@material-ui/lab';
 
 import { enqueueSnackbar } from 'notistack';
 import { InfoRounded } from '@material-ui/icons';
-import { SKILLS_REQUIRED_OPTIONS } from '../Organization/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { homeActions } from '../../Containers/Home/homeSlice';
-import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED } from './constants';
-import dayjs from 'dayjs';
+import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED, SKILLS_REQUIRED_OPTIONS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {

@@ -11,11 +11,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  footerContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   text: {
     fontSize: '1.125rem',
     letterSpacing: '0.0125rem',

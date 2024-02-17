@@ -1,24 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { CheckRounded, EditRounded, CancelRounded, CallToActionRounded } from '@material-ui/icons';
 import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
+import { CheckRounded, EditRounded, CancelRounded, CallToActionRounded } from '@material-ui/icons';
+
+import classNames from 'classnames';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
-import classNames from 'classnames';
-import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
-  },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
   },
   rowContainer: {
     display: 'flex',
@@ -28,23 +19,11 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: theme.spacing(0.6),
   },
-  greenColor: {
+  colorVariant: {
     color: theme.palette.primary.main,
   },
   emptyGap: {
     flexGrow: 1,
-  },
-  errorText: {
-    color: theme.palette.error.dark,
-  },
-  gutterBottom: {
-    marginBottom: theme.spacing(1),
-  },
-  btnRoot: {
-    color: theme.palette.primary.main,
-  },
-  text: {
-    fontSize: '0.925rem',
   },
 }));
 
@@ -69,7 +48,7 @@ const ProfileDetailsCard = ({
             <IconButton
               disabled={!editMode}
               onClick={handleSubmit}
-              className={classNames(classes.iconButton, { [classes.greenColor]: editMode })}
+              className={classNames(classes.iconButton, { [classes.colorVariant]: editMode })}
             >
               <CheckRounded />
             </IconButton>

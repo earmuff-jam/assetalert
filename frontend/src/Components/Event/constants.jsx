@@ -1,8 +1,30 @@
 import { Chip, Tooltip } from '@material-ui/core';
 import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
 dayjs.extend(relativeTime);
+
+export const EXISTING_PROJECTS_MSG =
+  'By deactivating the project, all associated content and features will be disabled. This action cannot be undone.';
+
+export const EXISTING_PROJECTS_NOT_FOUND_MSG = 'Hmm.. Seems like you have no active events created.';
+
+export const EVENT_FORM = {
+  eventID: '',
+  reason: '',
+};
+
+export const EVENT_FORM_ERROR = {
+  eventID: '',
+  reason: '',
+};
+
+export const EVENT_FORM_TOUCHED = {
+  eventID: false,
+  reason: false,
+};
 
 export const UNKNOWN_LABEL = 'Unknown';
 export const LABELS = [

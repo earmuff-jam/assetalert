@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, InputAdornment, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  textField: {
-    padding: theme.spacing(2, 0),
-  },
   formInputContainer: {
     display: 'flex',
     flexDirection: 'column',

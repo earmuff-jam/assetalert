@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Button, Dialog } from '@material-ui/core';
-import Drawer from '../DrawerListComponent/Drawer';
-import ViewExpenseList from './ViewExpenseList';
-import Title from '../DialogComponent/Title';
-import AddExpenseDetail from './AddExpenseDetail';
+
 import { useDispatch } from 'react-redux';
+import Title from '../DialogComponent/Title';
+import ViewExpenseList from './ViewExpenseList';
+import AddExpenseDetail from './AddExpenseDetail';
+import Drawer from '../DrawerListComponent/Drawer';
 import { eventActions } from '../../Containers/Event/eventSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,28 +21,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
-  headerText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
-    color: theme.palette.primary.main,
-  },
   text: {
     color: theme.palette.primary.main,
     fontSize: '0.725rem',
     fontWeight: 'bold',
     textTransform: 'uppercase',
     fontFamily: 'Roboto',
-  },
-  aside: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(1),
   },
 }));
 

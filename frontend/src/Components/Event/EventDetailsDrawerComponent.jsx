@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, ListItemText, Paper, Typography } from '@material-ui/core';
+import { Box, List, ListItem, ListItemText, Paper } from '@material-ui/core';
 
 import classNames from 'classnames';
+import ExpenseTab from './ExpenseTab';
 import MapComponentFn from '../Map/Map';
 import Host from '../HostComponent/Host';
 import PieChart from '../PieChart/PieChart';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
+import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import { NAVIGATION_TABS, isEditingAllowed } from './constants';
-import ExpenseTab from './ExpenseTab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: theme.palette.secondary.main,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.error.dark}`,
   },
   listItem: {
     borderRadius: theme.spacing(0.25),
@@ -47,10 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
   allowSpace: {
     gap: theme.spacing(2),
-  },
-  center: {
-    display: 'flex',
-    margin: '0 auto',
   },
   underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,

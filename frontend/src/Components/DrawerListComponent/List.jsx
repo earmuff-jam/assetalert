@@ -1,6 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 import {
   Table,
   TableBody,
@@ -12,8 +10,12 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
+
+import { makeStyles } from '@material-ui/core/styles';
+import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
+
 const useStyles = makeStyles((theme) => ({
-  tableWrapper: {
+  container: {
     padding: theme.spacing(1),
     maxHeight: '40vh',
   },
@@ -57,7 +59,7 @@ const List = ({
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
-      <Box className={classes.tableWrapper}>
+      <Box className={classes.container}>
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
           {data.length > 0 && (

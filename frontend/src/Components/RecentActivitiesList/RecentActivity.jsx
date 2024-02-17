@@ -62,7 +62,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
             <Tooltip title={`Total ${activity.volunteering_hours} hrs volunteered`} placement="top-start">
               <Box className={classes.chipContainer}>
                 {activity?.volunteering_skill?.map((v) => (
-                  <Chip className={classes.chip} size="small" label={v} />
+                  <Chip key={v} className={classes.chip} size="small" label={v} />
                 ))}
               </Box>
             </Tooltip>

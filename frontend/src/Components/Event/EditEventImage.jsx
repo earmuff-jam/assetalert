@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     gap: theme.spacing(2),
   },
-  btn: {
+  buttonContainer: {
     backgroundColor: 'white',
     color: 'black',
     fontSize: theme.spacing(1.2),
@@ -64,10 +64,10 @@ const EditEventImage = ({
         />
       </form>
       <div className={classes.spanContainer}>
-        <Button className={classes.btn} onClick={toggleEditImage}>
+        <Button className={classes.buttonContainer} onClick={toggleEditImage}>
           Back
         </Button>
-        <Button className={classes.btn} disabled={!uploadedImage} onClick={() => submit(eventID)}>
+        <Button className={classes.buttonContainer} disabled={!uploadedImage} onClick={() => submit(eventID)}>
           Upload
         </Button>
       </div>

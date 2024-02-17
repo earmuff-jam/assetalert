@@ -1,14 +1,15 @@
-import { Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
+import { Box } from '@material-ui/core';
+
 import ExpenseChart from '../PieChart/ExpenseChart';
-import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
-import ViewExpenseListHeader from '../ViewExpenseList/ViewExpenseListHeader';
 import { useDispatch, useSelector } from 'react-redux';
+import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import ViewExpenseListHeader from '../ViewExpenseList/ViewExpenseListHeader';
 
 const ExpenseTab = ({ eventID, userID, editingAllowed }) => {
   const dispatch = useDispatch();
-  const { loading, expenses } = useSelector((state) => state.event);
+  const { expenses } = useSelector((state) => state.event);
 
   useEffect(() => {
     if (eventID) {

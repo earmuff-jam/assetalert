@@ -1,5 +1,5 @@
 import React from 'react';
-import dayjs from 'dayjs';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   Button,
@@ -13,7 +13,8 @@ import {
   Chip,
   Avatar,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+
+import dayjs from 'dayjs';
 import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 

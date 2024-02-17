@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     gap: theme.spacing(2),
   },
-  btn: {
+  buttonContainer: {
     backgroundColor: 'white',
     color: 'black',
     fontSize: theme.spacing(1.2),
@@ -64,11 +64,11 @@ const EditProfileImage = ({
         />
       </form>
       <div className={classes.spanContainer}>
-        <Button className={classes.btn} onClick={toggleEditImage}>
+        <Button className={classes.buttonContainer} onClick={toggleEditImage}>
           Back
         </Button>
         <Button
-          className={classes.btn}
+          className={classes.buttonContainer}
           disabled={!uploadedImage}
           onClick={() => {
             submit(profileDetails.id);

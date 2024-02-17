@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box, Chip, Tooltip, Typography } from '@material-ui/core';
+
 import classNames from 'classnames';
-import EditProfileImage from '../EditProfileImage/EditProfileImage';
 import { useDispatch } from 'react-redux';
+import EditProfileImage from '../EditProfileImage/EditProfileImage';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(12),
     height: theme.spacing(12),
-  },
-  text: {
-    fontSize: '0.925rem',
   },
 }));
 
