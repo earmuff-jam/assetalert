@@ -222,7 +222,7 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
 		p.updated_at AS latest_updated_date
     FROM
         community.projects p
-    LEFT JOIN expenses e ON
+    LEFT JOIN community.expenses e ON
         p.id = e.project_id
     LEFT JOIN community.projects_volunteer pv ON
         pv.project_id = p.id
