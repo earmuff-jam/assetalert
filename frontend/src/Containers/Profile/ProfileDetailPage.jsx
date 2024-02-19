@@ -34,12 +34,7 @@ const ProfileDetailPage = () => {
   const dispatch = useDispatch();
 
   const { loading: eventsLoading, events } = useSelector((state) => state.home);
-  const {
-    loading: profileStateLoading,
-    profileDetails,
-    volunteeringDetails,
-    notifications: notificationsDetails,
-  } = useSelector((state) => state.profile);
+  const { profileDetails, volunteeringDetails, notifications } = useSelector((state) => state.profile);
 
   const userCreatedEvents = events?.filter((v) => v.created_by === profileDetails.id);
   const usernameOrFullName = profileDetails.username || profileDetails.full_name || 'Anonymous';
@@ -48,7 +43,6 @@ const ProfileDetailPage = () => {
   const [formFields, setFormFields] = useState(USER_PROFILE_FORM_FIELDS);
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notifications, setNotifications] = useState([]);
   const handleClickNotificationBar = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -125,13 +119,6 @@ const ProfileDetailPage = () => {
     dispatch(profileActions.getRecentActivitiesList());
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    if (Array.isArray(notificationsDetails) && notificationsDetails?.length >= 0) {
-      setNotifications([...notificationsDetails]);
-    }
-    // eslint-disable-next-line
-  }, [profileStateLoading]);
 
   useEffect(() => {
     if (profileDetails.id) {
