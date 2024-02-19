@@ -6,18 +6,14 @@
 
 ## Key Features
 
-| Feature             | Description                                                                                                                                                                                                      |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| User Profiles       | Create profiles that show your name and contact information. You can also add small interesting topics about yourself as well. These profiles facilitate better matching between volunteers and organizations.   |
-| Project Listings    | Organizations can seamlessly post project details, upcoming events, and volunteer opportunities. Share crucial information such as the cause, location, date, time, and required skills needed for each project. |
-| Search and Match    | Learn about various other different events and connect volunteers with projects that align with their location, chosen cause, or unique skills.                                                                  |
-| Communication Tools | Efficient real-time messaging and notifications make it easy for volunteers and organizations to communicate and collaborate effectively.                                                                        |
-| Impact Tracking     | Log your volunteer hours and activities, and see the positive impact your contributions have made. Be proud of the change you're creating.                                                                       |
-| Mobile-Friendly     | Stay engaged on the go! Our mobile-optimized platform ensures you can access and contribute wherever you are.                                                                                                    |
-
-## Application Usage
-
-To simply use the application as intended, log in or sign up with the provided services. Once verified, you will be able to use mashed as intended.
+| Feature             | Description                                                                                                                                                                                                                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User Profiles       | Create profiles that show your name and contact information. You can also add small interesting topics about yourself as well. These profiles facilitate better matching between volunteers and organizations.                                                                              |
+| Event Listings      | Organizations can seamlessly post event details, upcoming events, and volunteer opportunities. Share crucial information such as the cause, location, date, time, and required skills needed for each project. Booster more confidence with the ability to log expenses and visualize them. |
+| Search and Match    | Learn about various other different events and connect volunteers with projects that align with their location, chosen cause, or unique skills.                                                                                                                                             |
+| Communication Tools | Efficient real-time messaging and notifications make it easy for volunteers and organizations to communicate and collaborate effectively.                                                                                                                                                   |
+| Impact Tracking     | Log your volunteer hours and activities, and see the positive impact your contributions have made. Be proud of the change you're creating.                                                                                                                                                  |
+| Mobile-Friendly     | Stay engaged on the go! Our mobile-optimized platform ensures you can access and contribute wherever you are.                                                                                                                                                                               |
 
 ## Application Brief Demonstration
 
@@ -34,13 +30,6 @@ To simply use the application as intended, log in or sign up with the provided s
 **C. View profile page**
 
 ![Profile Overview](setup/demo/gifs/v1/select-profile-sample.gif)
-
-## Developer Guide
-
-- Configured with CRA and Muiv4.
-- Configured supabase for the server side implementations for local development.
-- Dockerized containers. Seperate instances for database, apilayer and frontend.
-- Each section of the app contains their own dev setup guide.
 
 ## Contact
 
