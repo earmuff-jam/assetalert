@@ -15,11 +15,11 @@ WHERE email_address = 'test@gmail.com';
 
 -- ADD EVENTS SQL TEST DATA --
 INSERT INTO community.projects
-    (title, description, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
+    (title, description, street, city, state, zip, lat, lon, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
 VALUES
-    ('SC Go raiders', 'South Carolina Football Team Inventory List', 'Community Cause', 'Test Project Type', 100, array[(SELECT id FROM profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM profiles LIMIT 1)::UUID]),
-    ('North Carolina Football Team', 'North Carolina football team', 'Environment Development', 'Test Project Type', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
-    ('Worthington Football Team', 'Worthington Football Team', 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, true, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]);
+    ('SC Go raiders', 'South Carolina Football Team Inventory List', '5 S Mill St', 'Manning', 'SC', '29102', '33.75', '-80.22', 'Community Cause', 'Test Project Type', 100, array[(SELECT id FROM profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM profiles LIMIT 1)::UUID]),
+    ('North Carolina Football Team', 'North Carolina football team', NULL, NULL, NULL, NULL, NULL, NULL,'Environment Development', 'Test Project Type', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
+    ('Worthington Football Team', 'Worthington Football Team', NULL, NULL, NULL, NULL, NULL, NULL, 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, true, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]);
 
 -- ADD PROJECT SKILLS TO PROJECT TEST DATA --
 INSERT INTO community.project_skills(project_id, skill, created_by, updated_by)

@@ -1039,9 +1039,8 @@ func RetrieveAllExpenses(user string, eventID uuid.UUID) ([]model.Expense, error
 FROM community.expenses e
 		LEFT JOIN community.category cc ON e.category_id = cc.id 
          LEFT JOIN community.profiles cp ON e.created_by = cp.id
-         LEFT JOIN community.profiles up ON e.updated_by = cp.id
+         LEFT JOIN community.profiles up ON e.updated_by = up.id
 WHERE e.project_id = $1
-GROUP BY category_name, e.project_id, e.id, e.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address
 ORDER BY e.updated_at DESC;
 `
 	rows, err := db.Query(sqlStr, eventID)
