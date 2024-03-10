@@ -94,7 +94,7 @@ const profileSlice = createSlice({
       state.loading = true;
       state.error = '';
     },
-    updateProfileImageSuccess: (state, action) => {
+    updateProfileImageSuccess: (state) => {
       state.loading = false;
       state.error = '';
     },

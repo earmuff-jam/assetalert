@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Chip, Box } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
-import Signup from './Signup';
-import Login from './Login';
-import classNames from 'classnames';
+import Title from '../Title/Title';
 import { useSelector } from 'react-redux';
-import { EmojiPeopleRounded, FaceRounded, PersonAddRounded } from '@material-ui/icons';
+import Login from '../Login/Login';
+import Signup from '../Signup/Signup';
+import { FaceRounded, PersonAddRounded } from '@material-ui/icons';
+import ChipComponent from '../Chip/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
   },
   errorText: {
+    fontWeight: 'bold',
     color: theme.palette.error.dark,
   },
-  row: {
+  leftAlignContent: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignSelf: 'inherit',
   },
 }));
 
@@ -52,27 +53,24 @@ const Authenticator = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography className={classNames(classes.header, classes.errorText)}>Find meaning to volunteer</Typography>
-      <Typography className={classes.text}>
-        Sign up to be updated with events around your community. You can lend a hand, or even ask for one.
-        <EmojiPeopleRounded />
-      </Typography>
-      <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
+      <Title title={'Find meaning to volunteer'} displaySubtitle={true} />
+      <Title title={signUpView ? 'Sign Up' : 'Sign In'} headingVariant={'general'} displaySubtitle={false} />
       {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
-      <Typography className={classes.titleText}>
-        {signUpView ? `Already have an account ?` : `Do not have an account ?`}
-      </Typography>
+      <Title
+        title={signUpView ? `Already have an account ?` : `Do not have an account ?`}
+        headingVariant={'general'}
+        titleStyle={classes.titleText}
+        displaySubtitle={false}
+      />
       {hasServerError ? <span className={classes.errorText}>Error</span> : null}
-      <div className={classes.row}>
-        <Chip
+      <Box className={classes.leftAlignContent}>
+        <ChipComponent
           icon={signUpView ? <FaceRounded /> : <PersonAddRounded />}
-          label={signUpView ? `Login` : `Create Account`}
-          onClick={() => {
-            setSignUpView(!signUpView);
-          }}
-          variant="outlined"
+          label={signUpView ? 'Login' : 'Create Account'}
+          onClick={() => setSignUpView(!signUpView)}
+          variant={'outlined'}
         />
-      </div>
+      </Box>
     </Box>
   );
 };
