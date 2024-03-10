@@ -1,7 +1,8 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Subtitle from '../Subtitle/Subtitle';
 import { EmojiPeopleRounded } from '@material-ui/icons';
 import { Typography, makeStyles } from '@material-ui/core';
-import Subtitle from '../Subtitle/Subtitle';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -23,19 +24,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Title = () => {
+const Title = ({ title, headingVariant, displaySubtitle, titleStyle }) => {
   const classes = useStyles();
 
   return (
     <>
-      <Typography className={classNames(classes.header, classes.errorText)}>Find meaning to volunteer</Typography>
-      <Subtitle
-        subtitle={'Sign up to be updated with events around your community. You can lend a hand, or even ask for one.'}
-        showIcon={true}
-        icon={<EmojiPeopleRounded />}
-      />
+      <Typography
+        className={classNames(classes.header, titleStyle, { [classes.errorText]: headingVariant === 'error' })}
+      >
+        {title}
+      </Typography>
+      {displaySubtitle ? (
+        <Subtitle
+          subtitle={
+            'Sign up to be updated with events around your community. You can lend a hand, or even ask for one.'
+          }
+          showIcon={true}
+          icon={<EmojiPeopleRounded />}
+        />
+      ) : null}
     </>
   );
+};
+
+Title.defaultProps = {
+  title: 'Find meaning to volunteer',
+  headingVariant: 'error',
+  displaySubtitle: false,
+  titleStyle: {}, // titleStyle overrides the classes.header since it is cascading styles
+};
+
+Title.propTypes = {
+  title: PropTypes.string,
+  headingVariant: PropTypes.string,
+  displaySubtitle: PropTypes.boolean,
+  titleStyle: PropTypes.object,
 };
 
 export default Title;

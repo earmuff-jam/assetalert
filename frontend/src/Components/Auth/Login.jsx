@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, InputAdornment, TextField } from '@material-ui/core';
+import { InputAdornment, TextField } from '@material-ui/core';
 
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { LOGIN_FORM_FIELDS } from './constants';
 import { authActions } from '../../Containers/Auth/authSlice';
+import { SaveRounded } from '@material-ui/icons';
+import ButtonComponent from '../../stories/Button/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -102,7 +104,16 @@ const Login = () => {
           />
         ))}
       </form>
-      <Button onClick={handleFormSubmit}>Submit</Button>
+      <ButtonComponent
+        text={'Submit'}
+        showIcon={false}
+        buttonVariant={true}
+        disableRipple={true}
+        icon={<SaveRounded />}
+        disableFocusRipple={true}
+        onClick={handleFormSubmit}
+        disabled={false}
+      />
     </div>
   );
 };

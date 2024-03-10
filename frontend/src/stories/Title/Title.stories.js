@@ -22,6 +22,19 @@ export default {
   },
 };
 
-export const PrimaryTitle = {
-  args: {},
+export const PrimaryTitleWithSubtitle = {
+  args: {
+    title: 'Find meaning to volunteer',
+    displaySubtitle: true,
+    headingVariant: 'error',
+    titleStyle: {},
+  },
+};
+export const PrimaryTitleWithNoSubtitle = {
+  args: {
+    title: 'Find meaning to volunteer',
+    displaySubtitle: false,
+    headingVariant: 'error',
+    titleStyle: {},
+  },
 };

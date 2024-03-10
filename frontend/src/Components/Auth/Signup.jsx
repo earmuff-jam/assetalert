@@ -5,7 +5,9 @@ import { useDispatch } from 'react-redux';
 import { SIGN_UP_FORM_FIELDS } from './constants';
 import { makeStyles } from '@material-ui/core/styles';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { Button, Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
+import ButtonComponent from '../../stories/Button/ButtonComponent';
+import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
+import { SaveRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -118,9 +120,16 @@ const Signup = ({ setSignUpView }) => {
           classes={{ label: classes.caption }}
         />
       </FormControl>
-      <Button disabled={isRequiredFieldsEmpty} onClick={handleFormSubmit}>
-        Submit
-      </Button>
+      <ButtonComponent
+        text={'Submit'}
+        showIcon={true}
+        buttonVariant={true}
+        disableRipple={true}
+        icon={<SaveRounded />}
+        disableFocusRipple={true}
+        onClick={handleFormSubmit}
+        disabled={isRequiredFieldsEmpty}
+      />
     </div>
   );
 };

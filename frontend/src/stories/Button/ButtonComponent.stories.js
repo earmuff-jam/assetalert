@@ -1,12 +1,12 @@
-import Subtitle from './Subtitle';
+import ButtonComponent from './ButtonComponent';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { EmojiPeopleRounded } from '@material-ui/icons';
 
 export default {
-  title: 'LandingPage/Subtitle',
-  component: Subtitle,
+  title: 'LandingPage/ButtonComponent',
+  component: ButtonComponent,
   decorators: [
     withRouter,
     (Story) => (
@@ -23,18 +23,28 @@ export default {
   },
 };
 
-export const PrimarySubtitleNoIcon = {
+export const PrimaryButtonComponentNoRipple = {
   args: {
-    subtitle: 'Sign up to be updated with events around your community. You can lend a hand, or even ask for one.',
+    text: 'Sign in',
+    buttonVariant: 'outlined',
     showIcon: false,
     icon: <EmojiPeopleRounded />,
+    disabled: false,
+    disableRipple: true,
+    disableFocusRipple: true,
+    onClick: () => {},
   },
 };
 
-export const PrimarySubtitleWithIcon = {
+export const PrimaryButtonComponent = {
   args: {
-    subtitle: 'Sign up to be updated with events around your community. You can lend a hand, or even ask for one.',
-    showIcon: true,
+    text: 'Sign in',
+    buttonVariant: 'outlined',
+    showIcon: false,
     icon: <EmojiPeopleRounded />,
+    disabled: false,
+    disableRipple: false,
+    disableFocusRipple: false,
+    onClick: () => {},
   },
 };

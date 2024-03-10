@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Chip, Box } from '@material-ui/core';
+import { Chip, Box } from '@material-ui/core';
 
 import Title from '../Title/Title';
 import { useSelector } from 'react-redux';
@@ -52,13 +52,15 @@ const Authenticator = () => {
 
   return (
     <Box className={classes.root}>
-      <Title />
-      
-      <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
+      <Title title={'Find meaning to volunteer'} displaySubtitle={'true'} />
+      <Title title={signUpView ? 'Sign Up' : 'Sign In'} headingVariant={'general'} displaySubtitle={false} />
       {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
-      <Typography className={classes.titleText}>
-        {signUpView ? `Already have an account ?` : `Do not have an account ?`}
-      </Typography>
+      <Title
+        title={signUpView ? `Already have an account ?` : `Do not have an account ?`}
+        headingVariant={'general'}
+        titleStyle={classes.titleText}
+        displaySubtitle={false}
+      />
       {hasServerError ? <span className={classes.errorText}>Error</span> : null}
       <div className={classes.row}>
         <Chip
