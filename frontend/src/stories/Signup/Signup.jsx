@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { SIGN_UP_FORM_FIELDS } from '../../Components/Auth/constants';
+import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
 import { makeStyles } from '@material-ui/core/styles';
 import { authActions } from '../../Containers/Auth/authSlice';
 import ButtonComponent from '../Button/ButtonComponent';

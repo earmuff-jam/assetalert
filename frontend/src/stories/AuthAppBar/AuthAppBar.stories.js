@@ -1,11 +1,11 @@
-import AppBar from './AppBar';
+import AuthAppBar from './AuthAppBar';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 
 export default {
-  title: 'AppBar/AppBar',
-  component: AppBar,
+  title: 'LandingPage/AuthAppBar',
+  component: AuthAppBar,
   decorators: [
     withRouter,
     (Story) => (
@@ -22,7 +22,7 @@ export default {
   },
 };
 
-export const PrimaryAppBar = {
+export const PrimaryAuthAppBar = {
   args: {
     title: 'Mashed',
     titleVariant: 'h6',

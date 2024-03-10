@@ -1,12 +1,11 @@
 // import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Paper } from '@material-ui/core';
-import { BarChartRounded, LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
+import { DonutLargeRounded, LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: '0.975rem',
-    fontWeight: 'lighter',
     letterSpacing: '0.0125rem',
     marginBottom: theme.spacing(2),
     fontFamily: 'Roboto',
@@ -65,7 +64,7 @@ const InviteSection = () => {
       </ul>
 
       <Typography variant="h6" className={classes.header}>
-        <BarChartRounded />
+        <DonutLargeRounded />
         Visualize expense reports.
       </Typography>
       <ul>

@@ -1,11 +1,9 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box, Container, Paper, Typography } from '@material-ui/core';
-import AuthFooter from '../../Components/Auth/AuthFooter';
-import Authenticator from '../../stories/InviteSection/Authenticator';
-import AuthHeroSection from '../../Components/Auth/AuthHeroSection';
+import { Grid, Box, Container } from '@material-ui/core';
+import AppBar from '../../stories/AuthAppBar/AuthAppBar';
+import AuthFooter from '../../stories/AuthFooter/AuthFooter';
+import Authenticator from '../../stories/Authenticator/Authenticator';
 import InviteSection from '../../stories/InviteSection/InviteSection';
-import AppBar from '../../stories/AppBar/AppBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,22 +42,20 @@ const AuthHome = () => {
   const classes = useStyles();
 
   return (
-    <>
-      <Container maxWidth="lg">
-        <AppBar />
-        <Grid container className={classes.root}>
-          <Grid item xs={12} md={6}>
-            <InviteSection />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box className={classes.auth}>
-              <Authenticator />
-            </Box>
-          </Grid>
+    <Container maxWidth="lg">
+      <AppBar title={'Mashed'} titleVariant={'h5'} elevation={0} />
+      <Grid container className={classes.root}>
+        <Grid item xs={12} md={6}>
+          <InviteSection />
         </Grid>
-        <AuthFooter />
-      </Container>
-    </>
+        <Grid item xs={12} md={6}>
+          <Box className={classes.auth}>
+            <Authenticator />
+          </Box>
+        </Grid>
+      </Grid>
+      <AuthFooter />
+    </Container>
   );
 };
 
