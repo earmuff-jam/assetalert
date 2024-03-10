@@ -4,7 +4,7 @@ import { Container, ThemeProvider } from '@material-ui/core';
 import EventDetailPage from './EventDetailPage';
 import { primary_theme } from '../../util/Theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import PrimaryAppBar from '../../Components/AppBar/PrimaryAppBar';
+import PrimaryAppBar from '../../stories/AppBar/PrimaryAppBar';
 
 const EventPage = () => {
   return (

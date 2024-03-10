@@ -132,8 +132,8 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                 <Box className={classes.rowAlign}>
                   <Tooltip title={`${event.skills_required.length} in demand skills`}>
                     <Box>
-                      {event.skills_required.map(() => (
-                        <WhatshotRounded className={classNames(classes.iconSm, classes.active)} />
+                      {event.skills_required.map((_, index) => (
+                        <WhatshotRounded key={index} className={classNames(classes.iconSm, classes.active)} />
                       ))}
                     </Box>
                   </Tooltip>
