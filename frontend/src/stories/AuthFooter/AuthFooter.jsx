@@ -1,4 +1,4 @@
-import React from 'react';
+import Title from '../Title/Title';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -33,7 +33,13 @@ const AuthFooter = () => {
 
   return (
     <footer className={classes.footer}>
-      <Typography className={classes.text}>&copy; {new Date().getFullYear()} Mashed. All Rights Reserved.</Typography>
+      <Title
+        title={`\u00A9 ${new Date().getFullYear()} Mashed. All Rights Reserved.`}
+        displaySubtitle={false}
+        headingVariant={'general'}
+        titleStyle={classes.text}
+      />
+
       <Typography className={classes.text}>
         <a
           target="_blank"

@@ -3,10 +3,13 @@ import classNames from 'classnames';
 import { SaveRounded } from '@material-ui/icons';
 import { Button, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   disableHover: {
     '&:hover': {
       backgroundColor: 'transparent',
+    },
+    '& .MuiButton-endIcon': {
+      margin: theme.spacing(0),
     },
   },
 }));
@@ -29,8 +32,8 @@ const ButtonComponent = ({
       disabled={disabled}
       disableRipple={disableRipple}
       disableFocusRipple={disableFocusRipple}
-      onClick={onClick}
       endIcon={showIcon ? icon : null}
+      onClick={onClick}
     >
       {text}
     </Button>

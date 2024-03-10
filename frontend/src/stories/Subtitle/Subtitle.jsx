@@ -3,8 +3,7 @@ import { Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   text: {
-    fontSize: '1.2rem',
-    fontWeight: 'lighter',
+    fontSize: '0.975rem',
     marginBottom: theme.spacing(2),
   },
 }));
