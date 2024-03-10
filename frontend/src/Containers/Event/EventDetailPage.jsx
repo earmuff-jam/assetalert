@@ -10,7 +10,7 @@ import { eventActions } from './eventSlice';
 import { homeActions } from '../Home/homeSlice';
 
 import { profileActions } from '../Profile/profileSlice';
-import SecondaryAppBar from '../../Components/AppBar/SecondaryAppBar';
+import SecondaryAppBar from '../../stories/AppBar/SecondaryAppBar';
 import EventDetailsCard from '../../Components/Event/EventDetailsCard';
 import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
 import EventDetailsDrawerComponent from '../../Components/Event/EventDetailsDrawerComponent';
