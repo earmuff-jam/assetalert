@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { produce } from 'immer';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { SIGN_UP_FORM_FIELDS } from './constants';
 import { makeStyles } from '@material-ui/core/styles';
@@ -122,6 +123,14 @@ const Signup = ({ setSignUpView }) => {
       </Button>
     </div>
   );
+};
+
+Signup.defaultProps = {
+  setSignUpView: () => {},
+};
+
+Signup.propTypes = {
+  setSignUpView: PropTypes.func,
 };
 
 export default Signup;

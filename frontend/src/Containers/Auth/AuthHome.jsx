@@ -2,8 +2,10 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box, Container, Paper, Typography } from '@material-ui/core';
 import AuthFooter from '../../Components/Auth/AuthFooter';
-import Authenticator from '../../Components/Auth/Authenticator';
+import Authenticator from '../../stories/InviteSection/Authenticator';
 import AuthHeroSection from '../../Components/Auth/AuthHeroSection';
+import InviteSection from '../../stories/InviteSection/InviteSection';
+import AppBar from '../../stories/AppBar/AppBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,17 +46,10 @@ const AuthHome = () => {
   return (
     <>
       <Container maxWidth="lg">
-        <Paper className={classes.appBar}>
-          <Typography variant="h6" className={classes.text}>
-            Mashed
-            <img src={'mashed-logo.png'} className={classes.logo} alt="company logo" />
-          </Typography>
-        </Paper>
+        <AppBar />
         <Grid container className={classes.root}>
           <Grid item xs={12} md={6}>
-            <Box>
-              <AuthHeroSection />
-            </Box>
+            <InviteSection />
           </Grid>
           <Grid item xs={12} md={6}>
             <Box className={classes.auth}>

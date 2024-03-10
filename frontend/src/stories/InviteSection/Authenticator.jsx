@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Chip, Box } from '@material-ui/core';
 
-import Signup from './Signup';
-import Login from './Login';
-import classNames from 'classnames';
+import Title from '../Title/Title';
 import { useSelector } from 'react-redux';
-import { EmojiPeopleRounded, FaceRounded, PersonAddRounded } from '@material-ui/icons';
+import Login from '../../Components/Auth/Login';
+import Signup from '../../Components/Auth/Signup';
+import { FaceRounded, PersonAddRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,11 +52,8 @@ const Authenticator = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography className={classNames(classes.header, classes.errorText)}>Find meaning to volunteer</Typography>
-      <Typography className={classes.text}>
-        Sign up to be updated with events around your community. You can lend a hand, or even ask for one.
-        <EmojiPeopleRounded />
-      </Typography>
+      <Title />
+      
       <Typography className={classes.header}>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
       {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
       <Typography className={classes.titleText}>

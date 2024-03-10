@@ -1,11 +1,11 @@
-import AppBar from './AppBar';
+import InviteSection from './InviteSection';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 
 export default {
-  title: 'AppBar/AppBar',
-  component: AppBar,
+  title: 'LandingPage/InviteSection',
+  component: InviteSection,
   decorators: [
     withRouter,
     (Story) => (
@@ -22,9 +22,6 @@ export default {
   },
 };
 
-export const PrimaryAppBar = {
-  args: {
-    title: 'Mashed',
-    titleVariant: 'h6',
-  },
+export const PrimaryInviteSection = {
+  args: {},
 };
