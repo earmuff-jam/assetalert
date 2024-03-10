@@ -44,7 +44,7 @@ AppBar.defaultProps = {
 AppBar.propTypes = {
   title: PropTypes.string,
   titleVariant: PropTypes.string,
-  elevation: PropTypes.string,
+  elevation: PropTypes.number,
 };
 
 export default AppBar;

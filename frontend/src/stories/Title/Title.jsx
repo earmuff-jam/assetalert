@@ -51,14 +51,14 @@ Title.defaultProps = {
   title: 'Find meaning to volunteer',
   headingVariant: 'error',
   displaySubtitle: false,
-  titleStyle: {}, // titleStyle overrides the classes.header since it is cascading styles
+  titleStyle: '', // titleStyle overrides the classes.header since it is cascading styles
 };
 
 Title.propTypes = {
   title: PropTypes.string,
   headingVariant: PropTypes.string,
-  displaySubtitle: PropTypes.boolean,
-  titleStyle: PropTypes.object,
+  displaySubtitle: PropTypes.bool,
+  titleStyle: PropTypes.string, // this is className with jsx
 };
 
 export default Title;

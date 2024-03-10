@@ -22,12 +22,13 @@ const Subtitle = ({ subtitle, showIcon, icon }) => {
 Subtitle.defaultProps = {
   subtitle: 'Mashed',
   showIcon: false,
+  icon: {},
 };
 
 Subtitle.propTypes = {
   subtitle: PropTypes.string,
-  showIcon: PropTypes.boolean,
-  icon: PropTypes.func,
+  showIcon: PropTypes.bool,
+  icon: PropTypes.object,
 };
 
 export default Subtitle;

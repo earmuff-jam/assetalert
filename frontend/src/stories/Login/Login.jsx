@@ -4,10 +4,10 @@ import { InputAdornment, TextField } from '@material-ui/core';
 
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
-import { LOGIN_FORM_FIELDS } from './constants';
+import { LOGIN_FORM_FIELDS } from '../../Components/Auth/constants';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { SaveRounded } from '@material-ui/icons';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import { ArrowRightRounded } from '@material-ui/icons';
+import ButtonComponent from '../Button/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -106,13 +106,13 @@ const Login = () => {
       </form>
       <ButtonComponent
         text={'Submit'}
-        showIcon={false}
-        buttonVariant={true}
-        disableRipple={true}
-        icon={<SaveRounded />}
-        disableFocusRipple={true}
+        showIcon={true}
+        icon={<ArrowRightRounded />}
+        buttonVariant={'standard'}
         onClick={handleFormSubmit}
         disabled={false}
+        disableRipple={true}
+        disableFocusRipple={true}
       />
     </div>
   );

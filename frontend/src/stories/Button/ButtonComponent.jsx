@@ -51,12 +51,12 @@ ButtonComponent.defaultProps = {
 ButtonComponent.propTypes = {
   text: PropTypes.string,
   buttonVariant: PropTypes.string,
-  showIcon: PropTypes.boolean,
+  showIcon: PropTypes.bool,
   icon: PropTypes.object,
   onClick: PropTypes.func,
-  disabled: PropTypes.boolean,
-  disableRipple: PropTypes.boolean,
-  disableFocusRipple: PropTypes.boolean,
+  disabled: PropTypes.bool,
+  disableRipple: PropTypes.bool,
+  disableFocusRipple: PropTypes.bool,
 };
 
 export default ButtonComponent;

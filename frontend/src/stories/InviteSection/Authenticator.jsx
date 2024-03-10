@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Chip, Box } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import Title from '../Title/Title';
 import { useSelector } from 'react-redux';
-import Login from '../../Components/Auth/Login';
-import Signup from '../../Components/Auth/Signup';
+import Login from '../Login/Login';
+import Signup from '../Signup/Signup';
 import { FaceRounded, PersonAddRounded } from '@material-ui/icons';
+import ChipComponent from '../Chip/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
   },
   errorText: {
+    fontWeight: 'bold',
     color: theme.palette.error.dark,
   },
-  row: {
+  leftAlignContent: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignSelf: 'inherit',
   },
 }));
 
@@ -52,7 +53,7 @@ const Authenticator = () => {
 
   return (
     <Box className={classes.root}>
-      <Title title={'Find meaning to volunteer'} displaySubtitle={'true'} />
+      <Title title={'Find meaning to volunteer'} displaySubtitle={true} />
       <Title title={signUpView ? 'Sign Up' : 'Sign In'} headingVariant={'general'} displaySubtitle={false} />
       {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
       <Title
@@ -62,16 +63,14 @@ const Authenticator = () => {
         displaySubtitle={false}
       />
       {hasServerError ? <span className={classes.errorText}>Error</span> : null}
-      <div className={classes.row}>
-        <Chip
+      <Box className={classes.leftAlignContent}>
+        <ChipComponent
           icon={signUpView ? <FaceRounded /> : <PersonAddRounded />}
-          label={signUpView ? `Login` : `Create Account`}
-          onClick={() => {
-            setSignUpView(!signUpView);
-          }}
-          variant="outlined"
+          label={signUpView ? 'Login' : 'Create Account'}
+          onClick={() => setSignUpView(!signUpView)}
+          variant={'outlined'}
         />
-      </div>
+      </Box>
     </Box>
   );
 };

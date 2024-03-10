@@ -2,12 +2,12 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { SIGN_UP_FORM_FIELDS } from './constants';
+import { SIGN_UP_FORM_FIELDS } from '../../Components/Auth/constants';
 import { makeStyles } from '@material-ui/core/styles';
 import { authActions } from '../../Containers/Auth/authSlice';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import ButtonComponent from '../Button/ButtonComponent';
+import { ArrowRightRounded } from '@material-ui/icons';
 import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
-import { SaveRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -121,11 +121,11 @@ const Signup = ({ setSignUpView }) => {
         />
       </FormControl>
       <ButtonComponent
-        text={'Submit'}
+        text={'Register'}
         showIcon={true}
         buttonVariant={true}
         disableRipple={true}
-        icon={<SaveRounded />}
+        icon={<ArrowRightRounded />}
         disableFocusRipple={true}
         onClick={handleFormSubmit}
         disabled={isRequiredFieldsEmpty}
