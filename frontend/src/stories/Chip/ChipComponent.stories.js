@@ -23,3 +23,4 @@ export default {
 export const PrimaryChipComponent = {
   args: {},
 };
+

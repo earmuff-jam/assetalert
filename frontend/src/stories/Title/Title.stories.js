@@ -30,11 +30,21 @@ export const PrimaryTitleWithSubtitle = {
     titleStyle: {},
   },
 };
+
 export const PrimaryTitleWithNoSubtitle = {
   args: {
     title: 'Find meaning to volunteer',
     displaySubtitle: false,
     headingVariant: 'error',
+    titleStyle: {},
+  },
+};
+
+export const GeneralTitleWithNoSubtitle = {
+  args: {
+    title: 'Do not have an account?',
+    displaySubtitle: false,
+    headingVariant: 'general',
     titleStyle: {},
   },
 };

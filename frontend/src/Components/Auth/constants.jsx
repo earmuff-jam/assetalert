@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { CakeRounded, EmailRounded, VisibilityRounded } from '@material-ui/icons';
+import { CakeRounded, EmailRounded, LockRounded } from '@material-ui/icons';
 
 export const GENERIC_TEXTFIELD_VARIANT = {
   variant: 'outlined',
@@ -46,7 +46,7 @@ export const LOGIN_FORM_FIELDS = {
     type: 'password',
     name: 'password',
     errorMsg: '',
-    icon: <VisibilityRounded />,
+    icon: <LockRounded />,
     required: true,
     fullWidth: true,
     validators: [
@@ -101,7 +101,7 @@ export const SIGN_UP_FORM_FIELDS = {
     type: 'password',
     name: 'password',
     errorMsg: '',
-    icon: <VisibilityRounded />,
+    icon: <LockRounded />,
     required: true,
     fullWidth: true,
     validators: [
