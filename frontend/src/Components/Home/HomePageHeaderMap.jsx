@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './map.css';
@@ -105,7 +106,9 @@ const HomePageHeaderMap = ({ eventList }) => {
       map.addOverlay(button);
       map.addOverlay(popup);
       const coordinate = evt.coordinate;
-      ReactDOM.render(<PopupContent selectedEvent={selectedEvent} />, popupContentRef.current);
+      const root = ReactDOM.createRoot(popupContentRef.current);
+      root.render(<PopupContent selectedEvent={selectedEvent} />);
+
       map.addOverlay(data);
       data.setPosition(coordinate);
     });
@@ -143,6 +146,14 @@ const HomePageHeaderMap = ({ eventList }) => {
       </div>
     </div>
   );
+};
+
+HomePageHeaderMap.defaultProps = {
+  eventList: [],
+};
+
+HomePageHeaderMap.propTypes = {
+  eventList: PropTypes.array,
 };
 
 export default HomePageHeaderMap;

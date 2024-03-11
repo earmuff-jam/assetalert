@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
-
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
 import SearchAllEvents from '../Event/SearchAllEvents';
 import ViewFilteredEventList from './ViewFilteredEventList';
+import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -117,6 +117,16 @@ const ViewEventListDetails = (props) => {
       )}
     </Box>
   );
+};
+
+ViewEventListDetails.defaultProps = {
+  currentEvents: [],
+  loading: true,
+};
+
+ViewEventListDetails.propTypes = {
+  currentEvents: PropTypes,
+  loading: true,
 };
 
 export default ViewEventListDetails;

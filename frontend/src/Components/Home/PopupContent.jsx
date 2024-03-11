@@ -1,5 +1,5 @@
-import React from 'react';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
@@ -95,6 +95,34 @@ const PopupContent = ({ selectedEvent }) => {
       </Tooltip>
     </Box>
   );
+};
+
+PopupContent.defaultProps = {
+  id: '',
+  title: '',
+  cause: '',
+  attendees: [],
+  sharable_groups: [],
+  comments: '',
+  display_name: '',
+  project_type: '',
+  updated_at: '',
+  created_at: '',
+  selectedEvent: {},
+};
+
+PopupContent.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  cause: PropTypes.string,
+  attendees: PropTypes.array,
+  sharable_groups: PropTypes.array,
+  comments: PropTypes.string,
+  display_name: PropTypes.string,
+  project_type: PropTypes.string,
+  updated_at: PropTypes.string,
+  created_at: PropTypes.string,
+  selectedEvent: PropTypes.object,
 };
 
 export default PopupContent;

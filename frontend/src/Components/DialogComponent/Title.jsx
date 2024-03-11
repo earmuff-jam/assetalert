@@ -1,9 +1,8 @@
-import React from 'react';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import { IconButton, Typography } from '@material-ui/core';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Title = (props) => {
   const classes = useStyles();
-  const { children, className, onClose, ...other } = props;
+  const { children, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography {...other}>
       <div className={classes.container}>
@@ -39,6 +38,16 @@ const Title = (props) => {
       </div>
     </MuiDialogTitle>
   );
+};
+
+Title.defaultProps = {
+  children: '',
+  onClose: () => {},
+};
+
+Title.propTypes = {
+  onClose: PropTypes.func,
+  children: PropTypes.string,
 };
 
 export default Title;
