@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, CircularProgress, Grid, Container, Paper } from '@material-ui/core';
 
 import { homeActions } from './homeSlice';
-import HomePageHeaderMap from '../../Components/Home/HomePageHeaderMap';
+import HomePageHeaderMap from '../../stories/Home/HomePageHeaderMap';
 import CreateNewEvent from '../../stories/CreateNewEvent/CreateNewEvent';
 import ViewEventListDetails from '../../Components/ViewEventsListDetails/ViewEventListDetails';
 

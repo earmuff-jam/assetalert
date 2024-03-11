@@ -21,12 +21,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    color: theme.palette.primary.main,
+    fontSize: '1.125rem',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    textTransform: 'uppercase',
   },
   errorText: {
     color: theme.palette.error.dark,

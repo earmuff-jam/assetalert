@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontWeight: 'lighter',
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 'bold',
+    fontSize: '1.125rem',
+    fontFamily: 'Roboto',
     color: theme.palette.primary.main,
   },
   errorButton: {

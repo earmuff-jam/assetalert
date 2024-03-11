@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Title from '../../Components/DialogComponent/Title';
 import ButtonComponent from '../Button/ButtonComponent';
-import { Box, Dialog, Typography } from '@material-ui/core';
+import { Box, Dialog, Divider, Typography } from '@material-ui/core';
 import AddCommunityEvent from '../../Components/CommunityEvent/AddCommunityEvent';
-import { AddCircleRounded, ContactMailRounded } from '@material-ui/icons';
+import { AddCircleRounded, ContactMailRounded, ViewListRounded } from '@material-ui/icons';
+import ChipComponent from '../Chip/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     fontSize: '0.925rem',
+  },
+  chipContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 2,
+    padding: theme.spacing(1),
   },
 }));
 
@@ -42,9 +49,18 @@ const CreateNewEvent = () => {
         Create new event or volunteer for any existing event. Monitor inventory and track expense reports. View all
         items associated with selected event or even maintain your own personal inventory list.
       </Typography>
+      <Divider />
+      <Box className={classes.chipContainer}>
+        <ChipComponent
+          variant={'outlined'}
+          icon={<ViewListRounded />}
+          label={'Inventory'}
+          onClick={() => navigate('/profile')}
+        />
+      </Box>
       <Typography className={classes.text} gutterBottom>
-        Browse other events around you to volunteer, or jump right in to create new event. Explore options to change
-        your profile and avatars.
+        Browse other events around you to volunteer, or jump right in to create new event. Add personal inventories for
+        audit or even explore options to change your profile and avatars.
       </Typography>
       <Box>
         <ButtonComponent
