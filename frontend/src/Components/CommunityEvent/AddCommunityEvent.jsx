@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Box, Tooltip } from '@material-ui/core';
 
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@material-ui/lab';
@@ -364,6 +365,14 @@ const AddCommunityEvent = ({ setEditMode }) => {
       </form>
     </div>
   );
+};
+
+AddCommunityEvent.defaultProps = {
+  setEditMode: () => {},
+};
+
+AddCommunityEvent.propTypes = {
+  setEditMode: PropTypes.func,
 };
 
 export default AddCommunityEvent;

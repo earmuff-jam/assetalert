@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { FiberManualRecordRounded } from '@material-ui/icons';
 import { Box, TextField, Typography } from '@material-ui/core';
@@ -94,6 +95,16 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
       )}
     />
   );
+};
+
+SearchAllEvents.defaultProps = {
+  events: [],
+  setSearchValue: () => {},
+};
+
+SearchAllEvents.propTypes = {
+  events: PropTypes.array,
+  setSearchValue: PropTypes.func,
 };
 
 export default SearchAllEvents;

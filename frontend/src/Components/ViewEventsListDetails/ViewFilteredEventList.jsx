@@ -1,5 +1,3 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   Button,
@@ -15,9 +13,11 @@ import {
 } from '@material-ui/core';
 
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { WhatshotRounded } from '@material-ui/icons';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -154,6 +154,16 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
       })}
     </>
   );
+};
+
+ViewFilteredEventList.defaultProps = {
+  filteredOptions: [],
+  handleNavigate: () => {},
+};
+
+ViewFilteredEventList.propTypes = {
+  filteredOptions: PropTypes.array,
+  handleNavigate: PropTypes.func,
 };
 
 export default ViewFilteredEventList;
