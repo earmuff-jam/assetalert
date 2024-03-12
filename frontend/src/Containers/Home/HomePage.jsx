@@ -49,7 +49,7 @@ const HomePage = () => {
   }
 
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <Box className={classes.container}>
       <Grid container>
         <Grid item xs={12} md={6} data-tour="0">
           <Paper>
@@ -63,7 +63,7 @@ const HomePage = () => {
           <ViewEventListDetails currentEvents={currentEvents} loading={loading} />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

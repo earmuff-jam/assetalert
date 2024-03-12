@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 2),
     borderRadius: theme.spacing(0),
     backgroundColor: theme.palette.common.white,
+    flexGrow: 1, // keeps the nav menu bar across the screen
   },
   headerText: {
     fontSize: '2.0rem',
@@ -75,22 +76,6 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
   const { setIsOpen, setCurrentStep, setSteps } = useTour();
 
   const NAVIGATION_MENU_BAR = [
-    {
-      id: 1,
-      displayName: 'HOME',
-      description: 'Home Page',
-      icon: <HomeRounded />,
-      display: true,
-      to: '/',
-    },
-    {
-      id: 2,
-      displayName: 'PROFILE',
-      description: 'Profile Page',
-      icon: <AssignmentIndRounded />,
-      display: true,
-      to: '/profile',
-    },
     {
       id: 3,
       displayName: 'HELP',
