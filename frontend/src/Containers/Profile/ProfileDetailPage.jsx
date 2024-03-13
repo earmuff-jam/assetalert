@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, CircularProgress, Grid, Popover } from '@material-ui/core';
+import { Box, CircularProgress, Grid, Popover } from '@material-ui/core';
 
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
@@ -142,7 +142,7 @@ const ProfileDetailPage = () => {
     );
   }
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <Box className={classes.container}>
       <Grid container>
         <Grid item xs={12} data-tour="0">
           <ProfileDetailsCard
@@ -180,7 +180,7 @@ const ProfileDetailPage = () => {
           />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

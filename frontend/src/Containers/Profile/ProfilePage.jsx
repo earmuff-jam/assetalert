@@ -6,7 +6,13 @@ import { ThemeProvider } from '@material-ui/core';
 const ProfilePage = () => {
   return (
     <ThemeProvider theme={primary_theme}>
+<<<<<<< Updated upstream
       <ProfileDetailPage />
+=======
+        <CssBaseline />
+        <PrimaryAppBar selectedID={2} />
+        <ProfileDetailPage />
+>>>>>>> Stashed changes
     </ThemeProvider>
   );
 };

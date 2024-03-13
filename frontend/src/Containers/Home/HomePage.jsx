@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     margin: '1rem auto',
+    padding: theme.spacing(1),
     minHeight: '100%',
     backgroundColor: theme.palette.secondary.main,
   },
