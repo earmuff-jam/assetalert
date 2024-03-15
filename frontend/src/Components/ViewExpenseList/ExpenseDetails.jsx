@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Button, Dialog } from '@material-ui/core';
-
 import { useDispatch } from 'react-redux';
 import Title from '../DialogComponent/Title';
 import ViewExpenseList from './ViewExpenseList';
@@ -65,6 +65,18 @@ const ExpenseDetails = ({ eventID, userID, editingAllowed }) => {
       </Dialog>
     </Box>
   );
+};
+
+ExpenseDetails.defaultProps = {
+  eventID: '',
+  userID: '',
+  editingAllowed: false,
+};
+
+ExpenseDetails.propTypes = {
+  eventID: PropTypes.string,
+  userID: PropTypes.string,
+  editingAllowed: PropTypes.bool,
 };
 
 export default ExpenseDetails;

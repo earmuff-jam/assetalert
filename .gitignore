@@ -1,4 +1,5 @@
 .env
 logs
 
+docs
 node_modules

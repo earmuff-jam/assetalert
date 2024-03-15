@@ -1,13 +1,12 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Container } from '@material-ui/core';
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
-
 import dayjs from 'dayjs';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
 import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
 
@@ -22,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewExpenseList = ({ disabled }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   dayjs.extend(relativeTime);
 
   const { loading, expenses } = useSelector((state) => state.event);
@@ -30,14 +28,16 @@ const ViewExpenseList = ({ disabled }) => {
 
   // removing unwanted values from the display column
   const filteredItems = expenses?.map((item) => {
+    // eslint-disable-next-line
     const { id, eventID, category_id, category_name, sharable_groups, created_by, updated_by, ...rest } = item;
     return rest;
   });
 
   const save = (value, rowIndex, column) => {
-    const row = expenses.filter((v, index) => index === rowIndex).find((v) => true);
+    const row = expenses.filter((index) => index === rowIndex).find(() => true);
     const { id: itemID, eventID } = row;
     const userID = !userDetailsLoading && profileDetails.id;
+    console.debug(userID, itemID, eventID, value, column);
     // dispatch(eventActions.updateItemDetails({ itemID, eventID, userID, value, column }));
   };
 
@@ -105,6 +105,14 @@ const ViewExpenseList = ({ disabled }) => {
       />
     </Container>
   );
+};
+
+ViewExpenseList.defaultProps = {
+  disabled: false,
+};
+
+ViewExpenseList.propTypes = {
+  disabled: PropTypes.bool,
 };
 
 export default ViewExpenseList;

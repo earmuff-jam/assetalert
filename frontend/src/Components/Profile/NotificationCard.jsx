@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 
@@ -73,6 +73,16 @@ const NotificationCard = ({ notifications, handleNotificationMenuSelect }) => {
       </List>
     </Box>
   );
+};
+
+NotificationCard.defaultProps = {
+  notifications: [],
+  handleNotificationMenuSelect: () => {},
+};
+
+NotificationCard.propTypes = {
+  notifications: PropTypes.array,
+  handleNotificationMenuSelect: PropTypes.func,
 };
 
 export default NotificationCard;

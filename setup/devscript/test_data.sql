@@ -7,10 +7,10 @@ INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test
 -- UPDATE PROFILE TABLE WITH USER DETAILS --
 
 UPDATE community.profiles SET 
-username = 'Test User',
-full_name = 'cypress user',
+username = 'native',
+full_name = 'Native Plants',
 phone_number = '1234567890',
-about_me = 'falling skies are blue'
+about_me = 'I like to climb trees and hike with my friends'
 WHERE email_address = 'test@gmail.com';
 
 -- ADD EVENTS SQL TEST DATA --
@@ -18,8 +18,11 @@ INSERT INTO community.projects
     (title, description, street, city, state, zip, lat, lon, cause, project_type, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
 VALUES
     ('SC Go raiders', 'South Carolina Football Team Inventory List', '5 S Mill St', 'Manning', 'SC', '29102', '33.75', '-80.22', 'Community Cause', 'Test Project Type', 100, array[(SELECT id FROM profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM profiles LIMIT 1)::UUID]),
-    ('North Carolina Football Team', 'North Carolina football team', NULL, NULL, NULL, NULL, NULL, NULL,'Environment Development', 'Test Project Type', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
-    ('Worthington Football Team', 'Worthington Football Team', NULL, NULL, NULL, NULL, NULL, NULL, 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, true, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]);
+    ('North Carolina Football Team', 'North Carolina football team', NULL, NULL, NULL, NULL, '35.12', '-78.22','Environment Development', 'Test Project Type', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
+    ('Worthington Football Team', 'Worthington Football Team', NULL, NULL, NULL, NULL, '39.96', '-82.99', 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, true, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
+    ('Austin Zoo Fair Show', 'Austin zoo fair show for children and adults', 'S Congress Ave', 'Austin', 'TX', '78702', '30.26', '-97.74', 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
+    ('Free knap-in & natural living market!', 'Free knap-in & natural living market!', 'S Liberty St', 'Bastrop', 'TX', '78602', '32.77', '-91.91', 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]),
+    ('Sherwood Forest Renfest - Camping and Festival - Spring Break', 'Sherwood Forest Renfest - Camping and Festival - Spring Break', '2100 Barton Springs Road', 'Austin', 'TX', '78704', '30.26', '-97.74', 'Community Cause', 'Community Development', 100, array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID], 250, false, NOW(), (SELECT id FROM community.community.profiles LIMIT 1), (SELECT id FROM community.community.profiles LIMIT 1), array[(SELECT id FROM community.community.profiles LIMIT 1)::UUID]);
 
 -- ADD PROJECT SKILLS TO PROJECT TEST DATA --
 INSERT INTO community.project_skills(project_id, skill, created_by, updated_by)
@@ -86,7 +89,11 @@ VALUES
     ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Kitchen Cutting Board', 1, 'Walmart', 'Large kitchen board to support knife action', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
     ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Momo Cooking Utensils', 4, 'Indian Store', 'Large Cooking Set from Indian store', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
     ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Costco Air Fryer', 1, 'Walmart', 'Ninja Air Fryer from Costco', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
-    ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Costco Milk and Shake', 1, 'Costco', 'Shaking jar from Costco', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1));
+    ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Costco Milk and Shake', 1, 'Costco', 'Shaking jar from Costco', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
+    ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Vitamin D Jar', 1, 'Costco', 'Adult vitamin jars', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
+    ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Sour Dough', 1, 'Costco', 'Natural sour dough', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1)),
+    ((SELECT id FROM community.projects LIMIT 1), (SELECT id FROM community.storage_locations LIMIT 1), 'Electronics Weight Scale', 1, 'Costco', 'Electronic scale to measure kitchen stuff', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1));
+
 
 -- EXPENSES SQL TEST DATA ---
 INSERT INTO community.expenses (project_id, item_name, item_cost, category_id, purchase_location, notes, created_by, updated_by, sharable_groups)

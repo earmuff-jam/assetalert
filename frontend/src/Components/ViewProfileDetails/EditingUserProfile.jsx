@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, InputAdornment, TextField } from '@material-ui/core';
 
@@ -38,6 +38,16 @@ const EditingUserProfile = ({ formFields, handleInput }) => {
       ))}
     </Box>
   );
+};
+
+EditingUserProfile.defaultProps = {
+  formFields: {},
+  handleInput: () => {},
+};
+
+EditingUserProfile.propTypes = {
+  formFields: PropTypes.object,
+  handleInput: PropTypes.func,
 };
 
 export default EditingUserProfile;

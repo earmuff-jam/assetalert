@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, CircularProgress, Grid, Popover } from '@material-ui/core';
-
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { profileActions } from './profileSlice';
@@ -10,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { USER_PROFILE_FORM_FIELDS } from './constants';
 import Notification from '../../Components/Profile/Notification';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
-import RecentActivitiesList from '../../Components/RecentActivitiesList/RecentActivitiesList';
+import { Container, CircularProgress, Grid, Popover } from '@material-ui/core';
+import ProfileNavigationMenu from '../../Components/ProfileNavigationMenu/ProfileNavigationMenu';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -55,7 +54,7 @@ const ProfileDetailPage = () => {
   const id = open ? 'simple-popover' : undefined;
 
   const handleNotificationMenuSelect = (id) => {
-    const selectedNotification = notifications.filter((v) => v.id === id).find((v) => true);
+    const selectedNotification = notifications.filter((v) => v.id === id).find(() => true);
     const draftNotification = produce(selectedNotification, (draft) => {
       draft.is_viewed = true;
     });
@@ -173,11 +172,7 @@ const ProfileDetailPage = () => {
           </Popover>
         </Grid>
         <Grid item xs={12} data-tour="1">
-          <RecentActivitiesList
-            userCreatedEvents={userCreatedEvents}
-            volunteeringDetails={volunteeringDetails}
-            usernameOrFullName={usernameOrFullName}
-          />
+          <ProfileNavigationMenu usernameOrFullName={usernameOrFullName} />
         </Grid>
       </Grid>
     </Container>

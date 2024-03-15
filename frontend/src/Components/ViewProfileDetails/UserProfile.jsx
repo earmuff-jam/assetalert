@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box, Chip, Tooltip, Typography } from '@material-ui/core';
-
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import EditProfileImage from '../EditProfileImage/EditProfileImage';
@@ -29,12 +29,25 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   avatar: {
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    width: theme.spacing(8),
+    height: theme.spacing(8),
+  },
+  aboutMe: {
+    fontSize: '0.725rem',
+    fontWeight: 'bold',
+    overflowWrap: 'anywhere',
+  },
+  centerContent: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  userProfileDetailsContainer: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
 }));
 
-const UserProfile = ({ formFields, profileDetails }) => {
+const UserProfile = ({ formFields, avatarUrl, profileID }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -57,10 +70,10 @@ const UserProfile = ({ formFields, profileDetails }) => {
   };
 
   useEffect(() => {
-    if (profileDetails?.avatar_url) {
-      setSelectedImage(profileDetails?.avatar_url);
+    if (avatarUrl) {
+      setSelectedImage(avatarUrl);
     }
-  }, [profileDetails?.avatar_url]);
+  }, [avatarUrl]);
 
   return (
     <Box>
@@ -73,7 +86,7 @@ const UserProfile = ({ formFields, profileDetails }) => {
             setUploadedImage={setUploadedImage}
             toggleEditImage={toggleEditImage}
             submit={handleSubmitImage}
-            profileDetails={profileDetails}
+            profileID={profileID}
           />
         ) : (
           <Avatar
@@ -84,25 +97,38 @@ const UserProfile = ({ formFields, profileDetails }) => {
           />
         )}
 
-        <Box>
-          <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
-            {formFields.name.value || 'Anonymous'}
-          </Typography>
-          <Typography className={classes.aboutMe} gutterBottom>
+        <Box className={classes.userProfileDetailsContainer}>
+          <Box className={classes.rowContainer}>
+            <Typography className={classNames(classes.header, classes.errorText)} gutterBottom>
+              {formFields.name.value || 'Anonymous'}
+            </Typography>
+            <Box className={classNames(classes.rowContainer, classes.centerContent)}>
+              <Tooltip title="Your username in the application">
+                <Chip size="small" icon={formFields.username.icon} label={formFields.username.value} />
+              </Tooltip>
+              <Tooltip title="Your mobile phone information">
+                <Chip size="small" icon={formFields.phone.icon} label={formFields.phone.value} />
+              </Tooltip>
+            </Box>
+          </Box>
+          <Typography className={classes.aboutMe}>
             {formFields.aboutMe.value || 'Edit profile details to add description'}
           </Typography>
-          <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
-            <Tooltip title="Your username in the application">
-              <Chip size="small" icon={formFields.username.icon} label={formFields.username.value} />
-            </Tooltip>
-            <Tooltip title="Your mobile phone information">
-              <Chip size="small" icon={formFields.phone.icon} label={formFields.phone.value} />
-            </Tooltip>
-          </Box>
         </Box>
       </Box>
     </Box>
   );
 };
 
+UserProfile.defaultProps = {
+  formFields: {},
+  avatarUrl: '',
+  profileID: '',
+};
+
+UserProfile.propTypes = {
+  formFields: PropTypes.object,
+  avatarUrl: PropTypes.string,
+  profileID: PropTypes.string,
+};
 export default UserProfile;

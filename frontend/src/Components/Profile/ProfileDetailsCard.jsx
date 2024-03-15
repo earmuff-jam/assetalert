@@ -1,7 +1,7 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
-import { CheckRounded, EditRounded, CancelRounded, CallToActionRounded } from '@material-ui/icons';
+import { CheckRounded, EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import UserProfile from '../ViewProfileDetails/UserProfile';
@@ -25,6 +25,17 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
+  iconTilt: {
+    // runs tilt-shaking fn for 5seconds at 0.5 rate of speed
+    animation: '$tilt-shaking 0.5s 5',
+  },
+  '@keyframes tilt-shaking': {
+    '0%': { transform: 'rotate(0deg)' },
+    '25%': { transform: 'rotate(5deg)' },
+    '50%': { transform: 'rotate(0deg)' },
+    '75%': { transform: 'rotate(-5deg)' },
+    '100%': { transform: 'rotate(0deg)' },
+  },
 }));
 
 const ProfileDetailsCard = ({
@@ -38,11 +49,13 @@ const ProfileDetailsCard = ({
   handleClickNotificationBar,
 }) => {
   const classes = useStyles();
+
+  const containsUnreadNotifications = notifications.map((v) => !v.is_viewed).filter(Boolean).length;
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} elevation={0}>
       <CardContent>
         <Box className={classes.rowContainer}>
-          <UserProfile formFields={formFields} profileDetails={profileDetails} />
+          <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             <IconButton
@@ -55,14 +68,12 @@ const ProfileDetailsCard = ({
             <IconButton onClick={handleToggle} className={classes.iconButton}>
               {!editMode ? <EditRounded /> : <CancelRounded />}
             </IconButton>
-            <IconButton onClick={handleClickNotificationBar} className={classes.iconButton}>
-              <Badge
-                badgeContent={notifications.map((v) => !v.is_viewed).filter(Boolean).length}
-                variant="dot"
-                color="error"
-                overlap="rectangular"
-              >
-                <CallToActionRounded />
+            <IconButton
+              onClick={handleClickNotificationBar}
+              className={[classes.iconButton, classes.iconTilt].join(' ')}
+            >
+              <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
+                <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
               </Badge>
             </IconButton>
           </Box>
@@ -71,6 +82,28 @@ const ProfileDetailsCard = ({
       </CardContent>
     </Card>
   );
+};
+
+ProfileDetailsCard.defaultProps = {
+  editMode: false,
+  formFields: {},
+  handleInput: () => {},
+  handleSubmit: () => {},
+  handleToggle: () => {},
+  profileDetails: {},
+  notifications: [],
+  handleClickNotificationBar: () => {},
+};
+
+ProfileDetailsCard.propTypes = {
+  editMode: PropTypes.bool,
+  formFields: PropTypes.object,
+  handleInput: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  handleToggle: PropTypes.func,
+  profileDetails: PropTypes.object,
+  notifications: PropTypes.array,
+  handleClickNotificationBar: PropTypes.func,
 };
 
 export default ProfileDetailsCard;

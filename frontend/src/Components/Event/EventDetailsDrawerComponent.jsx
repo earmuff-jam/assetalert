@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, ListItemText, Paper } from '@material-ui/core';
-
+import { Box, List, ListItem, ListItemIcon, ListItemText, Paper, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
 import ExpenseTab from './ExpenseTab';
 import MapComponentFn from '../Map/Map';
@@ -27,11 +26,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
-  fontVariation: {
-    color: theme.palette.primary.main,
-    fontSize: '0.725rem',
+  profileVariation: {
+    fontSize: '0.925rem',
     fontWeight: 'bold',
-    textTransform: 'uppercase',
     fontFamily: 'Roboto',
   },
   smallVariant: {
@@ -48,23 +45,40 @@ const useStyles = makeStyles((theme) => ({
   underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,
   },
+  selected: {
+    color: theme.palette.warning.dark,
+  },
 }));
 
-export const NavigationTabBar = ({ value, handleChange }) => {
+export const NavigationTabBar = ({
+  data,
+  value,
+  handleChange,
+  applyProfileVariation = true,
+  extraRootStyle = '',
+  iconStyle = '',
+}) => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.rowContainer} data-tour="9">
-      {NAVIGATION_TABS.map((v, index) => (
+    <Box className={[classes.rowContainer, extraRootStyle].join(' ')}>
+      {data.map((v, index) => (
         <List key={index}>
-          <ListItem button className={classes.listItem} onClick={() => handleChange(index)} disableGutters>
-            <ListItemText
-              classes={{ primary: classes.fontVariation }}
-              className={classNames({ [classes.underline]: value === index })}
-            >
-              {v.displayName}
-            </ListItemText>
-          </ListItem>
+          <Tooltip title={v.subtitle || ''}>
+            <ListItem button className={classes.listItem} onClick={() => handleChange(index)} disableGutters>
+              {v.icon ? (
+                <ListItemIcon className={classNames({ [classes.selected]: value === index }, iconStyle)}>
+                  {v.icon}
+                </ListItemIcon>
+              ) : null}
+              <ListItemText
+                classes={{ primary: classNames({ [classes.profileVariation]: applyProfileVariation }) }}
+                className={classNames({ [classes.underline]: value === index })}
+              >
+                {v.displayName}
+              </ListItemText>
+            </ListItem>
+          </Tooltip>
         </List>
       ))}
     </Box>
@@ -157,7 +171,7 @@ const EventDetailsDrawerComponent = ({
 
   return (
     <div className={classes.root}>
-      <NavigationTabBar handleChange={handleChange} value={value} />
+      <NavigationTabBar handleChange={handleChange} value={value} data={NAVIGATION_TABS} />
       {displaySelection(value)}
     </div>
   );
