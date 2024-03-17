@@ -38,12 +38,16 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
   },
+  ellipsisContainer: {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    // width: theme.spacing(4),
+  },
   headerText: {
     fontSize: '0.925rem',
     fontWeight: 'bold',
     lineHeight: '1.5rem',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
   },
   textDetails: {
     color: theme.palette.text.secondary,
@@ -57,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
   rowAlign: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     gap: theme.spacing(1),
+    justifyContent: 'space-between',
   },
   gutterBottom: {
     marginBottom: theme.spacing(1),
@@ -111,9 +115,11 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                           : 'blank_canvas.png'
                       }
                     />
-                    <Box className={classes.presetWidth}>
+                    <Box className={[classes.presetWidth, classes.ellipsisContainer].join(' ')}>
                       <Tooltip title={event.title}>
-                        <Typography className={classes.headerText}>{event.title}</Typography>
+                        <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>
+                          {event.title}
+                        </Typography>
                       </Tooltip>
                       <Typography className={classes.textDetails} gutterBottom>
                         {event.cause}
