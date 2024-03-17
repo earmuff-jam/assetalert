@@ -131,7 +131,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
         </Timeline>
       </Box>
       <Typography className={classes.subtitleTextHeader} gutterBottom>
-        Last updated around {dayjs(activity?.updated_at).fromNow()} by {usernameOrFullName}
+        Event updated around {dayjs(activity?.updated_at).fromNow()} by {activity?.updator}
       </Typography>
     </Box>
   );

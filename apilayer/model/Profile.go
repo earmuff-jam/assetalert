@@ -43,4 +43,6 @@ type RecentActivity struct {
 	VolunteeringSkill []string  `json:"volunteering_skill"`
 	VolunteeringHours string    `json:"volunteering_hours"`
 	UpdatedAt         time.Time `json:"updated_at"`
+	UpdatedBy         string    `json:"updated_by"`
+	Updator           string    `json:"updator"`
 }
