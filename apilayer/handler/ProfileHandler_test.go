@@ -100,7 +100,7 @@ func Test_GetUsernameApi(t *testing.T) {
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	assert.Equal(t, "Test User", userName)
+	assert.Equal(t, "native", userName)
 	t.Logf("response = %+v", string(data))
 
 	w = httptest.NewRecorder()
@@ -135,7 +135,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 		t.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/profile/%s", prevUser.ID), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w := httptest.NewRecorder()
 	UpdateProfile(w, req, config.CTO_USER)
@@ -158,10 +158,10 @@ func Test_UpdateProfileApi(t *testing.T) {
 
 	// cleanup
 	cleanUpProfile := model.Profile{
-		Username:    "Test User",
-		FullName:    "cypress user",
+		Username:    "native",
+		FullName:    "Native Plants",
 		PhoneNumber: "1234567890",
-		AboutMe:     "falling skies are blue",
+		AboutMe:     "I like to climb trees and hike with my friends",
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -187,7 +187,8 @@ func Test_UpdateProfileApi(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	assert.Equal(t, prevProfile.Username, "Test User")
+	// verify cleanup occured
+	assert.Equal(t, "native", prevProfile.Username)
 
 	w = httptest.NewRecorder()
 	UpdateProfile(w, req, config.CEO_USER)
@@ -232,7 +233,7 @@ func Test_GetUserRecentActivities(t *testing.T) {
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	assert.Equal(t, len(recentActivities), 3)
+	assert.Equal(t, len(recentActivities), 6)
 	t.Logf("response = %+v", string(data))
 
 }

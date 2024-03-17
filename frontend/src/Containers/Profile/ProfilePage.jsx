@@ -1,8 +1,7 @@
-import React from 'react';
 import { primary_theme } from '../../util/Theme';
 import ProfileDetailPage from './ProfileDetailPage';
-import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import PrimaryAppBar from '../../stories/AppBar/PrimaryAppBar';
+import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 
 const ProfilePage = () => {
   return (

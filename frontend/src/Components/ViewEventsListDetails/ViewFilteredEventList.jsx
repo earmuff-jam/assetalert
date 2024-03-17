@@ -42,11 +42,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.925rem',
     fontWeight: 'bold',
     lineHeight: '1.5rem',
-    color: theme.palette.primary.main,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
   },
   textDetails: {
+    color: theme.palette.text.secondary,
     fontSize: '0.725rem',
     fontWeight: 'bold',
     fontFamily: 'Roboto',

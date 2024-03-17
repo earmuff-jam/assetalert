@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Tooltip, Typography } from '@material-ui/core';
-
+import { Button, TextField, Tooltip } from '@material-ui/core';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_EXPENSE_FORM_FIELDS } from './constants';
@@ -177,6 +177,18 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
       </Tooltip>
     </div>
   );
+};
+
+AddExpenseDetail.defaultProps = {
+  eventID: '',
+  userID: '',
+  setDisplayMode: () => {},
+};
+
+AddExpenseDetail.propTypes = {
+  eventID: PropTypes.string,
+  userID: PropTypes.string,
+  setDisplayMode: PropTypes.func,
 };
 
 export default AddExpenseDetail;

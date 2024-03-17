@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import { WarningRounded } from '@material-ui/icons';
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: theme.palette.primary.main,
-  }
+  },
 }));
 
 const EmptyNotificationCard = () => {
@@ -29,7 +28,7 @@ const EmptyNotificationCard = () => {
   return (
     <Box className={classes.root}>
       <Box>
-        <WarningRounded className={classes.icon}/>
+        <WarningRounded className={classes.icon} />
       </Box>
       <Typography className={classes.subtitle}> No new notifications</Typography>
     </Box>

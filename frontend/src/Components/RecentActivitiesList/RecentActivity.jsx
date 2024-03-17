@@ -1,9 +1,18 @@
-import React from 'react';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Chip, Tooltip, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
+import {
+  Timeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineDot,
+  TimelineContent,
+  TimelineOppositeContent,
+} from '@material-ui/lab';
+import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,12 +24,30 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     borderRadius: theme.spacing(0.4),
   },
-  extraPaddingTop: {
-    paddingTop: theme.spacing(1),
+  timelineContainer: {
+    display: 'flex',
+    '& .MuiTimeline-root': {
+      flexGrow: 0,
+    },
+  },
+  timelineRoot: {
+    display: 'none',
+  },
+  timelineItem: {
+    minHeight: 0,
+  },
+  timelineDot: {
+    backgroundColor: theme.palette.error.main,
+    border: 'none',
+  },
+  timelineDotPrimary: {
+    backgroundColor: theme.palette.primary.main,
+    border: 'none',
   },
   subtitleTextHeader: {
-    color: theme.palette.primary.main,
-    fontSize: theme.spacing(1.5),
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    fontSize: '0.725rem',
   },
   chipContainer: {
     display: 'flex',
@@ -32,8 +59,15 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     fontSize: theme.spacing(1.5),
   },
-  activityTitle: {
-    color: '#555555',
+  iconWithText: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  text: {
+    fontSize: '0.825rem',
+    overflowWrap: 'anywhere',
+    marginTop: theme.spacing(1),
   },
   activityDescription: {
     fontSize: theme.spacing(1.5),
@@ -43,64 +77,74 @@ const useStyles = makeStyles((theme) => ({
 const RecentActivity = ({ activity, usernameOrFullName }) => {
   const classes = useStyles();
   dayjs.extend(relativeTime);
-
   return (
     <Box className={classes.root}>
-      <Typography className={classNames(classes.subtitleTextHeader, classes.extraPaddingTop)}>
-        {usernameOrFullName || 'Anonymous'} - {dayjs(activity.updated_at).fromNow()}
+      <Box className={classes.timelineContainer}>
+        <Timeline align="left">
+          <TimelineItem className={classes.timelineItem}>
+            <TimelineOppositeContent classes={{ root: classes.timelineRoot }} />
+            <TimelineSeparator>
+              <TimelineDot className={classNames(classes.timelineDot, classes.timelineDotPrimary)}>
+                <CreateNewFolderRounded />
+              </TimelineDot>
+            </TimelineSeparator>
+            <TimelineContent className={classes.text}>Created event {activity.title}</TimelineContent>
+          </TimelineItem>
+
+          {activity.volunteering_hours > 0 ? (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineOppositeContent classes={{ root: classes.timelineRoot }} />
+              <TimelineSeparator>
+                <TimelineDot className={classes.timelineDot}>
+                  <TrackChangesRounded />
+                </TimelineDot>
+              </TimelineSeparator>
+              <TimelineContent className={classes.text}>
+                Volunteered on {activity?.volunteering_skill.length} skill for {activity.volunteering_hours} hours
+              </TimelineContent>
+            </TimelineItem>
+          ) : null}
+
+          {activity.skills_required > 0 ? (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineOppositeContent classes={{ root: classes.timelineRoot }} />
+              <TimelineSeparator>
+                <TimelineDot className={classNames(classes.timelineDot, classes.timelineDotPrimary)} />
+              </TimelineSeparator>
+              <TimelineContent>Requested help on {activity?.skills_required.length} skills</TimelineContent>
+            </TimelineItem>
+          ) : null}
+
+          {activity?.expense_name?.length > 1 ? (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineOppositeContent classes={{ root: classes.timelineRoot }} />
+              <TimelineSeparator>
+                <TimelineDot className={classes.timelineDot}>
+                  <LocalAtmRounded />
+                </TimelineDot>
+              </TimelineSeparator>
+              <TimelineContent className={classes.text}>
+                Expenses listed on {activity?.expense_name.length} items
+              </TimelineContent>
+            </TimelineItem>
+          ) : null}
+        </Timeline>
+      </Box>
+      <Typography className={classes.subtitleTextHeader} gutterBottom>
+        Last updated around {dayjs(activity?.updated_at).fromNow()} by {usernameOrFullName}
       </Typography>
-      <Typography variant="h6" className={classes.activityTitle}>
-        {activity.title}
-      </Typography>
-      {activity?.comments && <Typography className={classes.activityDescription}>{activity.comments}</Typography>}
-      <Box>
-        {activity.volunteering_hours > 0 && (
-          <Box>
-            <Typography className={classes.subtitleTextHeader} gutterBottom>
-              Volunteered on
-            </Typography>
-            <Tooltip title={`Total ${activity.volunteering_hours} hrs volunteered`} placement="top-start">
-              <Box className={classes.chipContainer}>
-                {activity?.volunteering_skill?.map((v) => (
-                  <Chip key={v} className={classes.chip} size="small" label={v} />
-                ))}
-              </Box>
-            </Tooltip>
-          </Box>
-        )}
-      </Box>
-      <Box>
-        {activity?.skills_required?.length > 1 ? (
-          <Box>
-            <Typography className={classes.subtitleTextHeader} gutterBottom>
-              Requested help on
-            </Typography>
-            <Box className={classes.chipContainer}>
-              {activity?.skills_required.map((v, index) => (
-                <Chip size="small" className={classes.chip} key={index} label={v} />
-              ))}
-            </Box>
-          </Box>
-        ) : null}
-      </Box>
-      <Box>
-        {activity?.expense_name?.length > 1 ? (
-          <Box>
-            <Typography className={classes.subtitleTextHeader} gutterBottom>
-              Expense listed on
-            </Typography>
-            <Tooltip title={`Total ${activity.expense_amount} expenses accured`} placement="top-start">
-              <Box className={classes.chipContainer}>
-                {activity?.expense_name.map((v, index) => (
-                  <Chip size="small" className={classes.chip} key={index} label={v} />
-                ))}
-              </Box>
-            </Tooltip>
-          </Box>
-        ) : null}
-      </Box>
     </Box>
   );
+};
+
+RecentActivity.defaultProps = {
+  activity: {},
+  usernameOrFullName: '',
+};
+
+RecentActivity.propTypes = {
+  activity: PropTypes.object,
+  usernameOrFullName: PropTypes.string,
 };
 
 export default RecentActivity;

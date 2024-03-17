@@ -34,7 +34,7 @@ jobs:
           echo "Attempting to build test container and run migrations..."
           migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
           echo "Attempting to insert test data into container ..."
-          cd server && ./_addTestData.sh runner 5432 community localhost
+          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f setup/devscript/test_data.sql
 
       - name: Build Go code
         uses: docker://golang:latest

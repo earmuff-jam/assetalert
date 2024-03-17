@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Checkbox, FormControlLabel, Tooltip, FormControl, Box, Typography } from '@material-ui/core';
 
@@ -49,6 +49,18 @@ const RSVPRegistration = ({ isChecked, handleRSVP, disabled }) => {
       </Tooltip>
     </Box>
   );
+};
+
+RSVPRegistration.defaultProps = {
+  isChecked: false,
+  handleRSVP: () => {},
+  disabled: true,
+};
+
+RSVPRegistration.propTypes = {
+  isChecked: PropTypes.bool,
+  handleRSVP: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default RSVPRegistration;

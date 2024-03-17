@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Divider, Typography } from '@material-ui/core';
 
 import 'chart.js/auto'; // do not remove this
 import { Bar } from 'react-chartjs-2';
@@ -14,9 +14,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   headerText: {
-    fontSize: '2.0rem',
-    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: '1.725rem',
   },
   aside: {
     display: 'flex',
@@ -28,22 +28,10 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
-  text: {
-    fontSize: '0.725rem',
+  largeText: {
+    fontSize: '1.685rem',
     fontWeight: 'bold',
-    textTransform: 'uppercase',
     fontFamily: 'Roboto',
-  },
-  highlight: {
-    color: theme.palette.primary.main,
-  },
-  chartContainer: {
-    position: ' relative',
-    height: '40vh',
-    width: '40vw',
-    [theme.breakpoints.down('sm')]: {
-      width: '80vw',
-    },
   },
 }));
 
@@ -102,20 +90,18 @@ const ExpenseChart = ({ expenses }) => {
 
   return (
     <Box className={classes.container}>
-      <Typography variant="h5" className={classes.headerText}>
+      <Typography variant="h5" className={classes.headerText} gutterBottom>
         Expense Report
       </Typography>
       <Typography className={classes.text}>
-        {`Incurred Expenses:`}{' '}
+        Incurred Expenses:
         <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
       </Typography>
       <Box className={classes.aside}>
         <Box className={classes.emptyGap}></Box>
-        {totalIncurred > 0 && (
-          <div className={classes.chartContainer}>
-            <Bar data={data} options={options} />
-          </div>
-        )}
+        <Box className={classes.container}>
+          <Bar data={data} options={options} />
+        </Box>
       </Box>
     </Box>
   );

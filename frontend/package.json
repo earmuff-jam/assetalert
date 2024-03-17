@@ -12,7 +12,8 @@
     "vite:start": "vite",
     "vite:build": "vite build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "docugen": "jsdoc src -r -d docs"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",

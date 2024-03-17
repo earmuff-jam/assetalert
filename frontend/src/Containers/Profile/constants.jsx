@@ -27,7 +27,7 @@ export const USER_PROFILE_FORM_FIELDS = {
         message: 'Full Name is required',
       },
       {
-        validate: (value) => value.trim().length >= 100,
+        validate: (value) => value.trim().length >= 20,
         message: 'Full Name should be less than 100 characters',
       },
     ],
@@ -102,7 +102,12 @@ export const USER_PROFILE_FORM_FIELDS = {
     errorMsg: '',
     required: false,
     fullWidth: true,
-    validators: [],
+    validators: [
+      {
+        validate: (value) => value.trim().length > 50,
+        message: 'should be less than 50 characters',
+      },
+    ],
     ...TEXTAREA_FORM_FIELDS,
   },
 };

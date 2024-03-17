@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box, Button, Input } from '@material-ui/core';
 
@@ -32,7 +32,7 @@ const EditProfileImage = ({
   setUploadedImage,
   toggleEditImage,
   submit,
-  profileDetails,
+  profileID,
 }) => {
   const classes = useStyles();
   return (
@@ -71,7 +71,7 @@ const EditProfileImage = ({
           className={classes.buttonContainer}
           disabled={!uploadedImage}
           onClick={() => {
-            submit(profileDetails.id);
+            submit(profileID);
           }}
         >
           Upload
@@ -79,6 +79,26 @@ const EditProfileImage = ({
       </div>
     </Box>
   );
+};
+
+EditProfileImage.defaultProps = {
+  selectedImage: {},
+  setSelectedImage: () => {},
+  uploadedImage: {},
+  setUploadedImage: () => {},
+  toggleEditImage: () => {},
+  submit: () => {},
+  profileID: '',
+};
+
+EditProfileImage.propTypes = {
+  selectedImage: PropTypes.object,
+  setSelectedImage: PropTypes.func,
+  uploadedImage: PropTypes.object,
+  setUploadedImage: PropTypes.func,
+  toggleEditImage: PropTypes.func,
+  submit: PropTypes.func,
+  profileID: PropTypes.string,
 };
 
 export default EditProfileImage;
