@@ -67,7 +67,7 @@ const CreateNewEvent = () => {
           data-tour="3"
           text={'Create Event'}
           showIcon={true}
-          buttonVariant={true}
+          buttonVariant={'text'}
           disableRipple={true}
           icon={<AddCircleRounded />}
           disableFocusRipple={true}
@@ -77,7 +77,7 @@ const CreateNewEvent = () => {
         <ButtonComponent
           text={'View profile'}
           showIcon={true}
-          buttonVariant={true}
+          buttonVariant={'text'}
           disableRipple={true}
           icon={<ContactMailRounded />}
           disableFocusRipple={true}

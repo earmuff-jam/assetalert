@@ -88,7 +88,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
                 <CreateNewFolderRounded />
               </TimelineDot>
             </TimelineSeparator>
-            <TimelineContent className={classes.text}>Created event {activity.title}</TimelineContent>
+            <TimelineContent className={classes.text}>{activity.title}</TimelineContent>
           </TimelineItem>
 
           {activity.volunteering_hours > 0 ? (

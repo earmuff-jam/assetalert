@@ -65,10 +65,9 @@ const BLANK_AUTOCOMPLETE_FORM = {
   id: '',
 };
 
-const ViewEventListDetails = (props) => {
+const ViewEventListDetails = ({ currentEvents, loading }) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { currentEvents, loading } = props;
 
   const noAvailableProjects = currentEvents.length <= 0;
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -124,8 +123,8 @@ ViewEventListDetails.defaultProps = {
 };
 
 ViewEventListDetails.propTypes = {
-  currentEvents: PropTypes,
-  loading: true,
+  currentEvents: PropTypes.array,
+  loading: PropTypes.bool,
 };
 
 export default ViewEventListDetails;
