@@ -11,7 +11,6 @@ import {
   Chip,
   Avatar,
 } from '@material-ui/core';
-
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -42,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    // width: theme.spacing(4),
   },
   headerText: {
     fontSize: '0.925rem',
