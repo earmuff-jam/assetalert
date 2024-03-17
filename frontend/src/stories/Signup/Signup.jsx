@@ -123,7 +123,7 @@ const Signup = ({ setSignUpView }) => {
       <ButtonComponent
         text={'Register'}
         showIcon={true}
-        buttonVariant={true}
+        buttonVariant={'text'}
         disableRipple={true}
         icon={<ArrowRightRounded />}
         disableFocusRipple={true}

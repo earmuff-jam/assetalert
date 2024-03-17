@@ -58,7 +58,7 @@ AppBarNavListItem.propTypes = {
   tooltipTitle: PropTypes.string,
   title: PropTypes.string,
   titleStyle: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.object,
   iconStyle: PropTypes.string,
   onClick: PropTypes.func,
 };

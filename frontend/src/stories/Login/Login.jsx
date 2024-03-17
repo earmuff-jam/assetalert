@@ -108,7 +108,7 @@ const Login = () => {
         text={'Submit'}
         showIcon={true}
         icon={<ArrowRightRounded />}
-        buttonVariant={'standard'}
+        buttonVariant={'text'}
         onClick={handleFormSubmit}
         disabled={false}
         disableRipple={true}

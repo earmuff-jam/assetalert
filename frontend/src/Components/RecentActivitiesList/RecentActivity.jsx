@@ -88,7 +88,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
                 <CreateNewFolderRounded />
               </TimelineDot>
             </TimelineSeparator>
-            <TimelineContent className={classes.text}>Created event {activity.title}</TimelineContent>
+            <TimelineContent className={classes.text}>{activity.title}</TimelineContent>
           </TimelineItem>
 
           {activity.volunteering_hours > 0 ? (
@@ -131,7 +131,7 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
         </Timeline>
       </Box>
       <Typography className={classes.subtitleTextHeader} gutterBottom>
-        Last updated around {dayjs(activity?.updated_at).fromNow()} by {usernameOrFullName}
+        Event updated around {dayjs(activity?.updated_at).fromNow()} by {activity?.updator}
       </Typography>
     </Box>
   );

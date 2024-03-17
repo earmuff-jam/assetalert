@@ -31,8 +31,8 @@ const RecentItemTabs = ({ rowData }) => {
 
   return (
     <Box className={classes.rowContainer}>
-      {rowData?.map((v) => (
-        <Tooltip title={v.title} placement={v.tooltipPlacement}>
+      {rowData?.map((v, index) => (
+        <Tooltip key={index} title={v.title} placement={v.tooltipPlacement}>
           <Box className={classes.centerRowAlign}>
             {v.icon}
             <span>{v.count}</span>
