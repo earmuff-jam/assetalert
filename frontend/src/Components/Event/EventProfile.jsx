@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme) => ({
     gap: '1.2rem',
     textOverflow: 'ellipsis',
     textWrap: 'wrap',
-    width: '40rem',
+    width: `calc(100% - 40rem)`,
+    [theme.breakpoints.down('sm')]: {
+      width: `26rem`,
+    },
   },
   rowContainer: {
     display: 'flex',
@@ -92,6 +95,7 @@ const EventProfile = ({ userDetail }) => {
         secondLabel={` ${userDetail?.attendees.length || 0}`}
         secondTooltipLabel={'Anticipated members'}
         titleText={userDetail?.title || ''}
+        titleTooltip={userDetail?.title || ''}
         extraSubtitle={userDetail?.description || 'Edit event details to add description'}
       />
     </Box>

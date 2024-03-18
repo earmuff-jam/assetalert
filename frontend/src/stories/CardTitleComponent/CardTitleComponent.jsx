@@ -42,20 +42,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CardTitleComponent = ({
-  titleText,
   firstIcon,
   firstToolTipLabel,
   firstLabel,
   secondIcon,
   secondLabel,
   secondTooltipLabel,
+  titleText,
+  titleTooltip,
   extraSubtitle,
 }) => {
   const classes = useStyles();
   return (
     <Box className={classes.userProfileDetailsContainer}>
       <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')}>
-        <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
+        <Tooltip title={titleTooltip}>
+          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
+        </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)}>
           <Tooltip title={firstToolTipLabel}>
             <Chip size="small" icon={firstIcon} label={firstLabel} />
@@ -78,11 +81,13 @@ CardTitleComponent.defaultProps = {
   secondLabel: '',
   secondTooltipLabel: '',
   titleText: '',
+  titleTooltip: '',
   extraSubtitle: '',
 };
 
 CardTitleComponent.propTypes = {
   titleText: PropTypes.string,
+  titleTooltip: PropTypes.string,
   firstIcon: PropTypes.object,
   firstLabel: PropTypes.string,
   secondIcon: PropTypes.object,
