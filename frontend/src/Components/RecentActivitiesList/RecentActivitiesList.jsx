@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, CircularProgress, Divider, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import RecentActivity from './RecentActivity';
 import EmptyComponent from '../../util/EmptyComponent';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   EmojiEventsRounded,
   HighlightOffRounded,
@@ -12,6 +10,7 @@ import {
   TrackChangesRounded,
 } from '@material-ui/icons';
 import RecentItemTabs from './RecentItemTabs';
+import { Box, CircularProgress, Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecentActivitiesList = ({ usernameOrFullName }) => {
+const RecentActivitiesList = () => {
   const classes = useStyles();
 
   const { loading, recentActivities } = useSelector((state) => state.profile);
@@ -126,9 +125,7 @@ const RecentActivitiesList = ({ usernameOrFullName }) => {
         </Box>
         <Box className={classes.recentActivitiesList}>
           {recentActivities && recentActivities.length > 0 ? (
-            recentActivities?.map((event, index) => (
-              <RecentActivity key={index} index={index} activity={event} usernameOrFullName={usernameOrFullName} />
-            ))
+            recentActivities?.map((event, index) => <RecentActivity key={index} index={index} activity={event} />)
           ) : (
             <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />
           )}
@@ -136,14 +133,6 @@ const RecentActivitiesList = ({ usernameOrFullName }) => {
       </Box>
     </Box>
   );
-};
-
-RecentActivitiesList.defaultProps = {
-  usernameOrFullName: '',
-};
-
-RecentActivitiesList.propTypes = {
-  usernameOrFullName: PropTypes.string,
 };
 
 export default RecentActivitiesList;

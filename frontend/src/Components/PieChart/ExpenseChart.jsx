@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Divider, Typography } from '@material-ui/core';
-
+import { Box, Typography } from '@material-ui/core';
 import 'chart.js/auto'; // do not remove this
 import { Bar } from 'react-chartjs-2';
 
@@ -105,6 +105,14 @@ const ExpenseChart = ({ expenses }) => {
       </Box>
     </Box>
   );
+};
+
+ExpenseChart.defaultProps = {
+  expenses: [],
+};
+
+ExpenseChart.propTypes = {
+  expenses: PropTypes.array,
 };
 
 export default ExpenseChart;

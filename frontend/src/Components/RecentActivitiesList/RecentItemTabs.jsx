@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import EmptyComponent from '../../util/EmptyComponent';
 import { Box, Tooltip, makeStyles } from '@material-ui/core';

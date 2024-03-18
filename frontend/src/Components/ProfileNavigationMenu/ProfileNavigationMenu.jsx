@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileNavigationMenu = ({ usernameOrFullName }) => {
+const ProfileNavigationMenu = () => {
   const classes = useStyles();
   const [selectedValue, setSelectedValue] = useState(1);
 
@@ -57,7 +57,7 @@ const ProfileNavigationMenu = ({ usernameOrFullName }) => {
       case 1:
         return (
           <Box>
-            <RecentActivitiesList usernameOrFullName={usernameOrFullName} />
+            <RecentActivitiesList />
           </Box>
         );
       case 2:

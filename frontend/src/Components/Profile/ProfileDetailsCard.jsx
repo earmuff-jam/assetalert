@@ -6,6 +6,7 @@ import { CheckRounded, EditRounded, CancelRounded, NotificationImportantRounded 
 import classNames from 'classnames';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileDetailsCard = ({
   editMode,
+  isLoading,
   formFields,
   handleInput,
   handleSubmit,
@@ -55,28 +57,36 @@ const ProfileDetailsCard = ({
     <Card className={classes.root} elevation={0}>
       <CardContent>
         <Box className={classes.rowContainer}>
-          <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
+          {!isLoading ? (
+            <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
+          ) : (
+            <LoadingSkeleton height={20} width={20} />
+          )}
           <Box className={classes.emptyGap}></Box>
-          <Box>
-            <IconButton
-              disabled={!editMode}
-              onClick={handleSubmit}
-              className={classNames(classes.iconButton, { [classes.colorVariant]: editMode })}
-            >
-              <CheckRounded />
-            </IconButton>
-            <IconButton onClick={handleToggle} className={classes.iconButton}>
-              {!editMode ? <EditRounded /> : <CancelRounded />}
-            </IconButton>
-            <IconButton
-              onClick={handleClickNotificationBar}
-              className={[classes.iconButton, classes.iconTilt].join(' ')}
-            >
-              <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
-                <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
-              </Badge>
-            </IconButton>
-          </Box>
+          {!isLoading ? (
+            <Box>
+              <IconButton
+                disabled={!editMode}
+                onClick={handleSubmit}
+                className={classNames(classes.iconButton, { [classes.colorVariant]: editMode })}
+              >
+                <CheckRounded />
+              </IconButton>
+              <IconButton onClick={handleToggle} className={classes.iconButton}>
+                {!editMode ? <EditRounded /> : <CancelRounded />}
+              </IconButton>
+              <IconButton
+                onClick={handleClickNotificationBar}
+                className={[classes.iconButton, classes.iconTilt].join(' ')}
+              >
+                <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
+                  <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
+                </Badge>
+              </IconButton>
+            </Box>
+          ) : (
+            <LoadingSkeleton height={12} width={20} />
+          )}
         </Box>
         {editMode && <EditingUserProfile formFields={formFields} handleInput={handleInput} />}
       </CardContent>
@@ -86,6 +96,7 @@ const ProfileDetailsCard = ({
 
 ProfileDetailsCard.defaultProps = {
   editMode: false,
+  isLoading: false,
   formFields: {},
   handleInput: () => {},
   handleSubmit: () => {},
@@ -97,6 +108,7 @@ ProfileDetailsCard.defaultProps = {
 
 ProfileDetailsCard.propTypes = {
   editMode: PropTypes.bool,
+  isLoading: PropTypes.bool,
   formFields: PropTypes.object,
   handleInput: PropTypes.func,
   handleSubmit: PropTypes.func,

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { Box } from '@material-ui/core';
-
 import ExpenseChart from '../PieChart/ExpenseChart';
 import { useDispatch, useSelector } from 'react-redux';
 import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
@@ -15,6 +15,7 @@ const ExpenseTab = ({ eventID, userID, editingAllowed }) => {
     if (eventID) {
       dispatch(eventActions.getExpenseList({ eventID }));
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -26,6 +27,18 @@ const ExpenseTab = ({ eventID, userID, editingAllowed }) => {
       <ExpenseChart expenses={expenses || []} totalSkillLimit={0} />
     </>
   );
+};
+
+ExpenseTab.defaultProps = {
+  eventID: '',
+  userID: '',
+  editingAllowed: false,
+};
+
+ExpenseTab.propTypes = {
+  eventID: PropTypes.string,
+  userID: PropTypes.string,
+  editingAllowed: PropTypes.bool,
 };
 
 export default ExpenseTab;

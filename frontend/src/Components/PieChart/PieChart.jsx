@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
@@ -81,7 +82,7 @@ const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {
 
   useEffect(() => {
     if (Array.isArray(volunteeringActivities)) {
-      const formattedData = volunteeringActivities.reduce((acc, el, index, arr) => {
+      const formattedData = volunteeringActivities.reduce((acc, el) => {
         const existingItem = acc.find((x) => x.skill === el.volunteeringActivity);
         if (existingItem) {
           existingItem.hours += parseFloat(el.volunteer_hours);
@@ -112,6 +113,16 @@ const PieChart = ({ volunteeringActivities, totalSkillLimit }) => {
       </Box>
     </Box>
   );
+};
+
+PieChart.defaultProps = {
+  volunteeringActivities: [],
+  totalSkillLimit: 0,
+};
+
+PieChart.propTypes = {
+  volunteeringActivities: PropTypes.array,
+  totalSkillLimit: PropTypes.number,
 };
 
 export default PieChart;

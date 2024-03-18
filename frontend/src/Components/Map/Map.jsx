@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 import { Map, View } from 'ol';
 import OSM from 'ol/source/OSM';
 import * as proj from 'ol/proj';
@@ -13,8 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapComponentFn = (props) => {
-  const { shrinkSize = false, locationDetails = {}, disabled } = props;
+const MapComponentFn = ({ shrinkSize = false, locationDetails = {}, disabled }) => {
   const classes = useStyles();
   const mapElement = useRef();
   const map = useRef(null);
@@ -74,6 +74,18 @@ const MapComponentFn = (props) => {
       </div>
     </div>
   );
+};
+
+MapComponentFn.defaultProps = {
+  shrinkSize: false,
+  locationDetails: {},
+  disabled: false,
+};
+
+MapComponentFn.propTypes = {
+  shrinkSize: PropTypes.bool,
+  locationDetails: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
 export default MapComponentFn;

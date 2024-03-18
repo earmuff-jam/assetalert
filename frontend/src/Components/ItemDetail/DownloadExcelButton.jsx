@@ -1,5 +1,5 @@
-import React from 'react';
 import * as XLSX from 'xlsx';
+import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { CloudDownloadRounded } from '@material-ui/icons';
 
@@ -18,6 +18,20 @@ const DownloadExcelButton = ({ data, tooltipTitle, fileName, sheetName }) => {
       </IconButton>
     </Tooltip>
   );
+};
+
+DownloadExcelButton.defaultProps = {
+  data: [],
+  tooltipTitle: '',
+  fileName: '',
+  sheetName: '',
+};
+
+DownloadExcelButton.propTypes = {
+  data: PropTypes.object,
+  tooltipTitle: PropTypes.string,
+  fileName: PropTypes.string,
+  sheetName: PropTypes.string,
 };
 
 export default DownloadExcelButton;

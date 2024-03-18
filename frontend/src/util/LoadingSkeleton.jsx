@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core';

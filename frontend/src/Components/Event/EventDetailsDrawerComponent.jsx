@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, ListItemIcon, ListItemText, Paper, Tooltip } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import classNames from 'classnames';
 import ExpenseTab from './ExpenseTab';
 import MapComponentFn from '../Map/Map';
 import Host from '../HostComponent/Host';
 import PieChart from '../PieChart/PieChart';
+import { makeStyles } from '@material-ui/core/styles';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
+import { Box, List, ListItem, ListItemIcon, ListItemText, Paper, Tooltip } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,6 +84,24 @@ export const NavigationTabBar = ({
       ))}
     </Box>
   );
+};
+
+NavigationTabBar.defaultProps = {
+  data: [],
+  value: '',
+  handleChange: () => {},
+  applyProfileVariation: true,
+  extraRootStyle: '',
+  iconStyle: '',
+};
+
+NavigationTabBar.propTypes = {
+  data: PropTypes.array,
+  value: PropTypes.string,
+  handleChange: PropTypes.func,
+  applyProfileVariation: PropTypes.bool,
+  extraRootStyle: PropTypes.string,
+  iconStyle: PropTypes.string,
 };
 
 const EventDetailsDrawerComponent = ({
@@ -175,6 +194,26 @@ const EventDetailsDrawerComponent = ({
       {displaySelection(value)}
     </div>
   );
+};
+
+EventDetailsDrawerComponent.defaultProps = {
+  eventID: '',
+  volunteeringActivities: [],
+  userDetail: {},
+  handleRSVP: () => {},
+  isChecked: false,
+  disabled: true,
+  selectedEvent: {},
+};
+
+EventDetailsDrawerComponent.propTypes = {
+  eventID: PropTypes.string,
+  volunteeringActivities: PropTypes.array,
+  userDetail: PropTypes.object,
+  handleRSVP: PropTypes.func,
+  isChecked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  selectedEvent: PropTypes.object,
 };
 
 export default EventDetailsDrawerComponent;

@@ -1,11 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
+import { Typography } from '@material-ui/core';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const TextComponent = ({ textStyle, loading, gutterBottom, value }) => {
   if (loading) {
-    return <SkeletonLoader width={11} height={5} />;
+    return <LoadingSkeleton width={11} height={5} />;
   }
 
   return (

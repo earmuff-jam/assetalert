@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecentActivity = ({ activity, usernameOrFullName }) => {
+const RecentActivity = ({ activity }) => {
   const classes = useStyles();
   dayjs.extend(relativeTime);
   return (
@@ -139,12 +139,10 @@ const RecentActivity = ({ activity, usernameOrFullName }) => {
 
 RecentActivity.defaultProps = {
   activity: {},
-  usernameOrFullName: '',
 };
 
 RecentActivity.propTypes = {
   activity: PropTypes.object,
-  usernameOrFullName: PropTypes.string,
 };
 
 export default RecentActivity;
