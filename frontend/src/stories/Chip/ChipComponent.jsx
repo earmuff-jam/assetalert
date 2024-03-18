@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import { Chip } from '@material-ui/core';
 import { FaceRounded } from '@material-ui/icons';
 
-const ChipComponent = ({ icon, label, onClick, variant, disabled }) => {
-  return <Chip icon={icon} label={label} onClick={onClick} variant={variant} disabled={disabled} />;
+const ChipComponent = ({ size, icon, label, onClick, variant, disabled }) => {
+  return <Chip icon={icon} size={size} label={label} onClick={onClick} variant={variant} disabled={disabled} />;
 };
 
 ChipComponent.defaultProps = {
-  variant: 'outlined',
+  variant: 'default',
   icon: <FaceRounded />,
   label: 'Login',
+  size: 'small',
   disabled: false,
   onClick: () => {},
 };
@@ -17,6 +18,7 @@ ChipComponent.defaultProps = {
 ChipComponent.propTypes = {
   variant: PropTypes.string,
   icon: PropTypes.object,
+  size: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import ChipComponent from '../Chip/ChipComponent';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Chip, Tooltip, Typography } from '@material-ui/core';
+import TextComponent from '../TextComponent/TextComponent';
+import { Box, Tooltip, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   headerText: {
@@ -61,14 +63,14 @@ const CardTitleComponent = ({
         </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)}>
           <Tooltip title={firstToolTipLabel}>
-            <Chip size="small" icon={firstIcon} label={firstLabel} />
+            <ChipComponent icon={firstIcon} variant={'default'} label={firstLabel} size={'small'} />
           </Tooltip>
           <Tooltip title={secondTooltipLabel}>
-            <Chip size="small" icon={secondIcon} label={secondLabel} />
+            <ChipComponent icon={secondIcon} variant={'default'} label={secondLabel} size={'small'} />
           </Tooltip>
         </Box>
       </Box>
-      <Typography className={classes.extraSubtitle}>{extraSubtitle}</Typography>
+      <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} />
     </Box>
   );
 };
