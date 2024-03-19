@@ -4,7 +4,7 @@ import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const TextComponent = ({ textStyle, loading, gutterBottom, value }) => {
   if (loading) {
-    return <LoadingSkeleton width={11} height={5} />;
+    return <LoadingSkeleton width={'11rem'} height={'2rem'} />;
   }
 
   return (

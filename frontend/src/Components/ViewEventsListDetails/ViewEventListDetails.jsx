@@ -7,6 +7,7 @@ import EmptyComponent from '../../util/EmptyComponent';
 import SearchAllEvents from '../Event/SearchAllEvents';
 import ViewFilteredEventList from './ViewFilteredEventList';
 import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -88,12 +89,8 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
     }
   }, [searchValue, currentEvents]);
 
-  if (isLoading) {
-    return (
-      <Box className={classes.spinnerContainer}>
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading || noAvailableProjects) {
+    return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'20rem'} />;
   }
 
   return (

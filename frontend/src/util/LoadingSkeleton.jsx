@@ -14,13 +14,13 @@ const LoadingSkeleton = ({ width, height }) => {
 };
 
 LoadingSkeleton.defaultProps = {
-  width: 10,
-  height: 10,
+  width: '20rem',
+  height: '10rem',
 };
 
 LoadingSkeleton.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.string,
+  height: PropTypes.string,
 };
 
 export default LoadingSkeleton;
