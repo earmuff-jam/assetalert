@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     borderRadius: theme.spacing(0.25),
     padding: theme.spacing(0.25),
+    gap: theme.spacing(1),
   },
   rowContainer: {
     display: 'flex',

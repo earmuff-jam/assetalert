@@ -4,9 +4,8 @@ import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const TextComponent = ({ textStyle, loading, gutterBottom, value }) => {
   if (loading) {
-    return <LoadingSkeleton width={'11rem'} height={'2rem'} />;
+    return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
   }
-
   return (
     <Typography className={textStyle} gutterBottom={gutterBottom}>
       {value}

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import ProfileNavigationMenu from './ProfileNavigationMenu';
+import ProfileNavigationMenu from '../../Components/ProfileNavigationMenu/ProfileNavigationMenu';
 
 export default {
   title: 'ProfilePage/ProfileNavigation',

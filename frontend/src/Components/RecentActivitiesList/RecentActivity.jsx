@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Box } from '@material-ui/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
 import {
   Timeline,
   TimelineItem,
@@ -13,6 +13,7 @@ import {
   TimelineOppositeContent,
 } from '@material-ui/lab';
 import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@material-ui/icons';
+import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,9 +131,12 @@ const RecentActivity = ({ activity }) => {
           ) : null}
         </Timeline>
       </Box>
-      <Typography className={classes.subtitleTextHeader} gutterBottom>
-        Event updated around {dayjs(activity?.updated_at).fromNow()} by {activity?.updator}
-      </Typography>
+      <TextComponent
+        gutterBottom={true}
+        loading={false}
+        textStyle={classes.subtitleTextHeader}
+        value={`Event updated around ${dayjs(activity?.updated_at).fromNow()} by ${activity?.updator}`}
+      />
     </Box>
   );
 };

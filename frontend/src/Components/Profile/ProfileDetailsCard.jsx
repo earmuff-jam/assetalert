@@ -60,7 +60,7 @@ const ProfileDetailsCard = ({
           {!isLoading ? (
             <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
           ) : (
-            <LoadingSkeleton height={20} width={20} />
+            <LoadingSkeleton width={`calc(20% - 1rem)`} height={'4rem'} />
           )}
           <Box className={classes.emptyGap}></Box>
           {!isLoading ? (
@@ -85,7 +85,7 @@ const ProfileDetailsCard = ({
               </IconButton>
             </Box>
           ) : (
-            <LoadingSkeleton height={12} width={20} />
+            <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
           )}
         </Box>
         {editMode && <EditingUserProfile formFields={formFields} handleInput={handleInput} />}
