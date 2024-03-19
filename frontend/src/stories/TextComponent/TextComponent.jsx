@@ -15,14 +15,14 @@ const TextComponent = ({ textStyle, loading, gutterBottom, value }) => {
 };
 
 TextComponent.defaultProps = {
-  textStyle: {},
+  textStyle: '',
   loading: true,
   gutterBottom: true,
   value: 'John Doe',
 };
 
 TextComponent.propTypes = {
-  textStyle: PropTypes.object,
+  textStyle: PropTypes.string,
   gutterBottom: PropTypes.bool,
   loading: PropTypes.bool,
   value: PropTypes.string,

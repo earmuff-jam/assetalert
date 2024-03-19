@@ -65,7 +65,7 @@ const BLANK_AUTOCOMPLETE_FORM = {
   id: '',
 };
 
-const ViewEventListDetails = ({ currentEvents, loading }) => {
+const ViewEventListDetails = ({ currentEvents, isLoading }) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -78,6 +78,7 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
   };
 
   useEffect(() => {
+    if (isLoading) return;
     if (searchValue?.id) {
       const filteredEvent = currentEvents?.filter((v) => v.id === searchValue.id);
       setFilteredOptions(filteredEvent);
@@ -87,7 +88,7 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
     }
   }, [searchValue, currentEvents]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Box className={classes.spinnerContainer}>
         <CircularProgress />
@@ -119,12 +120,12 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
 
 ViewEventListDetails.defaultProps = {
   currentEvents: [],
-  loading: true,
+  isLoading: true,
 };
 
 ViewEventListDetails.propTypes = {
   currentEvents: PropTypes.array,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default ViewEventListDetails;
