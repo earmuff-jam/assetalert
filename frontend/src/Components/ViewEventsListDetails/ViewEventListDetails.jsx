@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
 import SearchAllEvents from '../Event/SearchAllEvents';
 import ViewFilteredEventList from './ViewFilteredEventList';
-import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
+import { Typography, Grid, Box, Divider } from '@material-ui/core';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({

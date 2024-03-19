@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Divider, makeStyles } from '@material-ui/core';
 import { NavigationTabBar } from '../Event/EventDetailsDrawerComponent';
-import RecentActivitiesList from '../RecentActivitiesList/RecentActivitiesList';
+import RecentActivitiesList from '../RecentActivitiesList/RecentActivitiesListContainer';
 import { PROFILE_NAVIGATION_MENU_BAR } from './constants';
 
 const useStyles = makeStyles((theme) => ({

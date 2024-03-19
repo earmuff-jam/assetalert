@@ -35,17 +35,13 @@ const ProfileDetailPage = () => {
   const { loading: eventsLoading } = useSelector((state) => state.home);
   const { loading: profilePageLoading, profileDetails, notifications } = useSelector((state) => state.profile);
 
+  const [anchorEl, setAnchorEl] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [formFields, setFormFields] = useState(USER_PROFILE_FORM_FIELDS);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClickNotificationBar = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseNotificationBar = () => {
-    setAnchorEl(null);
-  };
+  const handleToggle = () => setEditMode(!editMode);
+  const handleCloseNotificationBar = () => setAnchorEl(null);
+  const handleClickNotificationBar = (event) => setAnchorEl(event.currentTarget);
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -76,7 +72,6 @@ const ProfileDetailPage = () => {
     });
   };
 
-  const handleToggle = () => setEditMode(!editMode);
   const handleSubmit = () => {
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {

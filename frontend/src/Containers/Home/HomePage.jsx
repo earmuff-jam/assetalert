@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, CircularProgress, Grid, Container, Paper } from '@material-ui/core';
-
+import { Grid, Container, Paper } from '@material-ui/core';
 import { homeActions } from './homeSlice';
 import HomePageHeaderMap from '../../stories/Home/HomePageHeaderMap';
 import CreateNewEvent from '../../stories/CreateNewEvent/CreateNewEvent';

@@ -1,7 +1,3 @@
-import { useSelector } from 'react-redux';
-import RecentActivity from './RecentActivity';
-import EmptyComponent from '../../util/EmptyComponent';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   EmojiEventsRounded,
   HighlightOffRounded,
@@ -10,7 +6,9 @@ import {
   TrackChangesRounded,
 } from '@material-ui/icons';
 import RecentItemTabs from './RecentItemTabs';
-import { Box, CircularProgress, Divider, Typography } from '@material-ui/core';
+import RecentActivities from './RecentActivities';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,18 +50,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecentActivitiesList = () => {
+const RecentActivitiesListContainer = () => {
   const classes = useStyles();
-
-  const { loading, recentActivities } = useSelector((state) => state.profile);
-
-  if (loading) {
-    return (
-      <Box className={classes.spinnerContainer}>
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   const data = [
     {
@@ -124,15 +112,11 @@ const RecentActivitiesList = () => {
           <RecentItemTabs rowData={data.slice(4, 6)} />
         </Box>
         <Box className={classes.recentActivitiesList}>
-          {recentActivities && recentActivities.length > 0 ? (
-            recentActivities?.map((event, index) => <RecentActivity key={index} index={index} activity={event} />)
-          ) : (
-            <EmptyComponent shouldRedirect={true} path={'/'} subtitle="Create or volunteer for any event" />
-          )}
+          <RecentActivities />
         </Box>
       </Box>
     </Box>
   );
 };
 
-export default RecentActivitiesList;
+export default RecentActivitiesListContainer;
