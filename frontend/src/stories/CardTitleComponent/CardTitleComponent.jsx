@@ -63,10 +63,14 @@ const CardTitleComponent = ({
         </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)}>
           <Tooltip title={firstToolTipLabel}>
-            <ChipComponent icon={firstIcon} variant={'default'} label={firstLabel} size={'small'} />
+            <Box>
+              <ChipComponent icon={firstIcon} variant={'default'} label={firstLabel} size={'small'} />
+            </Box>
           </Tooltip>
           <Tooltip title={secondTooltipLabel}>
-            <ChipComponent icon={secondIcon} variant={'default'} label={secondLabel} size={'small'} />
+            <Box>
+              <ChipComponent icon={secondIcon} variant={'default'} label={secondLabel} size={'small'} />
+            </Box>
           </Tooltip>
         </Box>
       </Box>

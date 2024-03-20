@@ -13,7 +13,7 @@ import {
   Tooltip,
   Badge,
 } from '@material-ui/core';
-import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded } from '@material-ui/icons';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, BookmarkRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -45,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
       gap: theme.spacing(0),
     },
   },
+  centerAlign: {
+    wordWrap: true,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   chipContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -64,8 +70,11 @@ const useStyles = makeStyles((theme) => ({
   gutterBottom: {
     marginBottom: theme.spacing(1),
   },
-  buttonColor: {
+  primaryColor: {
     color: theme.palette.primary.main,
+  },
+  errorVariant: {
+    color: theme.palette.warning.light,
   },
   text: {
     color: theme.palette.primary.main,
@@ -96,6 +105,10 @@ const EventDetailsCard = ({
 
   const [display, setDisplay] = useState(0);
   const [editMode, setEditMode] = useState(false); // editing general fields for select event
+
+  const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
+
+  const handleReportEvent = () => setDisplay('Report');
 
   const toggleEditMode = () => {
     if (editMode) {
@@ -145,15 +158,17 @@ const EventDetailsCard = ({
     }
     setEditMode(!editMode);
   };
+
   const handleViewItems = () => {
     setDisplay('View');
     dispatch(eventActions.getItemList({ eventID }));
   };
+
   const handleAddItem = () => {
     setDisplay('Add');
     dispatch(eventActions.getStorageLocations(eventID));
   };
-  const handleReportEvent = () => setDisplay('Report');
+
   const toggleDrawer = (event) => {
     setDisplay(event);
     // only fetch api data first time load
@@ -161,8 +176,6 @@ const EventDetailsCard = ({
       dispatch(eventActions.getItemList({ eventID }));
     }
   };
-
-  console.log(isLoading);
 
   return (
     <Card className={classes.root}>
@@ -176,7 +189,7 @@ const EventDetailsCard = ({
                 <Button
                   data-tour="3"
                   variant="text"
-                  className={classes.buttonColor}
+                  className={classes.primaryColor}
                   onClick={userDetail?.userIsMember ? onLeave : onJoin}
                 >
                   {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
@@ -216,6 +229,10 @@ const EventDetailsCard = ({
             View Items
           </Button>
         </CardActions>
+        <Box className={classes.centerAlign}>
+          <BookmarkRounded className={classes.errorVariant} />
+          <span>{remainingSpots} spots left</span>
+        </Box>
         {editMode && (
           <EditCommunityEvent
             userDetail={userDetail}
