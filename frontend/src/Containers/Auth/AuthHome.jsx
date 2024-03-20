@@ -42,20 +42,22 @@ const AuthHome = () => {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="lg">
+    <>
       <AppBar title={'Mashed'} titleVariant={'h5'} elevation={0} />
-      <Grid container className={classes.root}>
-        <Grid item xs={12} md={6}>
-          <InviteSection />
+      <Container maxWidth="lg">
+        <Grid container className={classes.root}>
+          <Grid item xs={12} md={6}>
+            <InviteSection />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box className={classes.auth}>
+              <Authenticator />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Box className={classes.auth}>
-            <Authenticator />
-          </Box>
-        </Grid>
-      </Grid>
-      <AuthFooter />
-    </Container>
+        <AuthFooter />
+      </Container>
+    </>
   );
 };
 
