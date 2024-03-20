@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Table,
   TableBody,
@@ -91,6 +91,32 @@ const List = ({
       </Box>
     </>
   );
+};
+
+List.defaultProps = {
+  title: '',
+  subtitle: '',
+  data: [],
+  filteredData: [],
+  columns: [],
+  columnHeaderFormatter: () => {},
+  rowFormatter: () => {},
+  tooltipTitle: '',
+  fileName: '',
+  sheetName: '',
+};
+
+List.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  data: PropTypes.array,
+  filteredData: PropTypes.array,
+  columns: PropTypes.array,
+  columnHeaderFormatter: PropTypes.func,
+  rowFormatter: PropTypes.func,
+  tooltipTitle: PropTypes.string,
+  fileName: PropTypes.string,
+  sheetName: PropTypes.string,
 };
 
 export default List;

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import ChipComponent from '../Chip/ChipComponent';
 import { makeStyles } from '@material-ui/core/styles';
-import Title from '../../Components/DialogComponent/Title';
+import { Box, Dialog, Divider } from '@material-ui/core';
 import ButtonComponent from '../Button/ButtonComponent';
-import { Box, Dialog, Divider, Typography } from '@material-ui/core';
+import TextComponent from '../TextComponent/TextComponent';
+import Title from '../../Components/DialogComponent/Title';
 import AddCommunityEvent from '../../Components/CommunityEvent/AddCommunityEvent';
 import { AddCircleRounded, ContactMailRounded, ViewListRounded } from '@material-ui/icons';
-import ChipComponent from '../Chip/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,20 +36,26 @@ const useStyles = makeStyles((theme) => ({
 const CreateNewEvent = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { username } = useSelector((state) => state.home);
+  const { loading: userNameLoading, username } = useSelector((state) => state.home);
 
   const [editMode, setEditMode] = useState(false);
   const handleClick = () => setEditMode(!editMode);
 
   return (
     <Box className={classes.container} data-tour="1">
-      <Typography className={classes.titleText} gutterBottom>
-        {username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
-      </Typography>
-      <Typography className={classes.text} gutterBottom>
-        Create new event or volunteer for any existing event. Monitor inventory and track expense reports. View all
-        items associated with selected event or even maintain your own personal inventory list.
-      </Typography>
+      <TextComponent
+        gutterBottom={true}
+        loading={userNameLoading}
+        textStyle={classes.titleText}
+        value={username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
+      />
+      <TextComponent
+        gutterBottom={true}
+        loading={false}
+        textStyle={classes.text}
+        value={`Create new event or volunteer for any existing event. Monitor inventory and track expense reports. View all
+        items associated with selected event or even maintain your own personal inventory list.`}
+      />
       <Divider />
       <Box className={classes.chipContainer}>
         <ChipComponent
@@ -58,10 +65,13 @@ const CreateNewEvent = () => {
           onClick={() => navigate('/profile')}
         />
       </Box>
-      <Typography className={classes.text} gutterBottom>
-        Browse other events around you to volunteer, or jump right in to create new event. Add personal inventories for
-        audit or even explore options to change your profile and avatars.
-      </Typography>
+      <TextComponent
+        gutterBottom={true}
+        loading={false}
+        textStyle={classes.text}
+        value={`Browse other events around you to volunteer, or jump right in to create new event. Add personal inventories for
+        audit or even explore options to change your profile and avatars.`}
+      />
       <Box>
         <ButtonComponent
           data-tour="3"
@@ -85,7 +95,6 @@ const CreateNewEvent = () => {
           disabled={false}
         />
       </Box>
-
       {editMode && (
         <Dialog open={editMode} width={'md'} fullWidth={true}>
           <Title onClose={() => setEditMode(false)}>Add New Event</Title>

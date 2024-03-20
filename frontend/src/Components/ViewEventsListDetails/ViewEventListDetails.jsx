@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
 import SearchAllEvents from '../Event/SearchAllEvents';
 import ViewFilteredEventList from './ViewFilteredEventList';
-import { Typography, Grid, CircularProgress, Box, Divider } from '@material-ui/core';
+import { Typography, Grid, Box, Divider } from '@material-ui/core';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -65,7 +66,7 @@ const BLANK_AUTOCOMPLETE_FORM = {
   id: '',
 };
 
-const ViewEventListDetails = ({ currentEvents, loading }) => {
+const ViewEventListDetails = ({ currentEvents, isLoading }) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -78,6 +79,7 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
   };
 
   useEffect(() => {
+    if (isLoading) return;
     if (searchValue?.id) {
       const filteredEvent = currentEvents?.filter((v) => v.id === searchValue.id);
       setFilteredOptions(filteredEvent);
@@ -87,12 +89,8 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
     }
   }, [searchValue, currentEvents]);
 
-  if (loading) {
-    return (
-      <Box className={classes.spinnerContainer}>
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading || noAvailableProjects) {
+    return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'20rem'} />;
   }
 
   return (
@@ -119,12 +117,12 @@ const ViewEventListDetails = ({ currentEvents, loading }) => {
 
 ViewEventListDetails.defaultProps = {
   currentEvents: [],
-  loading: true,
+  isLoading: true,
 };
 
 ViewEventListDetails.propTypes = {
   currentEvents: PropTypes.array,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default ViewEventListDetails;

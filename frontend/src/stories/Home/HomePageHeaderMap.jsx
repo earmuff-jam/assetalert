@@ -1,20 +1,17 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import './map.css';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import * as proj from 'ol/proj';
 import ReactDOM from 'react-dom';
-
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { fromLonLat } from 'ol/proj';
 import { Style, Icon } from 'ol/style';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
-
 import Overlay from 'ol/Overlay.js';
 import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
@@ -29,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomePageHeaderMap = ({ eventList }) => {
+const HomePageHeaderMap = ({ eventList, isLoading }) => {
   const classes = useStyles();
   const mapRef = useRef(null);
   const popupContentRef = useRef(null);
@@ -37,6 +34,7 @@ const HomePageHeaderMap = ({ eventList }) => {
   const dataContainerRef = useRef(null);
 
   useEffect(() => {
+    if (isLoading) return;
     const map = new Map({
       target: mapRef.current,
       layers: [
@@ -150,16 +148,25 @@ const HomePageHeaderMap = ({ eventList }) => {
 
 HomePageHeaderMap.defaultProps = {
   eventList: [],
+  isLoading: false,
 };
 
 HomePageHeaderMap.propTypes = {
   eventList: PropTypes.array,
+  isLoading: PropTypes.bool,
 };
 
 export default HomePageHeaderMap;
 
+/**
+ * addMarkers fn is used to mark endpoints with the red dot as svg icons
+ * 
+ * @param {Object} vectorLayer contains source that we add features to
+ * @param {Array} events contains the lat, lon to display the red dot
+ * @returns {Object} updated vectorLayer with red dot for markers
+ */
 const addMarkers = (vectorLayer, events) => {
-  const features = events.map((details, index) => {
+  const features = events?.map((details, index) => {
     const { lon, lat } = details;
     const geometry = new Point(fromLonLat([lon, lat]));
     const feature = new Feature({

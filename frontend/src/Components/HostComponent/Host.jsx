@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
@@ -89,4 +89,11 @@ const Host = ({ selectedEvent }) => {
   );
 };
 
+Host.defaultProps = {
+  selectedEvent: {},
+};
+
+Host.propTypes = {
+  selectedEvent: PropTypes.object,
+};
 export default Host;

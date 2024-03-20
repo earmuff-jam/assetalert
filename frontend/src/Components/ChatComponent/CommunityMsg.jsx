@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { useCallback, useEffect, useState } from 'react';
 import { TextField, Button, Container, Paper, Typography } from '@material-ui/core';
 
 import useWebSocket from 'react-use-websocket';
@@ -111,6 +112,22 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
       </div>
     </Container>
   );
+};
+
+CommunityMsg.defaultProps = {
+  userFullName: '',
+  userID: '',
+  eventID: '',
+  isChecked: false,
+  disabled: false,
+};
+
+CommunityMsg.propTypes = {
+  userFullName: PropTypes.string,
+  userID: PropTypes.string,
+  eventID: PropTypes.string,
+  isChecked: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export default CommunityMsg;

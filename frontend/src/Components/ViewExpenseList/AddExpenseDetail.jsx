@@ -165,7 +165,7 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
         renderOption={(option) => option.category || option}
         freeSolo
         renderInput={(params) => (
-          <TextField {...params} fullWidth label="Category" variant="standard" placeholder="Categorized as ..." />
+          <TextField {...params} fullWidth label="Category" variant="standard" placeholder="Create new category..." />
         )}
       />
       <Tooltip

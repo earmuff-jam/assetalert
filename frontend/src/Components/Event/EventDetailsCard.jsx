@@ -200,14 +200,6 @@ const EventDetailsCard = ({
             )}
           </Box>
         </Box>
-        <Box className={classNames(classes.rowContainer, classes.gutterBottom)} data-tour="5">
-          <Tooltip title="Current members">
-            <Chip size="small" icon={<CardMembershipRounded />} label={` ${userDetail?.sharable_groups.length || 0}`} />
-          </Tooltip>
-          <Tooltip title="Anticipated members">
-            <Chip size="small" icon={<GroupRounded />} label={` ${userDetail?.attendees.length || 0}`} />
-          </Tooltip>
-        </Box>
         <Box className={classNames((classes.rowContainer, classes.chipContainer))} data-tour="6">
           {userDetail?.requiredSkills.length > 0 &&
             userDetail?.requiredSkills[0] !== '' &&

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography, TextField, IconButton } from '@material-ui/core';
 
@@ -118,6 +119,22 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
       </div>
     </Box>
   );
+};
+
+ImpactTracking.defaultProps = {
+  eventID: '',
+  userID: '',
+  requiredSkills: [],
+  isChecked: false,
+  disabled: false,
+};
+
+ImpactTracking.propTypes = {
+  eventID: PropTypes.string,
+  userID: PropTypes.string,
+  requiredSkills: PropTypes.array,
+  isChecked: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export default ImpactTracking;

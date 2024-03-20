@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Drawer as DrawerComponent } from '@material-ui/core';
 
 const Drawer = ({ open, toggleDrawer, children }) => {
@@ -7,6 +7,18 @@ const Drawer = ({ open, toggleDrawer, children }) => {
       {children}
     </DrawerComponent>
   );
+};
+
+Drawer.defaultProps = {
+  open: false,
+  toggleDrawer: () => {},
+  children: [],
+};
+
+Drawer.propTypes = {
+  open: PropTypes.bool,
+  toggleDrawer: PropTypes.func,
+  children: PropTypes.array,
 };
 
 export default Drawer;

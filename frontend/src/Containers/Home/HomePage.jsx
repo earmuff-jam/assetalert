@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, CircularProgress, Grid, Container, Paper } from '@material-ui/core';
-
+import { Grid, Container, Paper } from '@material-ui/core';
 import { homeActions } from './homeSlice';
 import HomePageHeaderMap from '../../stories/Home/HomePageHeaderMap';
 import CreateNewEvent from '../../stories/CreateNewEvent/CreateNewEvent';
@@ -28,8 +27,8 @@ const HomePage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { loading, events } = useSelector((state) => state.home);
-  const currentEvents = !loading && events;
+  const { loading: eventsLoading, events } = useSelector((state) => state.home);
+  const currentEvents = (!eventsLoading && events) || [];
 
   useEffect(() => {
     dispatch(homeActions.getUsername());
@@ -40,14 +39,6 @@ const HomePage = () => {
     // eslint-disable-next-line
   }, []);
 
-  if (loading) {
-    return (
-      <Box className={classes.spinnerContainer}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container>
@@ -57,10 +48,10 @@ const HomePage = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6} data-tour="2">
-          <HomePageHeaderMap eventList={currentEvents} />
+          <HomePageHeaderMap eventList={currentEvents} isLoading={eventsLoading} />
         </Grid>
         <Grid item xs={12}>
-          <ViewEventListDetails currentEvents={currentEvents} loading={loading} />
+          <ViewEventListDetails currentEvents={currentEvents} isLoading={eventsLoading} />
         </Grid>
       </Grid>
     </Container>

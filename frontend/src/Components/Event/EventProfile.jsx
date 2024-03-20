@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box, Typography } from '@material-ui/core';
+import { Avatar, Box } from '@material-ui/core';
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import EditEventImage from './EditEventImage';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import CardTitleComponent from '../../stories/CardTitleComponent/CardTitleComponent';
+import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
+  root: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
+    gap: '1.2rem',
     textOverflow: 'ellipsis',
-    overflow: 'hidden',
+    textWrap: 'wrap',
+    width: `calc(100% - 40rem)`,
+    [theme.breakpoints.down('sm')]: {
+      width: `26rem`,
+    },
   },
   rowContainer: {
     display: 'flex',
@@ -27,21 +29,12 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  adjustMaxWidth: {
-    maxWidth: '20rem',
-  },
-  errorText: {
-    color: theme.palette.error.dark,
-  },
   gutterBottom: {
     marginBottom: theme.spacing(1),
   },
   avatar: {
     width: theme.spacing(12),
     height: theme.spacing(12),
-  },
-  text: {
-    fontSize: '0.925rem',
   },
 }));
 
@@ -72,7 +65,7 @@ const EventProfile = ({ userDetail }) => {
   }, [userDetail?.imageUrl]);
 
   return (
-    <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
+    <Box className={classes.root}>
       <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
         {editImage ? (
           <EditEventImage
@@ -94,14 +87,17 @@ const EventProfile = ({ userDetail }) => {
           />
         )}
       </Box>
-      <Box className={classes.adjustMaxWidth}>
-        <Typography className={classNames(classes.header, classes.errorText)} gutterBottom data-tour="1">
-          {userDetail?.title || ''}
-        </Typography>
-        <Typography className={classes.text} gutterBottom data-tour="2">
-          {userDetail?.description || 'Edit event details to add description'}
-        </Typography>
-      </Box>
+      <CardTitleComponent
+        firstIcon={<CardMembershipRounded />}
+        firstLabel={`${userDetail?.sharable_groups.length || 0}`}
+        firstToolTipLabel={'Current members'}
+        secondIcon={<GroupRounded />}
+        secondLabel={` ${userDetail?.attendees.length || 0}`}
+        secondTooltipLabel={'Anticipated members'}
+        titleText={userDetail?.title || ''}
+        titleTooltip={userDetail?.title || ''}
+        extraSubtitle={userDetail?.description || 'Edit event details to add description'}
+      />
     </Box>
   );
 };
