@@ -1,18 +1,32 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box } from '@material-ui/core';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import EditProfileImage from '../EditProfileImage/EditProfileImage';
+import { useState, useEffect } from 'react';
+import { Avatar, Box } from '@material-ui/core';
+import EditEventImage from '../Event/EditEventImage';
+import { makeStyles } from '@material-ui/core/styles';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import CardTitleComponent from '../../stories/CardTitleComponent/CardTitleComponent';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '1.2rem',
+    textOverflow: 'ellipsis',
+    textWrap: 'wrap',
+    width: `calc(100% - 40rem)`,
+    [theme.breakpoints.down('sm')]: {
+      width: `26rem`,
+    },
+  },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
   gutterBottom: {
     marginBottom: theme.spacing(1),
@@ -52,10 +66,10 @@ const UserProfile = ({ formFields, avatarUrl, profileID }) => {
   }, [avatarUrl]);
 
   return (
-    <Box>
+    <Box className={classes.root}>
       <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
         {editImage ? (
-          <EditProfileImage
+          <EditEventImage
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
             uploadedImage={uploadedImage}
@@ -72,17 +86,17 @@ const UserProfile = ({ formFields, avatarUrl, profileID }) => {
             onClick={toggleEditImage}
           />
         )}
-        <CardTitleComponent
-          firstIcon={formFields.username.icon}
-          firstLabel={formFields.username.value}
-          firstToolTipLabel={'Your username'}
-          secondIcon={formFields.phone.icon}
-          secondLabel={formFields.phone.value}
-          secondTooltipLabel={'your phone number'}
-          titleText={formFields.name.value || 'Anonymous'}
-          extraSubtitle={formFields.aboutMe.value || 'Edit profile details to add description'}
-        />
       </Box>
+      <CardTitleComponent
+        firstIcon={formFields.username.icon}
+        firstLabel={formFields.username.value}
+        firstToolTipLabel={'Your username'}
+        secondIcon={formFields.phone.icon}
+        secondLabel={formFields.phone.value}
+        secondTooltipLabel={'your phone number'}
+        titleText={formFields.name.value || 'Anonymous'}
+        extraSubtitle={formFields.aboutMe.value || 'Edit profile details to add description'}
+      />
     </Box>
   );
 };

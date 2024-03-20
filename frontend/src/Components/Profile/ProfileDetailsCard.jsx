@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
   },
   iconButton: {
     padding: theme.spacing(0.6),
