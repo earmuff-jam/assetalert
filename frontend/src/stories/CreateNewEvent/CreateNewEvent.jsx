@@ -72,9 +72,8 @@ const CreateNewEvent = () => {
         value={`Browse other events around you to volunteer, or jump right in to create new event. Add personal inventories for
         audit or even explore options to change your profile and avatars.`}
       />
-      <Box>
+      <Box data-tour="3">
         <ButtonComponent
-          data-tour="3"
           text={'Create Event'}
           showIcon={true}
           buttonVariant={'text'}
