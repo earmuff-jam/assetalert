@@ -1,6 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { WarningRounded } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,7 @@ const EmptyNotificationCard = () => {
       <Box>
         <WarningRounded className={classes.icon} />
       </Box>
-      <Typography className={classes.subtitle}> No new notifications</Typography>
+      <TextComponent gutterBottom={false} loading={false} textStyle={classes.subtitle} value={'No new notifications'} />
     </Box>
   );
 };

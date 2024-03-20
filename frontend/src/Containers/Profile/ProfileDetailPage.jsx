@@ -114,6 +114,7 @@ const ProfileDetailPage = () => {
   useEffect(() => {
     if (profileDetails.id) {
       dispatch(profileActions.getVolunteeringDetails({ userID: profileDetails.id }));
+      dispatch(profileActions.getRecentActivitiesTrophyList({ userID: profileDetails.id }));
     }
     const updatedFormFields = { ...formFields };
     updatedFormFields.name.value = profileDetails?.full_name || '';

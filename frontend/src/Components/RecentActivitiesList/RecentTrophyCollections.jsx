@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import RecentItemTabs from './RecentItemTabs';
 import { Box, Divider, makeStyles } from '@material-ui/core';
 import { RECENT_TROPHY_COLLECTION_TABS } from './constants';
@@ -19,16 +21,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 const RecentTrophyCollections = () => {
   const classes = useStyles();
+
+  const { loading: profilePageLoading, recentTrophies } = useSelector((state) => state.profile);
+  const [formattedData, setFormattedData] = useState([...RECENT_TROPHY_COLLECTION_TABS]);
+
+  useEffect(() => {
+    if (Object.values(recentTrophies).length >= 0) {
+      const draftData = formattedData.map((v, index) => ({ ...v, count: Object.values(recentTrophies)[index] }));
+      setFormattedData(draftData);
+    }
+  }, [recentTrophies]);
+
   return (
     <Box className={classes.root}>
-      <TextComponent gutterBottom={false} loading={false} textStyle={classes.text} value={'Events'} />
-      <RecentItemTabs rowData={RECENT_TROPHY_COLLECTION_TABS.slice(0, 2)} />
+      <TextComponent gutterBottom={false} loading={profilePageLoading} textStyle={classes.text} value={'Events'} />
+      <RecentItemTabs rowData={formattedData.slice(0, 2)} />
       <Divider />
-      <TextComponent gutterBottom={false} loading={false} textStyle={classes.text} value={'Issues'} />
-      <RecentItemTabs rowData={RECENT_TROPHY_COLLECTION_TABS.slice(2, 4)} />
+      <TextComponent gutterBottom={false} loading={profilePageLoading} textStyle={classes.text} value={'Issues'} />
+      <RecentItemTabs rowData={formattedData.slice(2, 4)} />
       <Divider />
-      <TextComponent gutterBottom={false} loading={false} textStyle={classes.text} value={'Expenses'} />
-      <RecentItemTabs rowData={RECENT_TROPHY_COLLECTION_TABS.slice(4, 6)} />
+      <TextComponent gutterBottom={false} loading={profilePageLoading} textStyle={classes.text} value={'Expenses'} />
+      <RecentItemTabs rowData={formattedData.slice(4, 6)} />
     </Box>
   );
 };

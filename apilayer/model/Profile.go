@@ -46,3 +46,13 @@ type RecentActivity struct {
 	UpdatedBy         string    `json:"updated_by"`
 	Updator           string    `json:"updator"`
 }
+
+// RecentHighlight ...
+type RecentHighlight struct {
+	CreatedEvents      int `json:"created_events"`
+	VolunteeredEvents  int `json:"volunteered_events"`
+	ReportedEvents     int `json:"reported_events"`
+	ExpensesReported   int `json:"expenses_reported"`
+	InventoriesUpdated int `json:"inventories_updated"`
+	DeactivatedEvents  int `json:"deactivated_events"`
+}
