@@ -77,7 +77,7 @@ const ProfileDetailsCard = ({
                 Submit
               </Button>
               <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
-              <IconButton onClick={handleClickNotificationBar}>
+              <IconButton onClick={handleClickNotificationBar} disabled={isLoading || notifications.length <= 0}>
                 <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
                   <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
                 </Badge>

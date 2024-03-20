@@ -32,8 +32,6 @@ const RecentTrophyCollections = () => {
     }
   }, [recentTrophies]);
 
-  console.log(formattedData);
-
   return (
     <Box className={classes.root}>
       <TextComponent gutterBottom={false} loading={profilePageLoading} textStyle={classes.text} value={'Events'} />
