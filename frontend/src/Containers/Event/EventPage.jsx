@@ -9,9 +9,9 @@ import PrimaryAppBar from '../../stories/AppBar/PrimaryAppBar';
 const EventPage = () => {
   return (
     <ThemeProvider theme={primary_theme}>
+      <CssBaseline />
+      <PrimaryAppBar selectedID={1} />
       <Container maxWidth="lg">
-        <CssBaseline />
-        <PrimaryAppBar selectedID={1} />
         <EventDetailPage />
       </Container>
     </ThemeProvider>

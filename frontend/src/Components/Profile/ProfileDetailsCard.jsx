@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
-import { CheckRounded, EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
+import { Badge, Box, Button, Card, CardContent, IconButton } from '@material-ui/core';
+import { EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import UserProfile from '../ViewProfileDetails/UserProfile';
@@ -11,6 +11,15 @@ import LoadingSkeleton from '../../util/LoadingSkeleton';
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
+  },
+  columnVariant: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      gap: theme.spacing(0),
+    },
+  },
+  buttonColor: {
+    color: theme.palette.primary.main,
   },
   rowContainer: {
     display: 'flex',
@@ -57,31 +66,18 @@ const ProfileDetailsCard = ({
 
   const containsUnreadNotifications = notifications.map((v) => !v.is_viewed).filter(Boolean).length;
   return (
-    <Card className={classes.root} elevation={0}>
+    <Card className={classes.root}>
       <CardContent>
-        <Box className={classes.rowContainer}>
-          {!isLoading ? (
-            <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
-          ) : (
-            <LoadingSkeleton width={`calc(20% - 1rem)`} height={'4rem'} />
-          )}
+        <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
+          <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
           <Box className={classes.emptyGap}></Box>
           {!isLoading ? (
             <Box>
-              <IconButton
-                disabled={!editMode}
-                onClick={handleSubmit}
-                className={classNames(classes.iconButton, { [classes.colorVariant]: editMode })}
-              >
-                <CheckRounded />
-              </IconButton>
-              <IconButton onClick={handleToggle} className={classes.iconButton}>
-                {!editMode ? <EditRounded /> : <CancelRounded />}
-              </IconButton>
-              <IconButton
-                onClick={handleClickNotificationBar}
-                className={[classes.iconButton, classes.iconTilt].join(' ')}
-              >
+              <Button disabled={!editMode} variant={'text'} onClick={handleSubmit} className={classes.buttonColor}>
+                Submit
+              </Button>
+              <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
+              <IconButton onClick={handleClickNotificationBar}>
                 <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
                   <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
                 </Badge>

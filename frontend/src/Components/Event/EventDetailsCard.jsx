@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import {
   Box,
   Card,
@@ -13,15 +13,7 @@ import {
   Tooltip,
   Badge,
 } from '@material-ui/core';
-
-import {
-  LowPriorityRounded,
-  GroupRounded,
-  BugReportRounded,
-  EditRounded,
-  DoneRounded,
-  CardMembershipRounded,
-} from '@material-ui/icons';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -36,6 +28,7 @@ import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   gutterBottom: {
     marginBottom: theme.spacing(1),
   },
-  buttonContainer: {
+  buttonColor: {
     color: theme.palette.primary.main,
   },
   text: {
@@ -89,6 +82,7 @@ const EventDetailsCard = ({
   handleUserDetail,
   userDetailError,
   eventID,
+  isLoading,
   isDeactivated,
   setIsDeactivated,
   selectedEvent,
@@ -168,6 +162,8 @@ const EventDetailsCard = ({
     }
   };
 
+  console.log(isLoading);
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -175,28 +171,33 @@ const EventDetailsCard = ({
           <EventProfile userDetail={userDetail} />
           <Box className={classes.emptyGap}></Box>
           <Box>
-            <Button
-              data-tour="3"
-              variant="text"
-              className={classes.buttonContainer}
-              onClick={userDetail?.userIsMember ? onLeave : onJoin}
-            >
-              {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
-            </Button>
-
-            <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
-              <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
-                <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
-                  <BugReportRounded />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            {userDetail?.userIsMember && (
-              <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
-                <IconButton onClick={toggleEditMode}>
-                  {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
-                </IconButton>
-              </Tooltip>
+            {!isLoading ? (
+              <Box>
+                <Button
+                  data-tour="3"
+                  variant="text"
+                  className={classes.buttonColor}
+                  onClick={userDetail?.userIsMember ? onLeave : onJoin}
+                >
+                  {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
+                </Button>
+                <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
+                  <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
+                    <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
+                      <BugReportRounded />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                {userDetail?.userIsMember && (
+                  <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
+                    <IconButton onClick={toggleEditMode}>
+                      {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+            ) : (
+              <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
             )}
           </Box>
         </Box>
@@ -241,6 +242,36 @@ const EventDetailsCard = ({
       )}
     </Card>
   );
+};
+
+EventDetailsCard.defaultProps = {
+  disabled: false,
+  userDetail: {},
+  handleUserDetail: () => {},
+  userDetailError: false,
+  eventID: '',
+  isLoading: false,
+  isDeactivated: false,
+  setIsDeactivated: () => {},
+  selectedEvent: '',
+  reports: [],
+  onLeave: () => {},
+  onJoin: () => {},
+};
+
+EventDetailsCard.propTypes = {
+  disabled: PropTypes.bool,
+  userDetail: PropTypes.object,
+  handleUserDetail: PropTypes.func,
+  userDetailError: PropTypes.bool,
+  eventID: PropTypes.string,
+  isLoading: PropTypes.bool,
+  isDeactivated: PropTypes.bool,
+  setIsDeactivated: PropTypes.func,
+  selectedEvent: PropTypes.string,
+  reports: PropTypes.array,
+  onLeave: PropTypes.func,
+  onJoin: PropTypes.func,
 };
 
 export default EventDetailsCard;
