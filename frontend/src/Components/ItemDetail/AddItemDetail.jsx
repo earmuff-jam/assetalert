@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Tooltip, Typography } from '@material-ui/core';
-
+import { Box, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_ITEM_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import ButtonComponent from '../../stories/Button/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,8 +102,8 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
 
   return (
     <div className={classes.container}>
-      <Typography variant="caption" color="textSecondary" gutterBottom>
-        Adding a item in an event allows for the ability to share information across the members of the group. Such
+      <Typography variant="caption" color="textSecondary">
+        Add item that are required for this event. These items can be shared with other members of the group. Such
         shared items are stored with due process until the group is abandoned or until the creator removes the ability
         to share the items with other members.
       </Typography>
@@ -165,13 +165,15 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
           />
         )}
       />
-      <Tooltip
-        title={
-          'Adding items to any event will allow all members to view the item. Any person who is not within that event group must join that group to view the item.'
-        }
-      >
-        <Button onClick={submit}>Submit</Button>
-      </Tooltip>
+      <Box>
+        <Tooltip
+          title={
+            'Adding items to any event will allow all members to view the item. Any person who is not within that event group must join that group to view the item.'
+          }
+        >
+          <ButtonComponent text={'Submit'} onClick={submit} buttonVariant={'text'} />
+        </Tooltip>
+      </Box>
     </div>
   );
 };

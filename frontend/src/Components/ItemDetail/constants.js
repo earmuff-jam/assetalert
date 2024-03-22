@@ -25,7 +25,7 @@ export const ADD_ITEM_FORM_FIELDS = {
     ...GENERIC_FORM_FIELDS,
   },
   description: {
-    label: 'Brief Description of Item',
+    label: 'Item description',
     placeholder: '',
     value: '',
     name: 'description',

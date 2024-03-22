@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Tooltip } from '@material-ui/core';
+import { Box, Button, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_EXPENSE_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import ButtonComponent from '../../stories/Button/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -110,6 +111,10 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
 
   return (
     <div className={classes.container}>
+      <Typography variant="caption" color="textSecondary">
+        Add expenses that occured for this event. These expenses items can be shared with other members of the group.
+        Expense list can also be downloaded and stored as well.
+      </Typography>
       {Object.values(formFields).map((v) => (
         <TextField
           key={v.name}
@@ -168,13 +173,15 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
           <TextField {...params} fullWidth label="Category" variant="standard" placeholder="Create new category..." />
         )}
       />
-      <Tooltip
-        title={
-          'Add expense report to the selected event. All expense reports must be approved by the creator of the selected event.'
-        }
-      >
-        <Button onClick={handleFormSubmit}>Submit</Button>
-      </Tooltip>
+      <Box>
+        <Tooltip
+          title={
+            'Add expense report to the selected event. All expense reports must be approved by the creator of the selected event.'
+          }
+        >
+          <ButtonComponent text={'Submit'} onClick={handleFormSubmit} buttonVariant={'text'} />
+        </Tooltip>
+      </Box>
     </div>
   );
 };
