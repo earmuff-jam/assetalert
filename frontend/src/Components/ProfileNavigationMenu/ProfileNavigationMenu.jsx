@@ -3,6 +3,7 @@ import { Box, Divider, makeStyles } from '@material-ui/core';
 import { NavigationTabBar } from '../Event/EventDetailsDrawerComponent';
 import { PROFILE_NAVIGATION_MENU_BAR } from './constants';
 import RecentActivitiesListContainer from '../RecentActivitiesList/RecentActivitiesListContainer';
+import Notes from '../Notes/Notes';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -57,7 +58,7 @@ const ProfileNavigationMenu = () => {
       case 1:
         return <Box>{PROFILE_NAVIGATION_MENU_BAR[0].text}</Box>;
       case 2:
-        return <Box>{PROFILE_NAVIGATION_MENU_BAR[2].text}</Box>;
+        return <Notes />;
       default:
         return null;
     }
