@@ -13,8 +13,6 @@ import {
   Tooltip,
   Badge,
 } from '@material-ui/core';
-import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, BookmarkRounded } from '@material-ui/icons';
-
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import EventProfile from './EventProfile';
@@ -23,12 +21,13 @@ import Title from '../DialogComponent/Title';
 import { isEditingAllowed } from './constants';
 import Drawer from '../DrawerListComponent/Drawer';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,8 +72,8 @@ const useStyles = makeStyles((theme) => ({
   primaryColor: {
     color: theme.palette.primary.main,
   },
-  errorVariant: {
-    color: theme.palette.warning.light,
+  colorVariant: {
+    color: theme.palette.grey[400],
   },
   text: {
     color: theme.palette.primary.main,
@@ -230,7 +229,7 @@ const EventDetailsCard = ({
           </Button>
         </CardActions>
         <Box className={classes.centerAlign}>
-          <BookmarkRounded className={classes.errorVariant} />
+          <PlaceRounded className={classes.colorVariant} />
           <span>{remainingSpots} spots left</span>
         </Box>
         {editMode && (

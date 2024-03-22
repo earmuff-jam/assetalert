@@ -129,7 +129,7 @@ const ProfileDetailPage = () => {
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container>
-        <Grid item xs={12} data-tour="0">
+        <Grid item xs={12}>
           <ProfileDetailsCard
             editMode={editMode}
             formFields={formFields}

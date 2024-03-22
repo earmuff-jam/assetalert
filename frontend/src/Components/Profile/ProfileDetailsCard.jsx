@@ -68,11 +68,11 @@ const ProfileDetailsCard = ({
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
+        <Box className={classNames(classes.rowContainer, classes.columnVariant)} data-tour="0">
           <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
           <Box className={classes.emptyGap}></Box>
           {!isLoading ? (
-            <Box>
+            <Box data-tour="1">
               <Button disabled={!editMode} variant={'text'} onClick={handleSubmit} className={classes.buttonColor}>
                 Submit
               </Button>

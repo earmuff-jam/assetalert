@@ -1,4 +1,4 @@
-import { BookmarkRounded, ListRounded, NotesRounded, TimelineRounded } from '@material-ui/icons';
+import { ListRounded, NotesRounded, TimelineRounded } from '@material-ui/icons';
 
 /**
  * Profile Navigation Menu Bar
@@ -6,16 +6,16 @@ import { BookmarkRounded, ListRounded, NotesRounded, TimelineRounded } from '@ma
  * Contant values for the profile nav menu bar
  */
 export const PROFILE_NAVIGATION_MENU_BAR = [
+  // {
+  //   id: 1,
+  //   icon: <BookmarkRounded />,
+  //   displayName: 'Tags',
+  //   subtitle: '',
+  //   color: '',
+  //   onClick: () => {},
+  // },
   {
     id: 1,
-    icon: <BookmarkRounded />,
-    displayName: 'Tags',
-    subtitle: '',
-    color: '',
-    onClick: () => {},
-  },
-  {
-    id: 2,
     icon: <TimelineRounded />,
     displayName: 'Recent Activities',
     subtitle: 'Recently created events or volunteered events',
@@ -23,7 +23,7 @@ export const PROFILE_NAVIGATION_MENU_BAR = [
     onClick: () => {},
   },
   {
-    id: 3,
+    id: 2,
     icon: <ListRounded />,
     displayName: 'Inventories',
     subtitle: '',
@@ -31,7 +31,7 @@ export const PROFILE_NAVIGATION_MENU_BAR = [
     onClick: () => {},
   },
   {
-    id: 4,
+    id: 3,
     icon: <NotesRounded />,
     displayName: 'Notes',
     subtitle: '',

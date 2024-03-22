@@ -123,8 +123,8 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
     const stepMap = {
       '/': { start: 0, end: 6 },
       '/about': { start: 6, end: 8 },
-      '/profile': { start: 8, end: 10 },
-      '/eventID': { start: 10, end: 23 },
+      '/profile': { start: 8, end: 12 },
+      '/eventID': { start: 12, end: 25 },
     };
     const currentStep = eventID ? stepMap['/eventID'] : stepMap[location.pathname];
     const formattedSteps = steps.slice(currentStep.start, currentStep.end);

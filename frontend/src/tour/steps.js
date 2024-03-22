@@ -36,7 +36,14 @@ const ABOUT_US_TOUR_STEPS = [
 const PROFILE_TOUR_STEPS = [
   {
     title:
-      'Details about yourself and your interests. You can edit your profile details as well. Required to chat with other members of any community.',
+      'Add details to your biography. Update your looks, your username and even write a short description about yourself. You can edit your bio as you would like. Without properly filling out this bio, the chat application will not work as expected. For our user and their safety, these fields are required to chat with other members.',
+  },
+  {
+    title:
+      'Edit your profile bio with these action items. View list of notifications here as well. Notifications include only added expenses and added items for a specific event.',
+  },
+  {
+    title: 'View details about the efforts you have made to help reshape the world around you. ',
   },
   {
     title:

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileNavigationMenu = () => {
   const classes = useStyles();
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [selectedValue, setSelectedValue] = useState(0);
 
   const handleChange = (value) => {
     setSelectedValue(value);
@@ -53,13 +53,11 @@ const ProfileNavigationMenu = () => {
   const displaySelection = (value) => {
     switch (value) {
       case 0:
-        return <Box>{PROFILE_NAVIGATION_MENU_BAR[0].text}</Box>;
-      case 1:
         return <RecentActivitiesListContainer />;
+      case 1:
+        return <Box>{PROFILE_NAVIGATION_MENU_BAR[0].text}</Box>;
       case 2:
         return <Box>{PROFILE_NAVIGATION_MENU_BAR[2].text}</Box>;
-      case 3:
-        return <Box>{PROFILE_NAVIGATION_MENU_BAR[3].text}</Box>;
       default:
         return null;
     }
