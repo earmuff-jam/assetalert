@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import {
   Box,
   Card,
@@ -13,15 +13,7 @@ import {
   Tooltip,
   Badge,
 } from '@material-ui/core';
-
-import {
-  LowPriorityRounded,
-  GroupRounded,
-  BugReportRounded,
-  EditRounded,
-  DoneRounded,
-  CardMembershipRounded,
-} from '@material-ui/icons';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, BookmarkRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -36,6 +28,7 @@ import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
       gap: theme.spacing(0),
     },
+  },
+  centerAlign: {
+    wordWrap: true,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   chipContainer: {
     display: 'flex',
@@ -71,8 +70,11 @@ const useStyles = makeStyles((theme) => ({
   gutterBottom: {
     marginBottom: theme.spacing(1),
   },
-  buttonContainer: {
+  primaryColor: {
     color: theme.palette.primary.main,
+  },
+  errorVariant: {
+    color: theme.palette.warning.light,
   },
   text: {
     color: theme.palette.primary.main,
@@ -89,6 +91,7 @@ const EventDetailsCard = ({
   handleUserDetail,
   userDetailError,
   eventID,
+  isLoading,
   isDeactivated,
   setIsDeactivated,
   selectedEvent,
@@ -102,6 +105,10 @@ const EventDetailsCard = ({
 
   const [display, setDisplay] = useState(0);
   const [editMode, setEditMode] = useState(false); // editing general fields for select event
+
+  const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
+
+  const handleReportEvent = () => setDisplay('Report');
 
   const toggleEditMode = () => {
     if (editMode) {
@@ -151,15 +158,17 @@ const EventDetailsCard = ({
     }
     setEditMode(!editMode);
   };
+
   const handleViewItems = () => {
     setDisplay('View');
     dispatch(eventActions.getItemList({ eventID }));
   };
+
   const handleAddItem = () => {
     setDisplay('Add');
     dispatch(eventActions.getStorageLocations(eventID));
   };
-  const handleReportEvent = () => setDisplay('Report');
+
   const toggleDrawer = (event) => {
     setDisplay(event);
     // only fetch api data first time load
@@ -175,28 +184,33 @@ const EventDetailsCard = ({
           <EventProfile userDetail={userDetail} />
           <Box className={classes.emptyGap}></Box>
           <Box>
-            <Button
-              data-tour="3"
-              variant="text"
-              className={classes.buttonContainer}
-              onClick={userDetail?.userIsMember ? onLeave : onJoin}
-            >
-              {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
-            </Button>
-
-            <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
-              <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
-                <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
-                  <BugReportRounded />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            {userDetail?.userIsMember && (
-              <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
-                <IconButton onClick={toggleEditMode}>
-                  {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
-                </IconButton>
-              </Tooltip>
+            {!isLoading ? (
+              <Box>
+                <Button
+                  data-tour="3"
+                  variant="text"
+                  className={classes.primaryColor}
+                  onClick={userDetail?.userIsMember ? onLeave : onJoin}
+                >
+                  {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
+                </Button>
+                <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
+                  <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
+                    <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
+                      <BugReportRounded />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                {userDetail?.userIsMember && (
+                  <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
+                    <IconButton onClick={toggleEditMode}>
+                      {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+            ) : (
+              <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
             )}
           </Box>
         </Box>
@@ -215,6 +229,10 @@ const EventDetailsCard = ({
             View Items
           </Button>
         </CardActions>
+        <Box className={classes.centerAlign}>
+          <BookmarkRounded className={classes.errorVariant} />
+          <span>{remainingSpots} spots left</span>
+        </Box>
         {editMode && (
           <EditCommunityEvent
             userDetail={userDetail}
@@ -241,6 +259,36 @@ const EventDetailsCard = ({
       )}
     </Card>
   );
+};
+
+EventDetailsCard.defaultProps = {
+  disabled: false,
+  userDetail: {},
+  handleUserDetail: () => {},
+  userDetailError: false,
+  eventID: '',
+  isLoading: false,
+  isDeactivated: false,
+  setIsDeactivated: () => {},
+  selectedEvent: '',
+  reports: [],
+  onLeave: () => {},
+  onJoin: () => {},
+};
+
+EventDetailsCard.propTypes = {
+  disabled: PropTypes.bool,
+  userDetail: PropTypes.object,
+  handleUserDetail: PropTypes.func,
+  userDetailError: PropTypes.bool,
+  eventID: PropTypes.string,
+  isLoading: PropTypes.bool,
+  isDeactivated: PropTypes.bool,
+  setIsDeactivated: PropTypes.func,
+  selectedEvent: PropTypes.string,
+  reports: PropTypes.array,
+  onLeave: PropTypes.func,
+  onJoin: PropTypes.func,
 };
 
 export default EventDetailsCard;

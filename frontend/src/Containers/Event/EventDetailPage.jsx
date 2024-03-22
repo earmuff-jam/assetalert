@@ -244,13 +244,6 @@ const EventDetailPage = () => {
     profileDetails.id,
   ]);
 
-  if (!eventID && loadingSelectevent) {
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress />
-      </div>
-    );
-  }
   return (
     <Container maxWidth="lg" className={classes.container}>
       {shouldDisplaySecondMenuBar && <SecondaryAppBar />}
@@ -266,6 +259,7 @@ const EventDetailPage = () => {
             setIsDeactivated={setIsDeactivated}
             handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
+            isLoading={loadingSelectevent}
             onLeave={() => {
               handleLeave(userDetail.sharable_groups, userDetail.userID);
             }}

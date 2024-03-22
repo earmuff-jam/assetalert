@@ -7,6 +7,7 @@ const initialState = {
   notifications: [],
   volunteeringDetails: [],
   recentActivities: [],
+  recentTrophies: {},
 };
 
 const profileSlice = createSlice({
@@ -42,6 +43,21 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.recentActivities = [];
+    },
+    getRecentActivitiesTrophyList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.recentTrophies = {};
+    },
+    getRecentActivitiesTrophyListSuccess: (state, action) => {
+      state.recentTrophies = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getRecentActivitiesTrophyListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.recentTrophies = {};
     },
     getProfileNotifications: (state) => {
       state.loading = true;

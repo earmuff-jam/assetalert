@@ -308,3 +308,33 @@ ORDER BY p.updated_at DESC;
 
 	return recentActivities, nil
 }
+
+// RetrieveUserActivityHighlights ...
+//
+// retrieves highlights of recent activities from the user
+func RetrieveUserActivityHighlights(user string, userID uuid.UUID) (*model.RecentHighlight, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `
+	select count(p.*) as created_events, count(pv.*) as volunteered_events,
+	( select count(r.*) from community.reports r where r.created_by = $1 and r.updated_by = $1) as reported_events,
+	count(p.*) filter (where p.deactivated) as deactivated_events,
+	( select count(e.*) from community.expenses e where e.created_by = $1 and e.updated_by = $1) as expenses_reported,
+	( select count(i.*) from community.items i where i.created_by = $1 and i.updated_by = $1) as inventories_updated
+	from community.projects p
+	left join community.projects_volunteer pv on p.id = pv.project_id
+	left join community.project_skills ps on pv.project_skills_id = ps.id
+	where p.created_by = $1 and p.updated_by = $1`
+
+	var recentHighlight model.RecentHighlight
+	err = db.QueryRow(sqlStr, userID).Scan(&recentHighlight.CreatedEvents, &recentHighlight.VolunteeredEvents, &recentHighlight.ReportedEvents, &recentHighlight.ExpensesReported, &recentHighlight.InventoriesUpdated, &recentHighlight.DeactivatedEvents)
+	if err != nil {
+		return nil, err
+	}
+
+	return &recentHighlight, nil
+}

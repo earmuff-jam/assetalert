@@ -1,21 +1,26 @@
 const LANDING_PAGE_TOUR_STEPS = [
   {
-    title: 'Welcome to Mashed Application Tutorial. Learn how to navigate the application in thorough detail.',
+    title:
+      'Welcome to Mashed Application Tutorial. Learn how to navigate the application in thorough detail. For better user experience, each page has their own respective tutorials. Be sure to check them all out for a full learning experience.',
   },
   {
-    title: 'We aim to bring the community together by assisting them in simple auditory tasks.',
+    title:
+      'We aim to bring the community together by assisting them in simple auditory tasks. Update your username in your profile section. View inventories, create new events or view your profile and make adjustments to your biography.',
   },
   {
-    title: 'Map displays the location of every event even if they are deactivated.',
+    title:
+      'Navigate various events with our interactive map. View all events and a short description about them. Activated events are marked with a red color for easy access to select event.',
   },
   {
-    title: 'Create a new event for your local community.',
+    title: 'Create new events or edit your biography readily.',
   },
   {
-    title: 'You can even search any event through our quick sort and filter',
+    title:
+      'View our list of all events or search for a specific event with keywords related to the event. Deactivated events are associated with a yellowish dot to allows users for easy access.',
   },
   {
-    title: 'View all existing events that are in active status regardless of who created the event',
+    title:
+      'View specific details such as event title, cause and brief description about active events. Event skills can be tagged as required help and such skills are displayed with our custom in-demand meter. View location and event start date on the fly as well. Jump in to view more details about each select event.',
   },
 ];
 

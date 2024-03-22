@@ -287,3 +287,44 @@ func GetUserRecentActivities(rw http.ResponseWriter, r *http.Request, user strin
 	json.NewEncoder(rw).Encode(resp)
 
 }
+
+// GetUserRecentHighlights ...
+// swagger:route GET /api/profile/highlights/{id}
+//
+// # Retrieves the list of highlights for the user. The highlights includes created, reported, volunteered events
+//
+// Responses:
+// 200: []RecentHighlights
+// 400: Message
+// 404: Message
+// 500: Message
+func GetUserRecentHighlights(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok || len(id) <= 0 {
+		log.Printf("Unable to retrieve details without an id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(id)
+	if err != nil {
+		log.Printf("Unable to retrieve details with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveUserActivityHighlights(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve recent highlights. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+
+}

@@ -81,10 +81,6 @@ func RetrieveUser(user string, draftUser *model.UserCredentials) (*model.UserCre
 	sqlStr := `SELECT id, role, encrypted_password FROM auth.users WHERE email=$1`
 
 	result := db.QueryRow(sqlStr, draftUser.Email)
-	if err != nil {
-		return nil, err
-	}
-
 	storedCredentials := &model.UserCredentials{}
 	err = result.Scan(&storedCredentials.ID, &storedCredentials.Role, &storedCredentials.EncryptedPassword)
 	if err != nil {
@@ -208,7 +204,7 @@ func ValidateCredentials(user string, ID string) error {
 			ExpirationTime: time.Now().Add((time.Duration(produceTime) * time.Minute)),
 			PreBuiltToken:  tokenStr,
 		}
-		err = revalidateOauthToken(user, &ghostUser, tx)
+		err = revalidateOauthToken(&ghostUser, tx)
 		if err != nil {
 			log.Printf("unable to revalidate the user. error %+v", err)
 			return err
@@ -308,7 +304,7 @@ func upsertOauthToken(user string, draftUser *model.UserCredentials, tx *sql.Tx)
 // revalidateOauthToken ...
 //
 // revalidates the user token.
-func revalidateOauthToken(user string, draftUser *model.UserCredentials, tx *sql.Tx) error {
+func revalidateOauthToken(draftUser *model.UserCredentials, tx *sql.Tx) error {
 
 	sqlStr := `
 	UPDATE auth.oauth
