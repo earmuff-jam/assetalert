@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     padding: theme.spacing(3),
-    backgroundColor: '#F3F4F6',
+    backgroundColor: theme.palette.secondary.main,
     margin: theme.spacing(3, 0),
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   },

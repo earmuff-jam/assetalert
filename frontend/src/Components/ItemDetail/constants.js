@@ -6,7 +6,7 @@ const GENERIC_FORM_FIELDS = {
 export const ADD_ITEM_FORM_FIELDS = {
   name: {
     label: 'Item Name',
-    placeholder: '',
+    placeholder: 'Enter product name',
     value: '',
     name: 'name',
     errorMsg: '',
