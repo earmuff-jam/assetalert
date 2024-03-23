@@ -6,21 +6,12 @@ import { ListRounded, NotesRounded, TimelineRounded } from '@material-ui/icons';
  * Contant values for the profile nav menu bar
  */
 export const PROFILE_NAVIGATION_MENU_BAR = [
-  // {
-  //   id: 1,
-  //   icon: <BookmarkRounded />,
-  //   displayName: 'Tags',
-  //   subtitle: '',
-  //   color: '',
-  //   onClick: () => {},
-  // },
   {
     id: 1,
     icon: <TimelineRounded />,
     displayName: 'Recent Activities',
     subtitle: 'Recently created events or volunteered events',
     color: '',
-    onClick: () => {},
   },
   {
     id: 2,
@@ -28,7 +19,6 @@ export const PROFILE_NAVIGATION_MENU_BAR = [
     displayName: 'Inventories',
     subtitle: '',
     color: '',
-    onClick: () => {},
   },
   {
     id: 3,
@@ -36,6 +26,5 @@ export const PROFILE_NAVIGATION_MENU_BAR = [
     displayName: 'Notes',
     subtitle: '',
     color: '',
-    onClick: () => {},
   },
 ];

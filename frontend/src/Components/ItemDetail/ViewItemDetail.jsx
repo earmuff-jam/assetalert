@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
 import { CircularProgress, Container } from '@material-ui/core';
-
 import dayjs from 'dayjs';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
@@ -89,6 +88,8 @@ const ViewItemDetail = ({ disabled }) => {
   if (!items || items.length === 0) {
     return <EmptyComponent subtitle="Add an item." />;
   }
+
+  console.log(columns);
 
   return (
     <Container maxWidth="lg">

@@ -10,7 +10,7 @@ import CommunityMsg from '../ChatComponent/CommunityMsg';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import { Box, List, ListItem, ListItemIcon, ListItemText, Paper, Tooltip } from '@material-ui/core';
+import { Box, Paper, Tab, Tabs, Tooltip } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
+  },
+  textIconContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   profileVariation: {
     fontSize: '0.925rem',
@@ -52,59 +57,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const NavigationTabBar = ({
-  data,
-  value,
-  handleChange,
-  applyProfileVariation = true,
-  extraRootStyle = '',
-  iconStyle = '',
-}) => {
-  const classes = useStyles();
-
-  return (
-    <Box className={[classes.rowContainer, extraRootStyle].join(' ')}>
-      {data.map((v, index) => (
-        <List key={index}>
-          <Tooltip title={v.subtitle || ''}>
-            <ListItem button className={classes.listItem} onClick={() => handleChange(index)} disableGutters>
-              {v.icon ? (
-                <ListItemIcon className={classNames({ [classes.selected]: value === index }, iconStyle)}>
-                  {v.icon}
-                </ListItemIcon>
-              ) : null}
-              <ListItemText
-                classes={{ primary: classNames({ [classes.profileVariation]: applyProfileVariation }) }}
-                className={classNames({ [classes.underline]: value === index })}
-              >
-                {v.displayName}
-              </ListItemText>
-            </ListItem>
-          </Tooltip>
-        </List>
-      ))}
-    </Box>
-  );
-};
-
-NavigationTabBar.defaultProps = {
-  data: [],
-  value: '',
-  handleChange: () => {},
-  applyProfileVariation: true,
-  extraRootStyle: '',
-  iconStyle: '',
-};
-
-NavigationTabBar.propTypes = {
-  data: PropTypes.array,
-  value: PropTypes.string,
-  handleChange: PropTypes.func,
-  applyProfileVariation: PropTypes.bool,
-  extraRootStyle: PropTypes.string,
-  iconStyle: PropTypes.string,
-};
-
 const EventDetailsDrawerComponent = ({
   eventID,
   selectedEvent,
@@ -119,7 +71,7 @@ const EventDetailsDrawerComponent = ({
   const [value, setValue] = useState(0);
   const editingAllowed = isEditingAllowed(disabled, userDetail);
 
-  const handleChange = (newValue) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
@@ -190,10 +142,22 @@ const EventDetailsDrawerComponent = ({
   };
 
   return (
-    <div className={classes.root}>
-      <NavigationTabBar handleChange={handleChange} value={value} data={NAVIGATION_TABS} />
+    <Box className={classes.root}>
+      <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
+        {NAVIGATION_TABS.map((v) => (
+          <Tooltip title={v.subtitle}>
+            <Tab
+              label={
+                <span className={classes.textIconContainer}>
+                  {v.icon} {v.displayName}
+                </span>
+              }
+            />
+          </Tooltip>
+        ))}
+      </Tabs>
       {displaySelection(value)}
-    </div>
+    </Box>
   );
 };
 
