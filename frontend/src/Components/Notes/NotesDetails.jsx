@@ -1,8 +1,17 @@
-import React from 'react';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@material-ui/icons';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, Dialog, IconButton } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
+import EmptyComponent from '../../util/EmptyComponent';
+import Title from '../DialogComponent/Title';
+import AddNote from './AddNote';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import { enqueueSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,63 +48,106 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Takes array of notes and transforms them into objects categorized by the date and time
+ *
+ * Recently updated - Up to the last week
+ * Last Week - Up to the previous week
+ * Last month and beyond - everything else
+ *
+ * @param {Array} notes
+ * @returns {Array} refactored notes
+ */
+export const categorizeNotes = (notes) => {
+  const currentTime = new Date();
+  const categorizedNotes = notes.reduce((acc, item) => {
+    const updatedTime = new Date(item.updated_at);
+    const differenceInDays = Math.floor((currentTime - updatedTime) / (1000 * 3600 * 24));
+
+    let category;
+    if (differenceInDays <= 7) {
+      category = 'Recently added notes';
+    } else if (differenceInDays <= 14) {
+      category = 'Last Week';
+    } else {
+      category = 'Last Month and Beyond';
+    }
+
+    if (!acc[category]) {
+      acc[category] = {
+        id: acc.length + 1,
+        category: category,
+        totalNotes: 0,
+        details: [],
+      };
+    }
+
+    acc[category].details.push({
+      id: acc[category].details.length + 1,
+      noteID: item.noteID,
+      note_title: item.title,
+      note_description: item.description,
+      updated_by: item.updated_by,
+      updated_at: item.updated_at,
+      updator: item.updator,
+    });
+
+    acc[category].totalNotes++;
+
+    return acc;
+  }, {});
+
+  return Object.values(categorizedNotes);
+};
+
 const NotesDetails = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  dayjs.extend(relativeTime);
 
-  const notesData = [
-    {
-      id: 1,
-      category: 'Recently added notes',
-      totalNotes: 2,
-      details: [
-        {
-          id: 1,
-          note_title: 'Plants code from home depot',
-          note_description: 'Bought a coupon code to use while buying plants at Lowes or Home Depot',
-          updated_by: 'xxArthr',
-          updated_at: '',
-        },
-        {
-          id: 1,
-          note_title: 'Planted Magnolia according to sketch and diagram.',
-          note_description:
-            'Had an issue where the plant magnolia was not getting proper sunlight and therefore we had to move it to a better place. Thank god my wife sketched the location out and we planted it. Now we want to track a watering schedule.',
-          updated_by: 'xxArthr',
-          updated_at: '',
-        },
-      ],
-    },
-    {
-      id: 2,
-      category: 'Last Week',
-      totalNotes: 32,
-      details: [
-        {
-          id: 1,
-          note_title: 'Plants code from home depot',
-          note_description: 'Bought a coupon code to use while buying plants at Lowes or Home Depot',
-          updated_by: 'xxArthr',
-          updated_at: '',
-        },
-        {
-          id: 1,
-          note_title: 'Planted Magnolia according to sketch and diagram.',
-          note_description:
-            'Had an issue where the plant magnolia was not getting proper sunlight and therefore we had to move it to a better place. Thank god my wife sketched the location out and we planted it. Now we want to track a watering schedule.',
-          updated_by: 'xxArthr',
-          updated_at: '',
-        },
-      ],
-    },
-  ];
+  const { loading, notes } = useSelector((state) => state.profile);
+
+  const [editNote, setEditNote] = useState(false);
+  const [selecteNoteID, setSelectedNoteID] = useState('');
+  const [formattedNotes, setFormattedNotes] = useState([]);
+
+  const removeSelectedNote = (noteID) => {
+    const formattedNotes = notes.filter((v) => v.noteID != noteID);
+
+    const formattedDraftNotes = {
+      noteID: noteID,
+      updated_by: localStorage.getItem('userID'),
+    };
+    dispatch(profileActions.removeSelectedNote(formattedDraftNotes));
+    const transformedData = categorizeNotes(formattedNotes);
+    setFormattedNotes(transformedData);
+    enqueueSnackbar('Successfully removed notes.', {
+      variant: 'success',
+    });
+  };
+
+  useEffect(() => {
+    if (Array.isArray(notes) && notes.length >= 0) {
+      const transformedData = categorizeNotes(notes);
+      setFormattedNotes(transformedData);
+    }
+  }, [loading]);
+
+  if (loading) {
+    return <LoadingSkeleton height={'10rem'} width={'10rem'} />;
+  }
+
+  if (!notes || notes.length === 0) {
+    return <EmptyComponent subtitle="Add new notes." />;
+  }
 
   return (
     <div className={classes.root}>
-      {notesData.map((v) => (
+      {formattedNotes.map((v) => (
         <Accordion elevation={0} className={classes.colorVariant}>
           <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1a-content" id="panel1a-header">
             <Box className={[classes.rowContainer, classes.extraGap].join(' ')}>
-              <TextComponent textStyle={classes.heading} value={v.category} loading={false} />
+              <TextComponent textStyle={classes.heading} value={v.category} loading={loading} />
               <Chip label={v.totalNotes} size="small" />
             </Box>
           </AccordionSummary>
@@ -107,21 +159,43 @@ const NotesDetails = () => {
                     <TextComponent
                       value={note.note_title}
                       gutterBottom={true}
-                      loading={false}
+                      loading={loading}
                       textStyle={[classes.text, classes.textVariant].join(' ')}
                     />
                     <Box className={classes.emptyGap}></Box>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        removeSelectedNote(note.noteID);
+                      }}
+                    >
                       <DeleteRounded />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        setEditNote(true);
+                        setSelectedNoteID(note.noteID);
+                      }}
+                    >
                       <EditRounded />
                     </IconButton>
                   </Box>
+                  {editNote && (
+                    <Dialog open={editNote} width={'md'} fullWidth={true}>
+                      <Title onClose={() => setEditNote(false)}>Edit Note</Title>
+                      <AddNote editMode={editNote} setEditMode={setEditNote} noteID={selecteNoteID} />
+                    </Dialog>
+                  )}
                   <Box>
-                    <TextComponent textStyle={classes.heading} value={note.note_description} loading={false} />
-                    <TextComponent textStyle={classes.heading} value={note.updated_by} loading={false} />
-                    <TextComponent textStyle={classes.heading} value={note.updated_at} loading={false} />
+                    <TextComponent textStyle={classes.heading} value={note.note_description} loading={loading} />
+                    <Box className={classes.rowContainer}>
+                      <TextComponent textStyle={classes.heading} value={note.updator} loading={loading} />
+                      <Box className={classes.emptyGap}></Box>
+                      <TextComponent
+                        textStyle={classes.heading}
+                        value={dayjs(note.updated_at).fromNow()}
+                        loading={loading}
+                      />
+                    </Box>
                   </Box>
                 </Box>
               ))}

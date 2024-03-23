@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextComponent from '../../stories/TextComponent/TextComponent';
-import { Box, makeStyles } from '@material-ui/core';
+import { Box, Dialog, makeStyles } from '@material-ui/core';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
-import { AddRounded, SortRounded } from '@material-ui/icons';
+import { AddRounded, ImportExportRounded } from '@material-ui/icons';
 import NotesDetails from './NotesDetails';
+import { useDispatch } from 'react-redux';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import Title from '../DialogComponent/Title';
+import AddNote from './AddNote';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -23,6 +27,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Notes = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [editMode, setEditMode] = useState(false);
+  const handleEditMode = () => setEditMode(!editMode);
+
+  useEffect(() => {
+    dispatch(profileActions.getUserNotes());
+  }, []);
+
   return (
     <Box>
       <Box className={classes.rowContainer}>
@@ -30,7 +43,7 @@ const Notes = () => {
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent
           buttonVariant={'text'}
-          icon={<SortRounded />}
+          icon={<ImportExportRounded />}
           showIcon={true}
           text={'Sort'}
           onClick={() => {}}
@@ -40,8 +53,14 @@ const Notes = () => {
           icon={<AddRounded />}
           showIcon={true}
           text={'Add new notes'}
-          onClick={() => {}}
+          onClick={handleEditMode}
         />
+        {editMode && (
+          <Dialog open={editMode} width={'md'} fullWidth={true}>
+            <Title onClose={() => setEditMode(false)}>Add New Note</Title>
+            <AddNote editMode={editMode} setEditMode={setEditMode} />
+          </Dialog>
+        )}
       </Box>
       <Box>
         <NotesDetails />
