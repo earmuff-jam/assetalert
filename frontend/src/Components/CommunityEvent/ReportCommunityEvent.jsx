@@ -10,7 +10,6 @@ import {
   Box,
   Checkbox,
 } from '@material-ui/core';
-
 import dayjs from 'dayjs';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';

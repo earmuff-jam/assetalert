@@ -6,18 +6,14 @@ const useStyles = makeStyles((theme) => ({
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
   },
   centerRowAlign: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
+    padding: theme.spacing(1),
     gap: theme.spacing(1),
-  },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
 }));
 

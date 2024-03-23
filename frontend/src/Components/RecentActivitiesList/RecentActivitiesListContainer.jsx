@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import RecentActivities from './RecentActivities';
 import { makeStyles } from '@material-ui/core/styles';
 import RecentTrophyCollections from './RecentTrophyCollections';
+import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  headingText: {
+    fontSize: '1.125rem',
+    fontWeight: 'lighter',
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
   text: {
     fontSize: '0.925rem',
     fontWeight: 'bold',
@@ -29,10 +36,8 @@ const useStyles = makeStyles((theme) => ({
   recentActivitiesList: {
     flexGrow: 1,
   },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+  emptyGap: {
+    flexGrow: 1,
   },
 }));
 
@@ -42,7 +47,11 @@ const RecentActivitiesListContainer = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.contentContainer}>
-        <RecentTrophyCollections />
+      <TextComponent value={'Recent Activities'} gutterBottom={true} loading={false} textStyle={classes.headingText} />
+      <Box className={classes.emptyGap}></Box>
+      <RecentTrophyCollections />
+      </Box>
+      <Box className={classes.contentContainer}>
         <Box className={classes.recentActivitiesList}>
           <RecentActivities />
         </Box>
