@@ -39,10 +39,17 @@ const Notes = () => {
   return (
     <Box>
       <Box className={classes.rowContainer}>
-        <TextComponent value={'Rough Notes'} gutterBottom={true} loading={false} textStyle={classes.text} />
+        <TextComponent
+          value={'Rough Notes'}
+          gutterBottom={true}
+          loading={false}
+          textStyle={classes.text}
+          fullWidth={true}
+        />
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent
           buttonVariant={'text'}
+          disabled={true}
           icon={<ImportExportRounded />}
           showIcon={true}
           text={'Sort'}
