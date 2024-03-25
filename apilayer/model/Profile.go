@@ -56,3 +56,17 @@ type RecentHighlight struct {
 	InventoriesUpdated int `json:"inventories_updated"`
 	DeactivatedEvents  int `json:"deactivated_events"`
 }
+
+// Notes ...
+type Note struct {
+	ID          string    `json:"noteID"`
+	Title       string    `json:"title"`
+	Status      string    `json:"status"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	CreatedBy   string    `json:"created_by"`
+	Creator     string    `json:"creator"`
+	UpdatedAt   time.Time `json:"updated_at"`
+	UpdatedBy   string    `json:"updated_by"`
+	Updator     string    `json:"updator"`
+}

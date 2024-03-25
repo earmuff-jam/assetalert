@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
@@ -176,6 +177,18 @@ const AddItemDetail = ({ eventID, userID, setDisplayMode }) => {
       </Box>
     </div>
   );
+};
+
+AddItemDetail.defaultProps = {
+  eventID: '',
+  userID: '',
+  setDisplayMode: () => {},
+};
+
+AddItemDetail.propTypes = {
+  eventID: PropTypes.string,
+  userID: PropTypes.string,
+  setDisplayMode: PropTypes.func,
 };
 
 export default AddItemDetail;

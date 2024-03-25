@@ -8,6 +8,7 @@ const initialState = {
   volunteeringDetails: [],
   recentActivities: [],
   recentTrophies: {},
+  notes: [],
 };
 
 const profileSlice = createSlice({
@@ -132,6 +133,72 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.volunteeringDetails = [];
+    },
+    getUserNotes: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.notes = [];
+    },
+    getUserNotesSuccess: (state, action) => {
+      state.notes = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getUserNotesFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notes = [];
+    },
+    addNewNote: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    addNewNoteSuccess: (state, action) => {
+      const updatedNotes = action.payload;
+      state.loading = false;
+      state.error = '';
+      state.notes = [...state.notes, updatedNotes];
+    },
+    addNewNoteFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notes = [];
+    },
+    updateExistingNote: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateExistingNoteSuccess: (state, action) => {
+      const updatedNotes = action.payload;
+      const filteredNotes = [...state.notes].filter((v) => {
+        return v.noteID !== updatedNotes.noteID;
+      });
+      state.loading = false;
+      state.error = '';
+      state.notes = [...filteredNotes, updatedNotes];
+    },
+    updateExistingNoteFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notes = [];
+    },
+    removeSelectedNote: (state, action) => {
+      state.loading = true;
+      state.error = '';
+    },
+    removeSelectedNoteSuccess: (state, action) => {
+      const updatedNotesID = action.payload;
+      const filteredNotes = [...state.notes].filter((v) => {
+        return v.noteID !== updatedNotesID;
+      });
+      state.loading = false;
+      state.error = '';
+      state.notes = [...filteredNotes];
+    },
+    removeSelectedNoteFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notes = [];
     },
   },
 });

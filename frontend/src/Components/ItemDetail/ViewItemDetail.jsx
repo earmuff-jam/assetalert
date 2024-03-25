@@ -89,8 +89,6 @@ const ViewItemDetail = ({ disabled }) => {
     return <EmptyComponent subtitle="Add an item." />;
   }
 
-  console.log(columns);
-
   return (
     <Container maxWidth="lg">
       <List

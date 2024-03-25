@@ -90,6 +90,46 @@ export function* fetchVolunteeringDetails(action) {
   }
 }
 
+export function* fetchUserNotes() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/notes/${USER_ID}`);
+    yield put(profileActions.getUserNotesSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getUserNotesFailure(e));
+  }
+}
+
+export function* fetchAddNewNote(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/notes/${USER_ID}`, { ...action.payload });
+    yield put(profileActions.addNewNoteSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.addNewNoteFailure(e));
+  }
+}
+
+export function* fetchUpdateExistingNote(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.put, `${BASEURL}/notes/${USER_ID}`, { ...action.payload });
+    yield put(profileActions.updateExistingNoteSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.updateExistingNoteFailure(e));
+  }
+}
+
+export function* fetchRemoveSelectedNote(action) {
+  try {
+    const { noteID } = action.payload;
+    const response = yield call(instance.delete, `${BASEURL}/notes/${noteID}`);
+    yield put(profileActions.removeSelectedNoteSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.removeSelectedNoteFailure(e));
+  }
+}
+
 export function* fetchUpdateProfileImage(action) {
   try {
     const { selectedImage, userID } = action.payload;
@@ -105,6 +145,22 @@ export function* fetchUpdateProfileImage(action) {
 
 export function* watchExistingNotificationsUserDetails() {
   yield takeLatest(`profile/getProfileNotifications`, fetchExistingNotificationsUserDetails);
+}
+
+export function* watchGetUserNotes() {
+  yield takeLatest(`profile/getUserNotes`, fetchUserNotes);
+}
+
+export function* watchFetchRemoveSelectedNote() {
+  yield takeLatest(`profile/removeSelectedNote`, fetchRemoveSelectedNote);
+}
+
+export function* watchFetchAddNewNote() {
+  yield takeLatest(`profile/addNewNote`, fetchAddNewNote);
+}
+
+export function* watchFetchUpdateExistingNote() {
+  yield takeLatest(`profile/updateExistingNote`, fetchUpdateExistingNote);
 }
 
 export function* watchUpdateProfileNotification() {
@@ -137,6 +193,10 @@ export function* watchFetchUpdateProfileImage() {
 
 // eslint-disable-next-line
 export default [
+  watchGetUserNotes,
+  watchFetchAddNewNote,
+  watchFetchUpdateExistingNote,
+  watchFetchRemoveSelectedNote,
   watchExistingNotificationsUserDetails,
   watchFetchRecentActivitiesTrophyList,
   watchFetchRecentActivitiesList,

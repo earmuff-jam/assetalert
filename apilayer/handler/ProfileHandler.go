@@ -328,3 +328,170 @@ func GetUserRecentHighlights(rw http.ResponseWriter, r *http.Request, user strin
 	json.NewEncoder(rw).Encode(resp)
 
 }
+
+// GetUserNotesDetails ...
+// swagger:route GET /api/profile/notes/{id}
+//
+// # Retrieves the list of notes for the user.
+//
+// Responses:
+// 200: []Notes
+// 400: Message
+// 404: Message
+// 500: Message
+func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok || len(id) <= 0 {
+		log.Printf("Unable to retrieve details without an id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(id)
+	if err != nil {
+		log.Printf("Unable to retrieve details with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveUserNotes(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve notes. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+
+}
+
+// AddNewNote ...
+// swagger:route POST /api/profile/notes/{id}
+//
+// # Add a new note to the database
+//
+// Responses:
+// 200: OK
+// 400: Message
+// 404: Message
+// 500: Message
+func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to update notes with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var note model.Note
+	if err := json.NewDecoder(r.Body).Decode(&note); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.AddNewNote(user, userID, note)
+	if err != nil {
+		log.Printf("Unable to add new note. error: +%v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+
+}
+
+// UpdateNote ...
+// swagger:route PUT /api/profile/notes/{id}
+//
+// # Updates an existing note in the database
+//
+// Responses:
+// 200: OK
+// 400: Message
+// 404: Message
+// 500: Message
+func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to update notes with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var note model.Note
+	if err := json.NewDecoder(r.Body).Decode(&note); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.UpdateSelectedNote(user, userID, note)
+	if err != nil {
+		log.Printf("Unable to update notes. error: +%v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+
+}
+
+// RemoveSelectedNote ...
+// swagger:route DELETE /api/profile/notes/{id}
+//
+// # Removes the note from the db
+//
+// Responses:
+// 200: OK
+// 400: Message
+// 404: Message
+// 500: Message
+func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	noteID := vars["id"]
+
+	if len(noteID) <= 0 {
+		log.Printf("Unable to update notes with empty noteID")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var note model.Note
+	note.ID = noteID
+
+	if len(note.ID) <= 0 {
+		log.Printf("Unable to update notes with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	err := db.RemoveSelectedNote(user, note.ID)
+	if err != nil {
+		log.Printf("Unable to remove notes. error: +%v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(note.ID)
+
+}

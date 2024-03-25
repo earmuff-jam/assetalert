@@ -69,7 +69,6 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
       selectedCategoryName === null ||
       Object.keys(selectedCategory).length <= 0
     ) {
-      console.log('Empty form fields. Unable to proceed.');
       enqueueSnackbar('Unable to add new expense report.', {
         variant: 'error',
       });

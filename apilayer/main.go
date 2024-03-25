@@ -66,9 +66,15 @@ func main() {
 
 	router.Handle("/api/v1/volunteering", CustomRequestHandler(handler.CreateVolunteerHours)).Methods(http.MethodPost)
 	router.Handle("/api/v1/volunteering/{id}", CustomRequestHandler(handler.GetVolunteerHours)).Methods(http.MethodGet)
+
 	router.Handle("/api/v1/profile/recent/{id}", CustomRequestHandler(handler.GetUserRecentActivities)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/highlights/{id}", CustomRequestHandler(handler.GetUserRecentHighlights)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/volunteering/{id}", CustomRequestHandler(handler.GetUserVolunteerDetails)).Methods(http.MethodGet)
+
+	router.Handle("/api/v1/profile/notes/{id}", CustomRequestHandler(handler.GetUserNotesDetails)).Methods(http.MethodGet)
+	router.Handle("/api/v1/profile/notes/{id}", CustomRequestHandler(handler.AddNewNote)).Methods(http.MethodPost)
+	router.Handle("/api/v1/profile/notes/{id}", CustomRequestHandler(handler.UpdateNote)).Methods(http.MethodPut)
+	router.Handle("/api/v1/profile/notes/{id}", CustomRequestHandler(handler.RemoveSelectedNote)).Methods(http.MethodDelete)
 
 	cors := handlers.CORS(
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),
