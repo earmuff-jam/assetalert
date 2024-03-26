@@ -13,7 +13,7 @@ import (
 )
 
 // GetProfileHealthCheck ...
-// swagger:route GET /api/v1/health
+// swagger:route GET /api/v1/health GetProfileHealthCheck getProfileHealthCheck
 //
 // # Health Check
 //
@@ -21,10 +21,10 @@ import (
 // does not attempt to connect with the backend service. It is designed to support heartbeat support system.
 //
 // Responses:
-// 200: Message
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetProfileHealthCheck(rw http.ResponseWriter, r *http.Request, user string) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
@@ -32,22 +32,22 @@ func GetProfileHealthCheck(rw http.ResponseWriter, r *http.Request, user string)
 }
 
 // GetProfile ...
-// swagger:route GET /api/v1/profile/{id}
+// swagger:route GET /api/v1/profile/{id} GetProfile getProfile
 //
 // # Retrieves the user details from the profiles table. Does not meddle with authentication
 //
 // Parameters:
-//   - name: id
-//     in: query
+//   - ++name: id
+//     in: path
 //     description: The id of the user
 //     type: string
 //     required: true
 //
 // Responses:
-// 200: UserDetails
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -74,22 +74,22 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetUsername ...
-// swagger:route GET /api/v1/profile/{id}
+// swagger:route GET /api/v1/profile/{id} GetUsername getUsername
 //
 // # Retrieves the user name from the profiles table. Does not meddle with authentication
 //
 // Parameters:
-//   - name: id
-//     in: query
+//   - +name: id
+//     in: path
 //     description: The id of the user
 //     type: string
 //     required: true
 //
 // Responses:
-// 200: Username
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -120,42 +120,22 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateProfile ...
-// swagger:route PUT /api/v1/profile
+// swagger:route PUT /api/v1/profile UpdateProfile updateProfile
 //
 // # Updates the current user profile for the selected user. Does not meddle with authentication
 //
 // Parameters:
-//   - name: name
-//     in: query
-//     description: The full name of the user
-//     type: string
+//   - +name: Profile
+//     in: body
+//     description: The full profile object of the user
+//     type: Profile
 //     required: true
-//   - name: username
-//     in: query
-//     description: The username of the user
-//     type: string
-//     required: true
-//   - name: phone
-//     in: query
-//     description: The phone number of the user
-//     type: string
-//     required: true
-//   - name: objective
-//     in: query
-//     description: The objective of the user to join any event
-//     type: string
-//     required: false
-//   - name: aboutMe
-//     in: query
-//     description: The about me details of the user
-//     type: string
-//     required: false
 //
 // Responses:
-// 200: UserDetails
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -187,21 +167,27 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateProfileAvatar ...
-// swagger:route POST /api/v1/profile/{id}/updateAvatar
+// swagger:route POST /api/v1/profile/{id}/updateAvatar UpdateProfileAvatar updateProfileAvatar
 //
 // # Updates the current user avatar for the selected user. Does not meddle with authentication
 //
 // Parameters:
-//   - name: avatarSrc
-//     in: query
-//     description: The full file details of the avatar
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
 //     type: string
 //     required: true
+//   - +name: FileHeader
+//     in: body
+//     description: The full file details of the avatar
+//     type: FileHeader
+//     required: true
 //
-// 200: UserDetails
-// 400: Message
-// 404: Message
-// 500: Message
+// Responses:
+// 200: Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -247,16 +233,23 @@ func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetUserRecentActivities ...
-// swagger:route GET /api/profile/recent/{id}
+// swagger:route GET /api/profile/recent/{id} GetUserRecentActivities getUserRecentActivities
 //
 // # Retrieves the list of recent activities the user has commenced. The api is responsible for
 // create / update event, create / update volunteering, create / update expense report.
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     type: string
+//     required: true
+//
 // Responses:
-// 200: []RecentActivitiesDetails
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: []RecentActivity
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetUserRecentActivities(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
@@ -289,15 +282,22 @@ func GetUserRecentActivities(rw http.ResponseWriter, r *http.Request, user strin
 }
 
 // GetUserRecentHighlights ...
-// swagger:route GET /api/profile/highlights/{id}
+// swagger:route GET /api/profile/highlights/{id} GetUserRecentHighlights getUserRecentHighlights
 //
 // # Retrieves the list of highlights for the user. The highlights includes created, reported, volunteered events
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     type: string
+//     required: true
+//
 // Responses:
-// 200: []RecentHighlights
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: RecentHighlight
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetUserRecentHighlights(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
@@ -330,15 +330,22 @@ func GetUserRecentHighlights(rw http.ResponseWriter, r *http.Request, user strin
 }
 
 // GetUserNotesDetails ...
-// swagger:route GET /api/profile/notes/{id}
+// swagger:route GET /api/profile/notes/{id} GetUserNotesDetails getUserNotesDetails
 //
 // # Retrieves the list of notes for the user.
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     type: string
+//     required: true
+//
 // Responses:
 // 200: []Notes
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
@@ -371,15 +378,27 @@ func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // AddNewNote ...
-// swagger:route POST /api/profile/notes/{id}
+// swagger:route POST /api/profile/notes/{id} AddNewNote addNewNote
 //
 // # Add a new note to the database
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected note
+//     type: string
+//     required: true
+//   - +name: Note
+//     in: query
+//     description: The note object to add into the db
+//     type: object
+//     required: true
+//
 // Responses:
-// 200: OK
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -412,15 +431,27 @@ func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateNote ...
-// swagger:route PUT /api/profile/notes/{id}
+// swagger:route PUT /api/profile/notes/{id} UpdateNote updateNote
 //
 // # Updates an existing note in the database
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected note
+//     type: string
+//     required: true
+//   - +name: Note
+//     in: query
+//     description: The note object to update into the db
+//     type: object
+//     required: true
+//
 // Responses:
-// 200: OK
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -453,15 +484,22 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // RemoveSelectedNote ...
-// swagger:route DELETE /api/profile/notes/{id}
+// swagger:route DELETE /api/profile/notes/{id} RemoveSelectedNote removeSelectedNote
 //
 // # Removes the note from the db
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected note
+//     type: string
+//     required: true
+//
 // Responses:
-// 200: OK
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	noteID := vars["id"]

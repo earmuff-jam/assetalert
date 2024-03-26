@@ -3,6 +3,9 @@ package model
 import "time"
 
 // Notification ...
+// swagger:model Notification
+//
+// Notification for the user. Used to retrieve changes during create, read and update operations.
 type Notification struct {
 	ID          string    `json:"id"`
 	EventID     string    `json:"event_id"`

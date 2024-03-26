@@ -13,17 +13,17 @@ import (
 )
 
 // Signup ...
-// swagger:route POST /api/v1/signup
+// swagger:route POST /api/v1/signup Signup signup
 //
 // # Sign up users into the database system.
 //
 // Parameters:
-//   - name: email
+//   - +name: email
 //     in: query
 //     description: The email address of the current user
 //     type: string
 //     required: true
-//   - name: password
+//   - +name: password
 //     in: query
 //     description: The password of the current user
 //     type: string
@@ -31,9 +31,9 @@ import (
 //
 // Responses:
 // 200: User
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func Signup(rw http.ResponseWriter, r *http.Request) {
 
 	draftUser := &model.UserCredentials{}
@@ -63,7 +63,7 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Calculate the age
-	age := time.Now().Year() - t.Year()
+	age := time.Now().Year() - +t.Year()
 	// Check if the user is at least 13 years old
 	if age <= 13 {
 		fmt.Println("unable to sign up user. verification failed. ")
@@ -72,7 +72,7 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 
 	backendClientUsr := os.Getenv("CLIENT_USER")
 	if len(backendClientUsr) == 0 {
-		log.Printf("unable to retrieve user from env. Unable to sign in. Error - %+v", err)
+		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
 	}
 	resp, err := db.SaveUser(backendClientUsr, draftUser) // the authority to log into backend as a certain user
 	if err != nil {
@@ -87,17 +87,17 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 }
 
 // Signin ...
-// swagger:route POST /api/v1/signin
+// swagger:route POST /api/v1/signin Signin signin
 //
 // # Sign in users into the database system.
 //
 // Parameters:
-//   - name: email
+//   - +name: email
 //     in: query
 //     description: The email address of the current user
 //     type: string
 //     required: true
-//   - name: password
+//   - +name: password
 //     in: query
 //     description: The password of the current user
 //     type: string
@@ -105,9 +105,9 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 //
 // Responses:
 // 200: User
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func Signin(rw http.ResponseWriter, r *http.Request) {
 
 	draftUser := &model.UserCredentials{}
@@ -129,7 +129,7 @@ func Signin(rw http.ResponseWriter, r *http.Request) {
 	draftUser.UserAgent = r.UserAgent()
 	user := os.Getenv("CLIENT_USER")
 	if len(user) == 0 {
-		log.Printf("unable to retrieve user from env. Unable to sign in. Error - %+v", err)
+		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
 	}
 	resp, err := db.RetrieveUser(user, draftUser)
 	if err != nil {
@@ -147,15 +147,15 @@ func Signin(rw http.ResponseWriter, r *http.Request) {
 }
 
 // Logout ...
-// swagger:route POST /api/v1/logout
+// swagger:route POST /api/v1/logout Logout logout
 //
 // # Logs users out of the database system.
 //
 // Responses:
-// 200: nil
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func Logout(rw http.ResponseWriter, r *http.Request) {
 
 	// immediately clear the token cookie

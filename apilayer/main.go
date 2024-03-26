@@ -1,3 +1,18 @@
+// Package Mashed Api Layer
+//
+// # Documentation for the mashed api layer.
+//
+// Scehmes: http
+// BasePath: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+//
+// swagger:meta
 package main
 
 import (
@@ -14,6 +29,14 @@ import (
 	"github.com/mohit2530/communityCare/handler"
 )
 
+// MessageResponse ...
+// swagger:model MessageResponse
+//
+// MessageResponse struct
+type MessageResponse struct {
+	Message string
+}
+
 type CustomRequestHandler func(http.ResponseWriter, *http.Request, string)
 
 func main() {
@@ -24,6 +47,7 @@ func main() {
 		log.Printf("No env file detected. Using os system configuration.")
 	}
 	router := mux.NewRouter()
+
 	// these routes are treated as they are public routes
 	router.HandleFunc("/api/v1/signup", handler.Signup).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/v1/signin", handler.Signin).Methods("POST", "OPTIONS")

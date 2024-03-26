@@ -7,3 +7,9 @@
 - To develop, it is tasteful to prevent the apilayer container and front end containers from being operational.
 - Run the apilayer container with `make startserver` and adding a `.env` file to house environment variables.
 - Default selection will choose a previous working port if `.env` variables are not provided.
+
+### Swagger Spec
+
+- Before we proceed, your bashrc must have `GO` export paths. `export PATH=$PATH:$HOME/go/bin`
+- To run swagger for the first time on any application, you need to install required dependencies. `go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.3 `.
+- Test before you proceed with cmd `swagger`.

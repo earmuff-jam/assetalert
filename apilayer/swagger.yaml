@@ -1,0 +1,1982 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    Category:
+        properties:
+            category_name:
+                type: string
+                x-go-name: CategoryName
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            id:
+                type: string
+                x-go-name: ID
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+        title: Category ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    Event:
+        properties:
+            attendees:
+                items:
+                    type: string
+                type: array
+                x-go-name: Attendees
+            boundingbox:
+                items:
+                    type: string
+                type: array
+                x-go-name: BoundingBox
+            cause:
+                type: string
+                x-go-name: Cause
+            city:
+                type: string
+                x-go-name: City
+            class:
+                type: string
+                x-go-name: Class
+            comments:
+                type: string
+                x-go-name: Comments
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            deactivated:
+                type: boolean
+                x-go-name: Deactivated
+            deactivated_reason:
+                type: string
+                x-go-name: DeactivatedReason
+            description:
+                type: string
+                x-go-name: Description
+            display_name:
+                type: string
+                x-go-name: DisplayName
+            id:
+                type: string
+                x-go-name: ID
+            image_url:
+                type: string
+                x-go-name: ImageURL
+            importance:
+                type: string
+                x-go-name: Importance
+            lat:
+                type: string
+                x-go-name: Lattitude
+            license:
+                type: string
+                x-go-name: License
+            lon:
+                type: string
+                x-go-name: Longitude
+            max_attendees:
+                format: int64
+                type: integer
+                x-go-name: MaxAttendees
+            osm_type:
+                type: string
+                x-go-name: OsmType
+            place_id:
+                type: string
+                x-go-name: PlaceID
+            powered_by:
+                type: string
+                x-go-name: PoweredBy
+            project_type:
+                type: string
+                x-go-name: ProjectType
+            registration_link:
+                type: string
+                x-go-name: RegistrationLink
+            required_total_man_hours:
+                format: int64
+                type: integer
+                x-go-name: TotalManHours
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            skills_required:
+                items:
+                    type: string
+                type: array
+                x-go-name: ProjectSkills
+            start_date:
+                format: date-time
+                type: string
+                x-go-name: StartDate
+            state:
+                type: string
+                x-go-name: State
+            street:
+                type: string
+                x-go-name: Street
+            text:
+                type: string
+                x-go-name: OsmID
+            title:
+                type: string
+                x-go-name: Title
+            type:
+                type: string
+                x-go-name: Type
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator_name:
+                type: string
+                x-go-name: UpdatorName
+            zip:
+                type: string
+                x-go-name: ZipCode
+        title: Event ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    EventCause:
+        properties:
+            cause:
+                type: string
+                x-go-name: Cause
+            id:
+                type: string
+                x-go-name: ID
+        title: EventCause ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    Expense:
+        properties:
+            category_id:
+                type: string
+                x-go-name: CategoryID
+            category_name:
+                type: string
+                x-go-name: Category
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            eventID:
+                type: string
+                x-go-name: EventID
+            id:
+                type: string
+                x-go-name: ID
+            item_cost:
+                type: string
+                x-go-name: ItemCost
+            item_name:
+                type: string
+                x-go-name: ItemName
+            notes:
+                type: string
+                x-go-name: Notes
+            purchase_location:
+                type: string
+                x-go-name: PurchaseLocation
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator_name:
+                type: string
+                x-go-name: UpdatorName
+        title: Expense ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    Item:
+        properties:
+            bought_at:
+                type: string
+                x-go-name: BoughtAt
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            description:
+                type: string
+                x-go-name: Description
+            eventID:
+                type: string
+                x-go-name: EventID
+            id:
+                type: string
+                x-go-name: ID
+            location:
+                type: string
+                x-go-name: Location
+            name:
+                type: string
+                x-go-name: Name
+            quantity:
+                format: int64
+                type: integer
+                x-go-name: Quantity
+            storage_location_id:
+                type: string
+                x-go-name: LocationID
+            unit_price:
+                format: double
+                type: number
+                x-go-name: UnitPrice
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updater_name:
+                type: string
+                x-go-name: UpdaterName
+        title: Item ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    ItemToUpdate:
+        properties:
+            column:
+                type: string
+                x-go-name: Column
+            eventID:
+                type: string
+                x-go-name: EventID
+            itemID:
+                type: string
+                x-go-name: ItemID
+            userID:
+                type: string
+                x-go-name: UserID
+            value:
+                type: string
+                x-go-name: Value
+        title: ItemToUpdate ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    MessageResponse:
+        properties:
+            Message:
+                type: string
+        title: MessageResponse ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare
+    Notes:
+        properties:
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator:
+                type: string
+                x-go-name: Creator
+            description:
+                type: string
+                x-go-name: Description
+            noteID:
+                type: string
+                x-go-name: ID
+            status:
+                type: string
+                x-go-name: Status
+            title:
+                type: string
+                x-go-name: Title
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator:
+                type: string
+                x-go-name: Updator
+        title: Notes ...
+        type: object
+        x-go-name: Note
+        x-go-package: github.com/mohit2530/communityCare/model
+    Notification:
+        properties:
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            event_id:
+                type: string
+                x-go-name: EventID
+            id:
+                type: string
+                x-go-name: ID
+            is_resolved:
+                type: boolean
+                x-go-name: IsResolved
+            is_viewed:
+                type: boolean
+                x-go-name: IsViewed
+            title:
+                type: string
+                x-go-name: Title
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updater_name:
+                type: string
+                x-go-name: UpdaterName
+        title: Notification ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    Profile:
+        properties:
+            about_me:
+                type: string
+                x-go-name: AboutMe
+            avatar_url:
+                type: string
+                x-go-name: AvatarUrl
+            email_address:
+                type: string
+                x-go-name: EmailAddress
+            full_name:
+                type: string
+                x-go-name: FullName
+            goal:
+                type: string
+                x-go-name: Goal
+            id:
+                format: uuid
+                type: string
+                x-go-name: ID
+            online_status:
+                type: boolean
+                x-go-name: OnlineStatus
+            phone_number:
+                type: string
+                x-go-name: PhoneNumber
+            role:
+                type: string
+                x-go-name: Role
+            username:
+                type: string
+                x-go-name: Username
+        title: Profile ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    ProjectType:
+        properties:
+            id:
+                type: string
+                x-go-name: ID
+            type:
+                type: string
+                x-go-name: Type
+        title: ProjectType ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    RecentActivity:
+        properties:
+            expense_amount:
+                type: string
+                x-go-name: ExpenseAmount
+            expense_name:
+                items:
+                    type: string
+                type: array
+                x-go-name: ExpenseName
+            expenseID:
+                type: string
+                x-go-name: ExpenseID
+            id:
+                type: string
+                x-go-name: EventID
+            title:
+                type: string
+                x-go-name: Title
+            type:
+                type: string
+                x-go-name: Type
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator:
+                type: string
+                x-go-name: Updator
+            volunteering_hours:
+                type: string
+                x-go-name: VolunteeringHours
+            volunteering_id:
+                type: string
+                x-go-name: VolunteeringID
+            volunteering_skill:
+                items:
+                    type: string
+                type: array
+                x-go-name: VolunteeringSkill
+        title: RecentActivity ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    RecentHighlight:
+        properties:
+            created_events:
+                format: int64
+                type: integer
+                x-go-name: CreatedEvents
+            deactivated_events:
+                format: int64
+                type: integer
+                x-go-name: DeactivatedEvents
+            expenses_reported:
+                format: int64
+                type: integer
+                x-go-name: ExpensesReported
+            inventories_updated:
+                format: int64
+                type: integer
+                x-go-name: InventoriesUpdated
+            reported_events:
+                format: int64
+                type: integer
+                x-go-name: ReportedEvents
+            volunteered_events:
+                format: int64
+                type: integer
+                x-go-name: VolunteeredEvents
+        title: RecentHighlight ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    ReportEvent:
+        properties:
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            description:
+                type: string
+                x-go-name: Description
+            event_id:
+                type: string
+                x-go-name: EventID
+            event_location:
+                type: string
+                x-go-name: EventLocation
+            id:
+                type: string
+                x-go-name: ID
+            organizer_name:
+                type: string
+                x-go-name: OrganizerName
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            subject:
+                type: string
+                x-go-name: Subject
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator_name:
+                type: string
+                x-go-name: UpdatorName
+        title: ReportEvent ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    StandardClaims:
+        description: |-
+            Structured version of Claims Section, as referenced at
+            https://tools.ietf.org/html/rfc7519#section-4.1
+            See examples for how to use this with your own claim types
+        properties:
+            aud:
+                type: string
+                x-go-name: Audience
+            exp:
+                format: int64
+                type: integer
+                x-go-name: ExpiresAt
+            iat:
+                format: int64
+                type: integer
+                x-go-name: IssuedAt
+            iss:
+                type: string
+                x-go-name: Issuer
+            jti:
+                type: string
+                x-go-name: Id
+            nbf:
+                format: int64
+                type: integer
+                x-go-name: NotBefore
+            sub:
+                type: string
+                x-go-name: Subject
+        type: object
+        x-go-package: github.com/dgrijalva/jwt-go
+    State:
+        properties:
+            abbreviation:
+                type: string
+                x-go-name: Abbreviation
+            id:
+                type: string
+                x-go-name: ID
+            name:
+                type: string
+                x-go-name: Name
+        title: State ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    StorageLocation:
+        properties:
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            id:
+                type: string
+                x-go-name: ID
+            location:
+                type: string
+                x-go-name: Location
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+        title: StorageLocation ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    User:
+        properties:
+            InstanceID:
+                format: uuid
+                type: string
+            aud:
+                type: string
+                x-go-name: Aud
+            banned_until:
+                format: date-time
+                type: string
+                x-go-name: BannedUntil
+            confirmation_sent_at:
+                format: date-time
+                type: string
+                x-go-name: ConfirmationSentAt
+            confirmation_token:
+                type: string
+                x-go-name: ConfirmationToken
+            confirmed_at:
+                format: date-time
+                type: string
+                x-go-name: ConfirmedAt
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            deleted_at:
+                format: date-time
+                type: string
+                x-go-name: DeletedAt
+            email:
+                type: string
+                x-go-name: Email
+            email_change:
+                type: string
+                x-go-name: EmailChange
+            email_change_confirm_status:
+                format: int64
+                type: integer
+                x-go-name: EmailChangeConfirmStatus
+            email_change_sent_at:
+                format: date-time
+                type: string
+                x-go-name: EmailChangeSentAt
+            email_change_token_current:
+                type: string
+                x-go-name: EmailChangeTokenCurrent
+            email_change_token_new:
+                type: string
+                x-go-name: EmailChangeTokenNew
+            email_confirmed_at:
+                format: date-time
+                type: string
+                x-go-name: EmailConfirmedAt
+            encrypted_password:
+                type: string
+                x-go-name: EncryptedPassword
+            first_name:
+                type: string
+                x-go-name: FirstName
+            id:
+                format: uuid
+                type: string
+                x-go-name: ID
+            invited_at:
+                format: date-time
+                type: string
+                x-go-name: InvitedAt
+            is_sso_user:
+                type: boolean
+                x-go-name: IsSSOUser
+            last_name:
+                type: string
+                x-go-name: LastName
+            last_sign_in_at:
+                format: date-time
+                type: string
+                x-go-name: LastSignInAt
+            middle_name:
+                type: string
+                x-go-name: MiddleName
+            phone:
+                type: string
+                x-go-name: Phone
+            phone_change:
+                type: string
+                x-go-name: PhoneChange
+            phone_change_sent_at:
+                format: date-time
+                type: string
+                x-go-name: PhoneChangeSentAt
+            phone_change_token:
+                type: string
+                x-go-name: PhoneChangeToken
+            phone_confirmed_at:
+                format: date-time
+                type: string
+                x-go-name: PhoneConfirmedAt
+            raw_app_meta_data:
+                type: object
+                x-go-name: RawAppMetaData
+            raw_user_meta_data:
+                type: object
+                x-go-name: RawUserMetaData
+            re_authentication_sent_at:
+                format: date-time
+                type: string
+                x-go-name: ReAuthenticationSentAt
+            re_authentication_token:
+                type: string
+                x-go-name: ReAuthenticationToken
+            recovery_sent_at:
+                format: date-time
+                type: string
+                x-go-name: RecoverySentAt
+            recovery_token:
+                type: string
+                x-go-name: RecoveryToken
+            role:
+                type: string
+                x-go-name: Role
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+        title: User ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    UserCredentials:
+        properties:
+            aud:
+                type: string
+                x-go-name: Audience
+            birthday:
+                type: string
+                x-go-name: Birthday
+            email:
+                type: string
+                x-go-name: Email
+            exp:
+                format: int64
+                type: integer
+                x-go-name: ExpiresAt
+            expiration_time:
+                format: date-time
+                type: string
+                x-go-name: ExpirationTime
+            iat:
+                format: int64
+                type: integer
+                x-go-name: IssuedAt
+            id:
+                format: uuid
+                type: string
+                x-go-name: ID
+            iss:
+                type: string
+                x-go-name: Issuer
+            jti:
+                type: string
+                x-go-name: Id
+            licence_key:
+                type: string
+                x-go-name: LicenceKey
+            nbf:
+                format: int64
+                type: integer
+                x-go-name: NotBefore
+            password:
+                type: string
+                x-go-name: EncryptedPassword
+            pre_token:
+                type: string
+                x-go-name: PreBuiltToken
+            role:
+                type: string
+                x-go-name: Role
+            sub:
+                type: string
+                x-go-name: Subject
+            user_agent:
+                type: string
+                x-go-name: UserAgent
+        title: UserCredentials ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    VolunteeringDetails:
+        properties:
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            eventID:
+                type: string
+                x-go-name: EventID
+            id:
+                type: string
+                x-go-name: ID
+            project_skills_id:
+                type: string
+                x-go-name: EventSkillsID
+            title:
+                type: string
+                x-go-name: Title
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            userID:
+                type: string
+                x-go-name: UserID
+            volunteer_hours:
+                type: string
+                x-go-name: Hours
+            volunteeringActivity:
+                type: string
+                x-go-name: VolunteeringActivity
+        title: VolunteeringDetails ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+info:
+    description: |-
+        # Documentation for the mashed api layer.
+
+        Scehmes: http
+    title: Api Layer
+    version: 1.0.0
+paths:
+    /api/profile/highlights/{id}:
+        get:
+            operationId: getUserRecentHighlights
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: RecentHighlight
+                    schema:
+                        $ref: '#/definitions/RecentHighlight'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of highlights for the user. The highlights includes created, reported, volunteered events
+            tags:
+                - GetUserRecentHighlights
+    /api/profile/notes/{id}:
+        delete:
+            operationId: removeSelectedNote
+            parameters:
+                - description: The id of the selected note
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Removes the note from the db
+            tags:
+                - RemoveSelectedNote
+        get:
+            operationId: getUserNotesDetails
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Notes
+                    schema:
+                        items:
+                            $ref: '#/definitions/Notes'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Retrieves the list of notes for the user.'
+            tags:
+                - GetUserNotesDetails
+        post:
+            operationId: addNewNote
+            parameters:
+                - description: The id of the selected note
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The note object to add into the db
+                  in: query
+                  name: Note
+                  required: true
+                  type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Add a new note to the database
+            tags:
+                - AddNewNote
+        put:
+            operationId: updateNote
+            parameters:
+                - description: The id of the selected note
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The note object to update into the db
+                  in: query
+                  name: Note
+                  required: true
+                  type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Updates an existing note in the database
+            tags:
+                - UpdateNote
+    /api/profile/recent/{id}:
+        get:
+            description: create / update event, create / update volunteering, create / update expense report.
+            operationId: getUserRecentActivities
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: RecentActivity
+                    schema:
+                        items:
+                            $ref: '#/definitions/RecentActivity'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of recent activities the user has commenced. The api is responsible for
+            tags:
+                - GetUserRecentActivities
+    /api/v1/categories:
+        get:
+            operationId: getAllCategories
+            responses:
+                "200":
+                    description: Category
+                    schema:
+                        items:
+                            $ref: '#/definitions/Category'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of categories that can be associated with each project
+            tags:
+                - GetAllCategories
+    /api/v1/causes:
+        get:
+            operationId: getAllEventCauses
+            responses:
+                "200":
+                    description: EventCause
+                    schema:
+                        items:
+                            $ref: '#/definitions/EventCause'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of event causes as options
+            tags:
+                - GetAllEventCauses
+    /api/v1/event/{id}:
+        get:
+            operationId: getEvent
+            parameters:
+                - description: The id for any event
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        items:
+                            $ref: '#/definitions/Event'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the selected event with the specific id
+            tags:
+                - GetEvent
+    /api/v1/event/{id}/updateAvatar:
+        post:
+            operationId: updateEventAvatar
+            parameters:
+                - description: The id of the selected event that the avatar should be associated to.
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        $ref: '#/definitions/Event'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Updates the current event image for the selected event. Does not meddle with anything else.'
+            tags:
+                - UpdateEventAvatar
+    /api/v1/events:
+        get:
+            description: |-
+                Retrieves the list of events that are happening currently in the application. Currently
+                with the v1 there is no limit to the amount of events that can be applied therefore all
+                events that are not deactivated are displayed.
+            operationId: getAllEvents
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        items:
+                            $ref: '#/definitions/Event'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of events
+            tags:
+                - GetAllEvents
+        post:
+            operationId: updateExistingEvent
+            parameters:
+                - description: The id of the event to be updated
+                  in: query
+                  name: id
+                  required: true
+                  type: string
+                - description: The column name to be updated
+                  in: query
+                  name: column_name
+                  required: true
+                  type: string
+                - description: The column value to be updated
+                  in: query
+                  name: column_value
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        $ref: '#/definitions/Event'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Update an existing event with selected parameters passed in
+            tags:
+                - UpdateExistingEvent
+    /api/v1/expense:
+        post:
+            operationId: addExpenseToEvent
+            parameters:
+                - description: The name of the item to add to the event storage list
+                  in: query
+                  name: name
+                  required: true
+                  type: string
+                - description: The eventID of the project that the item belongs to
+                  in: query
+                  name: eventID
+                  required: true
+                  type: string
+                - description: The description of the item
+                  in: query
+                  name: description
+                  required: true
+                  type: string
+                - description: The quantity of the item to add into the storage container
+                  in: query
+                  name: quantity
+                  required: true
+                  type: object
+                - description: The location of the item to add into the storage container.
+                  in: query
+                  name: location
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        $ref: '#/definitions/Event'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Add expenses to an existing event. If the eventID does not exist, the api results an error
+            tags:
+                - AddExpenseToEvent
+    /api/v1/expenses/{id}:
+        get:
+            operationId: getAllExpenses
+            parameters:
+                - description: The id of the selected event
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Expense
+                    schema:
+                        items:
+                            $ref: '#/definitions/Expense'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of expenses for a selected event
+            tags:
+                - GetAllExpenses
+    /api/v1/health:
+        get:
+            description: |-
+                Health Check to test if the application api layer is operational or not. This api functionality
+                does not attempt to connect with the backend service. It is designed to support heartbeat support system.
+            operationId: getProfileHealthCheck
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Health Check
+            tags:
+                - GetProfileHealthCheck
+    /api/v1/item:
+        post:
+            operationId: addItemToEvent
+            parameters:
+                - description: The name of the item to add to the event storage list
+                  in: query
+                  name: name
+                  required: true
+                  type: string
+                - description: The eventID of the project that the item belongs to
+                  in: query
+                  name: eventID
+                  required: true
+                  type: string
+                - description: The description of the item
+                  in: query
+                  name: description
+                  required: true
+                  type: string
+                - description: The quantity of the item to add into the storage container
+                  in: query
+                  name: quantity
+                  required: true
+                  type: object
+                - description: The location of the item to add into the storage container.
+                  in: query
+                  name: location
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Event
+                    schema:
+                        $ref: '#/definitions/Event'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Update an existing event
+            tags:
+                - AddItemToEvent
+    /api/v1/items/{id}:
+        get:
+            operationId: getAllItems
+            parameters:
+                - description: The id of the event that all the items are associated with
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Item
+                    schema:
+                        items:
+                            $ref: '#/definitions/Item'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Retrieves the list of items related to an event.'
+            tags:
+                - GetAllItems
+        put:
+            operationId: updateItemDetails
+            parameters:
+                - description: The id of the item to be updated
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The object of item that needs to be updated
+                  in: body
+                  name: ItemToUpdate
+                  required: true
+                  schema:
+                    $ref: '#/definitions/ItemToUpdate'
+                    description: The object of item that needs to be updated
+                    type: object
+            responses:
+                "200":
+                    description: Item
+                    schema:
+                        $ref: '#/definitions/Item'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Update an existing item details with selected parameters passed in. Allows to update items that are stored against an event.'
+            tags:
+                - UpdateItemDetails
+    /api/v1/locations:
+        get:
+            operationId: getAllStorageLocations
+            responses:
+                "200":
+                    description: StorageLocation
+                    schema:
+                        items:
+                            $ref: '#/definitions/StorageLocation'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of locations that can be used to store items associated to a event
+            tags:
+                - GetAllStorageLocations
+    /api/v1/logout:
+        post:
+            operationId: logout
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Logs users out of the database system.'
+            tags:
+                - Logout
+    /api/v1/profile:
+        put:
+            operationId: updateProfile
+            parameters:
+                - description: The full profile object of the user
+                  in: body
+                  name: Profile
+                  required: true
+                  schema:
+                    $ref: '#/definitions/Profile'
+                    description: The full profile object of the user
+                    type: object
+            responses:
+                "200":
+                    description: Profile
+                    schema:
+                        $ref: '#/definitions/Profile'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Updates the current user profile for the selected user. Does not meddle with authentication
+            tags:
+                - UpdateProfile
+    /api/v1/profile/{id}:
+        get:
+            operationId: getUsername
+            parameters:
+                - description: The id of the user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the user name from the profiles table. Does not meddle with authentication
+            tags:
+                - GetUsername
+    /api/v1/profile/{id}/notifications:
+        get:
+            description: Retrieves the list of notifications that are happening currently in the application.
+            operationId: getAllNotifications
+            parameters:
+                - description: The id of the selected user to retrieve the notification for
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: Notification
+                    schema:
+                        items:
+                            $ref: '#/definitions/Notification'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of notifications for each users
+            tags:
+                - GetAllNotifications
+    /api/v1/profile/{id}/notifications/{notificationID}:
+        put:
+            description: '# Updates the selected notification'
+            operationId: updateSingleNotification
+            parameters:
+                - description: The id of the selected user to retrieve the notification for
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The notificationID of the selected notification
+                  in: path
+                  name: notificationID
+                  required: true
+                  type: string
+                - description: The Notification object that can be used to update the selected notification
+                  in: body
+                  name: Notification
+                  required: true
+                  schema:
+                    $ref: '#/definitions/Notification'
+                    description: The Notification object that can be used to update the selected notification
+                    type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of notifications for each users
+            tags:
+                - UpdateSingleNotification
+    /api/v1/profile/{id}/updateAvatar:
+        post:
+            operationId: updateProfileAvatar
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The full file details of the avatar
+                  in: body
+                  name: FileHeader
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FileHeader'
+                    description: The full file details of the avatar
+                    type: object
+            responses:
+                "200":
+                    description: Profile
+                    schema:
+                        $ref: '#/definitions/Profile'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Updates the current user avatar for the selected user. Does not meddle with authentication
+            tags:
+                - UpdateProfileAvatar
+    /api/v1/report:
+        post:
+            operationId: createNewReport
+            parameters:
+                - description: The id of the new report
+                  in: query
+                  name: id
+                  type: string
+                - description: The report event object that needs to be updated in the db
+                  in: body
+                  name: ReportEvent
+                  required: true
+                  schema:
+                    $ref: '#/definitions/ReportEvent'
+                    description: The report event object that needs to be updated in the db
+                    type: object
+            responses:
+                "200":
+                    description: ReportEvent
+                    schema:
+                        items:
+                            $ref: '#/definitions/ReportEvent'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Create a new report against an event
+            tags:
+                - CreateNewReport
+    /api/v1/report/{id}:
+        get:
+            operationId: getAllEventReports
+            parameters:
+                - description: The id of the event to retrieve the report from
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: ReportEvent
+                    schema:
+                        items:
+                            $ref: '#/definitions/ReportEvent'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Retrieves the list of reports made against any event. If there is no report, the result is empty array.'
+            tags:
+                - GetAllEventReports
+    /api/v1/signin:
+        post:
+            operationId: signin
+            parameters:
+                - description: The email address of the current user
+                  in: query
+                  name: email
+                  required: true
+                  type: string
+                - description: The password of the current user
+                  in: query
+                  name: password
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: User
+                    schema:
+                        $ref: '#/definitions/User'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Sign in users into the database system.'
+            tags:
+                - Signin
+    /api/v1/signup:
+        post:
+            operationId: signup
+            parameters:
+                - description: The email address of the current user
+                  in: query
+                  name: email
+                  required: true
+                  type: string
+                - description: The password of the current user
+                  in: query
+                  name: password
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: User
+                    schema:
+                        $ref: '#/definitions/User'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Sign up users into the database system.'
+            tags:
+                - Signup
+    /api/v1/states:
+        get:
+            operationId: getAllStates
+            responses:
+                "200":
+                    description: State
+                    schema:
+                        items:
+                            $ref: '#/definitions/State'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of states of the USA
+            tags:
+                - GetAllStates
+    /api/v1/types:
+        get:
+            operationId: getAllProjectTypes
+            responses:
+                "200":
+                    description: ProjectType
+                    schema:
+                        items:
+                            $ref: '#/definitions/ProjectType'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of types of project
+            tags:
+                - GetAllProjectTypes
+    /api/v1/volunteering:
+        get:
+            operationId: getVolunteerHours
+            responses:
+                "200":
+                    description: VolunteeringDetails
+                    schema:
+                        items:
+                            $ref: '#/definitions/VolunteeringDetails'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of volunteering hours that the select user has made against all events
+            tags:
+                - GetVolunteerHours
+        post:
+            operationId: createVolunteerHours
+            parameters:
+                - description: The eventID of the event the project is related to
+                  in: query
+                  name: eventID
+                  required: true
+                  type: string
+                - description: The userID of author submitting request
+                  in: query
+                  name: userID
+                  required: true
+                  type: string
+                - description: The volunteeringActivity name
+                  in: query
+                  name: volunteeringActivity
+                  required: true
+                  type: string
+                - description: The volunteeringHours in hours
+                  in: query
+                  name: volunteeringHours
+                  required: true
+                  type: string
+                - description: The creator of the volunteering skill. Defaults to userID
+                  in: query
+                  name: created_by
+                  type: string
+                - description: The created date of the volunteering skill. Defaults to current time.
+                  in: query
+                  name: created_at
+                  type: string
+                - description: The updator of the volunteering skill. Defaults to userID
+                  in: query
+                  name: updated_by
+                  type: string
+                - description: The updated date of the volunteering skill. Defaults to userID
+                  in: query
+                  name: updated_at
+                  type: string
+            responses:
+                "200":
+                    description: VolunteeringDetails
+                    schema:
+                        $ref: '#/definitions/VolunteeringDetails'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Adds hours and skill to a required volunteering item. Supports the ability to add volunteer hours
+            tags:
+                - CreateVolunteerHours
+    /api/v1/volunteering/{userID}:
+        get:
+            operationId: getUserVolunteerDetails
+            parameters:
+                - description: The userID of the user the report to retrieve from
+                  in: path
+                  name: userID
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: VolunteeringDetails
+                    schema:
+                        items:
+                            $ref: '#/definitions/VolunteeringDetails'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of volunteering activities completed by the user
+            tags:
+                - GetUserVolunteerDetails
+produces:
+    - application/json
+swagger: "2.0"
