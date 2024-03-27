@@ -8,6 +8,9 @@ import (
 )
 
 // Profile ...
+// swagger:model Profile
+//
+// Profile object of the user.
 type Profile struct {
 	ID           uuid.UUID `json:"id"`
 	Username     string    `json:"username"`
@@ -32,6 +35,9 @@ func (p *Profile) Validate() error {
 }
 
 // RecentActivity ...
+// swagger:model RecentActivity
+//
+// RecentActivity is a activity that happened in the past. Used primarily to retrieve list of recent activities for the user.
 type RecentActivity struct {
 	Type              string    `json:"type"`
 	EventID           string    `json:"id"`
@@ -48,6 +54,9 @@ type RecentActivity struct {
 }
 
 // RecentHighlight ...
+// swagger:model RecentHighlight
+//
+// RecentHighlight object of the user. Stores count of different types of events
 type RecentHighlight struct {
 	CreatedEvents      int `json:"created_events"`
 	VolunteeredEvents  int `json:"volunteered_events"`
@@ -58,6 +67,9 @@ type RecentHighlight struct {
 }
 
 // Notes ...
+// swagger:model Notes
+//
+// Notes object. Used to store the note details
 type Note struct {
 	ID          string    `json:"noteID"`
 	Title       string    `json:"title"`

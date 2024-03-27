@@ -3,6 +3,9 @@ package model
 import "time"
 
 // Event ...
+// swagger:model Event
+//
+// List of the events
 type Event struct {
 	ID                string    `json:"id"`
 	Title             string    `json:"title"`
@@ -45,6 +48,9 @@ type Event struct {
 }
 
 // VolunteeringDetails ...
+// swagger:model VolunteeringDetails
+//
+// List of volunteering details
 type VolunteeringDetails struct {
 	ID                   string    `json:"id"`
 	UserID               string    `json:"userID"`
@@ -60,6 +66,9 @@ type VolunteeringDetails struct {
 }
 
 // ReportEvent ...
+// swagger:model ReportEvent
+//
+// Report made against any selected event.
 type ReportEvent struct {
 	ID             string    `json:"id"` // same as eventID. Report ID is hidden for clients
 	Subject        string    `json:"subject"`
@@ -77,6 +86,9 @@ type ReportEvent struct {
 }
 
 // Expense ...
+// swagger:model Expense
+//
+// Expense made for each item. These items are bought for the selected event.
 type Expense struct {
 	ID               string    `json:"id"`
 	EventID          string    `json:"eventID"`
@@ -96,6 +108,9 @@ type Expense struct {
 }
 
 // State ...
+// swagger:model State
+//
+// The current states of United States are displayed here.
 type State struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
@@ -103,18 +118,27 @@ type State struct {
 }
 
 // EventCause ...
+// swagger:model EventCause
+//
+// EventCause are the cause that the selected event is associated with. Only one event can be associated with one event cause.
 type EventCause struct {
 	ID    string `json:"id"`
 	Cause string `json:"cause"`
 }
 
 // ProjectType ...
+// swagger:model ProjectType
+//
+// ProjectType are the types of project that the selected event can be associated with. Only one event can be of a specific type.
 type ProjectType struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`
 }
 
 // ItemToUpdate ...
+// swagger:model ItemToUpdate
+//
+// ItemToUpdate is the object that needs to be updated when the client is updating the item list of a selected event. A user can update a certain limit of columns
 type ItemToUpdate struct {
 	Column  string `json:"column"`
 	Value   string `json:"value"`
@@ -124,6 +148,9 @@ type ItemToUpdate struct {
 }
 
 // Item ...
+// swagger:model Item
+//
+// Each selected item is the item that clients add to the selected event.
 type Item struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
@@ -143,6 +170,9 @@ type Item struct {
 }
 
 // StorageLocation ...
+// swagger:model StorageLocation
+//
+// Storage Location is the location where the item has been stored
 type StorageLocation struct {
 	ID             string    `json:"id"`
 	Location       string    `json:"location"`
@@ -154,6 +184,9 @@ type StorageLocation struct {
 }
 
 // Category ...
+// swagger:model Category
+//
+// These are the list of categories for each item. Items that are added can be categorized into certain values based on characteristics.
 type Category struct {
 	ID             string    `json:"id"`
 	CategoryName   string    `json:"category_name"`

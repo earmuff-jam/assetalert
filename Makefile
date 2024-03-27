@@ -1,6 +1,10 @@
 
 include .env
 
+# load swagger
+swagger:
+	cd apilayer && swagger generate spec -o swagger.yaml --scan-models
+
 # load api
 startserver:
 	cd apilayer && \

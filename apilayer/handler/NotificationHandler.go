@@ -11,7 +11,7 @@ import (
 )
 
 // GetNotificationHealthCheck ...
-// swagger:route GET /api/v1/health
+// swagger:route GET /api/v1/health GetNotificationHealthCheck getNotificationHealthCheck
 //
 // # Health Check
 //
@@ -19,10 +19,10 @@ import (
 // does not attempt to connect with the backend service. It is designed to support heartbeat support system.
 //
 // Responses:
-// 200: Message
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetNotificationHealthCheck(rw http.ResponseWriter, r *http.Request, user string) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
@@ -30,17 +30,24 @@ func GetNotificationHealthCheck(rw http.ResponseWriter, r *http.Request, user st
 }
 
 // GetAllNotifications ...
-// swagger:route GET /api/v1/profile/{id}/notifications
+// swagger:route GET /api/v1/profile/{id}/notifications GetAllNotifications getAllNotifications
 //
 // # Retrieves the list of notifications for each users
 //
 // Retrieves the list of notifications that are happening currently in the application.
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected user to retrieve the notification for
+//     type: string
+//     required: true
+//
 // Responses:
 // 200: []Notification
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetAllNotifications(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -66,17 +73,34 @@ func GetAllNotifications(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateSingleNotification ...
-// swagger:route PUT /api/v1/profile/{id}/notifications/{notificationID}
+// swagger:route PUT /api/v1/profile/{id}/notifications/{notificationID} UpdateSingleNotification updateSingleNotification
 //
 // # Retrieves the list of notifications for each users
 //
 // # Updates the selected notification
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected user to retrieve the notification for
+//     type: string
+//     required: true
+//   - +name: notificationID
+//     in: path
+//     description: The notificationID of the selected notification
+//     type: string
+//     required: true
+//   - +name: Notification
+//     in: body
+//     description: The Notification object that can be used to update the selected notification
+//     type: Notification
+//     required: true
+//
 // Responses:
-// 200: Message
-// 400: Message
-// 404: Message
-// 500: Message
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func UpdateSingleNotification(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)

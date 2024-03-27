@@ -13,6 +13,9 @@ import (
 )
 
 // UserCredentials ...
+// swagger:model UserCredentials
+//
+// UserCredentials object. Used for authentication purposes only.
 type UserCredentials struct {
 	ID                uuid.UUID `json:"id,omitempty"`
 	Email             string    `json:"email,omitempty"`
@@ -53,6 +56,9 @@ func (us *UserCredentials) ProduceAuthToken(draftUser *UserCredentials) {
 }
 
 // User ...
+// swagger:model User
+//
+// User object.
 type User struct {
 	InstanceID               uuid.UUID
 	ID                       uuid.UUID       `json:"id,omitempty"`
