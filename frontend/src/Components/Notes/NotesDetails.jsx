@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
+    width: '100vw', // set width to force inside content to be 100%
   },
   rowContainer: {
     display: 'flex',
@@ -159,6 +160,7 @@ const NotesDetails = () => {
                     <TextComponent
                       value={note.note_title}
                       gutterBottom={true}
+                      fullWidth={true}
                       loading={loading}
                       textStyle={[classes.text, classes.textVariant].join(' ')}
                     />
