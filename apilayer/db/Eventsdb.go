@@ -523,7 +523,7 @@ func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error
 	if err != nil {
 		// if the location is not a uuid type, then it should resemble a new storage location
 		emptyLocationID := ""
-		err := addNewCategoryLocation(user, draftExpense.CategoryID, draftExpense.CreatedBy, &emptyLocationID)
+		err := addNewCategoryLocation(user, draftExpense.Category, draftExpense.CreatedBy, &emptyLocationID)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -1478,7 +1478,7 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 // addNewCategoryLocation ...
 //
 // adds new storage location if not existing
-func addNewCategoryLocation(user string, draftCategoryID string, created_by string, emptyLocationID *string) error {
+func addNewCategoryLocation(user string, draftCategoryName string, created_by string, emptyLocationID *string) error {
 	db, err := SetupDB(user)
 	if err != nil {
 		return err
@@ -1510,7 +1510,7 @@ func addNewCategoryLocation(user string, draftCategoryID string, created_by stri
 
 	row := tx.QueryRow(
 		sqlStr,
-		draftCategoryID,
+		draftCategoryName,
 		created_by,
 		created_by,
 		time.Now(),

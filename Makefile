@@ -20,8 +20,8 @@ gotests-details:
 
 # load data
 datagen:
-	cd server && \
-	./_addTestData.sh ${COMMUNITY_TEST_USER} ${DATABASE_DOCKER_CONTAINER_PORT} ${POSTGRES_DB} ${DATABASE_DOCKER_CONTAINER_IP_ADDRESS}
+	./setup/_addTestData.sh
+	cd apilayer/dataLake && go run main.go
 
 # load ui
 startclient:
