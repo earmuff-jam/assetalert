@@ -400,7 +400,6 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		return nil, err
 	}
 
-	// for add scenarios
 	var draftNoteID string
 	draftNote.CreatedAt = time.Now()
 	draftNote.UpdatedAt = time.Now()
