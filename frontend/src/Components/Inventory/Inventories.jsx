@@ -1,10 +1,10 @@
-import { Box, Container, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
 import EasyEdit, { Types } from 'react-easy-edit';
-import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
+import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_COLUMNS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
 import Title from '../DialogComponent/Title';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import List from '../DrawerListComponent/List';
@@ -40,6 +40,7 @@ const Inventories = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [editMode, setEditMode] = useState(false);
+  const [displayData, setDisplayData] = useState([]);
 
   const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
 
@@ -47,60 +48,27 @@ const Inventories = () => {
     setEditMode(!editMode);
     dispatch(eventActions.getStorageLocations());
   };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    const selectionMenu = {
+      1: 'COUPONS',
+      2: 'DRAFT',
+      3: 'HIDDEN',
+    };
+    const currentSelectedCriteria = selectionMenu[newValue];
+    const formattedData =
+      (currentSelectedCriteria && inventories.filter((v) => v.status === currentSelectedCriteria)) || inventories;
+    setDisplayData([...formattedData]);
   };
 
-  const data = [
-    {
-      id: '5a271435-a055-45b9-9481-97b41e5a4d05',
-      name: 'Dog food',
-      description: 'Large breed dog food for tiku',
-      price: '89.99',
-      status: 'COUPONS', // [COUPONS, HIDDEN, DRAFT]
-      barcode: '',
-      sku: '',
-      quantity: 1,
-      location: 'Kitchen Pantry',
-      created_at: '2024-03-17T15:55:02.701296Z',
-      created_by: '71759d26-8128-4b30-abb3-b84f63439bf3',
-      creator_name: 'Native Plants',
-      updated_at: '2024-03-17T15:55:02.701296Z',
-      updated_by: '71759d26-8128-4b30-abb3-b84f63439bf3',
-      updater_name: 'Native Plants',
-      storage_location_id: 'efc8e1f6-9462-492c-9ce6-821bdb591fea',
-      bought_at: 'Walmart',
-    },
-    {
-      id: '5a271435-a055-45b9-9481-97b41e5a4d05',
-      name: 'Dog food',
-      description: 'Large breed dog food for tiku',
-      price: '89.99',
-      status: 'HIDDEN', // [COUPONS, HIDDEN, DRAFT]
-      barcode: '',
-      sku: '',
-      quantity: 1,
-      location: 'Kitchen Pantry',
-      created_at: '2024-03-17T15:55:02.701296Z',
-      created_by: '71759d26-8128-4b30-abb3-b84f63439bf3',
-      creator_name: 'Native Plants',
-      updated_at: '2024-03-17T15:55:02.701296Z',
-      updated_by: '71759d26-8128-4b30-abb3-b84f63439bf3',
-      updater_name: 'Native Plants',
-      storage_location_id: 'efc8e1f6-9462-492c-9ce6-821bdb591fea',
-      bought_at: 'Walmart',
-    },
-  ];
-
-  const columns = Object.keys(data.length > 0 && data[0]); // for header purpose
-  // removing unwanted values from the display column
-  const filteredItems = data?.map((item) => {
+  const filteredItems = displayData?.map((item) => {
     const { id, eventID, storage_location_id, created_by, updated_by, ...rest } = item;
     return rest;
   });
 
   const columnHeaderFormatter = (column) => {
-    const header = VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column];
+    const header = VIEW_PERSONAL_INVENTORY_COLUMNS[column];
     // Apply a modifier function if defined
     const formattedTitle = header?.modifier ? header.modifier(header.title) : header?.displayName;
     return formattedTitle;
@@ -132,67 +100,63 @@ const Inventories = () => {
     return row[column];
   };
 
-  const displaySelection = (value) => {
+  const displaySelection = (value, data) => {
     switch (value) {
       case 0:
         return (
-          <Container maxWidth="lg">
-            <List
-              tooltipTitle={'Download all items '}
-              fileName={'inventories.xlsx'}
-              sheetName={'All Inventories'}
-              data={data}
-              columns={columns}
-              filteredData={filteredItems}
-              columnHeaderFormatter={columnHeaderFormatter}
-              rowFormatter={rowFormatter}
-            />
-          </Container>
+          <List
+            key={performance.now()}
+            tooltipTitle={'Download all items '}
+            fileName={'inventories.xlsx'}
+            sheetName={'All Inventories'}
+            data={displayData}
+            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
+          />
         );
       case 1:
         return (
-          <Container maxWidth="lg">
-            <List
-              tooltipTitle={'Download all items with coupons '}
-              fileName={'inventories.xlsx'}
-              sheetName={'Coupons'}
-              data={data.filter((v) => v.status === 'COUPONS')}
-              columns={columns}
-              filteredData={filteredItems}
-              columnHeaderFormatter={columnHeaderFormatter}
-              rowFormatter={rowFormatter}
-            />
-          </Container>
+          <List
+            key={performance.now()}
+            tooltipTitle={'Download all items with coupons '}
+            fileName={'inventories.xlsx'}
+            sheetName={'Coupons'}
+            data={displayData}
+            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
+          />
         );
       case 2:
         return (
-          <Container maxWidth="lg">
-            <List
-              tooltipTitle={'Download all items with draft status '}
-              fileName={'inventories.xlsx'}
-              sheetName={'Draft Status'}
-              data={data.filter((v) => v.status === 'DRAFT')}
-              columns={columns}
-              filteredData={filteredItems}
-              columnHeaderFormatter={columnHeaderFormatter}
-              rowFormatter={rowFormatter}
-            />
-          </Container>
+          <List
+            key={performance.now()}
+            tooltipTitle={'Download all items with draft status '}
+            fileName={'inventories.xlsx'}
+            sheetName={'Draft Status'}
+            data={displayData}
+            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
+          />
         );
       case 3:
         return (
-          <Container maxWidth="lg">
-            <List
-              tooltipTitle={'Download all inventories with hidden status '}
-              fileName={'inventories.xlsx'}
-              sheetName={'Hidden Inventories'}
-              data={data.filter((v) => v.status === 'HIDDEN')}
-              columns={columns}
-              filteredData={filteredItems}
-              columnHeaderFormatter={columnHeaderFormatter}
-              rowFormatter={rowFormatter}
-            />
-          </Container>
+          <List
+            key={performance.now()}
+            tooltipTitle={'Download all inventories with hidden status '}
+            fileName={'inventories.xlsx'}
+            sheetName={'Hidden Inventories'}
+            data={displayData}
+            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
+          />
         );
       default:
         return null;
@@ -202,6 +166,12 @@ const Inventories = () => {
   useEffect(() => {
     dispatch(profileActions.getAllInventoriesForUser());
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(inventories)) {
+      setDisplayData(inventories);
+    }
+  }, [inventoriesLoading]);
 
   return (
     <Box>

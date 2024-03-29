@@ -7,9 +7,7 @@ const ProfilePage = () => {
     <ThemeProvider theme={primary_theme}>
       <CssBaseline />
       <PrimaryAppBar selectedID={2} />
-      <Container maxWidth="xl">
-        <ProfileDetailPage />
-      </Container>
+      <ProfileDetailPage />
     </ThemeProvider>
   );
 };

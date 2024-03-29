@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS community.inventory
     sku                 VARCHAR(100)                 ,
     quantity            INT                                   DEFAULT 1,
     boughtAt            VARCHAR(500)                 ,
-    location            INT                          ,
+    location            VARCHAR(500)                ,
     storage_location_id UUID                         REFERENCES storage_locations (id) ON UPDATE CASCADE ON DELETE CASCADE,
     created_at          TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),
     created_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,

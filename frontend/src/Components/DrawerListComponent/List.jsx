@@ -1,23 +1,13 @@
 import PropTypes from 'prop-types';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Box,
-} from '@material-ui/core';
-
+import MUIDataTable from 'mui-datatables';
+import { Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(1),
-    maxHeight: '40vh',
+    height: `calc(100vh - 20rem)`,
+    overflow: 'auto',
   },
   tableHeaderCell: {
     fontWeight: 'bold',
@@ -42,51 +32,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const List = ({
-  title,
-  subtitle,
-  data,
-  filteredData,
-  columns,
-  columnHeaderFormatter,
-  rowFormatter,
-  tooltipTitle,
-  fileName,
-  sheetName,
-}) => {
+const List = ({ title, subtitle, data, columns, tooltipTitle, fileName, sheetName }) => {
   const classes = useStyles();
+  const options = {
+    filterType: 'checkbox',
+  };
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
       <Box className={classes.container}>
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
-          {data.length > 0 && (
-            <DownloadExcelButton data={data} tooltipTitle={tooltipTitle} fileName={fileName} sheetName={sheetName} />
-          )}
         </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column} className={classes.tableHeaderCell}>
-                    {columnHeaderFormatter(column)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredData.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {columns.map((column) => (
-                    <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <MUIDataTable title={title} data={data} columns={columns} options={options} />
       </Box>
     </>
   );

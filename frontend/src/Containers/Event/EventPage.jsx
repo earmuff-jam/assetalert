@@ -11,9 +11,7 @@ const EventPage = () => {
     <ThemeProvider theme={primary_theme}>
       <CssBaseline />
       <PrimaryAppBar selectedID={1} />
-      <Container maxWidth="lg">
-        <EventDetailPage />
-      </Container>
+      <EventDetailPage />
     </ThemeProvider>
   );
 };
