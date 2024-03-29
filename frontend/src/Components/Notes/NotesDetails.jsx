@@ -133,7 +133,7 @@ const NotesDetails = () => {
   }, [loading]);
 
   if (loading) {
-    return <LoadingSkeleton height={'10rem'} width={'10rem'} />;
+    return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
   }
 
   if (!notes || notes.length === 0) {

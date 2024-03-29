@@ -31,7 +31,6 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
     inv.updated_at
 FROM
     community.inventory inv
-LEFT JOIN community.projects p ON inv.project_id = p.id
 LEFT JOIN community.profiles cp ON inv.created_by = cp.id
 LEFT JOIN community.profiles up ON inv.updated_by = up.id
 WHERE

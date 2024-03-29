@@ -25,6 +25,16 @@ export function* fetchRecentActivitiesList() {
   }
 }
 
+export function* fetchAllInventoriesForUser() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
+    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || []));
+  } catch (e) {
+    yield put(profileActions.getAllInventoriesForUserFailure(e));
+  }
+}
+
 export function* fetchRecentActivitiesTrophyList() {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -187,6 +197,10 @@ export function* watchFetchVolunteeringDetails() {
   yield takeLatest(`profile/getVolunteeringDetails`, fetchVolunteeringDetails);
 }
 
+export function* watchFetchAllInventoriesForUser() {
+  yield takeLatest(`profile/getAllInventoriesForUser`, fetchAllInventoriesForUser);
+}
+
 export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
@@ -197,6 +211,7 @@ export default [
   watchFetchAddNewNote,
   watchFetchUpdateExistingNote,
   watchFetchRemoveSelectedNote,
+  watchFetchAllInventoriesForUser,
   watchExistingNotificationsUserDetails,
   watchFetchRecentActivitiesTrophyList,
   watchFetchRecentActivitiesList,

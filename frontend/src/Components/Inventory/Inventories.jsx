@@ -1,5 +1,5 @@
 import { Box, Container, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
@@ -9,8 +9,9 @@ import Title from '../DialogComponent/Title';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import List from '../DrawerListComponent/List';
 import dayjs from 'dayjs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -39,6 +40,8 @@ const Inventories = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [editMode, setEditMode] = useState(false);
+
+  const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
 
   const handleEditMode = () => {
     setEditMode(!editMode);
@@ -88,6 +91,7 @@ const Inventories = () => {
       bought_at: 'Walmart',
     },
   ];
+
   const columns = Object.keys(data.length > 0 && data[0]); // for header purpose
   // removing unwanted values from the display column
   const filteredItems = data?.map((item) => {
@@ -194,6 +198,10 @@ const Inventories = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    dispatch(profileActions.getAllInventoriesForUser());
+  }, []);
 
   return (
     <Box>
