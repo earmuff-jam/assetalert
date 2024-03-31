@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
-import { Table, TableBody, TableCell, TableRow, CircularProgress } from '@material-ui/core';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
+import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,6 +20,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  scrollable: {
+    height: '4rem',
+    overflowX: 'clip',
+    overflowY: 'auto',
+  },
   text: {
     fontSize: '0.825rem',
     fontFamily: 'Roboto',
@@ -28,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
   tableRow: {
     '& td': {
-      padding: theme.spacing(1.25),
       borderBottom: 'none',
     },
   },
@@ -55,7 +60,7 @@ const Host = ({ selectedEvent }) => {
   if (selectedEvent === undefined || Object.keys(selectedEvent).length <= 0) {
     return (
       <div className={classes.spinnerContainer}>
-        <CircularProgress />
+        <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
       </div>
     );
   }
@@ -77,6 +82,7 @@ const Host = ({ selectedEvent }) => {
                 classes.text,
                 classes.columnContainer,
                 { [classes.emptyGap]: row.id === 5 },
+                { [classes.scrollable]: row.id === 5 },
                 { [classes.darkbackgroundColor]: row.id % 2 === 0 }
               )}
             >

@@ -108,7 +108,7 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
         </div>
       ) : (
         <Grid container className={classes.cardContainer} data-tour="5">
-          <ViewFilteredEventList filteredOptions={currentEvents} handleNavigate={handleNavigate} />
+          <ViewFilteredEventList filteredOptions={filteredOptions} handleNavigate={handleNavigate} />
         </Grid>
       )}
     </Box>

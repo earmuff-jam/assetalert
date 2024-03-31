@@ -158,7 +158,7 @@ const ProfileDetailPage = () => {
             <Notification notifications={notifications} handleNotificationMenuSelect={handleNotificationMenuSelect} />
           </Popover>
         </Grid>
-        <Grid item xs={12} data-tour="1">
+        <Grid item xs={12} data-tour="2">
           <ProfileNavigationMenu />
         </Grid>
       </Grid>

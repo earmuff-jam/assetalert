@@ -31,15 +31,18 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   text: {
+    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
-    fontSize: '0.725rem',
-    fontWeight: 'bold',
+    color: theme.palette.primary.main,
+    fontSize: '0.925rem',
     textTransform: 'uppercase',
-    fontFamily: 'Roboto',
   },
   iconStyle: {
     width: theme.spacing(2),
     height: theme.spacing(2),
+  },
+  primaryStyle: {
+    color: theme.palette.warning.main,
   },
   underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,
@@ -58,10 +61,10 @@ const useStyles = makeStyles((theme) => ({
   navListComponent: {
     display: 'flex',
     flexDirection: 'row',
-    gap: theme.spacing(1),
+    gap: theme.spacing(2),
   },
   primaryStyle: {
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.dark,
   },
 }));
 

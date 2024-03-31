@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyItems: 'center',
     gap: theme.spacing(2),
+    margin: theme.spacing(2),
   },
   activatedChip: {
     color: theme.palette.error.dark,
@@ -91,12 +92,12 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
       />
       <Box>
         <Alert
-          severity="info"
+          severity={!isDeactivated ? "info" : "error"}
           className={classNames(classes.text, isDeactivated ? classes.activatedChip : classes.deactivatedChip)}
         >
           {!isDeactivated
             ? 'Current event is active. Save to process changes.'
-            : 'Current event is deactive. save to process changes.'}
+            : 'Current event is deactive. Save to process changes.'}
         </Alert>
         <Chip
           icon={<EventRounded className={`${!isDeactivated ? classes.activatedChip : classes.deactivatedChip}`} />}

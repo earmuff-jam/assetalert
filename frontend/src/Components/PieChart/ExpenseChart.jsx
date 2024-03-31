@@ -3,20 +3,26 @@ import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import 'chart.js/auto'; // do not remove this
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+import EmptyComponent from '../../util/EmptyComponent';
+import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    margin: '0 auto',
     marginTop: theme.spacing(1),
     padding: theme.spacing(1),
+    width: `calc(100% - 12rem)`,
+    height: `calc(100% - 12rem)`,
+    [theme.breakpoints.down('sm')]: {
+      width: `calc(100% - 0rem)`,
+      height: `calc(100% - 0rem)`,
+    },
   },
-  headerText: {
-    color: theme.palette.primary.main,
+  text: {
+    fontSize: '0.925rem',
     fontFamily: 'Poppins, sans-serif',
-    fontSize: '1.725rem',
   },
   aside: {
     display: 'flex',
@@ -25,8 +31,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  emptyGap: {
-    flexGrow: 1,
+  center: {
+    display: 'flex',
+    margin: '0 auto',
   },
   largeText: {
     fontSize: '1.685rem',
@@ -53,7 +60,7 @@ const ExpenseChart = ({ expenses }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -90,18 +97,22 @@ const ExpenseChart = ({ expenses }) => {
 
   return (
     <Box className={classes.container}>
-      <Typography variant="h5" className={classes.headerText} gutterBottom>
-        Expense Report
-      </Typography>
-      <Typography className={classes.text}>
-        Incurred Expenses:
-        <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
-      </Typography>
+      {totalIncurred ? (
+        <Typography className={classes.text}>
+          Incurred Expenses:
+          <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
+        </Typography>
+      ) : null}
       <Box className={classes.aside}>
-        <Box className={classes.emptyGap}></Box>
-        <Box className={classes.container}>
-          <Bar data={data} options={options} />
-        </Box>
+        {totalIncurred ? (
+          <Box className={classes.container}>
+            <Line data={data} options={options} />
+          </Box>
+        ) : (
+          <Box className={classes.center}>
+            <EmptyComponent subtitle="Add expenses to view data." />
+          </Box>
+        )}
       </Box>
     </Box>
   );

@@ -74,7 +74,7 @@ const CardTitleComponent = ({
           </Tooltip>
         </Box>
       </Box>
-      <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} />
+      <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'}/>
     </Box>
   );
 };
@@ -97,7 +97,7 @@ CardTitleComponent.propTypes = {
   firstIcon: PropTypes.object,
   firstLabel: PropTypes.string,
   secondIcon: PropTypes.object,
-  secondLabel: PropTypes.number,
+  secondLabel: PropTypes.string,
   extraSubtitle: PropTypes.string,
   firstToolTipLabel: PropTypes.string,
   secondTooltipLabel: PropTypes.string,

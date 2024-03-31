@@ -122,6 +122,9 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
           fullWidth={v.fullWidth}
           error={!!v.errorMsg}
           helperText={v.errorMsg}
+          variant={v.variant}
+          minRows={v.rows || 4}
+          multiline={v.multiline || false}
         />
       ))}
       <Autocomplete

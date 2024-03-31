@@ -5,7 +5,7 @@ const LANDING_PAGE_TOUR_STEPS = [
   },
   {
     title:
-      'We aim to bring the community together by assisting them in simple auditory tasks. Update your username in your profile section. View inventories, create new events or view your profile and make adjustments to your biography.',
+      'We aim to bring the community together by assisting them in simple auditory tasks. Update your username in your profile section. View inventories, create new events or view your profile and make adjustments to your biography. To access the chat service within any selected event, the user must have a valid profile.',
   },
   {
     title:
@@ -43,11 +43,12 @@ const PROFILE_TOUR_STEPS = [
       'Edit your profile bio with these action items. View list of notifications here as well. Notifications include only added expenses and added items for a specific event.',
   },
   {
-    title: 'View details about the efforts you have made to help reshape the world around you. ',
+    title:
+      'Reshape events around you with support from your reach. Search your personal inventories to update select event.',
   },
   {
     title:
-      'Volunteering hours on required skills are displayed here. If you do not have any such event, feel feel to create one or volunteer on your local events nearby.',
+      'View current events created by you, hours volunteered and / or count of total expenses accured relative to you as a user. If you did not volunteer on a event or did not add expenses to an event, it will not be visible under recent activities tab.',
   },
 ];
 
@@ -63,7 +64,7 @@ const SINGLE_EVENT_TOUR_STEPS = [
     title: 'The description of the event.',
   },
   {
-    title: 'Select option to join the event or leave the event',
+    title: 'Select option to join the event or leave the event.',
   },
   {
     title:
@@ -82,7 +83,7 @@ const SINGLE_EVENT_TOUR_STEPS = [
   },
   {
     title:
-      'View list of the items that are stored against the selected event. To edit certain fields, hover over the fields to edit them. ',
+      'View list of the items that are stored against the selected event. To edit certain fields, hover over the fields to edit them.',
   },
   {
     title:

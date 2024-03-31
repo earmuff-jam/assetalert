@@ -119,3 +119,78 @@ export const ADD_EXPENSE_FORM_FIELDS = {
     ...GENERIC_TEXTAREA_VARIANT,
   },
 };
+
+export const VIEW_CURRENT_SUPPLIES_COLUMNS = [
+  {
+    name: 'item_name',
+    label: 'Item Name',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'item_cost',
+    label: 'Item Cost',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'category_name',
+    label: 'Category',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'purchase_location',
+    label: 'Location',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'notes',
+    label: 'Notes',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'created_at',
+    label: 'Created At',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'creator_name',
+    label: 'Creator',
+    options: {
+      filter: true,
+      sort: false,
+    },
+  },
+  {
+    name: 'updated_at',
+    label: 'Updated At',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updator_name',
+    label: 'Updator',
+    options: {
+      filter: true,
+      sort: false,
+    },
+  },
+];

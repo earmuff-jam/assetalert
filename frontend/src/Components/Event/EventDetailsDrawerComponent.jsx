@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   allowSpace: {
     gap: theme.spacing(2),
   },
-  underline: {
+    underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,
   },
   selected: {
@@ -115,7 +115,7 @@ const EventDetailsDrawerComponent = ({
       case 2:
         return (
           <Box>
-            <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>
+            <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
               <ExpenseTab eventID={eventID} userID={userDetail.userID} editingAllowed={editingAllowed} />
             </Box>
           </Box>
@@ -125,9 +125,7 @@ const EventDetailsDrawerComponent = ({
           <Box>
             <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>
               <Box>
-                <Paper>
-                  <Host selectedEvent={selectedEvent} />
-                </Paper>
+                <Host selectedEvent={selectedEvent} />
               </Box>
               <Box className={classes.mapRoot}>
                 <MapComponentFn shrinkSize={true} disabled={disabled} locationDetails={userDetail.location} />
@@ -145,7 +143,7 @@ const EventDetailsDrawerComponent = ({
     <Box className={classes.root}>
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
         {NAVIGATION_TABS.map((v) => (
-          <Tooltip title={v.subtitle}>
+          <Tooltip title={v.subtitle} key={v.id}>
             <Tab
               label={
                 <span className={classes.textIconContainer}>

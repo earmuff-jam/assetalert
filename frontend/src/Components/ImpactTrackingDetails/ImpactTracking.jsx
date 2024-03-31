@@ -108,6 +108,11 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
           onChange={(e) => setVolunteerHours(e.target.value)}
           error={isErrorVolunteerHours.length ?? false}
           helperText={isErrorVolunteerHours ? 'Volunteer Hours must be +ve in nature ' : null}
+          onKeyDown={(e) => {
+            if (e.code === 'Enter') {
+              handleSubmit();
+            }
+          }}
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSubmit} disabled={disabled}>

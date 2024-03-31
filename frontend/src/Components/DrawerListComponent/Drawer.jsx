@@ -12,13 +12,13 @@ const Drawer = ({ open, toggleDrawer, children }) => {
 Drawer.defaultProps = {
   open: false,
   toggleDrawer: () => {},
-  children: [],
+  children: {},
 };
 
 Drawer.propTypes = {
   open: PropTypes.bool,
   toggleDrawer: PropTypes.func,
-  children: PropTypes.array,
+  children: PropTypes.object,
 };
 
 export default Drawer;

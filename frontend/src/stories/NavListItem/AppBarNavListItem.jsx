@@ -19,12 +19,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
-  text: {
-    color: theme.palette.primary.main,
-    fontSize: '0.725rem',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
-  },
   iconRoot: {
     minWidth: 0,
   },
@@ -37,9 +31,7 @@ const AppBarNavListItem = ({ tooltipTitle, title, titleStyle, icon, iconStyle, o
       <Tooltip title={tooltipTitle}>
         <ListItem button onClick={onClick} className={classes.listItem}>
           <ListItemIcon classes={{ root: classNames(classes.iconRoot, iconStyle) }}>{icon}</ListItemIcon>
-          <ListItemText classes={{ primary: classes.text }} className={titleStyle}>
-            {title}
-          </ListItemText>
+          <ListItemText classes={{ primary: titleStyle }}>{title}</ListItemText>
         </ListItem>
       </Tooltip>
     </List>

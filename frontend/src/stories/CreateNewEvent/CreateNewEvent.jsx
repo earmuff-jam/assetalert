@@ -70,8 +70,7 @@ const CreateNewEvent = () => {
         gutterBottom={true}
         loading={false}
         textStyle={classes.text}
-        value={`Browse other events around you to volunteer, or jump right in to create new event. Add personal inventories for
-        audit or even explore options to change your profile and avatars.`}
+        value={`Browse other events around you to volunteer, or jump right in and create new event. Add personal inventory, keep tabs on it and explore more options regarding your profile and bio.`}
       />
       <Box data-tour="3">
         <ButtonComponent
