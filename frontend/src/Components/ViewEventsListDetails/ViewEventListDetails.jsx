@@ -99,7 +99,7 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
         View all active events
       </Typography>
       <Box className={classes.searchContainer}>
-        <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} />
+        <SearchAllEvents events={filteredOptions} setSearchValue={setSearchValue} />
       </Box>
       <Divider className={classes.divider} />
       {noAvailableProjects ? (
@@ -108,7 +108,7 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
         </div>
       ) : (
         <Grid container className={classes.cardContainer} data-tour="5">
-          <ViewFilteredEventList filteredOptions={filteredOptions} handleNavigate={handleNavigate} />
+          <ViewFilteredEventList filteredOptions={currentEvents} handleNavigate={handleNavigate} />
         </Grid>
       )}
     </Box>
