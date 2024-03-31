@@ -57,11 +57,11 @@ const CardTitleComponent = ({
   const classes = useStyles();
   return (
     <Box className={classes.userProfileDetailsContainer}>
-      <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')}>
+      <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')} data-tour="1">
         <Tooltip title={titleTooltip}>
           <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
         </Tooltip>
-        <Box className={classNames(classes.rowContainer, classes.centerContent)}>
+        <Box className={classNames(classes.rowContainer, classes.centerContent)} data-tour="5">
           <Tooltip title={firstToolTipLabel}>
             <Box>
               <ChipComponent icon={firstIcon} variant={'default'} label={firstLabel} size={'small'} />
@@ -74,7 +74,9 @@ const CardTitleComponent = ({
           </Tooltip>
         </Box>
       </Box>
-      <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'}/>
+      <Box data-tour="2">
+        <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'} />
+      </Box>
     </Box>
   );
 };
