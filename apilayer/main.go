@@ -88,12 +88,16 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/profile/{id}/notifications", CustomRequestHandler(handler.GetAllNotifications)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/notifications/{notificationID}", CustomRequestHandler(handler.UpdateSingleNotification)).Methods(http.MethodPut)
 
 	router.Handle("/api/v1/profile/{id}/recent", CustomRequestHandler(handler.GetUserRecentActivities)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/highlights", CustomRequestHandler(handler.GetUserRecentHighlights)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/volunteering", CustomRequestHandler(handler.GetUserVolunteerDetails)).Methods(http.MethodGet)
+
+	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)
+	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.AddNewInventory)).Methods(http.MethodPost)
+	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.UpdateNote)).Methods(http.MethodPut)
+	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.RemoveSelectedNote)).Methods(http.MethodDelete)
 
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetUserNotesDetails)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.AddNewNote)).Methods(http.MethodPost)

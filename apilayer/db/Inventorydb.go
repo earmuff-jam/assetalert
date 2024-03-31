@@ -90,7 +90,7 @@ ORDER BY
 }
 
 // AddInventory ...
-func AddInventory(user string, draftInventory model.Inventory, userID string) (*model.Inventory, error) {
+func AddInventory(user string, userID string, draftInventory model.Inventory) (*model.Inventory, error) {
 
 	db, err := SetupDB(user)
 	if err != nil {
@@ -102,12 +102,6 @@ func AddInventory(user string, draftInventory model.Inventory, userID string) (*
 	if err != nil {
 		return nil, err
 	}
-
-	sqlStr := `INSERT INTO community.inventory
-	(name, description, price, status, barcode, sku, quantity, boughtAt, location, storage_location_id, created_by, created_at, updated_by, updated_at)
-    VALUES
-	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	RETURNING id`
 
 	// storage location is unique key in the database.
 	// storage location can be shared across inventories and items that are stored in events.
@@ -127,6 +121,12 @@ func AddInventory(user string, draftInventory model.Inventory, userID string) (*
 		}
 		draftInventory.StorageLocationID = emptyLocationID
 	}
+
+	sqlStr := `INSERT INTO community.inventory
+	(name, description, price, status, barcode, sku, quantity, boughtAt, location, storage_location_id, created_by, created_at, updated_by, updated_at)
+    VALUES
+	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+	RETURNING id`
 
 	err = tx.QueryRow(
 		sqlStr,
@@ -152,7 +152,6 @@ func AddInventory(user string, draftInventory model.Inventory, userID string) (*
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}

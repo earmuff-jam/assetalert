@@ -18,7 +18,6 @@ import { useDispatch } from 'react-redux';
 import EventProfile from './EventProfile';
 import { enqueueSnackbar } from 'notistack';
 import Title from '../DialogComponent/Title';
-import { isEditingAllowed } from './constants';
 import Drawer from '../DrawerListComponent/Drawer';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
@@ -27,6 +26,7 @@ import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
+import { ADD_ITEMS_EVENT_FORM, ADD_NEW_EVENT_ITEM_SUBTITLE_TEXT, isEditingAllowed } from './constants';
 import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({

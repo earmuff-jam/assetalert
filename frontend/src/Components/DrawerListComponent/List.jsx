@@ -32,11 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const List = ({ title, subtitle, data, columns, tooltipTitle, fileName, sheetName }) => {
+const List = ({ title, subtitle, data, columns, tableTitle, tableOptions }) => {
   const classes = useStyles();
-  const options = {
-    filterType: 'checkbox',
-  };
+
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
@@ -44,7 +42,7 @@ const List = ({ title, subtitle, data, columns, tooltipTitle, fileName, sheetNam
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
         </Box>
-        <MUIDataTable title={title} data={data} columns={columns} options={options} />
+        <MUIDataTable title={tableTitle} data={data} columns={columns} options={tableOptions} />
       </Box>
     </>
   );
@@ -54,26 +52,17 @@ List.defaultProps = {
   title: '',
   subtitle: '',
   data: [],
-  filteredData: [],
   columns: [],
-  columnHeaderFormatter: () => {},
   rowFormatter: () => {},
-  tooltipTitle: '',
-  fileName: '',
-  sheetName: '',
 };
 
 List.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   data: PropTypes.array,
-  filteredData: PropTypes.array,
   columns: PropTypes.array,
-  columnHeaderFormatter: PropTypes.func,
   rowFormatter: PropTypes.func,
-  tooltipTitle: PropTypes.string,
-  fileName: PropTypes.string,
-  sheetName: PropTypes.string,
+  tableTitle: PropTypes.string,
 };
 
 export default List;

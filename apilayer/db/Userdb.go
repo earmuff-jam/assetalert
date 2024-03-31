@@ -50,19 +50,15 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	).Scan(&draftUserID)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// the draftUserID is generated from server.
 	draftUser.ID, err = uuid.Parse(draftUserID)
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -88,7 +84,6 @@ func RetrieveUser(user string, draftUser *model.UserCredentials) (*model.UserCre
 		return nil, err
 	}
 
-	// compare the stored encrpyted password vs the provided encrpyted password
 	if err = bcrypt.CompareHashAndPassword([]byte(storedCredentials.EncryptedPassword), []byte(draftUser.EncryptedPassword)); err != nil {
 		return nil, err
 	}
@@ -105,8 +100,6 @@ func RetrieveUser(user string, draftUser *model.UserCredentials) (*model.UserCre
 }
 
 // RemoveUser ...
-//
-// Restricted usage. elevated permissions are required
 func RemoveUser(user string, id uuid.UUID) error {
 	db, err := SetupDB(user)
 	if err != nil {

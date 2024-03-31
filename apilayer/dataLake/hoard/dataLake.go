@@ -300,7 +300,7 @@ func populateFakePersonalInventories(user string, limit int, creatorID string) {
 		draftInventory.UpdaterName = gofakeit.FirstName()
 		draftInventory.BoughtAt = gofakeit.CarMaker()
 
-		db.AddInventory(user, draftInventory, creatorID)
+		db.AddInventory(user, creatorID, draftInventory)
 	}
 }
 

@@ -6,6 +6,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
+export const ADD_NEW_EVENT_ITEM_SUBTITLE_TEXT =
+  'Add item that are required for this event. These items can be shared with other members of the group. Such shared items are stored with due process until the group is abandoned or until the creator removes the ability to share the items with other members.';
+
 export const EXISTING_PROJECTS_MSG =
   'By deactivating the project, all associated content and features will be disabled. This action cannot be undone.';
 
@@ -89,6 +92,77 @@ export const LABELS = [
     modifier: (value) => value || 'N/A',
   },
 ];
+
+const GENERIC_FORM_FIELDS = {
+  type: 'text',
+  variant: 'standard',
+};
+
+/**
+ * ADD ITEM EVENT FORM.
+ *
+ * Used to add new item in events personal profile.
+ */
+export const ADD_ITEMS_EVENT_FORM = {
+  name: {
+    label: 'Item Name',
+    placeholder: 'Enter product name',
+    value: '',
+    name: 'name',
+    errorMsg: '',
+    required: true,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => value.trim().length === 0,
+        message: 'Name is required',
+      },
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'Name should be less than 50 characters',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS,
+  },
+  description: {
+    label: 'Item description',
+    placeholder: '',
+    value: '',
+    name: 'description',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'Description should be less than 50 characters',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS,
+  },
+  quantity: {
+    label: 'Quantity',
+    placeholder: '',
+    value: '',
+    name: 'quantity',
+    errorMsg: '',
+    required: true,
+    fullWidth: false,
+    validators: [
+      {
+        validate: (value) => value.trim().length === 0,
+        message: 'Quantity for the selected item is required',
+      },
+      {
+        validate: (value) =>
+          // test for number first, then
+          !(/^\d+$/.test(value) && parseInt(value) > 0),
+        message: 'A positive number is required',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS,
+  },
+};
 
 /**
  * Navigation tabs for EventDetailsDrawerComponent

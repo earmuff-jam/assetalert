@@ -4,7 +4,7 @@ import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
 import EasyEdit, { Types } from 'react-easy-edit';
-import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_COLUMNS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
+import { ADD_ITEM_PROFILE_FORM, ADD_NEW_INVENTORY_SUBTITLE_TEXT, INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_COLUMNS } from './constants';
 import Title from '../DialogComponent/Title';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import List from '../DrawerListComponent/List';
@@ -67,13 +67,6 @@ const Inventories = () => {
     return rest;
   });
 
-  const columnHeaderFormatter = (column) => {
-    const header = VIEW_PERSONAL_INVENTORY_COLUMNS[column];
-    // Apply a modifier function if defined
-    const formattedTitle = header?.modifier ? header.modifier(header.title) : header?.displayName;
-    return formattedTitle;
-  };
-
   const rowFormatter = (row, column, rowIndex) => {
     // if any of the row includes timestamp we modify it
     if (['created_at', 'updated_at'].includes(column)) {
@@ -101,32 +94,37 @@ const Inventories = () => {
   };
 
   const displaySelection = (value, data) => {
+    const tableOptions = {
+      filterType: 'checkbox',
+      // customRowRender: rowFormatter
+    };
+
     switch (value) {
       case 0:
         return (
           <List
             key={performance.now()}
+            tableTitle={'All Products'}
             tooltipTitle={'Download all items '}
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
             data={displayData}
             columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
             filteredData={filteredItems}
-            columnHeaderFormatter={columnHeaderFormatter}
-            rowFormatter={rowFormatter}
+            tableOptions={tableOptions}
           />
         );
       case 1:
         return (
           <List
             key={performance.now()}
+            tableTitle={'Coupons / Deals'}
             tooltipTitle={'Download all items with coupons '}
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
             data={displayData}
             columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
             filteredData={filteredItems}
-            columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
           />
         );
@@ -134,27 +132,25 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
-            tooltipTitle={'Download all items with draft status '}
+            tableTitle={'Draft'}
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
             data={displayData}
             columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
             filteredData={filteredItems}
-            columnHeaderFormatter={columnHeaderFormatter}
-            rowFormatter={rowFormatter}
           />
         );
       case 3:
         return (
           <List
             key={performance.now()}
+            tableTitle={'Hidden'}
             tooltipTitle={'Download all inventories with hidden status '}
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
             data={displayData}
             columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
             filteredData={filteredItems}
-            columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
           />
         );
@@ -189,7 +185,11 @@ const Inventories = () => {
       {editMode && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setEditMode(false)}>Add New Item</Title>
-          <AddItemDetail eventID={''} setDisplayMode={setEditMode} />
+          <AddItemDetail
+            setDisplayMode={setEditMode}
+            draftFormFields={ADD_ITEM_PROFILE_FORM}
+            subtitleText={ADD_NEW_INVENTORY_SUBTITLE_TEXT}
+          />
         </Dialog>
       )}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">
