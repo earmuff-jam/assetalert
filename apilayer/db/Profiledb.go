@@ -314,16 +314,41 @@ func RetrieveUserActivityHighlights(user string, userID uuid.UUID) (*model.Recen
 	}
 	defer db.Close()
 
-	sqlStr := `
-	select count(p.*) as created_events, count(pv.*) as volunteered_events,
-	( select count(r.*) from community.reports r where r.created_by = $1 and r.updated_by = $1) as reported_events,
-	count(p.*) filter (where p.deactivated) as deactivated_events,
-	( select count(e.*) from community.expenses e where e.created_by = $1 and e.updated_by = $1) as expenses_reported,
-	( select count(i.*) from community.items i where i.created_by = $1 and i.updated_by = $1) as inventories_updated
-	from community.projects p
-	left join community.projects_volunteer pv on p.id = pv.project_id
-	left join community.project_skills ps on pv.project_skills_id = ps.id
-	where p.created_by = $1 or p.updated_by = $1`
+	sqlStr := `SELECT
+    COUNT(DISTINCT p.id) AS created_events,
+    (
+        SELECT COUNT(DISTINCT project_id)
+        FROM community.projects_volunteer
+        WHERE user_id = $1
+    ) AS volunteered_events,
+    (
+        SELECT COUNT(r.*)
+        FROM community.reports r
+        WHERE r.created_by = $1
+        AND r.updated_by = $1
+    ) AS reported_events,
+    (
+        SELECT COUNT(e.*)
+        FROM community.expenses e
+        WHERE e.created_by = $1
+        AND e.updated_by = $1
+    ) AS expenses_reported,
+    (
+        SELECT COUNT(i.*)
+        FROM community.items i
+        WHERE i.created_by = $1
+        AND i.updated_by = $1
+    ) AS inventories_updated,
+    COUNT(p.*) FILTER (WHERE p.deactivated) AS deactivated_events
+FROM
+    community.projects p
+LEFT JOIN community.projects_volunteer pv ON
+    p.id = pv.project_id
+LEFT JOIN community.project_skills ps ON
+    pv.project_skills_id = ps.id
+WHERE
+    p.created_by = $1
+    AND p.updated_by = $1;`
 
 	var recentHighlight model.RecentHighlight
 	err = db.QueryRow(sqlStr, userID).Scan(&recentHighlight.CreatedEvents, &recentHighlight.VolunteeredEvents, &recentHighlight.ReportedEvents, &recentHighlight.ExpensesReported, &recentHighlight.InventoriesUpdated, &recentHighlight.DeactivatedEvents)

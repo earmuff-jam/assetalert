@@ -1,6 +1,14 @@
 const GENERIC_FORM_FIELDS = {
   type: 'text',
-  variant: 'static',
+  variant: 'standard',
+};
+
+const GENERIC_TEXTAREA_VARIANT = {
+  type: 'text',
+  multiline: true,
+  rows: 4,
+  variant: 'outlined',
+  fullWidth: true,
 };
 
 export const ADD_ITEM_FORM_FIELDS = {
@@ -38,7 +46,7 @@ export const ADD_ITEM_FORM_FIELDS = {
         message: 'Description should be less than 50 characters',
       },
     ],
-    ...GENERIC_FORM_FIELDS,
+    ...GENERIC_TEXTAREA_VARIANT,
   },
   quantity: {
     label: 'Quantity',
@@ -63,6 +71,82 @@ export const ADD_ITEM_FORM_FIELDS = {
     ...GENERIC_FORM_FIELDS,
   },
 };
+
+export const VIEW_CURRENT_SUPPLIES_COLUMNS = [
+  {
+    name: 'name',
+    label: 'Item Name',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'description',
+    label: 'Description',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'location',
+    label: 'Location',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'quantity',
+    label: 'Count',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'location',
+    label: 'Location',
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: 'created_at',
+    label: 'Created At',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'creator_name',
+    label: 'Creator',
+    options: {
+      filter: true,
+      sort: false,
+    },
+  },
+  {
+    name: 'updated_at',
+    label: 'Updated At',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updater_name',
+    label: 'Updator',
+    options: {
+      filter: true,
+      sort: false,
+    },
+  },
+];
+
 
 export const VIEW_ITEMS_COLUMN_HEADERS = {
   name: {

@@ -142,8 +142,8 @@ const NotesDetails = () => {
 
   return (
     <div className={classes.root}>
-      {formattedNotes.map((v) => (
-        <Accordion elevation={0} className={classes.colorVariant}>
+      {formattedNotes.map((v, index) => (
+        <Accordion key={index} elevation={0} className={classes.colorVariant}>
           <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1a-content" id="panel1a-header">
             <Box className={[classes.rowContainer, classes.gapVariant].join(' ')}>
               <TextComponent textStyle={classes.heading} value={v.category} loading={loading} />
@@ -152,13 +152,12 @@ const NotesDetails = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Box className={classes.contentContainer}>
-              {v.details.map((note) => (
-                <Box className={classes.content}>
+              {v.details.map((note, index) => (
+                <Box key={index} className={classes.content}>
                   <Box className={classes.rowContainer}>
                     <TextComponent
                       value={note.note_title}
                       gutterBottom={true}
-                      fullWidth={true}
                       loading={loading}
                       textStyle={[classes.text, classes.textVariant].join(' ')}
                     />

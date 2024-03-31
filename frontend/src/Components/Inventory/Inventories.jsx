@@ -4,7 +4,12 @@ import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
 import EasyEdit, { Types } from 'react-easy-edit';
-import { ADD_ITEM_PROFILE_FORM, ADD_NEW_INVENTORY_SUBTITLE_TEXT, INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_COLUMNS } from './constants';
+import {
+  ADD_ITEM_PROFILE_FORM,
+  ADD_NEW_INVENTORY_SUBTITLE_TEXT,
+  INVENTORY_TABS,
+  VIEW_PERSONAL_INVENTORY_COLUMNS,
+} from './constants';
 import Title from '../DialogComponent/Title';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import List from '../DrawerListComponent/List';
@@ -96,6 +101,7 @@ const Inventories = () => {
   const displaySelection = (value, data) => {
     const tableOptions = {
       filterType: 'checkbox',
+      elevation: 0,
       // customRowRender: rowFormatter
     };
 
@@ -193,8 +199,8 @@ const Inventories = () => {
         </Dialog>
       )}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">
-        {INVENTORY_TABS.map((v) => (
-          <Tooltip title={v.tootipTitle}>
+        {INVENTORY_TABS.map((v, index) => (
+          <Tooltip title={v.tootipTitle} key={index}>
             <Tab
               label={
                 <span className={classes.textIconContainer}>

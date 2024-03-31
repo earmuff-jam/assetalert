@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import EmptyComponent from '../../util/EmptyComponent';
 import { Box, Tooltip, makeStyles } from '@material-ui/core';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecentItemTabs = ({ rowData }) => {
+const RecentItemTabs = ({ rowData, loading }) => {
   const classes = useStyles();
 
   if (rowData?.length <= 0) {
@@ -30,7 +31,7 @@ const RecentItemTabs = ({ rowData }) => {
         <Tooltip key={index} title={v.title} placement={v.tooltipPlacement}>
           <Box className={classes.centerRowAlign}>
             {v.icon}
-            <span>{v.count}</span>
+            <span>{loading ? <LoadingSkeleton width={'1rem'} height={'1rem'} /> : v.count}</span>
           </Box>
         </Tooltip>
       ))}
@@ -40,10 +41,12 @@ const RecentItemTabs = ({ rowData }) => {
 
 RecentItemTabs.defaultProps = {
   rowData: [],
+  loading: false,
 };
 
 RecentItemTabs.propTypes = {
   rowData: PropTypes.array,
+  loading: PropTypes.bool,
 };
 
 export default RecentItemTabs;

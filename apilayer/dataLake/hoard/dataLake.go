@@ -42,12 +42,12 @@ func IngestSvc() {
 	if err != nil {
 		log.Fatalf("error during finding a test user... %+v", err)
 	}
-	GenerateFakeDataWithLimit(currentUser, 200, "event", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 20, "report", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 20, "expense", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 20, "item", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 20, "note", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 20, "inventory", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 20, "event", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "report", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "expense", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "item", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "note", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "inventory", creatorID)
 
 }
 
@@ -62,7 +62,7 @@ func GenerateFakeDataWithLimit(user string, minCount int, typeOf string, creator
 	}
 
 	// rowCounts are generated from minCount. this is to generate dynamic information
-	rowCounts := gofakeit.Number(minCount, minCount+100)
+	rowCounts := gofakeit.Number(minCount, minCount+10)
 
 	switch typeOf {
 	case "event":

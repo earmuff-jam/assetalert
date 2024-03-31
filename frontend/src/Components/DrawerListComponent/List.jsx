@@ -2,12 +2,16 @@ import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import { Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(1),
-    height: `calc(100vh - 20rem)`,
     overflow: 'auto',
+  },
+  addedHeightVariant: {
+    // used for view items  && expense drawer
+    height: `calc(100vh - 20rem)`,
   },
   tableHeaderCell: {
     fontWeight: 'bold',
@@ -32,13 +36,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const List = ({ title, subtitle, data, columns, tableTitle, tableOptions }) => {
+const List = ({ title, subtitle, data, columns, tableTitle, tableOptions, applyHeightVariant }) => {
   const classes = useStyles();
 
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
-      <Box className={classes.container}>
+      <Box className={classNames(classes.container, { [classes.addedHeightVariant]: applyHeightVariant })}>
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
         </Box>
@@ -54,6 +58,7 @@ List.defaultProps = {
   data: [],
   columns: [],
   rowFormatter: () => {},
+  applyHeightVariant: false,
 };
 
 List.propTypes = {
@@ -63,6 +68,7 @@ List.propTypes = {
   columns: PropTypes.array,
   rowFormatter: PropTypes.func,
   tableTitle: PropTypes.string,
+  applyHeightVariant: PropTypes.bool,
 };
 
 export default List;

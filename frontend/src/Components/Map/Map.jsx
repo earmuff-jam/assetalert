@@ -52,7 +52,6 @@ const MapComponentFn = ({ shrinkSize = false, locationDetails = {}, disabled }) 
         isMounted.current = false;
       }
     };
-    // location is removed from dependency arr as the map loads twice.
     // eslint-disable-next-line
   }, [locationDetails.lat, locationDetails.lon]);
 

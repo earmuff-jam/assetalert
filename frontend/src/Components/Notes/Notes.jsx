@@ -44,7 +44,6 @@ const Notes = () => {
           gutterBottom={true}
           loading={false}
           textStyle={classes.text}
-          fullWidth={true}
         />
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent

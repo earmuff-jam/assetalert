@@ -11,6 +11,7 @@ import {
   TimelineDot,
   TimelineContent,
   TimelineOppositeContent,
+  TimelineConnector,
 } from '@material-ui/lab';
 import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@material-ui/icons';
 import TextComponent from '../../stories/TextComponent/TextComponent';

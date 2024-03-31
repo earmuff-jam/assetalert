@@ -16,11 +16,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100%',
     backgroundColor: theme.palette.secondary.main,
   },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 }));
 
 const HomePage = () => {

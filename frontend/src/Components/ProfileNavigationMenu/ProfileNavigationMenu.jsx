@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '0.5rem',
-
   },
   listItemRoot: {
     padding: theme.spacing(0),
@@ -73,9 +72,16 @@ const ProfileNavigationMenu = () => {
 
   return (
     <Box className={classes.root}>
-      <Tabs value={selectedValue} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
+      <Tabs
+        value={selectedValue}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+        data-tour="2"
+      >
         {PROFILE_NAVIGATION_MENU_BAR.map((v) => (
-          <Tooltip title={v.subtitle}>
+          <Tooltip title={v.subtitle} key={v.id}>
             <Tab
               label={
                 <span className={classes.textIconContainer}>
@@ -86,7 +92,7 @@ const ProfileNavigationMenu = () => {
           </Tooltip>
         ))}
       </Tabs>
-      {displaySelection(selectedValue)}
+      <Box data-tour="3">{displaySelection(selectedValue)}</Box>
     </Box>
   );
 };
