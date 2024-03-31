@@ -1,23 +1,13 @@
 import PropTypes from 'prop-types';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Box,
-} from '@material-ui/core';
-
+import MUIDataTable from 'mui-datatables';
+import { Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(1),
-    maxHeight: '40vh',
+    height: `calc(100vh - 20rem)`,
+    overflow: 'auto',
   },
   tableHeaderCell: {
     fontWeight: 'bold',
@@ -42,51 +32,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const List = ({
-  title,
-  subtitle,
-  data,
-  filteredData,
-  columns,
-  columnHeaderFormatter,
-  rowFormatter,
-  tooltipTitle,
-  fileName,
-  sheetName,
-}) => {
+const List = ({ title, subtitle, data, columns, tableTitle, tableOptions }) => {
   const classes = useStyles();
+
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
       <Box className={classes.container}>
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
-          {data.length > 0 && (
-            <DownloadExcelButton data={data} tooltipTitle={tooltipTitle} fileName={fileName} sheetName={sheetName} />
-          )}
         </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column} className={classes.tableHeaderCell}>
-                    {columnHeaderFormatter(column)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredData.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {columns.map((column) => (
-                    <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <MUIDataTable title={tableTitle} data={data} columns={columns} options={tableOptions} />
       </Box>
     </>
   );
@@ -96,26 +52,17 @@ List.defaultProps = {
   title: '',
   subtitle: '',
   data: [],
-  filteredData: [],
   columns: [],
-  columnHeaderFormatter: () => {},
   rowFormatter: () => {},
-  tooltipTitle: '',
-  fileName: '',
-  sheetName: '',
 };
 
 List.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   data: PropTypes.array,
-  filteredData: PropTypes.array,
   columns: PropTypes.array,
-  columnHeaderFormatter: PropTypes.func,
   rowFormatter: PropTypes.func,
-  tooltipTitle: PropTypes.string,
-  fileName: PropTypes.string,
-  sheetName: PropTypes.string,
+  tableTitle: PropTypes.string,
 };
 
 export default List;

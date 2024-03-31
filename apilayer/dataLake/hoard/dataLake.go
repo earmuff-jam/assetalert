@@ -47,6 +47,7 @@ func IngestSvc() {
 	GenerateFakeDataWithLimit(currentUser, 20, "expense", creatorID)
 	GenerateFakeDataWithLimit(currentUser, 20, "item", creatorID)
 	GenerateFakeDataWithLimit(currentUser, 20, "note", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 20, "inventory", creatorID)
 
 }
 
@@ -79,6 +80,9 @@ func GenerateFakeDataWithLimit(user string, minCount int, typeOf string, creator
 	case "note":
 		log.Printf("loading %d of note rows", rowCounts)
 		populateFakePersonalNotes(user, rowCounts, creatorID)
+	case "inventory":
+		log.Printf("loading %d of inventory rows", rowCounts)
+		populateFakePersonalInventories(user, rowCounts, creatorID)
 	default:
 	}
 	return nil
@@ -263,6 +267,40 @@ func populateFakePersonalNotes(user string, limit int, creatorID string) {
 		draftNote.Updator = gofakeit.FirstName()
 
 		db.AddNewNote(user, creatorID, draftNote)
+	}
+}
+
+// populateFakePersonalInventories ...
+//
+// generate fake personal inventories data to test in the application
+func populateFakePersonalInventories(user string, limit int, creatorID string) {
+
+	for i := 1; i <= limit; i++ {
+		draftInventory := model.Inventory{}
+
+		// time is set for created / updated
+		now := time.Now()
+		daysAgo := gofakeit.Number(1, 30)
+		startDate := now.AddDate(0, 0, -daysAgo)
+
+		draftInventory.Name = gofakeit.HipsterWord()
+		draftInventory.Description = gofakeit.HipsterSentence(2)
+		draftInventory.Price = fmt.Sprintf("%f", gofakeit.Price(2, 120))
+		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN"})
+		draftInventory.Barcode = gofakeit.Date().String()
+		draftInventory.SKU = gofakeit.Date().String()
+		draftInventory.Quantity = gofakeit.Number(10, 100)
+		draftInventory.Location = gofakeit.BuzzWord()
+		draftInventory.IsResolved = gofakeit.Bool()
+		draftInventory.CreatedAt = startDate
+		draftInventory.UpdatedAt = startDate
+		draftInventory.CreatedBy = creatorID
+		draftInventory.CreatorName = gofakeit.FirstName()
+		draftInventory.UpdatedBy = creatorID
+		draftInventory.UpdaterName = gofakeit.FirstName()
+		draftInventory.BoughtAt = gofakeit.CarMaker()
+
+		db.AddInventory(user, creatorID, draftInventory)
 	}
 }
 

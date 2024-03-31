@@ -12,7 +12,7 @@ import (
 )
 
 // GetUserNotesDetails ...
-// swagger:route GET /api/profile/notes/{id} GetUserNotesDetails getUserNotesDetails
+// swagger:route GET /api/profile/{id}/notes GetUserNotesDetails getUserNotesDetails
 //
 // # Retrieves the list of notes for the user.
 //
@@ -59,7 +59,7 @@ func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // AddNewNote ...
-// swagger:route POST /api/profile/notes/{id} AddNewNote addNewNote
+// swagger:route POST /api/profile/{id}/notes AddNewNote addNewNote
 //
 // # Add a new note to the database
 //
@@ -111,7 +111,7 @@ func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateNote ...
-// swagger:route PUT /api/profile/notes/{id} UpdateNote updateNote
+// swagger:route PUT /api/profile/{id}/notes UpdateNote updateNote
 //
 // # Updates an existing note in the database
 //
@@ -163,7 +163,7 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // RemoveSelectedNote ...
-// swagger:route DELETE /api/profile/notes/{id} RemoveSelectedNote removeSelectedNote
+// swagger:route DELETE /api/profile/{id}/notes RemoveSelectedNote removeSelectedNote
 //
 // # Removes the note from the db
 //

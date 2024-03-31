@@ -72,7 +72,6 @@ LIMIT 10;
 	}
 
 	if len(data) == 0 {
-		// empty array to factor in for null
 		return make([]model.Notification, 0), nil
 	}
 	return data, nil
@@ -101,7 +100,6 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 
 	var updatedNotification model.Notification
 
-	// Use QueryRow instead of Exec to get the updated row
 	row := tx.QueryRow(sqlStr,
 		draftNotification.ID,
 		draftNotification.IsViewed,
@@ -123,12 +121,10 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 	)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}

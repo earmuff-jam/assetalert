@@ -1,6 +1,6 @@
 const GENERIC_FORM_FIELDS = {
   type: 'text',
-  variant: 'static',
+  variant: 'standard',
 };
 
 const GENERIC_TEXTAREA_VARIANT = {

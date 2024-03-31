@@ -70,7 +70,6 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		return nil, err
 	}
 
-	// for add scenarios
 	var draftNoteID string
 	draftNote.CreatedAt = time.Now()
 	draftNote.UpdatedAt = time.Now()
@@ -94,12 +93,10 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	).Scan(&draftNoteID)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -150,11 +147,9 @@ func UpdateSelectedNote(user string, userID string, draftNote model.Note) (*mode
 	)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}

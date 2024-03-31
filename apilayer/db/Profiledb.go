@@ -99,7 +99,6 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 
 	var updatedProfile model.Profile
 
-	// Use QueryRow instead of Exec to get the updated row
 	row := tx.QueryRow(sqlStr,
 		userID,
 		draftProfile.Username,
@@ -123,12 +122,10 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -159,7 +156,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		RETURNING id, username, full_name, avatar_url, phone_number, goal, about_me, onlinestatus, role
 	`
 
-	// Use QueryRow instead of Exec to get the updated row
 	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
 	var goal sql.NullString
 
@@ -169,7 +165,7 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		&updatedProfile.ID,
 		&updatedProfile.Username,
 		&updatedProfile.FullName,
-		&avatarUrl, // Use & for nullable columns
+		&avatarUrl,
 		&updatedProfile.PhoneNumber,
 		&goal,
 		&updatedProfile.AboutMe,
@@ -182,7 +178,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		return nil, err
 	}
 
-	// Handle null values safely
 	if avatarUrl.Valid {
 		updatedProfile.AvatarUrl = avatarUrl.String
 	} else {
@@ -203,8 +198,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 }
 
 // RetrieveRecentActivity ...
-//
-// retrieves recent activities for a given user.
 func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivity, error) {
 	db, err := SetupDB(user)
 	if err != nil {

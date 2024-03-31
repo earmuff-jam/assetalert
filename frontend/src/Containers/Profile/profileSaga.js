@@ -15,33 +15,16 @@ export function* fetchExistingUserDetails() {
   }
 }
 
-export function* fetchRecentActivitiesList() {
+export function* fetchUpdateProfileImage(action) {
   try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent`);
-    yield put(profileActions.getRecentActivitiesListSuccess(response.data || []));
-  } catch (e) {
-    yield put(profileActions.getRecentActivitiesListFailure(e));
-  }
-}
+    const { selectedImage, userID } = action.payload;
 
-export function* fetchRecentActivitiesTrophyList() {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/highlights`);
-    yield put(profileActions.getRecentActivitiesTrophyListSuccess(response.data));
+    const formData = new FormData();
+    formData.append('avatarSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
+    yield put(profileActions.updateProfileImageSuccess(response.data));
   } catch (e) {
-    yield put(profileActions.getRecentActivitiesTrophyListFailure(e));
-  }
-}
-
-export function* fetchExistingNotificationsUserDetails() {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/notifications`);
-    yield put(profileActions.getProfileNotificationsSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.getProfileNotificationsFailure(e));
+    yield put(profileActions.updateProfileImageFailure(e));
   }
 }
 
@@ -63,6 +46,46 @@ export function* updateExistingUserDetails(action) {
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileDetailsFailure(e));
+  }
+}
+
+export function* fetchRecentActivitiesList() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent`);
+    yield put(profileActions.getRecentActivitiesListSuccess(response.data || []));
+  } catch (e) {
+    yield put(profileActions.getRecentActivitiesListFailure(e));
+  }
+}
+
+export function* fetchAllInventoriesForUser() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
+    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || []));
+  } catch (e) {
+    yield put(profileActions.getAllInventoriesForUserFailure(e));
+  }
+}
+
+export function* fetchRecentActivitiesTrophyList() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/highlights`);
+    yield put(profileActions.getRecentActivitiesTrophyListSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getRecentActivitiesTrophyListFailure(e));
+  }
+}
+
+export function* fetchExistingNotificationsUserDetails() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/notifications`);
+    yield put(profileActions.getProfileNotificationsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getProfileNotificationsFailure(e));
   }
 }
 
@@ -130,16 +153,13 @@ export function* fetchRemoveSelectedNote(action) {
   }
 }
 
-export function* fetchUpdateProfileImage(action) {
+export function* fetchAddNewInventory(action) {
   try {
-    const { selectedImage, userID } = action.payload;
-
-    const formData = new FormData();
-    formData.append('avatarSrc', selectedImage);
-    const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
-    yield put(profileActions.updateProfileImageSuccess(response.data));
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventory`, { ...action.payload });
+    yield put(profileActions.addInventorySuccess(response.data));
   } catch (e) {
-    yield put(profileActions.updateProfileImageFailure(e));
+    yield put(profileActions.addInventoryFailure(e));
   }
 }
 
@@ -171,6 +191,10 @@ export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
 
+export function* watchFetchAddNewInventory() {
+  yield takeLatest(`profile/addInventory`, fetchAddNewInventory);
+}
+
 export function* watchFetchRecentActivitiesList() {
   yield takeLatest(`profile/getRecentActivitiesList`, fetchRecentActivitiesList);
 }
@@ -187,6 +211,10 @@ export function* watchFetchVolunteeringDetails() {
   yield takeLatest(`profile/getVolunteeringDetails`, fetchVolunteeringDetails);
 }
 
+export function* watchFetchAllInventoriesForUser() {
+  yield takeLatest(`profile/getAllInventoriesForUser`, fetchAllInventoriesForUser);
+}
+
 export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
@@ -195,8 +223,10 @@ export function* watchFetchUpdateProfileImage() {
 export default [
   watchGetUserNotes,
   watchFetchAddNewNote,
+  watchFetchAddNewInventory,
   watchFetchUpdateExistingNote,
   watchFetchRemoveSelectedNote,
+  watchFetchAllInventoriesForUser,
   watchExistingNotificationsUserDetails,
   watchFetchRecentActivitiesTrophyList,
   watchFetchRecentActivitiesList,

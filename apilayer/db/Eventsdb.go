@@ -205,14 +205,12 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 	).Scan(&draftEventID)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
 	draftEvent.ID = draftEventID
 
-	// Insert project_skills within the transaction
 	for _, skill := range draftEvent.ProjectSkills {
 		_, err = tx.Exec(`
             INSERT INTO community.project_skills
@@ -227,13 +225,11 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 			time.Now().UTC(),
 		)
 		if err != nil {
-			// Rollback the transaction if there is an error
 			tx.Rollback()
 			return nil, err
 		}
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -297,29 +293,26 @@ func UpdateEventAvatar(user string, userID string, header *multipart.FileHeader,
 	`
 
 	// Use QueryRow instead of Exec to get the updated row
-	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
+	// Assuming avatar_url is a string column, not bytea
+	var avatarUrl sql.NullString
 
 	row := tx.QueryRow(sqlStr, userID, fileBytes)
-
 	err = row.Scan(
 		&updatedEvent.ID,
 		&avatarUrl, // Use & for nullable columns
 	)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Handle null values safely
 	if avatarUrl.Valid {
-		updatedEvent.ImageURL = avatarUrl.String // Assign if the value is not null
+		updatedEvent.ImageURL = avatarUrl.String
 	} else {
-		updatedEvent.ImageURL = "" // Or handle the null case accordingly
+		updatedEvent.ImageURL = ""
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -401,7 +394,6 @@ ORDER BY it.updated_at DESC
 	}
 
 	if len(data) == 0 {
-		// empty array to factor in for null
 		return make([]model.Item, 0), nil
 	}
 	return data, nil
@@ -421,11 +413,6 @@ func AddItem(user string, draftItem *model.Item) (*model.Item, error) {
 		return nil, err
 	}
 
-	sqlStr := `
-        INSERT INTO community.items(project_id, storage_location_id, item_detail, quantity, item_description, created_by, created_at, updated_by, updated_at)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id
-    `
-
 	parsedEventID, err := uuid.Parse(draftItem.EventID)
 	if err != nil {
 		tx.Rollback()
@@ -434,7 +421,6 @@ func AddItem(user string, draftItem *model.Item) (*model.Item, error) {
 
 	parsedStorageLocationID, err := uuid.Parse(draftItem.Location)
 	if err != nil {
-		// if the location is not a uuid type, then it should resemble a new storage location
 		emptyLocationID := ""
 		err := addNewStorageLocation(user, draftItem.Location, draftItem.CreatedBy, &emptyLocationID)
 		if err != nil {
@@ -446,7 +432,6 @@ func AddItem(user string, draftItem *model.Item) (*model.Item, error) {
 			tx.Rollback()
 			return nil, err
 		}
-		// Update draftItem with the new LocationID
 		draftItem.LocationID = emptyLocationID
 	}
 
@@ -457,6 +442,10 @@ func AddItem(user string, draftItem *model.Item) (*model.Item, error) {
 	}
 
 	var draftItemID uuid.UUID
+
+	sqlStr := `INSERT INTO community.items(project_id, storage_location_id, item_detail, quantity, item_description, created_by, created_at, updated_by, updated_at)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
+
 	err = tx.QueryRow(
 		sqlStr,
 		parsedEventID,
@@ -498,21 +487,6 @@ func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error
 		return nil, err
 	}
 
-	sqlStr := `
-        INSERT INTO community.expenses(
-			project_id,
-			item_name, 
-			item_cost, 
-			category_id, 
-			purchase_location, 
-			notes,
-			created_by, 
-			created_at, 
-			updated_by, 
-			updated_at,
-			sharable_groups
-		) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
-
 	parsedEventID, err := uuid.Parse(draftExpense.EventID)
 	if err != nil {
 		tx.Rollback()
@@ -551,6 +525,21 @@ func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error
 	sharableGroups = append(sharableGroups, parsedCreatorID)
 
 	var draftExpenseID uuid.UUID
+
+	sqlStr := `
+        INSERT INTO community.expenses(
+			project_id,
+			item_name, 
+			item_cost, 
+			category_id, 
+			purchase_location, 
+			notes,
+			created_by, 
+			created_at, 
+			updated_by, 
+			updated_at,
+			sharable_groups
+		) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
 	err = tx.QueryRow(
 		sqlStr,
 		parsedEventID,
@@ -613,8 +602,7 @@ func UpdateItem(user string, draftItem *model.ItemToUpdate) (*model.Item, error)
             updated_by = $2,
             updated_at = now()
         WHERE id = $3
-        RETURNING id
-    `
+        RETURNING id`
 
 	var updatedItemID uuid.UUID
 	err = tx.QueryRow(sqlStr, draftItem.Value, parsedUserID, parsedItemID).Scan(&updatedItemID)
@@ -707,13 +695,12 @@ func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 
 	updateFields := make(map[string]interface{})
 
-	// Check if ID exists and ensure it's a valid UUID
 	if draftEvent.ID == "" {
 		return nil, errors.New("missing event ID")
 	}
+
 	updateFields["id"] = draftEvent.ID
 
-	// Update fields based on provided data
 	if draftEvent.Title != "" {
 		updateFields["title"] = draftEvent.Title
 	}
@@ -756,7 +743,6 @@ func UpdateEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -850,14 +836,11 @@ func SaveNewReport(user string, draftReport *model.ReportEvent) (*model.ReportEv
 
 	err = row.Scan(&draftReport.ID)
 
-	// Check for errors
 	if err != nil {
-		// Rollback the transaction in case of an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -939,7 +922,6 @@ FROM community.projects ev
 WHERE ev.id = $1
 GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.full_name, up.username, up.email_address;
 `
-	// Query the database for a single row
 	row := db.QueryRow(sqlStr, eventID)
 
 	var cause sql.NullString
@@ -978,7 +960,6 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 		return nil, err
 	}
 
-	// Assign values to the struct
 	event.Cause = cause.String
 	event.ImageURL = imageURL.String
 	event.Street = street.String
@@ -1067,7 +1048,7 @@ ORDER BY e.updated_at DESC;
 		if err := rows.Scan(&expense.ID, &expense.EventID, &itemName, &itemCost, &categoryID, &category, &purchaseLocation, &notes, &expense.CreatedAt, &expense.CreatedBy, &creator, &expense.UpdatedAt, &expense.UpdatedBy, &updater, &sharableGroups); err != nil {
 			return nil, err
 		}
-		// Assign values to the struct
+
 		expense.ItemName = itemName.String
 		expense.ItemCost = itemCost.String
 		expense.CategoryID = categoryID.String
@@ -1158,7 +1139,6 @@ FROM community.projects_volunteer pv
 	}
 
 	if len(data) == 0 {
-		// empty array to factor in for null
 		return make([]model.VolunteeringDetails, 0), nil
 	}
 	return data, nil
@@ -1177,7 +1157,6 @@ func SaveVolunteeringEvent(user string, draftEvent *model.VolunteeringDetails) (
 		return nil, err
 	}
 
-	// Insert into community.projects_volunteer
 	sqlStr := `INSERT INTO 
 	community.projects_volunteer
 	(user_id, project_id, project_skills_id, volunteer_hours, created_at, created_by, updated_at, updated_by, sharable_groups)
@@ -1215,12 +1194,10 @@ func SaveVolunteeringEvent(user string, draftEvent *model.VolunteeringDetails) (
 	).Scan(&draftEvent.ID, &draftEvent.CreatedBy, &draftEvent.EventID, &draftEvent.EventSkillsID)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
 		tx.Rollback()
 		return nil, err
 	}
 
-	// Commit the transaction if everything is successful
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
@@ -1355,7 +1332,6 @@ func RetrieveAllStorageLocation(user string) ([]model.StorageLocation, error) {
 			return nil, err
 		}
 
-		// Assign values to the struct
 		ec.ID = storageLocationID.String
 		ec.Location = storageLocation.String
 		ec.CreatedAt = createdAt.Time
@@ -1405,7 +1381,6 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 			return nil, err
 		}
 
-		// Assign values to the struct
 		ec.ID = categoryID.String
 		ec.CategoryName = categoryName.String
 		ec.CreatedAt = createdAt.Time

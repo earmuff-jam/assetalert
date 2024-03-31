@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     gap: '1.2rem',
     textOverflow: 'ellipsis',
     textWrap: 'wrap',
-    width: `calc(100% - 40rem)`,
     [theme.breakpoints.down('sm')]: {
       width: `26rem`,
     },

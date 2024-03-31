@@ -5,6 +5,7 @@ const initialState = {
   error: '',
   profileDetails: {},
   notifications: [],
+  inventories: [],
   volunteeringDetails: [],
   recentActivities: [],
   recentTrophies: {},
@@ -133,6 +134,37 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.volunteeringDetails = [];
+    },
+    getAllInventoriesForUser: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.inventories = [];
+    },
+    getAllInventoriesForUserSuccess: (state, action) => {
+      state.inventories = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getAllInventoriesForUserFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventories = [];
+    },
+    addInventory: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.inventories = [];
+    },
+    addInventorySuccess: (state, action) => {
+      const updatedValues = action.payload;
+      state.loading = false;
+      state.error = '';
+      state.inventories = [...state.inventories, updatedValues];
+    },
+    addInventoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventories = [];
     },
     getUserNotes: (state) => {
       state.loading = true;
