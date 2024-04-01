@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS community.inventory
     barcode             VARCHAR(100)                 ,
     sku                 VARCHAR(100)                 ,
     quantity            INT                                   DEFAULT 1,
-    boughtAt            VARCHAR(500)                 ,
+    bought_at           VARCHAR(500)                 ,
     location            VARCHAR(500)                ,
     storage_location_id UUID                         REFERENCES storage_locations (id) ON UPDATE CASCADE ON DELETE CASCADE,
     created_at          TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),

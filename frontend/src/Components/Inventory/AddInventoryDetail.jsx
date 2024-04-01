@@ -4,11 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
-import { ADD_ITEM_FORM_FIELDS } from './constants';
+import { ADD_ITEM_PROFILE_FORM } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import StatusRadioButtons from './StatusRadioButtons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,11 +18,16 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(6),
     padding: theme.spacing(4),
   },
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+  },
 }));
 
 const filter = createFilterOptions();
 
-const AddItemDetail = ({ eventID, setDisplayMode }) => {
+const AddInventoryDetail = ({ setDisplayMode }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -30,7 +36,8 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
 
   const [options, setOptions] = useState([]);
   const [storageLocation, setStorageLocation] = useState({});
-  const [formFields, setFormFields] = useState(ADD_ITEM_FORM_FIELDS);
+  const [statusSelection, setStatusSelection] = useState('all');
+  const [formFields, setFormFields] = useState(ADD_ITEM_PROFILE_FORM);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -49,6 +56,18 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
     );
   };
 
+  // handleChange fn is used to toggle the radio selected buttons
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setStatusSelection(value);
+    setFormFields(
+      produce(formFields, (draft) => {
+        draft[name].value = value;
+      })
+    );
+  };
+
   const submit = () => {
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {
@@ -60,7 +79,7 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    // ensure that the storage location is not empty
+    // ensure that the storage location is not empty. no check for status since it is defaulted to ALL
     if (containsErr || isRequiredFieldsEmpty || storageLocation === null || Object.keys(storageLocation).length <= 0) {
       enqueueSnackbar('Cannot add new item.', {
         variant: 'error',
@@ -85,12 +104,12 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
     const draftRequest = {
       ...formattedData,
       location: storageLocationID,
+      status: statusSelection.toUpperCase(), // sanitize request
       created_by: userID,
-      eventID: eventID,
     };
-    dispatch(eventActions.addItem(draftRequest));
+    dispatch(profileActions.addInventory(draftRequest));
     setDisplayMode(0);
-    setFormFields(ADD_ITEM_FORM_FIELDS);
+    setFormFields(ADD_ITEM_PROFILE_FORM);
     enqueueSnackbar('Successfully added new item.', {
       variant: 'success',
     });
@@ -109,24 +128,91 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
         shared items are stored with due process until the group is abandoned or until the creator removes the ability
         to share the items with other members.
       </Typography>
-      {Object.values(formFields).map((v, index) => (
-        <TextField
-          key={index}
-          id={v.name}
-          name={v.name}
-          label={v.label}
-          value={v.value}
-          placeholder={v.placeholder}
-          onChange={handleInput}
-          required={v.required}
-          fullWidth={v.fullWidth}
-          error={!!v.errorMsg}
-          helperText={v.errorMsg}
-          variant={v.variant}
-          minRows={v.rows || 4}
-          multiline={v.multiline || false}
-        />
-      ))}
+      {Object.values(formFields)
+        .filter((v, index) => index < 2)
+        .map((v, index) => (
+          <TextField
+            key={index}
+            id={v.name}
+            name={v.name}
+            label={v.label}
+            value={v.value}
+            placeholder={v.placeholder}
+            onChange={handleInput}
+            required={v.required}
+            fullWidth={v.fullWidth}
+            error={!!v.errorMsg}
+            helperText={v.errorMsg}
+            variant={v.variant}
+            minRows={v.rows || 4}
+            multiline={v.multiline || false}
+          />
+        ))}
+      <StatusRadioButtons statusSelection={statusSelection} handleChange={handleChange} />
+      <Box className={classes.rowContainer}>
+        {Object.values(formFields)
+          .filter((v, index) => index >= 2 && index < 4)
+          .map((v, index) => (
+            <TextField
+              key={index}
+              id={v.name}
+              name={v.name}
+              label={v.label}
+              value={v.value}
+              placeholder={v.placeholder}
+              onChange={handleInput}
+              required={v.required}
+              fullWidth={v.fullWidth}
+              error={!!v.errorMsg}
+              helperText={v.errorMsg}
+              variant={v.variant}
+              minRows={v.rows || 4}
+              multiline={v.multiline || false}
+            />
+          ))}
+      </Box>
+      {Object.values(formFields)
+        .filter((v, index) => index === 4)
+        .map((v, index) => (
+          <TextField
+            key={index}
+            id={v.name}
+            name={v.name}
+            label={v.label}
+            value={v.value}
+            placeholder={v.placeholder}
+            onChange={handleInput}
+            required={v.required}
+            fullWidth={v.fullWidth}
+            error={!!v.errorMsg}
+            helperText={v.errorMsg}
+            variant={v.variant}
+            minRows={v.rows || 4}
+            multiline={v.multiline || false}
+          />
+        ))}
+      <Box className={classes.rowContainer}>
+        {Object.values(formFields)
+          .filter((v, index) => index > 5)
+          .map((v, index) => (
+            <TextField
+              key={index}
+              id={v.name}
+              name={v.name}
+              label={v.label}
+              value={v.value}
+              placeholder={v.placeholder}
+              onChange={handleInput}
+              required={v.required}
+              fullWidth={v.fullWidth}
+              error={!!v.errorMsg}
+              helperText={v.errorMsg}
+              variant={v.variant}
+              minRows={v.rows || 4}
+              multiline={v.multiline || false}
+            />
+          ))}
+      </Box>
       <Autocomplete
         value={storageLocation.inputValue}
         forcePopupIcon
@@ -170,27 +256,27 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
           />
         )}
       />
-      <Box>
-        <Tooltip
-          title={
-            'Adding items to any event will allow all members to view the item. Any person who is not within that event group must join that group to view the item.'
-          }
-        >
+      <Tooltip
+        title={
+          'Adding items to any event will allow all members to view the item. Any person who is not within that event group must join that group to view the item.'
+        }
+      >
+        <Box>
           <ButtonComponent text={'Submit'} onClick={submit} buttonVariant={'text'} />
-        </Tooltip>
-      </Box>
+        </Box>
+      </Tooltip>
     </div>
   );
 };
 
-AddItemDetail.defaultProps = {
+AddInventoryDetail.defaultProps = {
   eventID: '',
   setDisplayMode: () => {},
 };
 
-AddItemDetail.propTypes = {
+AddInventoryDetail.propTypes = {
   eventID: PropTypes.string,
   setDisplayMode: PropTypes.func,
 };
 
-export default AddItemDetail;
+export default AddInventoryDetail;

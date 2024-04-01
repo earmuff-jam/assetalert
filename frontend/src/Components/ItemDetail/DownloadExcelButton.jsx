@@ -28,7 +28,7 @@ DownloadExcelButton.defaultProps = {
 };
 
 DownloadExcelButton.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   tooltipTitle: PropTypes.string,
   fileName: PropTypes.string,
   sheetName: PropTypes.string,

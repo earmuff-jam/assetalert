@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     margin: '1rem auto',
-    minHeight: '100%',
+    minHeight: '100vh',
     backgroundColor: theme.palette.secondary.main,
   },
 }));

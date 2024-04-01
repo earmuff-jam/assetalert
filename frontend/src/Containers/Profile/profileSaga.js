@@ -5,6 +5,10 @@ import instance from '../../util/Instances';
 
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
 
+/**
+ * User Details related api calls
+ */
+
 export function* fetchExistingUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -12,19 +16,6 @@ export function* fetchExistingUserDetails() {
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileDetailsFailure(e));
-  }
-}
-
-export function* fetchUpdateProfileImage(action) {
-  try {
-    const { selectedImage, userID } = action.payload;
-
-    const formData = new FormData();
-    formData.append('avatarSrc', selectedImage);
-    const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
-    yield put(profileActions.updateProfileImageSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.updateProfileImageFailure(e));
   }
 }
 
@@ -49,35 +40,41 @@ export function* updateExistingUserDetails(action) {
   }
 }
 
-export function* fetchRecentActivitiesList() {
+/**
+ * Volunteering related api calls
+ */
+
+export function* fetchVolunteeringDetails(action) {
   try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent`);
-    yield put(profileActions.getRecentActivitiesListSuccess(response.data || []));
+    const { userID } = action.payload;
+    const response = yield call(instance.get, `${BASEURL}/${userID}/volunteering`);
+    yield put(profileActions.getVolunteeringDetailsSuccess(response.data));
   } catch (e) {
-    yield put(profileActions.getRecentActivitiesListFailure(e));
+    yield put(profileActions.getVolunteeringDetailsFailure(e));
   }
 }
 
-export function* fetchAllInventoriesForUser() {
+/**
+ * Profile picture related api calls
+ */
+
+export function* fetchUpdateProfileImage(action) {
   try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
-    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || []));
+    const { selectedImage, userID } = action.payload;
+
+    const formData = new FormData();
+    formData.append('avatarSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
+    yield put(profileActions.updateProfileImageSuccess(response.data));
   } catch (e) {
-    yield put(profileActions.getAllInventoriesForUserFailure(e));
+    yield put(profileActions.updateProfileImageFailure(e));
   }
 }
 
-export function* fetchRecentActivitiesTrophyList() {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/highlights`);
-    yield put(profileActions.getRecentActivitiesTrophyListSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.getRecentActivitiesTrophyListFailure(e));
-  }
-}
+/**
+ * Notification related api calls
+ *
+ */
 
 export function* fetchExistingNotificationsUserDetails() {
   try {
@@ -103,15 +100,71 @@ export function* fetchUpdateProfileNotification(action) {
   }
 }
 
-export function* fetchVolunteeringDetails(action) {
+/**
+ * Recent Activities related api calls
+ */
+
+export function* fetchRecentActivitiesList() {
   try {
-    const { userID } = action.payload;
-    const response = yield call(instance.get, `${BASEURL}/${userID}/volunteering`);
-    yield put(profileActions.getVolunteeringDetailsSuccess(response.data));
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent`);
+    yield put(profileActions.getRecentActivitiesListSuccess(response.data || []));
   } catch (e) {
-    yield put(profileActions.getVolunteeringDetailsFailure(e));
+    yield put(profileActions.getRecentActivitiesListFailure(e));
   }
 }
+
+/**
+ * Inventories related api calls
+ */
+
+export function* fetchAllInventoriesForUser() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
+    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || []));
+  } catch (e) {
+    yield put(profileActions.getAllInventoriesForUserFailure(e));
+  }
+}
+
+export function* fetchAddNewInventory(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories`, { ...action.payload });
+    yield put(profileActions.addInventorySuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.addInventoryFailure(e));
+  }
+}
+
+export function* fetchUpdateExistingInventoryDetails(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories`, { ...action.payload });
+    yield put(profileActions.updateInventorySuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.updateInventoryFailure(e));
+  }
+}
+
+/**
+ * Recent Trophy related api calls
+ */
+
+export function* fetchRecentActivitiesTrophyList() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/highlights`);
+    yield put(profileActions.getRecentActivitiesTrophyListSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getRecentActivitiesTrophyListFailure(e));
+  }
+}
+
+/**
+ * Notes related api calls
+ */
 
 export function* fetchUserNotes() {
   try {
@@ -145,30 +198,25 @@ export function* fetchUpdateExistingNote(action) {
 
 export function* fetchRemoveSelectedNote(action) {
   try {
+    const USER_ID = localStorage.getItem('userID');
     const { noteID } = action.payload;
-    const response = yield call(instance.delete, `${BASEURL}/${USER_ID}/notes`);
+    const response = yield call(instance.delete, `${BASEURL}/${USER_ID}/notes/${noteID}`);
     yield put(profileActions.removeSelectedNoteSuccess(response.data));
   } catch (e) {
     yield put(profileActions.removeSelectedNoteFailure(e));
   }
 }
 
-export function* fetchAddNewInventory(action) {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventory`, { ...action.payload });
-    yield put(profileActions.addInventorySuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.addInventoryFailure(e));
-  }
+/********************************
+ * WATCHER FUNCTIONS BELOW HERE
+ ********************************/
+
+export function* watchGetUserNotes() {
+  yield takeLatest(`profile/getUserNotes`, fetchUserNotes);
 }
 
 export function* watchExistingNotificationsUserDetails() {
   yield takeLatest(`profile/getProfileNotifications`, fetchExistingNotificationsUserDetails);
-}
-
-export function* watchGetUserNotes() {
-  yield takeLatest(`profile/getUserNotes`, fetchUserNotes);
 }
 
 export function* watchFetchRemoveSelectedNote() {
@@ -193,6 +241,10 @@ export function* watchFetchExistingUserDetails() {
 
 export function* watchFetchAddNewInventory() {
   yield takeLatest(`profile/addInventory`, fetchAddNewInventory);
+}
+
+export function* watchUpdateExistingInventoryDetails() {
+  yield takeLatest(`profile/updateInventory`, fetchUpdateExistingInventoryDetails);
 }
 
 export function* watchFetchRecentActivitiesList() {
@@ -227,6 +279,7 @@ export default [
   watchFetchUpdateExistingNote,
   watchFetchRemoveSelectedNote,
   watchFetchAllInventoriesForUser,
+  watchUpdateExistingInventoryDetails,
   watchExistingNotificationsUserDetails,
   watchFetchRecentActivitiesTrophyList,
   watchFetchRecentActivitiesList,

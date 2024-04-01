@@ -166,6 +166,22 @@ const profileSlice = createSlice({
       state.error = '';
       state.inventories = [];
     },
+    updateInventory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateInventorySuccess: (state, action) => {
+      const updatedItem = action.payload;
+      const filteredInventoriesList = state.inventories.filter((v) => v.id !== updatedItem.id);
+      state.loading = false;
+      state.error = '';
+      state.inventories = [...filteredInventoriesList, updatedItem];
+    },
+    updateInventoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventories = [];
+    },
     getUserNotes: (state) => {
       state.loading = true;
       state.error = '';
