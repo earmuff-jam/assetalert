@@ -13,7 +13,7 @@ import (
 // GetAllInventories ...
 // swagger:route GET /api/v1/profile/{id}/inventories
 //
-// # Retrieves the list of items that the user has.
+// # Retrieves the list of inventories that the user has.
 //
 // Responses:
 // 200: []Inventory
@@ -52,7 +52,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the selected note
+//     description: The id of the selected inventory
 //     type: string
 //     required: true
 //   - +name: Inventory
@@ -87,6 +87,110 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 	resp, err := db.AddInventory(user, userID, inventory)
 	if err != nil {
 		log.Printf("Unable to add new item. error: +%v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// UpdateSelectedInventory ...
+// swagger:route PUT /api/profile/{id}/inventories UpdateSelectedInventory updateSelectedInventory
+//
+// # Update selected inventory with details.
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected inventory
+//     type: string
+//     required: true
+//   - +name: Inventory
+//     in: query
+//     description: The inventory object to add into the db
+//     type: object
+//     required: true
+//
+// Responses:
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to update selected inventory without id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var inventory model.InventoryItemToUpdate
+	if err := json.NewDecoder(r.Body).Decode(&inventory); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.UpdateInventory(user, userID, inventory)
+	if err != nil {
+		log.Printf("Unable to update selected inventory. error: +%v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// RemoveSelectedInventory ...
+// swagger:route PUT /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
+//
+// # Update selected inventory with details.
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected inventory
+//     type: string
+//     required: true
+//   - +name: Inventory
+//     in: query
+//     description: The inventory object to add into the db
+//     type: object
+//     required: true
+//
+// Responses:
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func RemoveSelectedInventory(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to update selected inventory without id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var draftInventory model.InventoryItemToUpdate
+	if err := json.NewDecoder(r.Body).Decode(&draftInventory); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.UpdateInventory(user, userID, draftInventory)
+	if err != nil {
+		log.Printf("Unable to update selected inventory. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}

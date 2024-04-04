@@ -4,19 +4,14 @@ import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
 import EasyEdit, { Types } from 'react-easy-edit';
-import {
-  ADD_ITEM_PROFILE_FORM,
-  ADD_NEW_INVENTORY_SUBTITLE_TEXT,
-  INVENTORY_TABS,
-  VIEW_PERSONAL_INVENTORY_COLUMNS,
-} from './constants';
+import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
 import Title from '../DialogComponent/Title';
-import AddItemDetail from '../ItemDetail/AddItemDetail';
 import List from '../DrawerListComponent/List';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { profileActions } from '../../Containers/Profile/profileSlice';
+import AddInventoryDetail from './AddInventoryDetail';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -47,6 +42,7 @@ const Inventories = () => {
   const [editMode, setEditMode] = useState(false);
   const [displayData, setDisplayData] = useState([]);
 
+  const USER_ID = localStorage.getItem('userID');
   const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
 
   const handleEditMode = () => {
@@ -67,24 +63,38 @@ const Inventories = () => {
     setDisplayData([...formattedData]);
   };
 
+  const columns = Object.keys(displayData.length > 0 && displayData[0]); // for header purpose
   const filteredItems = displayData?.map((item) => {
-    const { id, eventID, storage_location_id, created_by, updated_by, ...rest } = item;
+    const { id, storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } = item;
     return rest;
   });
+
+  const save = (value, rowIndex, column) => {
+    const row = inventories.filter((v, index) => index === rowIndex).find((v) => true);
+    const { id } = row;
+    dispatch(profileActions.updateInventory({ id, userID: USER_ID, value, column, updated_by: USER_ID }));
+  };
+
+  const columnHeaderFormatter = (column) => {
+    const header = VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column];
+    // Apply a modifier function if defined
+    const formattedTitle = header?.modifier ? header.modifier(header.title) : header?.displayName;
+    return formattedTitle;
+  };
 
   const rowFormatter = (row, column, rowIndex) => {
     // if any of the row includes timestamp we modify it
     if (['created_at', 'updated_at'].includes(column)) {
       return dayjs(row[column]).fromNow();
     }
-    const inputColumns = ['bought_at', 'price', 'status', 'quantity', 'name', 'description'];
+    const inputColumns = ['bought_at', 'price', 'status', 'quantity', 'name', 'description', 'barcode', 'sku'];
     if (inputColumns.includes(column)) {
       return (
         <EasyEdit
           type={Types.TEXT}
           onSave={(value) => {
             // the column.key is the db column name
-            save(value, rowIndex, VIEW_ITEMS_COLUMN_HEADERS[column].key);
+            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].key);
           }}
           onCancel={(o) => o}
           placeholder={row[column].toString()}
@@ -99,38 +109,32 @@ const Inventories = () => {
   };
 
   const displaySelection = (value, data) => {
-    const tableOptions = {
-      filterType: 'checkbox',
-      elevation: 0,
-      // customRowRender: rowFormatter
-    };
-
     switch (value) {
       case 0:
         return (
           <List
             key={performance.now()}
-            tableTitle={'All Products'}
             tooltipTitle={'Download all items '}
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
             data={displayData}
-            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            columns={columns}
             filteredData={filteredItems}
-            tableOptions={tableOptions}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
           />
         );
       case 1:
         return (
           <List
             key={performance.now()}
-            tableTitle={'Coupons / Deals'}
             tooltipTitle={'Download all items with coupons '}
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
             data={displayData}
-            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            columns={columns}
             filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
           />
         );
@@ -138,25 +142,27 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
-            tableTitle={'Draft'}
+            tooltipTitle={'Download all items with draft status '}
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
             data={displayData}
-            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            columns={columns}
             filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowFormatter={rowFormatter}
           />
         );
       case 3:
         return (
           <List
             key={performance.now()}
-            tableTitle={'Hidden'}
             tooltipTitle={'Download all inventories with hidden status '}
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
             data={displayData}
-            columns={VIEW_PERSONAL_INVENTORY_COLUMNS}
+            columns={columns}
             filteredData={filteredItems}
+            columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
           />
         );
@@ -191,11 +197,7 @@ const Inventories = () => {
       {editMode && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setEditMode(false)}>Add New Item</Title>
-          <AddItemDetail
-            setDisplayMode={setEditMode}
-            draftFormFields={ADD_ITEM_PROFILE_FORM}
-            subtitleText={ADD_NEW_INVENTORY_SUBTITLE_TEXT}
-          />
+          <AddInventoryDetail setDisplayMode={setEditMode} />
         </Dialog>
       )}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">

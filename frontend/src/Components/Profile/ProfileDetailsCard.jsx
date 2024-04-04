@@ -77,19 +77,21 @@ const ProfileDetailsCard = ({
                 Submit
               </Button>
               <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
-              <IconButton
-                onClick={handleClickNotificationBar}
-                disabled={isLoading || notifications.length <= 0}
-                className={classes.iconTilt}
-              >
-                <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
-                  <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
-                </Badge>
-              </IconButton>
             </Box>
           ) : (
             <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
           )}
+          <Box>
+            <IconButton
+              onClick={handleClickNotificationBar}
+              disabled={isLoading || notifications.length <= 0}
+              className={classes.iconTilt}
+            >
+              <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
+                <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
+              </Badge>
+            </IconButton>
+          </Box>
         </Box>
         {editMode && <EditingUserProfile formFields={formFields} handleInput={handleInput} />}
       </CardContent>

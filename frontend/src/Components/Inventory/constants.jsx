@@ -35,6 +35,10 @@ const GENERIC_FORM_FIELDS_VARIANT = {
   variant: 'standard',
 };
 
+const GENERIC_FORM_FIELDS_OUTLINED_VARIANT = {
+  variant: 'outlined',
+};
+
 export const GENERIC_TEXTAREA_VARIANT = {
   type: 'text',
   multiline: true,
@@ -44,8 +48,8 @@ export const GENERIC_TEXTAREA_VARIANT = {
 };
 
 /**
- * ADD ITEM PROFILE FORM. 
- * 
+ * ADD ITEM PROFILE FORM.
+ *
  * Used to add new item in user's personal profile.
  */
 export const ADD_ITEM_PROFILE_FORM = {
@@ -71,7 +75,7 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   description: {
     label: 'Item description',
-    placeholder: '',
+    placeholder: 'Enter item description in less than 500 characters',
     value: '',
     name: 'description',
     errorMsg: '',
@@ -87,12 +91,12 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   price: {
     label: 'Price',
-    placeholder: '',
+    placeholder: 'Total price of each item',
     value: '',
     name: 'price',
     errorMsg: '',
     required: true,
-    fullWidth: false,
+    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
@@ -109,12 +113,12 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   barcode: {
     label: 'Item barcode',
-    placeholder: '',
+    placeholder: 'Item barcode to reference item',
     value: '',
     name: 'barcode',
     errorMsg: '',
     required: false,
-    fullWidth: false,
+    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length >= 100,
@@ -125,7 +129,7 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   sku: {
     label: 'Item sku',
-    placeholder: '',
+    placeholder: 'SKU of the item',
     value: '',
     name: 'sku',
     errorMsg: '',
@@ -137,16 +141,26 @@ export const ADD_ITEM_PROFILE_FORM = {
         message: 'sku should be less than 50 characters',
       },
     ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
+  },
+  status: {
+    // status is hidden because its not a textfield. index === 4 is status
+    // status column is skipped in AddInventoryDetails
+    label: 'Item Status',
+    placeholder: 'Item Status',
+    value: '',
+    name: 'status',
+    errorMsg: '',
+    required: true,
   },
   quantity: {
     label: 'Quantity',
-    placeholder: '',
+    placeholder: 'The total number of items',
     value: '',
     name: 'quantity',
     errorMsg: '',
     required: true,
-    fullWidth: false,
+    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
@@ -163,12 +177,12 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   bought_at: {
     label: 'Place of purchase',
-    placeholder: '',
+    placeholder: 'Walmart...',
     value: '',
     name: 'bought_at',
     errorMsg: '',
     required: false,
-    fullWidth: false,
+    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length >= 50,
@@ -179,101 +193,65 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
 };
 
-export const VIEW_PERSONAL_INVENTORY_COLUMNS = [
-  {
-    name: 'name',
-    label: 'Name',
-    options: {
-      filter: false,
-      sort: true,
-    },
+export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
+  name: {
+    key: 'name',
+    title: 'Item name',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'description',
-    label: 'Description',
-    options: {
-      filter: false,
-      sort: false,
-    },
+  description: {
+    key: 'item_description',
+    title: 'Item Description',
+    displayName: 'Description',
   },
-  {
-    name: 'price',
-    label: 'Price',
-    options: {
-      filter: false,
-      sort: true,
-    },
+  price: {
+    key: 'price',
+    title: 'Cost',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'status',
-    label: 'Status',
-    options: {
-      filter: true,
-      sort: true,
-    },
+  status: {
+    key: 'status',
+    title: 'Status',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'barcode',
-    label: 'BarCode',
-    options: {
-      filter: false,
-      sort: false,
-    },
+  barcode: {
+    key: 'barcode',
+    title: 'Barcode',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'sku',
-    label: 'SKU',
-    options: {
-      filter: false,
-      sort: false,
-    },
+  sku: {
+    key: 'sku',
+    title: 'SKU',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'quantity',
-    label: 'Count',
-    options: {
-      filter: false,
-      sort: false,
-    },
+  quantity: {
+    key: 'quantity',
+    title: 'Quantity',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'location',
-    label: 'Location',
-    options: {
-      filter: true,
-      sort: true,
-    },
+  location: {
+    key: 'location',
+    title: 'Location',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'created_at',
-    label: 'Created At',
-    options: {
-      filter: false,
-      sort: true,
-    },
+  updated_at: {
+    key: 'updated_at',
+    title: 'Updated At',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'creator_name',
-    label: 'Creator',
-    options: {
-      filter: true,
-      sort: false,
-    },
+  created_at: {
+    key: 'created_at',
+    title: 'Created At',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'updated_at',
-    label: 'Updated At',
-    options: {
-      filter: false,
-      sort: true,
-    },
+  updater_name: {
+    key: 'updater_name',
+    title: 'Updated By',
+    modifier: (title) => `${title}`,
   },
-  {
-    name: 'updater_name',
-    label: 'Updator',
-    options: {
-      filter: true,
-      sort: false,
-    },
+  bought_at: {
+    key: 'bought_at',
+    title: 'Purchase Location',
+    modifier: (title) => `${title}`,
   },
-];
+};

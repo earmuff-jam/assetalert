@@ -22,3 +22,14 @@ type Inventory struct {
 	UpdaterName       string    `json:"updater_name"`
 	BoughtAt          string    `json:"bought_at"`
 }
+
+// InventoryItemToUpdate ...
+// swagger:model InventoryItemToUpdate
+//
+// InventoryItemToUpdate is the object that needs to be updated when the client is updating the inventory list of their own personal account. A user can update a certain limit of columns
+type InventoryItemToUpdate struct {
+	Column string `json:"column"`
+	Value  string `json:"value"`
+	ID     string `json:"id"`
+	UserID string `json:"userID"`
+}

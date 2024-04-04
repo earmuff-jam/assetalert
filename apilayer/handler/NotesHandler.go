@@ -181,7 +181,15 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 // 500: MessageResponse
 func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
-	noteID := vars["id"]
+	userID := vars["id"]
+	noteID := vars["noteID"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to update notes with empty userID")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
 
 	if len(noteID) <= 0 {
 		log.Printf("Unable to update notes with empty noteID")

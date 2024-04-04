@@ -31,7 +31,7 @@ func RetrieveUserNotes(user string, userID uuid.UUID) ([]model.Note, error) {
 	FROM community.notes n
 	LEFT JOIN community.profiles cp on cp.id  = n.created_by
 	LEFT JOIN community.profiles up on up.id  = n.updated_by
-	WHERE n.created_by = $1 or n.updated_by = $1`
+	WHERE n.created_by = $1 or n.updated_by = $1 ORDER BY n.updated_at DESC`
 
 	rows, err := db.Query(sqlStr, userID)
 	if err != nil {

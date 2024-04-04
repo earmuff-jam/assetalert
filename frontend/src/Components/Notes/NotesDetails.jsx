@@ -118,8 +118,6 @@ const NotesDetails = () => {
       updated_by: localStorage.getItem('userID'),
     };
     dispatch(profileActions.removeSelectedNote(formattedDraftNotes));
-    const transformedData = categorizeNotes(formattedNotes);
-    setFormattedNotes(transformedData);
     enqueueSnackbar('Successfully removed notes.', {
       variant: 'success',
     });

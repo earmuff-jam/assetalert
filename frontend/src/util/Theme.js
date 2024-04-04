@@ -32,5 +32,15 @@ export const primary_theme = createTheme({
         borderRadius: '10%',
       },
     },
+    MuiCheckbox: {
+      root: {
+        color: '#20639B',
+      },
+    },
+    MuiRadio: {
+      root: {
+        color: '#20639B',
+      },
+    },
   },
 });
