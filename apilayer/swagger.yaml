@@ -229,6 +229,23 @@ definitions:
         title: Expense ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
+    InventoryItemToUpdate:
+        properties:
+            column:
+                type: string
+                x-go-name: Column
+            id:
+                type: string
+                x-go-name: ID
+            userID:
+                type: string
+                x-go-name: UserID
+            value:
+                type: string
+                x-go-name: Value
+        title: InventoryItemToUpdate ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
     Item:
         properties:
             bought_at:
@@ -869,20 +886,25 @@ info:
     title: Api Layer
     version: 1.0.0
 paths:
-    /api/profile/highlights/{id}:
-        get:
-            operationId: getUserRecentHighlights
+    /api/profile/{id}/inventories:
+        post:
+            operationId: addNewInventory
             parameters:
-                - description: The userID of the selected user
+                - description: The id of the selected inventory
                   in: path
                   name: id
                   required: true
                   type: string
+                - description: The inventory object to add into the db
+                  in: query
+                  name: Inventory
+                  required: true
+                  type: object
             responses:
                 "200":
-                    description: RecentHighlight
+                    description: MessageResponse
                     schema:
-                        $ref: '#/definitions/RecentHighlight'
+                        $ref: '#/definitions/MessageResponse'
                 "400":
                     description: MessageResponse
                     schema:
@@ -895,10 +917,43 @@ paths:
                     description: MessageResponse
                     schema:
                         $ref: '#/definitions/MessageResponse'
-            summary: Retrieves the list of highlights for the user. The highlights includes created, reported, volunteered events
+            summary: Add new personal item to the user inventory
             tags:
-                - GetUserRecentHighlights
-    /api/profile/notes/{id}:
+                - AddNewInventory
+        put:
+            operationId: removeSelectedInventory
+            parameters:
+                - description: The id of the selected inventory
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The inventory object to add into the db
+                  in: query
+                  name: Inventory
+                  required: true
+                  type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Update selected inventory with details.'
+            tags:
+                - RemoveSelectedInventory
+    /api/profile/{id}/notes:
         delete:
             operationId: removeSelectedNote
             parameters:
@@ -1023,6 +1078,35 @@ paths:
             summary: Updates an existing note in the database
             tags:
                 - UpdateNote
+    /api/profile/highlights/{id}:
+        get:
+            operationId: getUserRecentHighlights
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: RecentHighlight
+                    schema:
+                        $ref: '#/definitions/RecentHighlight'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of highlights for the user. The highlights includes created, reported, volunteered events
+            tags:
+                - GetUserRecentHighlights
     /api/profile/recent/{id}:
         get:
             description: create / update event, create / update volunteering, create / update expense report.

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Box, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_EXPENSE_FORM_FIELDS } from './constants';

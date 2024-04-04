@@ -230,7 +230,7 @@ const profileSlice = createSlice({
       state.error = '';
       state.notes = [];
     },
-    removeSelectedNote: (state, action) => {
+    removeSelectedNote: (state) => {
       state.loading = true;
       state.error = '';
     },

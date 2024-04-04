@@ -5,7 +5,6 @@ import { Box, Typography } from '@material-ui/core';
 import 'chart.js/auto'; // do not remove this
 import { Line } from 'react-chartjs-2';
 import EmptyComponent from '../../util/EmptyComponent';
-import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {

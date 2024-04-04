@@ -146,6 +146,11 @@ List.defaultProps = {
   data: [],
   columns: [],
   rowFormatter: () => {},
+  filteredData: [],
+  columnHeaderFormatter: () => {},
+  tooltipTitle: '',
+  fileName: '',
+  sheetName: '',
   modifyHeightVariant: false,
 };
 
@@ -155,7 +160,11 @@ List.propTypes = {
   data: PropTypes.array,
   columns: PropTypes.array,
   rowFormatter: PropTypes.func,
-  tableTitle: PropTypes.string,
+  filteredData: PropTypes.array,
+  columnHeaderFormatter: PropTypes.func,
+  tooltipTitle: PropTypes.string,
+  fileName: PropTypes.string,
+  sheetName: PropTypes.string,
   modifyHeightVariant: PropTypes.bool,
 };
 
