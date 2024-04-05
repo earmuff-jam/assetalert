@@ -10,7 +10,7 @@ import CommunityMsg from '../ChatComponent/CommunityMsg';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import { Box, Paper, Tab, Tabs, Tooltip } from '@material-ui/core';
+import { Box, Tab, Tabs, Tooltip } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   allowSpace: {
     gap: theme.spacing(2),
   },
-    underline: {
+  underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,
   },
   selected: {

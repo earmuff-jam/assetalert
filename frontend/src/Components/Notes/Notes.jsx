@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { Box, Dialog, makeStyles } from '@material-ui/core';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
@@ -39,12 +39,7 @@ const Notes = () => {
   return (
     <Box>
       <Box className={classes.rowContainer}>
-        <TextComponent
-          value={'Rough Notes'}
-          gutterBottom={true}
-          loading={false}
-          textStyle={classes.text}
-        />
+        <TextComponent value={'Rough Notes'} gutterBottom={true} loading={false} textStyle={classes.text} />
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent
           buttonVariant={'text'}

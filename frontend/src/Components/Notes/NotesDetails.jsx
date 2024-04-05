@@ -1,6 +1,6 @@
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@material-ui/icons';
@@ -112,7 +112,6 @@ const NotesDetails = () => {
   const [formattedNotes, setFormattedNotes] = useState([]);
 
   const removeSelectedNote = (noteID) => {
-    const formattedNotes = notes.filter((v) => v.noteID != noteID);
     const formattedDraftNotes = {
       noteID: noteID,
       updated_by: localStorage.getItem('userID'),

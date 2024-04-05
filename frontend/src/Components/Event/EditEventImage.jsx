@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box, Button, Input } from '@material-ui/core';
 
@@ -73,6 +73,26 @@ const EditEventImage = ({
       </div>
     </Box>
   );
+};
+
+EditEventImage.defaultProps = {
+  selectedImage: '',
+  setSelectedImage: () => {},
+  uploadedImage: {},
+  setUploadedImage: () => {},
+  toggleEditImage: false,
+  submit: () => {},
+  eventID: '',
+};
+
+EditEventImage.propTypes = {
+  selectedImage: PropTypes.string,
+  setSelectedImage: PropTypes.func,
+  uploadedImage: PropTypes.object,
+  setUploadedImage: PropTypes.func,
+  toggleEditImage: PropTypes.bool,
+  submit: PropTypes.func,
+  eventID: PropTypes.string,
 };
 
 export default EditEventImage;

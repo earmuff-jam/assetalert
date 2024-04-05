@@ -33,16 +33,12 @@ const useStyles = makeStyles((theme) => ({
   text: {
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
-    color: theme.palette.primary.main,
     fontSize: '0.925rem',
     textTransform: 'uppercase',
   },
   iconStyle: {
     width: theme.spacing(2),
     height: theme.spacing(2),
-  },
-  primaryStyle: {
-    color: theme.palette.warning.main,
   },
   underline: {
     borderBottom: `${theme.spacing(0.02)}rem ${theme.palette.warning.main} solid`,

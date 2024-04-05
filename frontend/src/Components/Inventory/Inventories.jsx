@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
 import TextComponent from '../../stories/TextComponent/TextComponent';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import ButtonComponent from '../../stories/Button/ButtonComponent';
@@ -50,7 +50,7 @@ const Inventories = () => {
     dispatch(eventActions.getStorageLocations());
   };
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
     const selectionMenu = {
       1: 'COUPONS',
@@ -65,12 +65,13 @@ const Inventories = () => {
 
   const columns = Object.keys(displayData.length > 0 && displayData[0]); // for header purpose
   const filteredItems = displayData?.map((item) => {
+    // eslint-disable-next-line
     const { id, storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } = item;
     return rest;
   });
 
   const save = (value, rowIndex, column) => {
-    const row = inventories.filter((v, index) => index === rowIndex).find((v) => true);
+    const row = inventories.filter((_, index) => index === rowIndex).find(() => true);
     const { id } = row;
     dispatch(profileActions.updateInventory({ id, userID: USER_ID, value, column, updated_by: USER_ID }));
   };
@@ -108,7 +109,7 @@ const Inventories = () => {
     return row[column];
   };
 
-  const displaySelection = (value, data) => {
+  const displaySelection = (value) => {
     switch (value) {
       case 0:
         return (
