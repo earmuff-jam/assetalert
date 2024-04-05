@@ -87,7 +87,7 @@ const profileSlice = createSlice({
       });
       state.loading = false;
       state.error = '';
-      state.notifications = [...filteredNotificationList, updatedNotification];
+      state.notifications = [updatedNotification, ...filteredNotificationList];
     },
     updateProfileNotificationFailure: (state) => {
       state.loading = false;
@@ -153,15 +153,29 @@ const profileSlice = createSlice({
     addInventory: (state) => {
       state.loading = true;
       state.error = '';
-      state.inventories = [];
     },
     addInventorySuccess: (state, action) => {
       const updatedValues = action.payload;
       state.loading = false;
       state.error = '';
-      state.inventories = [...state.inventories, updatedValues];
+      state.inventories = [updatedValues, ...state.inventories];
     },
     addInventoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventories = [];
+    },
+    addBulkInventory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    addBulkInventorySuccess: (state, action) => {
+      const updatedValues = action.payload;
+      state.loading = false;
+      state.error = '';
+      state.inventories = [...updatedValues, ...state.inventories];
+    },
+    addBulkInventoryFailure: (state) => {
       state.loading = false;
       state.error = '';
       state.inventories = [];
@@ -175,7 +189,7 @@ const profileSlice = createSlice({
       const filteredInventoriesList = state.inventories.filter((v) => v.id !== updatedItem.id);
       state.loading = false;
       state.error = '';
-      state.inventories = [...filteredInventoriesList, updatedItem];
+      state.inventories = [updatedItem, ...filteredInventoriesList];
     },
     updateInventoryFailure: (state) => {
       state.loading = false;
@@ -205,7 +219,7 @@ const profileSlice = createSlice({
       const updatedNotes = action.payload;
       state.loading = false;
       state.error = '';
-      state.notes = [...state.notes, updatedNotes];
+      state.notes = [updatedNotes, ...state.notes];
     },
     addNewNoteFailure: (state) => {
       state.loading = false;
@@ -223,7 +237,7 @@ const profileSlice = createSlice({
       });
       state.loading = false;
       state.error = '';
-      state.notes = [...filteredNotes, updatedNotes];
+      state.notes = [updatedNotes, ...filteredNotes];
     },
     updateExistingNoteFailure: (state) => {
       state.loading = false;

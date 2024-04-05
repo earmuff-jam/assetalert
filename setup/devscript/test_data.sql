@@ -117,3 +117,32 @@ VALUES
     ((SELECT id FROM community.projects LIMIT 1), 'Promotional Materials', 75.00, (SELECT id FROM community.category WHERE category.item_name='Clothing' LIMIT 1), 'Print Shop', 'Printing flyers and banners', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles LIMIT 1)::UUID]),
 
     ((SELECT id FROM community.projects LIMIT 1), 'Security Services', 350.00, (SELECT id FROM community.category WHERE category.item_name='Gifts/Donations' LIMIT 1), 'Secure Events Co.', 'Hiring security personnel', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles LIMIT 1)::UUID]);
+
+-- ADD NOTES SQL TEST DATA --
+INSERT INTO community.notes (title, description, status, created_by, updated_by, sharable_groups)
+VALUES (
+    'Buy kitty litter for four of my kittens',
+    'Do not buy the brand from walmart, buy from a generic well known place',
+    '',
+    (SELECT id FROM community.profiles p LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]
+);
+
+-- ADD INVENTORIES SQL TEST DATA --
+INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, updated_by, sharable_groups)
+VALUES (
+    '4 pounds of kitty litter',
+    'Bought from tractor supply in fm969',
+    12.00,
+    'DRAFT',
+    'barcode#1123928',
+    'sku#123456734',
+    12,
+    'Walmart',
+    'Kitchen Pantry',
+    (SELECT id from community.storage_locations WHERE location = 'Kitchen Pantry'),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]
+);

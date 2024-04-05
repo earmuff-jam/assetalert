@@ -6,11 +6,6 @@ export const VIEW_EXPENSE_LIST_COLUMN_HEADERS = {
     title: 'Title',
     displayName: 'Item Name',
   },
-  description: {
-    key: 'description',
-    title: 'Item Description',
-    displayName: 'Item Description',
-  },
   item_cost: {
     key: 'item_cost',
     title: 'item_cost',

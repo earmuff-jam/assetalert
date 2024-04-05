@@ -229,6 +229,68 @@ definitions:
         title: Expense ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
+    Inventory:
+        properties:
+            barcode:
+                type: string
+                x-go-name: Barcode
+            bought_at:
+                type: string
+                x-go-name: BoughtAt
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            description:
+                type: string
+                x-go-name: Description
+            id:
+                type: string
+                x-go-name: ID
+            is_resolved:
+                type: boolean
+                x-go-name: IsResolved
+            location:
+                type: string
+                x-go-name: Location
+            name:
+                type: string
+                x-go-name: Name
+            price:
+                type: string
+                x-go-name: Price
+            quantity:
+                format: int64
+                type: integer
+                x-go-name: Quantity
+            sku:
+                type: string
+                x-go-name: SKU
+            status:
+                type: string
+                x-go-name: Status
+            storage_location_id:
+                type: string
+                x-go-name: StorageLocationID
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updater_name:
+                type: string
+                x-go-name: UpdaterName
+        title: Inventory ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
     InventoryItemToUpdate:
         properties:
             column:
@@ -244,6 +306,22 @@ definitions:
                 type: string
                 x-go-name: Value
         title: InventoryItemToUpdate ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    InventoryListRequest:
+        properties:
+            InventoryList:
+                items:
+                    $ref: '#/definitions/Inventory'
+                type: array
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+        title: InventoryListRequest ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
     Item:
@@ -890,7 +968,7 @@ paths:
         post:
             operationId: addNewInventory
             parameters:
-                - description: The id of the selected inventory
+                - description: The id of the selected user
                   in: path
                   name: id
                   required: true
@@ -902,9 +980,9 @@ paths:
                   type: object
             responses:
                 "200":
-                    description: MessageResponse
+                    description: Inventory
                     schema:
-                        $ref: '#/definitions/MessageResponse'
+                        $ref: '#/definitions/Inventory'
                 "400":
                     description: MessageResponse
                     schema:
@@ -923,7 +1001,7 @@ paths:
         put:
             operationId: removeSelectedInventory
             parameters:
-                - description: The id of the selected inventory
+                - description: The id of the selected user
                   in: path
                   name: id
                   required: true
@@ -953,6 +1031,38 @@ paths:
             summary: '# Update selected inventory with details.'
             tags:
                 - RemoveSelectedInventory
+    /api/profile/{id}/inventories/bulk:
+        post:
+            operationId: addInventoryInBulk
+            parameters:
+                - description: The id of the selected inventory
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The list of inventories to add into the db to support bulk upload
+                  in: query
+                  name: InventoryListRequest
+                  required: true
+                  type: object
+            responses:
+                "200":
+                    $ref: '#/responses/model.Inventory'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Bulk upload inventory list. returns the list of uploaded items.'
+            tags:
+                - AddInventoryInBulk
     /api/profile/{id}/notes:
         delete:
             operationId: removeSelectedNote

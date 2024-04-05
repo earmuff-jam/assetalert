@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
-  text: {
-    fontSize: '1.125rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
+  headingText: {
+    fontSize: '1.6rem',
+    letterSpacing: '0.0125rem',
+    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.text.secondary,
   },
 }));
@@ -39,7 +39,7 @@ const Notes = () => {
   return (
     <Box>
       <Box className={classes.rowContainer}>
-        <TextComponent value={'Rough Notes'} gutterBottom={true} loading={false} textStyle={classes.text} />
+        <TextComponent value={'Rough Notes'} gutterBottom={true} loading={false} textStyle={classes.headingText} />
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent
           buttonVariant={'text'}

@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -90,6 +91,90 @@ ORDER BY
 	return data, nil
 }
 
+// AddInventoryInBulk ...
+func AddInventoryInBulk(user string, userID string, draftInventoryList model.InventoryListRequest) ([]model.Inventory, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		log.Printf("unable setup database connection. error: %+v", err)
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	for _, v := range draftInventoryList.InventoryList {
+
+		// storage location is unique key in the database.
+		// storage location can be shared across inventories and items that are stored in events.
+		parsedStorageLocationID, err := uuid.Parse(v.Location)
+		if err != nil {
+			// if the location is not a uuid type, then it should resemble a new storage location
+			emptyLocationID := ""
+			err := addNewStorageLocation(user, v.Location, userID, &emptyLocationID)
+			if err != nil {
+				log.Printf("unable to retrieve selected location id. error: %+v", err)
+				tx.Rollback()
+				return nil, err
+			}
+			parsedStorageLocationID, err = uuid.Parse(emptyLocationID)
+			if err != nil {
+				log.Printf("unable to parse the found location id. error: %+v", err)
+				tx.Rollback()
+				return nil, err
+			}
+			v.StorageLocationID = emptyLocationID
+		}
+
+		parsedCreatedByUUID, err := uuid.Parse(userID)
+		if err != nil {
+			log.Printf("unable to parse the creator id. error: %+v", err)
+			tx.Rollback()
+			return nil, err
+		}
+
+		sqlStr := `INSERT INTO community.inventory
+	(name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, created_at, updated_by, updated_at)
+    VALUES
+	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+	RETURNING id`
+
+		err = tx.QueryRow(
+			sqlStr,
+			v.Name,
+			v.Description,
+			v.Price,
+			v.Status,
+			v.Barcode,
+			v.SKU,
+			v.Quantity,
+			v.BoughtAt,
+			v.Location,
+			parsedStorageLocationID,
+			parsedCreatedByUUID,
+			time.Now(),
+			parsedCreatedByUUID,
+			time.Now(),
+		).Scan(&v.ID)
+
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return draftInventoryList.InventoryList, nil
+}
+
 // AddInventory ...
 func AddInventory(user string, userID string, draftInventory model.Inventory) (*model.Inventory, error) {
 
@@ -129,6 +214,10 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		return nil, err
 	}
 
+	currentTimestamp := time.Now()
+	draftInventory.CreatedAt = currentTimestamp
+	draftInventory.UpdatedAt = currentTimestamp
+
 	sqlStr := `INSERT INTO community.inventory
 	(name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, created_at, updated_by, updated_at)
     VALUES
@@ -148,9 +237,9 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		draftInventory.Location,
 		parsedStorageLocationID,
 		parsedCreatedByUUID,
-		time.Now(),
+		draftInventory.CreatedAt,
 		parsedCreatedByUUID, // created is the same for the first time
-		time.Now(),
+		draftInventory.UpdatedAt,
 	).Scan(&draftInventory.ID)
 
 	if err != nil {

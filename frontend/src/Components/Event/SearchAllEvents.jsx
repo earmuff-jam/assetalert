@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, TextField, Typography } from '@material-ui/core';
-import { FiberManualRecordRounded } from '@material-ui/icons';
+import { Box, InputAdornment, TextField, Typography } from '@material-ui/core';
+import { FiberManualRecordRounded, SearchRounded } from '@material-ui/icons';
 
 import classNames from 'classnames';
 import { Autocomplete } from '@material-ui/lab';
@@ -91,12 +91,7 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
         </Box>
       )}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          placeholder="Search"
-          variant="standard"
-          className={classes.text}
-        />
+        <TextField {...params} placeholder="Search" variant="standard" className={classes.text} />
       )}
       forcePopupIcon={true}
     />

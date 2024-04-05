@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box, Button, Input } from '@material-ui/core';
+import { Avatar, Box } from '@material-ui/core';
 import UploadData from '../DrawerListComponent/UploadData';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,17 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditEventImage = ({
+const EditImageComponent = ({
   selectedImage,
   setSelectedImage,
   uploadedImage,
   setUploadedImage,
   toggleEditImage,
   submit,
-  eventID,
+  id,
 }) => {
   const classes = useStyles();
-
   const onChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -63,37 +62,37 @@ const EditEventImage = ({
       )}
       <UploadData
         buttonCancelText={'cancel'}
+        buttonSubmitText={'submit'}
         cancelButtonStyles={classes.buttonContainer}
         disableCancelButton={false}
-        buttonSubmitText={'upload'}
         submitButtonStyles={classes.buttonContainer}
-        disableSubmitButton={!uploadedImage}
-        onChange={onChange}
+        disableSubmitButton={false}
+        onSubmitClick={() => submit(id)}
         onCancelClick={toggleEditImage}
-        onSubmitClick={() => submit(eventID)}
+        onChange={onChange}
       />
     </Box>
   );
 };
 
-EditEventImage.defaultProps = {
+EditImageComponent.defaultProps = {
   selectedImage: '',
   setSelectedImage: () => {},
   uploadedImage: {},
   setUploadedImage: () => {},
   toggleEditImage: false,
   submit: () => {},
-  eventID: '',
+  id: '',
 };
 
-EditEventImage.propTypes = {
+EditImageComponent.propTypes = {
   selectedImage: PropTypes.string,
   setSelectedImage: PropTypes.func,
   uploadedImage: PropTypes.object,
   setUploadedImage: PropTypes.func,
   toggleEditImage: PropTypes.bool,
   submit: PropTypes.func,
-  eventID: PropTypes.string,
+  id: PropTypes.string,
 };
 
-export default EditEventImage;
+export default EditImageComponent;

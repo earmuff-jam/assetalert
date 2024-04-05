@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # File: _main.sh
-# Description: Loads the database layer for the application
+# Description: Loads the application
 
 help() {
     echo "Usage: $0 [Choose any of the following options...] {loadEnv, loadDb, loadTestEnv, loadMigration, loadData, uninstall}" >&2

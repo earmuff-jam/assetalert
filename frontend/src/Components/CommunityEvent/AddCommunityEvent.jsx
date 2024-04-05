@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Box, Tooltip } from '@material-ui/core';
-
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -61,7 +60,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
       ...prevTouched,
       [field]: true,
     }));
-    // Validate the field
     validateField(field, value);
   };
 

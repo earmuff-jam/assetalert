@@ -291,7 +291,6 @@ func populateFakePersonalInventories(user string, limit int, creatorID string) {
 		draftInventory.SKU = gofakeit.Date().String()
 		draftInventory.Quantity = gofakeit.Number(10, 100)
 		draftInventory.Location = gofakeit.BuzzWord()
-		draftInventory.IsResolved = gofakeit.Bool()
 		draftInventory.CreatedAt = startDate
 		draftInventory.UpdatedAt = startDate
 		draftInventory.CreatedBy = creatorID
