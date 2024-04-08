@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Avatar, Box } from '@material-ui/core';
-import EditEventImage from '../Event/EditEventImage';
 import { makeStyles } from '@material-ui/core/styles';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import CardTitleComponent from '../../stories/CardTitleComponent/CardTitleComponent';
+import EditImageComponent from '../Event/EditImageComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,14 +68,14 @@ const UserProfile = ({ formFields, avatarUrl, profileID }) => {
     <Box className={classes.root}>
       <Box className={classNames(classes.rowContainer, classes.gutterBottom)}>
         {editImage ? (
-          <EditEventImage
+          <EditImageComponent
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
             uploadedImage={uploadedImage}
             setUploadedImage={setUploadedImage}
             toggleEditImage={toggleEditImage}
             submit={handleSubmitImage}
-            profileID={profileID}
+            id={profileID}
           />
         ) : (
           <Avatar

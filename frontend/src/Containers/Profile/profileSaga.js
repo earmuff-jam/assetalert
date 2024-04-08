@@ -61,7 +61,6 @@ export function* fetchVolunteeringDetails(action) {
 export function* fetchUpdateProfileImage(action) {
   try {
     const { selectedImage, userID } = action.payload;
-
     const formData = new FormData();
     formData.append('avatarSrc', selectedImage);
     const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
@@ -135,6 +134,16 @@ export function* fetchAddNewInventory(action) {
     yield put(profileActions.addInventorySuccess(response.data));
   } catch (e) {
     yield put(profileActions.addInventoryFailure(e));
+  }
+}
+
+export function* fetchAddBulkInventory(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories/bulk`, { ...action.payload });
+    yield put(profileActions.addBulkInventorySuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.addBulkInventoryFailure(e));
   }
 }
 
@@ -243,6 +252,10 @@ export function* watchFetchAddNewInventory() {
   yield takeLatest(`profile/addInventory`, fetchAddNewInventory);
 }
 
+export function* watchFetchAddBulkInventory() {
+  yield takeLatest(`profile/addBulkInventory`, fetchAddBulkInventory);
+}
+
 export function* watchUpdateExistingInventoryDetails() {
   yield takeLatest(`profile/updateInventory`, fetchUpdateExistingInventoryDetails);
 }
@@ -276,6 +289,7 @@ export default [
   watchGetUserNotes,
   watchFetchAddNewNote,
   watchFetchAddNewInventory,
+  watchFetchAddBulkInventory,
   watchFetchUpdateExistingNote,
   watchFetchRemoveSelectedNote,
   watchFetchAllInventoriesForUser,

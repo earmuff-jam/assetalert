@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
@@ -44,6 +45,71 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// AddInventoryInBulk ...
+// swagger:route POST /api/profile/{id}/inventories/bulk AddInventoryInBulk addInventoryInBulk
+//
+// # Bulk upload inventory list. returns the list of uploaded items.
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected inventory
+//     type: string
+//     required: true
+//   - +name: InventoryListRequest
+//     in: query
+//     description: The list of inventories to add into the db to support bulk upload
+//     type: object
+//     required: true
+//
+// Responses:
+//
+// 200: []model.Inventory
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to add new item with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var inventoryMap map[string]model.Inventory
+	if err := json.NewDecoder(r.Body).Decode(&inventoryMap); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	var inventoryList []model.Inventory
+	for _, v := range inventoryMap {
+		inventoryList = append(inventoryList, v)
+	}
+
+	inventoryListRequest := model.InventoryListRequest{
+		InventoryList: inventoryList,
+		CreatedBy:     userID,
+		CreatedAt:     time.Now(),
+	}
+
+	// Assuming db.AddInventoryInBulk returns an error
+	resp, err := db.AddInventoryInBulk(user, userID, inventoryListRequest)
+	if err != nil {
+		log.Printf("unable to add new item during bulk insert. error: %+v", err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // AddNewInventory ...
 // swagger:route POST /api/profile/{id}/inventories AddNewInventory addNewInventory
 //
@@ -52,7 +118,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the selected inventory
+//     description: The id of the selected user
 //     type: string
 //     required: true
 //   - +name: Inventory
@@ -62,7 +128,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -104,7 +170,7 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the selected inventory
+//     description: The id of the selected user
 //     type: string
 //     required: true
 //   - +name: Inventory
@@ -114,7 +180,7 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -156,7 +222,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the selected inventory
+//     description: The id of the selected user
 //     type: string
 //     required: true
 //   - +name: Inventory

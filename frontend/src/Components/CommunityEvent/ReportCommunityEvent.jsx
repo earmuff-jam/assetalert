@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import dayjs from 'dayjs';
 import { produce } from 'immer';
+import PropTypes from 'prop-types';
 import { enqueueSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -251,6 +252,16 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
       </form>
     </Box>
   );
+};
+
+ReportCommunityEvent.defaultProps = {
+  events: [],
+  setDisplayMode: () => {},
+};
+
+ReportCommunityEvent.propTypes = {
+  events: PropTypes.array,
+  setDisplayMode: PropTypes.func,
 };
 
 export default ReportCommunityEvent;

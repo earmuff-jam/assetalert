@@ -117,7 +117,7 @@ export const ADD_ITEM_PROFILE_FORM = {
     value: '',
     name: 'barcode',
     errorMsg: '',
-    required: false,
+    required: true,
     fullWidth: true,
     validators: [
       {
@@ -133,7 +133,7 @@ export const ADD_ITEM_PROFILE_FORM = {
     value: '',
     name: 'sku',
     errorMsg: '',
-    required: false,
+    required: true,
     fullWidth: true,
     validators: [
       {
@@ -181,7 +181,7 @@ export const ADD_ITEM_PROFILE_FORM = {
     value: '',
     name: 'bought_at',
     errorMsg: '',
-    required: false,
+    required: true,
     fullWidth: true,
     validators: [
       {
@@ -200,7 +200,7 @@ export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
     modifier: (title) => `${title}`,
   },
   description: {
-    key: 'item_description',
+    key: 'description',
     title: 'Item Description',
     displayName: 'Description',
   },

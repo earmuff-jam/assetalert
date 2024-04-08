@@ -1401,7 +1401,7 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 
 // addNewStorageLocation ...
 //
-// adds new storage location if not existing
+// adds new storage location if not existing but if there was an existing storage location, we just return that ID
 func addNewStorageLocation(user string, draftLocation string, created_by string, emptyLocationID *string) error {
 	db, err := SetupDB(user)
 	if err != nil {
@@ -1409,42 +1409,40 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 	}
 	defer db.Close()
 
-	tx, err := db.Begin()
+	fetchSqlStr := `SELECT count(sl.id), sl.id FROM community.storage_locations sl WHERE sl.location = $1 GROUP BY sl.id`
+	var count int
+	err = db.QueryRow(fetchSqlStr, draftLocation).Scan(&count, emptyLocationID)
 	if err != nil {
-		return err
+		log.Printf("found existing location for selected item. using existing location for %+v", draftLocation)
 	}
 
-	sqlStr := `INSERT INTO community.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+	// save new storage location if it does not already exists
+	if count == 0 {
+		sqlStr := `INSERT INTO community.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
 
-	var sharableGroups = make([]uuid.UUID, 0)
+		var locationID string
+		var sharableGroups = make([]uuid.UUID, 0)
 
-	userID, err := uuid.Parse(created_by)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
+		userID, err := uuid.Parse(created_by)
+		if err != nil {
+			return err
+		}
+		sharableGroups = append(sharableGroups, userID)
 
-	sharableGroups = append(sharableGroups, userID)
+		err = db.QueryRow(
+			sqlStr,
+			draftLocation,
+			created_by,
+			created_by,
+			time.Now(),
+			time.Now(),
+			pq.Array(sharableGroups),
+		).Scan(&locationID)
 
-	row := tx.QueryRow(
-		sqlStr,
-		draftLocation,
-		created_by,
-		created_by,
-		time.Now(),
-		time.Now(),
-		pq.Array(sharableGroups),
-	)
-
-	err = row.Scan(emptyLocationID)
-
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := tx.Commit(); err != nil {
-		return err
+		if err != nil {
+			return err
+		}
+		*emptyLocationID = locationID
 	}
 
 	return nil

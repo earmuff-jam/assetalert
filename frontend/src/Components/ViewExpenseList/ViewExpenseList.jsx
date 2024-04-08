@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { CircularProgress, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
 import dayjs from 'dayjs';
 import List from '../DrawerListComponent/List';
@@ -9,18 +8,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
 import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
-
-const useStyles = makeStyles((theme) => ({
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
-}));
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const ViewExpenseList = ({ disabled }) => {
-  const classes = useStyles();
   dayjs.extend(relativeTime);
 
   const { loading, expenses } = useSelector((state) => state.event);
@@ -78,11 +68,7 @@ const ViewExpenseList = ({ disabled }) => {
   };
 
   if (loading) {
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress />
-      </div>
-    );
+    return <LoadingSkeleton height={'20rem'} width={'20rem'} />;
   }
 
   if (!expenses || expenses.length === 0) {

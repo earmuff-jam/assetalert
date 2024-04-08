@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
   emptyGap: {
     flexGrow: 1,
   },
-  text: {
-    fontSize: '1.125rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
+  headingText: {
+    fontSize: '1.6rem',
+    letterSpacing: '0.0125rem',
+    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.text.secondary,
   },
 }));
@@ -115,6 +115,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
+            displaySelection={value}
             tooltipTitle={'Download all items '}
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
@@ -129,6 +130,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
+            displaySelection={value}
             tooltipTitle={'Download all items with coupons '}
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
@@ -143,6 +145,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
+            displaySelection={value}
             tooltipTitle={'Download all items with draft status '}
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
@@ -157,6 +160,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
+            displaySelection={value}
             tooltipTitle={'Download all inventories with hidden status '}
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
@@ -185,7 +189,7 @@ const Inventories = () => {
   return (
     <Box>
       <Box className={classes.rowContainer}>
-        <TextComponent value={'Inventories'} gutterBottom={true} loading={false} textStyle={classes.text} />
+        <TextComponent value={'Inventories'} gutterBottom={true} loading={false} textStyle={classes.headingText} />
         <Box className={classes.emptyGap}></Box>
         <ButtonComponent
           buttonVariant={'text'}

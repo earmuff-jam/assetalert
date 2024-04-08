@@ -22,11 +22,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   header: {
-    color: theme.palette.primary.main,
-    fontSize: '1.125rem',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
-    textTransform: 'uppercase',
+    fontSize: '1.6rem',
+    letterSpacing: '0.0125rem',
+    fontFamily: 'Poppins, sans-serif',
   },
   errorText: {
     color: theme.palette.error.dark,
@@ -96,10 +94,10 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
   return (
     <Box className={classes.container} data-tour="4">
       <Typography gutterBottom className={classNames(classes.header, classes.errorText)}>
-        View all active events
+        View all events
       </Typography>
       <Box className={classes.searchContainer}>
-        <SearchAllEvents events={filteredOptions} setSearchValue={setSearchValue} />
+        <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} />
       </Box>
       <Divider className={classes.divider} />
       {noAvailableProjects ? (

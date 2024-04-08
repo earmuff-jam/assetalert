@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
   },
   headingText: {
-    fontSize: '1.125rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
+    fontSize: '1.6rem',
+    letterSpacing: '0.0125rem',
+    fontFamily: 'Poppins, sans-serif',
     color: theme.palette.text.secondary,
   },
   text: {
@@ -47,9 +47,14 @@ const RecentActivitiesListContainer = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.contentContainer}>
-      <TextComponent value={'Recent Activities'} gutterBottom={true} loading={false} textStyle={classes.headingText} />
-      <Box className={classes.emptyGap}></Box>
-      <RecentTrophyCollections />
+        <TextComponent
+          value={'Recent Activities'}
+          gutterBottom={true}
+          loading={false}
+          textStyle={classes.headingText}
+        />
+        <Box className={classes.emptyGap}></Box>
+        <RecentTrophyCollections />
       </Box>
       <Box className={classes.contentContainer}>
         <Box className={classes.recentActivitiesList}>

@@ -2,6 +2,10 @@ package model
 
 import "time"
 
+// Inventory ...
+// swagger:model Inventory
+//
+// Inventory is the selected row for each inventory
 type Inventory struct {
 	ID                string    `json:"id"`
 	Name              string    `json:"name"`
@@ -13,7 +17,6 @@ type Inventory struct {
 	Quantity          int       `json:"quantity"`
 	Location          string    `json:"location"`
 	StorageLocationID string    `json:"storage_location_id"`
-	IsResolved        bool      `json:"is_resolved"`
 	CreatedAt         time.Time `json:"created_at"`
 	CreatedBy         string    `json:"created_by"`
 	CreatorName       string    `json:"creator_name"`
@@ -21,6 +24,16 @@ type Inventory struct {
 	UpdatedBy         string    `json:"updated_by"`
 	UpdaterName       string    `json:"updater_name"`
 	BoughtAt          string    `json:"bought_at"`
+}
+
+// InventoryListRequest ...
+// swagger:model InventoryListRequest
+//
+// InventoryListRequest is used to formulate the bulk download for selected inventory
+type InventoryListRequest struct {
+	InventoryList []Inventory
+	CreatedBy     string    `json:"created_by"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 // InventoryItemToUpdate ...

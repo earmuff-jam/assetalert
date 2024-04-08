@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import classNames from 'classnames';
@@ -92,7 +93,7 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
       />
       <Box>
         <Alert
-          severity={!isDeactivated ? "info" : "error"}
+          severity={!isDeactivated ? 'info' : 'error'}
           className={classNames(classes.text, isDeactivated ? classes.activatedChip : classes.deactivatedChip)}
         >
           {!isDeactivated
@@ -112,6 +113,20 @@ const EditCommunityEvent = ({ userDetail, handleUserDetail, isDeactivated, setIs
       </Box>
     </Box>
   );
+};
+
+EditCommunityEvent.defaultProps = {
+  userDetail: {},
+  handleUserDetail: () => {},
+  isDeactivated: false,
+  setIsDeactivated: () => {},
+};
+
+EditCommunityEvent.propTypes = {
+  userDetail: PropTypes.object,
+  handleUserDetail: PropTypes.func,
+  isDeactivated: PropTypes.bool,
+  setIsDeactivated: PropTypes.func,
 };
 
 export default EditCommunityEvent;
