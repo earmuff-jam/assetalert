@@ -69,7 +69,7 @@ func Test_GetAllItems(t *testing.T) {
 	t.Logf("response = %+v", string(data))
 }
 
-func Test_GetAllItems_Failure_Incorrect_ItemID(t *testing.T) {
+func Test_GetAllItems_WrongItemID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
@@ -81,9 +81,21 @@ func Test_GetAllItems_Failure_Incorrect_ItemID(t *testing.T) {
 	assert.Equal(t, "200 OK", res.Status)
 }
 
-func Test_GetAllItems_Failure(t *testing.T) {
+func Test_GetAllItems_NoItemID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllItems(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllItems_IncorrectItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
 	GetAllItems(w, req, config.CTO_USER)

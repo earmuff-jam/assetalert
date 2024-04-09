@@ -259,7 +259,7 @@ LEFT JOIN (
     GROUP BY 
         project_id, updated_by
 ) e ON p.id = e.project_id
-LEFT JOIN community.community.profiles p2 ON p.updated_by = p2.id 
+LEFT JOIN community.profiles p2 ON p.updated_by = p2.id 
 WHERE 
     p.created_by = $1
     OR p.updated_by = $1
