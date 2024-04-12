@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
+    fontWeight: 'bold',
     padding: theme.spacing(1),
-    gap: theme.spacing(1),
   },
 }));
 

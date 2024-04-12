@@ -15,6 +15,11 @@ startserver:
 gotest:
 	./main.sh -T
 
+# api unit test that can be run anytime during test period. must run against test db not main
+apitest:
+	cd apilayer/handler && \
+	go test -coverprofile=../logs/coverage.out ./... && go tool cover -func=../logs/coverage.out
+
 # load ui in development instance.
 startclient:
 	cd frontend && \

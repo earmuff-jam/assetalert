@@ -1,3 +1,4 @@
+import * as xlsx from 'xlsx';
 import { useEffect, useState } from 'react';
 import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import TextComponent from '../../stories/TextComponent/TextComponent';
@@ -12,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import AddInventoryDetail from './AddInventoryDetail';
+import UploadData from '../DrawerListComponent/UploadData';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -38,11 +40,16 @@ const useStyles = makeStyles((theme) => ({
 const Inventories = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [value, setValue] = useState(0);
-  const [editMode, setEditMode] = useState(false);
-  const [displayData, setDisplayData] = useState([]);
-
   const USER_ID = localStorage.getItem('userID');
+
+  // open the search icon
+  const [open, setOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  const [value, setValue] = useState(0);
+  const [displayData, setDisplayData] = useState([]);
+  const [uploadedFileInJson, setUploadedFileInJson] = useState([]);
+
   const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
 
   const handleEditMode = () => {
@@ -109,13 +116,40 @@ const Inventories = () => {
     return row[column];
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = xlsx.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const formattedArr = xlsx.utils.sheet_to_json(worksheet);
+        setUploadedFileInJson(formattedArr);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
+  const resetData = () => {
+    setOpen(false);
+    setUploadedFileInJson(null);
+  };
+
+  const submitExcel = () => {
+    if (Array.isArray(uploadedFileInJson)) {
+      dispatch(profileActions.addBulkInventory(Object.values(uploadedFileInJson)));
+    }
+  };
+
   const displaySelection = (value) => {
     switch (value) {
       case 0:
         return (
           <List
             key={performance.now()}
-            displaySelection={value}
+            open={open}
             tooltipTitle={'Download all items '}
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
@@ -130,7 +164,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
-            displaySelection={value}
+            open={open}
             tooltipTitle={'Download all items with coupons '}
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
@@ -145,7 +179,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
-            displaySelection={value}
+            open={open}
             tooltipTitle={'Download all items with draft status '}
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
@@ -160,7 +194,7 @@ const Inventories = () => {
         return (
           <List
             key={performance.now()}
-            displaySelection={value}
+            open={open}
             tooltipTitle={'Download all inventories with hidden status '}
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
@@ -198,6 +232,26 @@ const Inventories = () => {
           text={'Add new item'}
           onClick={handleEditMode}
         />
+        {open ? (
+          <UploadData
+            buttonCancelText={'cancel'}
+            buttonSubmitText={'submit'}
+            onChange={handleFileChange}
+            onSubmitClick={submitExcel}
+            onCancelClick={resetData}
+          />
+        ) : (
+          // only display download button under all inventories
+          value == 0 && (
+            <ButtonComponent
+              buttonVariant={'text'}
+              icon={<AddRounded />}
+              showIcon={true}
+              text={'Add item in bulk'}
+              onClick={setOpen}
+            />
+          )
+        )}
       </Box>
       {editMode && (
         <Dialog open width={'md'} fullWidth={true}>

@@ -54,7 +54,7 @@ func GetAllNotifications(rw http.ResponseWriter, r *http.Request, user string) {
 	userID := vars["id"]
 
 	if len(userID) <= 0 {
-		log.Printf("Unable to retrieve event with empty id")
+		log.Printf("Unable to retrieve notifications with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
@@ -107,7 +107,7 @@ func UpdateSingleNotification(rw http.ResponseWriter, r *http.Request, user stri
 	userID := vars["id"]
 
 	if len(userID) <= 0 {
-		log.Printf("Unable to retrieve event with empty id")
+		log.Printf("Unable to retrieve notification with empty userID")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return

@@ -1399,6 +1399,23 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 	return data, nil
 }
 
+// DeleteCategoryLocation
+func DeleteCategoryLocation(user string, locationID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.category WHERE id=$1`
+	_, err = db.Exec(sqlStr, locationID)
+	if err != nil {
+		log.Printf("unable to delete category ID %+v", locationID)
+		return err
+	}
+	return nil
+}
+
 // addNewStorageLocation ...
 //
 // adds new storage location if not existing but if there was an existing storage location, we just return that ID

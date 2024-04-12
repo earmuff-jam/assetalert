@@ -124,9 +124,7 @@ const RecentActivity = ({ activity }) => {
                   <LocalAtmRounded />
                 </TimelineDot>
               </TimelineSeparator>
-              <TimelineContent className={classes.text}>
-                Expenses listed on {activity?.expense_name.length} items
-              </TimelineContent>
+              <TimelineContent className={classes.text}>Bought {activity?.expense_name.length} items</TimelineContent>
             </TimelineItem>
           ) : null}
         </Timeline>
@@ -135,7 +133,7 @@ const RecentActivity = ({ activity }) => {
         gutterBottom={true}
         loading={false}
         textStyle={classes.subtitleTextHeader}
-        value={`Event updated around ${dayjs(activity?.updated_at).fromNow()} by ${activity?.updator}`}
+        value={`Updated around ${dayjs(activity?.updated_at).fromNow()} by ${activity?.updator}`}
       />
     </Box>
   );

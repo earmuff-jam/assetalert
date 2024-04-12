@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { CircularProgress, Container, Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 
 import { produce } from 'immer';
 import '../../Components/Map/styles.css';
@@ -21,6 +21,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: theme.spacing(2),
+  },
+  root: {
+    maxWidth: `calc(100% - 2rem)`,
+    minHeight: '100vh',
+    margin: '0 auto',
   },
   container: {
     display: 'flex',
@@ -245,7 +250,7 @@ const EventDetailPage = () => {
   ]);
 
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <Box className={classes.root}>
       {shouldDisplaySecondMenuBar && <SecondaryAppBar />}
       <Grid container>
         <Grid item xs={12}>
@@ -286,7 +291,7 @@ const EventDetailPage = () => {
           />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

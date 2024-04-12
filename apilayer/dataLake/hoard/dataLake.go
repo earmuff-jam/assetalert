@@ -103,7 +103,7 @@ func populateFakeEventDetails(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftEvent.Title = gofakeit.Sentence(6)
+		draftEvent.Title = fmt.Sprintf("%+v event", gofakeit.Name())
 		draftEvent.Description = gofakeit.Sentence(12)
 		draftEvent.Cause = "Celebrations"
 		draftEvent.ProjectType = "Education"
@@ -188,7 +188,7 @@ func populateFakeExpenseDetails(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftExpense.ItemName = gofakeit.HipsterWord()
+		draftExpense.ItemName = gofakeit.BeerName()
 		draftExpense.ItemCost = fmt.Sprintf("%f", gofakeit.Price(2, 12))
 		draftExpense.CategoryID = fmt.Sprintf("%f", gofakeit.Price(2, 12))
 		draftExpense.Category = gofakeit.BuzzWord()
@@ -225,13 +225,13 @@ func populateFakeItemDetails(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftItem.Name = gofakeit.HipsterWord()
-		draftItem.Description = gofakeit.Sentence(12)
+		draftItem.Name = gofakeit.BeerName()
+		draftItem.Description = fmt.Sprintf(" %+v with %+v ", gofakeit.Sentence(3), gofakeit.BeerStyle())
 		draftItem.Quantity = gofakeit.Number(10, 100)
 		draftItem.UnitPrice = gofakeit.Price(2, 120)
 		draftItem.BoughtAt = gofakeit.Company()
 		draftItem.EventID = draftEvent.ID
-		draftItem.Location = gofakeit.HipsterSentence(2)
+		draftItem.Location = gofakeit.CarMaker()
 		draftItem.CreatedAt = startDate
 		draftItem.UpdatedAt = startDate
 		draftItem.CreatedBy = creatorID
@@ -256,8 +256,8 @@ func populateFakePersonalNotes(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftNote.Title = gofakeit.HipsterWord()
-		draftNote.Status = gofakeit.BuzzWord()
+		draftNote.Title = gofakeit.JobTitle()
+		draftNote.Status = gofakeit.JobLevel()
 		draftNote.Description = gofakeit.HipsterSentence(2)
 		draftNote.CreatedAt = startDate
 		draftNote.UpdatedAt = startDate
@@ -283,14 +283,14 @@ func populateFakePersonalInventories(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftInventory.Name = gofakeit.HipsterWord()
+		draftInventory.Name = gofakeit.BeerName()
 		draftInventory.Description = gofakeit.HipsterSentence(2)
 		draftInventory.Price = fmt.Sprintf("%f", gofakeit.Price(2, 120))
 		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN", "ALL"})
-		draftInventory.Barcode = gofakeit.Date().String()
-		draftInventory.SKU = gofakeit.Date().String()
+		draftInventory.Barcode = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())
+		draftInventory.SKU = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())
 		draftInventory.Quantity = gofakeit.Number(10, 100)
-		draftInventory.Location = gofakeit.BuzzWord()
+		draftInventory.Location = gofakeit.CarMaker()
 		draftInventory.CreatedAt = startDate
 		draftInventory.UpdatedAt = startDate
 		draftInventory.CreatedBy = creatorID

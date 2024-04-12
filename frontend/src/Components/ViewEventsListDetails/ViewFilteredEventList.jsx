@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import { WhatshotRounded } from '@material-ui/icons';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
+import { fetchCurrentColor } from '../../util/Common';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -97,7 +98,7 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
       {filteredOptions?.map((event) => {
         const eventID = event.id;
         const formattedDate = dayjs(event.start_date).fromNow();
-        const formattedDay = dayjs(event.start_date).format('dd');
+        const remainingSpots = event?.max_attendees - event?.sharable_groups?.length || 0;
         return (
           <Grid item xs={12} md={3} key={event.id}>
             <Card className={classes.card}>
@@ -124,10 +125,10 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                       </Typography>
                     </Box>
                   </Box>
-                  <Tooltip title={`Start Date: ${formattedDate}`} placement="top">
+                  <Tooltip title={`${remainingSpots} open spots available`} placement="top">
                     <Badge
-                      badgeContent={formattedDay}
-                      color="primary"
+                      badgeContent={remainingSpots}
+                      color={fetchCurrentColor(remainingSpots)}
                       overlap="rectangular"
                       classes={{ anchorOriginTopRightRectangular: classes.badgeFont }}
                     />

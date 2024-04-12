@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
 
 import EventDetailPage from './EventDetailPage';
 import { primary_theme } from '../../util/Theme';
