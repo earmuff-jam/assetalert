@@ -100,6 +100,7 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
+	draftNote.ID = draftNoteID
 	return &draftNote, nil
 }
 

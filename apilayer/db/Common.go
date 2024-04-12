@@ -28,13 +28,42 @@ func SetupDB(user string) (*sql.DB, error) {
 		port = "5432"
 	}
 
+	database := os.Getenv("POSTGRES_DB")
+	if len(database) == 0 {
+		database = "community"
+	}
+
 	appEnv := os.Getenv("ENVIRONMENT")
-	pool, err := startSqlDb(user, pwd, host, port, appEnv) // appEnv is to just toggle for production
+	pool, err := startSqlDb(user, pwd, host, port, database, appEnv) // appEnv is to just toggle for production
+	if err != nil {
+		fmt.Printf("unable to start the database server. error: +%v", err)
+		return nil, err
+	}
+	return pool, nil
+}
+
+func startSqlDb(user string, pwd string, host string, port string, database string, appEnv string) (*sql.DB, error) {
+
+	psqlStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, pwd, host, port, database)
+
+	// if the env is production, we switch the port but still keep the same user context
+	if len(appEnv) != 0 && appEnv == "PRODUCTION" {
+		psqlStr = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, pwd, host, port, database)
+	}
+
+	var db, err = sql.Open("postgres", psqlStr)
+	if err != nil {
+		log.Fatalf("failed to open postgres db. error: +%v", err)
+		return nil, err
+	}
+
+	// if the user is unable to ping the db, we don't want to submit the request
+	err = db.Ping()
 	if err != nil {
 		fmt.Printf("unable to ping. error: +%v", err)
 		return nil, err
 	}
-	return pool, nil
+	return db, nil
 }
 
 // PreloadAllTestVariables ...
@@ -64,28 +93,4 @@ func RetriveTestUser(user string, eventID string) error {
 		return err
 	}
 	return nil
-}
-
-func startSqlDb(user string, pwd string, host string, port string, appEnv string) (*sql.DB, error) {
-
-	psqlStr := fmt.Sprintf("postgres://%s:%s@%s:%s/community?sslmode=disable", user, pwd, host, port)
-
-	// if the env is production, we switch the port but still keep the same user context
-	if len(appEnv) != 0 && appEnv == "PRODUCTION" {
-		psqlStr = fmt.Sprintf("postgres://%s:%s@%s:%s/community?sslmode=disable", user, pwd, host, port)
-	}
-
-	var db, err = sql.Open("postgres", psqlStr)
-	if err != nil {
-		log.Fatalf("failed to open postgres db. error: +%v", err)
-		return nil, err
-	}
-
-	// if the user is unable to ping the db, we don't want to submit the request
-	err = db.Ping()
-	if err != nil {
-		fmt.Printf("unable to ping. error: +%v", err)
-		return nil, err
-	}
-	return db, nil
 }

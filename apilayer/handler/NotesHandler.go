@@ -201,13 +201,6 @@ func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
 	var note model.Note
 	note.ID = noteID
 
-	if len(note.ID) <= 0 {
-		log.Printf("Unable to update notes with empty id")
-		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(nil)
-		return
-	}
-
 	err := db.RemoveSelectedNote(user, note.ID)
 	if err != nil {
 		log.Printf("Unable to remove notes. error: +%v", err)
