@@ -20,15 +20,12 @@ export const REACT_APP_GEOCODING_MAP_API_KEY = import.meta.env?.GEOCODING_MAP_AP
 export const fetchCurrentColor = (remainingSpots) => {
   const remainingSpotAndColor = {
     ERROR: 'error',
-    WARNING: 'warning',
     SECONDARY: 'secondary',
     PRIMARY: 'primary',
   };
 
   if (remainingSpots <= 10) {
     return remainingSpotAndColor['ERROR'];
-  } else if (remainingSpots <= 50) {
-    return remainingSpotAndColor['WARNING'];
   } else if (remainingSpots <= 100) {
     return remainingSpotAndColor['SECONDARY'];
   }

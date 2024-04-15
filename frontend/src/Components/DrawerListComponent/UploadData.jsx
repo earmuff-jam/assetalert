@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Box, Input, Button } from '@material-ui/core';
+import { Box, Input, Button, Typography } from '@material-ui/core';
 
 const UploadData = ({
   buttonCancelText,
@@ -12,18 +12,27 @@ const UploadData = ({
   onChange,
   onCancelClick,
   onSubmitClick,
+  displaySecondaryText,
+  secondaryText,
 }) => {
   return (
     <Box>
       <form>
         <Input type="file" onChange={onChange} />
       </form>
-      <Button onClick={onCancelClick} disabled={disableCancelButton} className={cancelButtonStyles}>
-        {buttonCancelText}
-      </Button>
-      <Button onClick={onSubmitClick} disabled={disableSubmitButton} className={submitButtonStyles}>
-        {buttonSubmitText}
-      </Button>
+      {displaySecondaryText && (
+        <Typography variant={'caption'} className={cancelButtonStyles}>
+          {secondaryText}
+        </Typography>
+      )}
+      <Box>
+        <Button onClick={onCancelClick} disabled={disableCancelButton} className={cancelButtonStyles}>
+          {buttonCancelText}
+        </Button>
+        <Button onClick={onSubmitClick} disabled={disableSubmitButton} className={submitButtonStyles}>
+          {buttonSubmitText}
+        </Button>
+      </Box>
     </Box>
   );
 };
@@ -38,6 +47,8 @@ UploadData.defaultProps = {
   disableCancelButton: false,
   submitButtonStyles: {},
   disableSubmitButton: false,
+  displaySecondaryText: false,
+  secondaryText: '',
 };
 
 UploadData.propTypes = {
@@ -51,6 +62,8 @@ UploadData.propTypes = {
   buttonSubmitText: PropTypes.string,
   submitButtonStyles: PropTypes.object,
   disableSubmitButton: PropTypes.bool,
+  displaySecondaryText: PropTypes.bool,
+  secondaryText: PropTypes.string,
 };
 
 export default UploadData;

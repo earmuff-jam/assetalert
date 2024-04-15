@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.text.secondary,
   },
+  buttonContainer: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: theme.spacing(1.2),
+  },
 }));
 
 const Inventories = () => {
@@ -239,6 +244,10 @@ const Inventories = () => {
             onChange={handleFileChange}
             onSubmitClick={submitExcel}
             onCancelClick={resetData}
+            cancelButtonStyles={classes.buttonContainer}
+            submitButtonStyles={classes.buttonContainer}
+            displaySecondaryText={true}
+            secondaryText={'Uploading excel data must contain required headers'}
           />
         ) : (
           // only display download button under all inventories
