@@ -215,7 +215,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 }
 
 // RemoveSelectedInventory ...
-// swagger:route PUT /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
+// swagger:route POST /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
 //
 // # Update selected inventory with details.
 //
@@ -227,7 +227,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 //     required: true
 //   - +name: Inventory
 //     in: query
-//     description: The inventory object to add into the db
+//     description: The inventory object to remove from the db
 //     type: object
 //     required: true
 //
@@ -241,7 +241,7 @@ func RemoveSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 	userID := vars["id"]
 
 	if len(userID) <= 0 {
-		log.Printf("Unable to update selected inventory without id")
+		log.Printf("Unable to remove selected inventory without id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
@@ -254,14 +254,14 @@ func RemoveSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 		return
 	}
 
-	resp, err := db.UpdateInventory(user, userID, draftInventory)
+	err := db.DeleteInventory(user, userID, draftInventory)
 	if err != nil {
-		log.Printf("Unable to update selected inventory. error: +%v", err)
+		log.Printf("Unable to remove selected inventory. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode(resp)
+	json.NewEncoder(rw).Encode(http.StatusOK)
 }

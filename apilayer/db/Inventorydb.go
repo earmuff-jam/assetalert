@@ -374,77 +374,19 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 }
 
 // DeleteInventory ...
-func DeleteInventory(user string, userID string, draftInventory model.Inventory) (*model.Inventory, error) {
+func DeleteInventory(user string, userID string, draftInventory model.InventoryItemToUpdate) error {
 
 	db, err := SetupDB(user)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer db.Close()
 
-	tx, err := db.Begin()
+	sqlStr := `DELETE FROM community.inventory WHERE id=$1`
+	_, err = db.Exec(sqlStr, draftInventory.ID)
 	if err != nil {
-		return nil, err
+		log.Printf("unable to delete selected inventory ID %+v", draftInventory.ID)
+		return err
 	}
-
-	// storage location is unique key in the database.
-	// storage location can be shared across inventories and items that are stored in events.
-	parsedStorageLocationID, err := uuid.Parse(draftInventory.Location)
-	if err != nil {
-		// if the location is not a uuid type, then it should resemble a new storage location
-		emptyLocationID := ""
-		err := addNewStorageLocation(user, draftInventory.Location, draftInventory.CreatedBy, &emptyLocationID)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		parsedStorageLocationID, err = uuid.Parse(emptyLocationID)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		draftInventory.StorageLocationID = emptyLocationID
-	}
-
-	parsedCreatedByUUID, err := uuid.Parse(draftInventory.CreatedBy)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	sqlStr := `INSERT INTO community.inventory
-	(name, description, price, status, barcode, sku, quantity, boughtAt, location, storage_location_id, created_by, created_at, updated_by, updated_at)
-    VALUES
-	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	RETURNING id`
-
-	err = tx.QueryRow(
-		sqlStr,
-		draftInventory.Name,
-		draftInventory.Description,
-		draftInventory.Price,
-		draftInventory.Status,
-		draftInventory.Barcode,
-		draftInventory.SKU,
-		draftInventory.Quantity,
-		draftInventory.BoughtAt,
-		draftInventory.Location,
-		parsedStorageLocationID,
-		parsedCreatedByUUID,
-		time.Now(),
-		parsedCreatedByUUID, // created is the same for the first time
-		time.Now(),
-	).Scan(&draftInventory.ID)
-
-	if err != nil {
-		// Rollback the transaction if there is an error
-		tx.Rollback()
-		return nil, err
-	}
-
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-
-	return &draftInventory, nil
+	return nil
 }
