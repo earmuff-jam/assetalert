@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Inventories from '../Inventory/Inventories';
 import { PROFILE_NAVIGATION_MENU_BAR } from './constants';
 import { Box, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import RecentActivitiesListContainer from '../RecentActivitiesList/RecentActivitiesListContainer';
 import Notes from '../Notes/Notes';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   textIconContainer: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileNavigationMenu = () => {
   const classes = useStyles();
+  const location = useLocation();
   const [selectedValue, setSelectedValue] = useState(0);
 
   const handleChange = (newEvent, value) => {
@@ -34,6 +36,14 @@ const ProfileNavigationMenu = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    // redirect users from home directly to rough notes
+    if (location?.state?.tab) {
+      setSelectedValue(location.state.tab);
+      window.history.replaceState({}, '');
+    }
+  }, [location]);
 
   return (
     <Box>
