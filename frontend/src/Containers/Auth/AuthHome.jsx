@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box, Container } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import AppBar from '../../stories/AuthAppBar/AuthAppBar';
 import AuthFooter from '../../stories/AuthFooter/AuthFooter';
 import Authenticator from '../../stories/Authenticator/Authenticator';
@@ -44,19 +44,17 @@ const AuthHome = () => {
   return (
     <>
       <AppBar title={'Mashed'} titleVariant={'h5'} elevation={0} />
-      <Container maxWidth="lg">
-        <Grid container className={classes.root}>
-          <Grid item xs={12} md={6}>
-            <InviteSection />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box className={classes.auth}>
-              <Authenticator />
-            </Box>
-          </Grid>
+      <Grid container className={classes.root}>
+        <Grid item xs={12} md={6}>
+          <InviteSection />
         </Grid>
-        <AuthFooter />
-      </Container>
+        <Grid item xs={12} md={6}>
+          <Box className={classes.auth}>
+            <Authenticator />
+          </Box>
+        </Grid>
+      </Grid>
+      <AuthFooter />
     </>
   );
 };

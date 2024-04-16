@@ -23,7 +23,7 @@ export const PROFILE_NAVIGATION_MENU_BAR = [
   {
     id: 3,
     icon: <NotesRounded />,
-    displayName: 'Notes',
+    displayName: 'Personal Notes',
     subtitle: '',
     color: '',
   },

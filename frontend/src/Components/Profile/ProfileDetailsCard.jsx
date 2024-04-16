@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import UserProfile from '../ViewProfileDetails/UserProfile';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
+import ButtonComponent from '../../stories/Button/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,17 +72,15 @@ const ProfileDetailsCard = ({
         <Box className={classNames(classes.rowContainer, classes.columnVariant)} data-tour="0">
           <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
           <Box className={classes.emptyGap}></Box>
-          {!isLoading ? (
-            <Box data-tour="1">
-              <Button disabled={!editMode} variant={'text'} onClick={handleSubmit} className={classes.buttonColor}>
-                Submit
-              </Button>
-              <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
-            </Box>
-          ) : (
-            <LoadingSkeleton width={`calc(10% - 1rem)`} height={'2rem'} />
-          )}
-          <Box>
+          <Box data-tour="1">
+            <ButtonComponent
+              disabled={!editMode}
+              buttonVariant={'text'}
+              onClick={handleSubmit}
+              buttonStyles={classes.buttonColor}
+              text={'Submit'}
+            />
+            <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
             <IconButton
               onClick={handleClickNotificationBar}
               disabled={isLoading || notifications.length <= 0}

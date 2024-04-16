@@ -1,20 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Container, Paper } from '@material-ui/core';
+import { Grid, Box, Paper } from '@material-ui/core';
 import { homeActions } from './homeSlice';
 import HomePageHeaderMap from '../../stories/Home/HomePageHeaderMap';
 import CreateNewEvent from '../../stories/CreateNewEvent/CreateNewEvent';
 import ViewEventListDetails from '../../Components/ViewEventsListDetails/ViewEventListDetails';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: '1rem auto',
+  root: {
+    maxWidth: `calc(100% - 2rem)`,
     minHeight: '100vh',
-    backgroundColor: theme.palette.secondary.main,
+    margin: '0 auto',
   },
 }));
 
@@ -35,7 +32,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <Box className={classes.root}>
       <Grid container>
         <Grid item xs={12} md={6} data-tour="0">
           <Paper>
@@ -49,7 +46,7 @@ const HomePage = () => {
           <ViewEventListDetails currentEvents={currentEvents} isLoading={eventsLoading} />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

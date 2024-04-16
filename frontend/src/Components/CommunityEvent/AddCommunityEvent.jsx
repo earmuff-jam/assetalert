@@ -6,9 +6,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@material-ui/lab';
-
 import { enqueueSnackbar } from 'notistack';
-import { InfoRounded } from '@material-ui/icons';
+import { ErrorOutlineRounded } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED, SKILLS_REQUIRED_OPTIONS } from './constants';
@@ -17,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(2),
+    gap: theme.spacing(6),
+    padding: theme.spacing(4),
   },
   textField: {
     marginBottom: theme.spacing(2),
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing(2),
   },
-  bottomGap: {
-    marginBottom: theme.spacing(1),
+  gutterBottom: {
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -203,7 +203,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
           error={touched.title && !!errors.title}
           helperText={touched.title && errors.title}
         />
-        <Box className={classnames(classes.rowContainer, classes.bottomGap)}>
+        <Box className={classnames(classes.rowContainer, classes.gutterBottom)}>
           <Autocomplete
             id="cause-autocomplete"
             fullWidth
@@ -231,14 +231,14 @@ const AddCommunityEvent = ({ setEditMode }) => {
           fullWidth
           className={classes.textField}
           label="Street Address"
-          variant="standard"
+          variant="outlined"
           value={project.street}
           onChange={(e) => handleInputChange('street', e.target.value)}
           required
           error={touched.street && !!errors.street}
           helperText={touched.street && errors.street}
         />
-        <Box className={classnames(classes.rowContainer, classes.bottomGap)}>
+        <Box className={classnames(classes.rowContainer, classes.gutterBottom)}>
           <TextField
             className={classes.textField}
             label="City"
@@ -297,7 +297,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
           value={project.comments}
           onChange={(e) => handleInputChange('comments', e.target.value)}
         />
-        <Box className={classnames(classes.rowContainer, classes.bottomGap)}>
+        <Box className={classnames(classes.rowContainer, classes.gutterBottom)}>
           <Autocomplete
             id="selected-event"
             multiple
@@ -309,7 +309,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
             }}
             getOptionLabel={(option) => option}
             renderInput={(params) => <TextField {...params} label="Volunteering" variant="standard" />}
-            // error={touched.skills_required && !!errors.skills_required}
           />
         </Box>
         <Box className={classes.rowContainer}>
@@ -333,7 +332,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
             required
             className={classes.textField}
             label="Effort hours"
-            placeholder="The total estimated effort required"
+            placeholder="total labor hours required"
             variant="standard"
             value={project.required_total_man_hours}
             onChange={(e) => handleInputChange('required_total_man_hours', e.target.value)}
@@ -341,8 +340,8 @@ const AddCommunityEvent = ({ setEditMode }) => {
             helperText={touched.required_total_man_hours && errors.required_total_man_hours}
             InputProps={{
               endAdornment: (
-                <Tooltip title="total labor hours required for the project">
-                  <InfoRounded />
+                <Tooltip title="total labor hours required for the event">
+                  <ErrorOutlineRounded />
                 </Tooltip>
               ),
             }}
@@ -351,7 +350,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
         <Box>
           <Button
             className={classes.addButton}
-            variant="contained"
+            variant="text"
             color="primary"
             type="submit"
             disabled={!isFormValid()}

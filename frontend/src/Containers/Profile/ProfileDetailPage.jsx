@@ -6,25 +6,16 @@ import { homeActions } from '../Home/homeSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { USER_PROFILE_FORM_FIELDS } from './constants';
-import { Container, Grid, Popover } from '@material-ui/core';
+import { Box, Grid, Popover } from '@material-ui/core';
 import Notification from '../../Components/Profile/Notification';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import ProfileNavigationMenu from '../../Components/ProfileNavigationMenu/ProfileNavigationMenu';
 
 const useStyles = makeStyles((theme) => ({
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: '1rem auto',
+  root: {
+    maxWidth: `calc(100% - 2rem)`,
     minHeight: '100vh',
-    backgroundColor: theme.palette.secondary.main,
+    margin: '0 auto',
   },
 }));
 
@@ -127,7 +118,7 @@ const ProfileDetailPage = () => {
   }, [profileDetails]);
 
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <Box className={classes.root}>
       <Grid container>
         <Grid item xs={12}>
           <ProfileDetailsCard
@@ -162,7 +153,7 @@ const ProfileDetailPage = () => {
           <ProfileNavigationMenu />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

@@ -10,16 +10,9 @@ import { Typography, Grid, Box, Divider } from '@material-ui/core';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
-    padding: theme.spacing(1),
-  },
-  spinnerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+  root: {
+    maxWidth: `calc(100% - 2rem)`,
+    margin: '0 auto',
   },
   header: {
     fontSize: '1.6rem',
@@ -92,7 +85,7 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
   }
 
   return (
-    <Box className={classes.container} data-tour="4">
+    <Box className={classes.root} data-tour="4">
       <Typography gutterBottom className={classNames(classes.header, classes.errorText)}>
         View all events
       </Typography>

@@ -11,8 +11,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   AssignmentIndRounded,
   BarChartRounded,
+  ContactSupportRounded,
   HomeRounded,
-  LiveHelpRounded,
   LockOpenRounded,
 } from '@material-ui/icons';
 
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Poppins, sans-serif',
     color: theme.palette.primary.main,
     fontSize: '0.925rem',
-    textTransform: 'uppercase',
   },
   iconStyle: {
     width: theme.spacing(2),
@@ -76,7 +75,7 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
   const NAVIGATION_MENU_BAR = [
     {
       id: 1,
-      displayName: 'HOME',
+      displayName: 'Home',
       description: 'Home Page',
       icon: <HomeRounded />,
       display: true,
@@ -84,7 +83,7 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
     },
     {
       id: 2,
-      displayName: 'PROFILE',
+      displayName: 'Profile',
       description: 'Profile Page',
       icon: <AssignmentIndRounded />,
       display: true,
@@ -92,14 +91,14 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
     },
     {
       id: 3,
-      displayName: 'HELP',
+      displayName: 'Help',
       description: 'Help with this page',
-      icon: <LiveHelpRounded />,
+      icon: <ContactSupportRounded />,
       display: selectedID === 1,
     },
     {
       id: 4,
-      displayName: 'LOGOFF',
+      displayName: 'Logoff',
       description: 'Logout',
       icon: <LockOpenRounded />,
       to: '/out',

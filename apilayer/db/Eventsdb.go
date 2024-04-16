@@ -1399,6 +1399,23 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 	return data, nil
 }
 
+// DeleteCategoryLocation
+func DeleteCategoryLocation(user string, locationID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.category WHERE id=$1`
+	_, err = db.Exec(sqlStr, locationID)
+	if err != nil {
+		log.Printf("unable to delete category ID %+v", locationID)
+		return err
+	}
+	return nil
+}
+
 // addNewStorageLocation ...
 //
 // adds new storage location if not existing but if there was an existing storage location, we just return that ID
@@ -1445,6 +1462,25 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 		*emptyLocationID = locationID
 	}
 
+	return nil
+}
+
+// removeSelectedStorageLocation ...
+//
+// removes the selected location
+func removeSelectedStorageLocation(user string, storageLocationID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.storage_location WHERE id=$1`
+	_, err = db.Exec(sqlStr, storageLocationID)
+	if err != nil {
+		log.Printf("unable to remove selected storage location %+v", storageLocationID)
+		return err
+	}
 	return nil
 }
 

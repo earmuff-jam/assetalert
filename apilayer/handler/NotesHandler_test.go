@@ -105,6 +105,18 @@ func Test_GetUserNotesDetails_WrongID(t *testing.T) {
 	assert.Equal(t, 400, res.StatusCode)
 }
 
+func Test_GetUserNotesDetails_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUserNotesDetails(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_AddNewNote(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
@@ -212,7 +224,7 @@ func Test_AddNewNote_WrongID(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to marshal JSON: %v", err)
 	}
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/notes", prevUser.ID), bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/notes", prevUser.ID), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": "prevUser.ID.String()"})
 	w := httptest.NewRecorder()
 	AddNewNote(w, req, config.CTO_USER)
@@ -224,6 +236,18 @@ func Test_AddNewNote_WrongID(t *testing.T) {
 	}
 
 	assert.Equal(t, 500, res.StatusCode)
+}
+
+func Test_AddNewNote_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	AddNewNote(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_UpdateNote(t *testing.T) {
@@ -293,6 +317,9 @@ func Test_UpdateNote(t *testing.T) {
 	}
 
 	assert.Equal(t, "Updated Title", updatedNote.Title)
+
+	// cleanup
+	db.RemoveSelectedNote(config.CTO_USER, updatedNote.ID)
 }
 
 func Test_UpdateNote_NoID(t *testing.T) {
@@ -400,6 +427,18 @@ func Test_UpdateNote_WrongID(t *testing.T) {
 	assert.Equal(t, 500, res.StatusCode)
 }
 
+func Test_UpdateNote_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	UpdateNote(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_RemoveSelectedNote(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
@@ -435,78 +474,64 @@ func Test_RemoveSelectedNote(t *testing.T) {
 	RemoveSelectedNote(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
-	_, err = io.ReadAll(res.Body)
+	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
+
+	var removedDraftNote model.Note
+	err = json.Unmarshal(data, &removedDraftNote)
+	if err != nil {
+		t.Errorf("expected error to be nil got %+v", err)
+	}
+
+	assert.Equal(t, draftNote.ID, removedDraftNote.ID)
 }
 
 func Test_RemoveSelectedNote_NoUserID(t *testing.T) {
 
-	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
-	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
-		Role:              "TESTER",
-		EncryptedPassword: "1231231",
-	}
-
 	db.PreloadAllTestVariables()
-	_, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
-
-	emptyNewNote := model.Note{}
-	// Marshal the draftEvent into JSON bytes
-	requestBody, err := json.Marshal(emptyNewNote)
-	if err != nil {
-		t.Errorf("failed to marshal JSON: %v", err)
-	}
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/v1/profile/%s/notes/%s", "", emptyNewNote.ID), bytes.NewBuffer(requestBody))
-	req = mux.SetURLVars(req, map[string]string{"id": "", "noteID": emptyNewNote.ID})
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	req = mux.SetURLVars(req, map[string]string{"noteID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	RemoveSelectedNote(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
-	_, err = io.ReadAll(res.Body)
+	_, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
-
 	assert.Equal(t, 400, res.StatusCode)
 }
 
 func Test_RemoveSelectedNote_NoNoteID(t *testing.T) {
 
-	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
-	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
-		Role:              "TESTER",
-		EncryptedPassword: "1231231",
-	}
-
 	db.PreloadAllTestVariables()
-	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
-
-	emptyNewNote := model.Note{}
-	// Marshal the draftEvent into JSON bytes
-	requestBody, err := json.Marshal(emptyNewNote)
-	if err != nil {
-		t.Errorf("failed to marshal JSON: %v", err)
-	}
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/v1/profile/%s/notes/%s", prevUser.ID, ""), bytes.NewBuffer(requestBody))
-	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String(), "noteID": ""})
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	req = mux.SetURLVars(req, map[string]string{"noteID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	RemoveSelectedNote(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
-	_, err = io.ReadAll(res.Body)
+	_, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
 	assert.Equal(t, 400, res.StatusCode)
+}
+
+func Test_RemoveSelectedNote_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	req = mux.SetURLVars(req, map[string]string{"noteID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	RemoveSelectedNote(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }

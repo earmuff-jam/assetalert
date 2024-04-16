@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import * as xlsx from 'xlsx';
 import {
   Table,
   TableBody,
@@ -16,12 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { profileActions } from '../../Containers/Profile/profileSlice';
-import UploadData from './UploadData';
-import { AddRounded } from '@material-ui/icons';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -65,17 +59,12 @@ const List = ({
   rowFormatter,
   tooltipTitle,
   fileName,
-  displaySelection,
   sheetName,
   modifyHeightVariant,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
-  // open the search icon
-  const [open, setOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState([]);
-  const [uploadedFileInJson, setUploadedFileInJson] = useState([]);
 
   const handleClick = (event, name) => {
     const selectedIndex = rowSelected.indexOf(name);
@@ -93,33 +82,6 @@ const List = ({
     setRowSelected(draftSelected);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = xlsx.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const formattedArr = xlsx.utils.sheet_to_json(worksheet);
-        setUploadedFileInJson(formattedArr);
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
-  const resetData = () => {
-    setOpen(false);
-    setUploadedFileInJson(null);
-  };
-
-  const submitExcel = () => {
-    if (Array.isArray(uploadedFileInJson)) {
-      dispatch(profileActions.addBulkInventory(Object.values(uploadedFileInJson)));
-    }
-  };
-
   return (
     <>
       <Typography className={classes.headerText}>{title}</Typography>
@@ -127,26 +89,6 @@ const List = ({
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
           <Box className={classes.rowContainer}>
-            {open ? (
-              <UploadData
-                buttonCancelText={'cancel'}
-                buttonSubmitText={'submit'}
-                onChange={handleFileChange}
-                onSubmitClick={submitExcel}
-                onCancelClick={resetData}
-              />
-            ) : (
-              // only display download button under all inventories
-              displaySelection == 0 && (
-                <ButtonComponent
-                  buttonVariant={'text'}
-                  icon={<AddRounded />}
-                  showIcon={true}
-                  text={'Add item in bulk'}
-                  onClick={setOpen}
-                />
-              )
-            )}
             {data.length > 0 && (
               <DownloadExcelButton data={data} tooltipTitle={tooltipTitle} fileName={fileName} sheetName={sheetName} />
             )}

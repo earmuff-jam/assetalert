@@ -6,46 +6,11 @@ import RecentActivitiesListContainer from '../RecentActivitiesList/RecentActivit
 import Notes from '../Notes/Notes';
 
 const useStyles = makeStyles((theme) => ({
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
-  listContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(0, 20),
-    backgroundColor: theme.palette.secondary.main,
-  },
   textIconContainer: {
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '0.5rem',
-  },
-  listItemRoot: {
-    padding: theme.spacing(0),
-  },
-  centerAlign: {
-    justifyContent: 'center',
-    gap: theme.spacing(2),
-  },
-  noWidth: {
-    minWidth: theme.spacing(0),
-    '& .MuiListItemIcon-root': {
-      minWidth: theme.spacing(0),
-    },
-  },
-  text: {
-    fontSize: '0.725rem',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
-  },
-  gutterBottom: {
-    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -71,7 +36,7 @@ const ProfileNavigationMenu = () => {
   };
 
   return (
-    <Box className={classes.root}>
+    <Box>
       <Tabs
         value={selectedValue}
         onChange={handleChange}

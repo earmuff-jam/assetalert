@@ -105,6 +105,18 @@ func Test_GetAllItems_IncorrectItemID(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_GetAllItems_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllItems(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_CreateNewEvent(t *testing.T) {
 	draftEvent := &model.Event{
 		Title:          "Test Event",
@@ -147,6 +159,28 @@ func Test_CreateNewEvent(t *testing.T) {
 	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
+func Test_CreateNewEvent_InvalidRequestParameters(t *testing.T) {
+
+	requestBody, err := json.Marshal(&model.Item{Name: "Wrong Item", Description: "Passing wrong item"})
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	_, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_AddItemToEvent(t *testing.T) {
 	draftEvent := &model.Event{
 		Title:          "Test Event",
@@ -167,7 +201,7 @@ func Test_AddItemToEvent(t *testing.T) {
 		t.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
 	CreateNewEvent(w, req, config.CTO_USER)
@@ -241,6 +275,94 @@ func Test_AddItemToEvent(t *testing.T) {
 }
 
 func Test_AddExpenseToEvent(t *testing.T) {
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/expenses", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	// profiles are automatically derieved from loggin in
+	// db.RetrieveUser method is used to populate existing cred on draftUserCredentials struct
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err = db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftExpense := &model.Expense{
+		ItemName:         "Water Bottle",
+		EventID:          selectedEvent.ID,
+		Notes:            "Stanley water bottle",
+		ItemCost:         "2.00",
+		PurchaseLocation: "Walmart",
+		Category:         "Groceries",
+		CreatedBy:        draftUserCredentials.ID.String(),
+		UpdatedBy:        draftUserCredentials.ID.String(),
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftExpense)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/expenses", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+
+	AddExpenseToEvent(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	// cleanup
+	var selectedExpense model.Expense
+	err = json.Unmarshal(data, &selectedExpense)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
+	db.DeleteCategoryLocation(config.CTO_USER, selectedExpense.CategoryID)
 }
 
 func Test_UpdateExistingEvent(t *testing.T) {
@@ -324,6 +446,131 @@ func Test_UpdateExistingEvent(t *testing.T) {
 }
 
 func Test_UpdateItemDetails(t *testing.T) {
+
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	// profiles are automatically derieved from log in
+	// db.RetrieveUser method is used to populate existing cred on draftUserCredentials struct
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err = db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftItem := &model.Item{
+		Name:        "Water Bottle",
+		EventID:     selectedEvent.ID,
+		Description: "Stanley water bottle",
+		Quantity:    1,
+		UnitPrice:   2,
+		BoughtAt:    "Walmart",
+		LocationID:  "31e5dc66-c7ce-427d-901d-bc1316127384",
+		Location:    "Test Location", // db expects a uuid if existing location is passed in
+		CreatedBy:   draftUserCredentials.ID.String(),
+		UpdatedBy:   draftUserCredentials.ID.String(),
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftItem)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/item", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+
+	AddItemToEvent(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	// cleanup
+	var selectedItem model.Item
+	err = json.Unmarshal(data, &selectedItem)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftItemToUpdate := &model.ItemToUpdate{
+		EventID: selectedEvent.ID,
+		UserID:  draftUserCredentials.ID.String(),
+		ItemID:  selectedItem.ID,
+		Column:  "item_detail",
+		Value:   "test updated item value",
+	}
+
+	requestBody, err = json.Marshal(draftItemToUpdate)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/items/%s", selectedEvent.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
+	w = httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	UpdateItemDetails(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	// cleanup
+	var draftCleanupItem model.Item
+	err = json.Unmarshal(data, &draftCleanupItem)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "test updated item value", draftCleanupItem.Name)
+
+	db.DeleteStorageLocation(config.CTO_USER, selectedItem.LocationID)
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
 func Test_UpdateEventAvatar(t *testing.T) {
@@ -477,15 +724,356 @@ func Test_CreateNewReport(t *testing.T) {
 }
 
 func Test_GetUserVolunteerDetails(t *testing.T) {
+
+	db.PreloadAllTestVariables()
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/volunteering", draftUserCredentials.ID.String()), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	GetUserVolunteerDetails(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetUserVolunteerDetails_WrongUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/volunteering", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUserVolunteerDetails(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetUserVolunteerDetails_NoUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/volunteering", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUserVolunteerDetails(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetUserVolunteerDetails_IncorrectUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/volunteering", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUserVolunteerDetails(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetUserVolunteerDetails_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/volunteering", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUserVolunteerDetails(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_GetVolunteerHours(t *testing.T) {
+
+	db.PreloadAllTestVariables()
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/volunteering/%s", draftUserCredentials.ID.String()), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	GetVolunteerHours(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetVolunteerHours_WrongUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/volunteering/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetVolunteerHours(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetVolunteerHours_NoUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/volunteering/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetVolunteerHours(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetVolunteerHours_IncorrectUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/volunteering/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetVolunteerHours(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetVolunteerHours_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/volunteering/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetVolunteerHours(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_CreateVolunteerHours(t *testing.T) {
+
+	db.PreloadAllTestVariables()
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftVolunteerHours := &model.VolunteeringDetails{
+		EventID:              selectedEvent.ID,
+		UserID:               draftUserCredentials.ID.String(),
+		Title:                "Test updated volunteer hours",
+		VolunteeringActivity: "Videography",
+		Hours:                "2",
+		EventSkillsID:        "",
+		CreatedBy:            draftUserCredentials.ID.String(),
+		UpdatedBy:            draftUserCredentials.ID.String(),
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftVolunteerHours)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/volunteering", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+	CreateVolunteerHours(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	var createdVolunteeringActivity model.VolunteeringDetails
+	err = json.Unmarshal(data, &createdVolunteeringActivity)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+	assert.Equal(t, draftUserCredentials.ID.String(), createdVolunteeringActivity.UpdatedBy)
+
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
+
 }
 
 func Test_GetEvent(t *testing.T) {
+
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	_, err = db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/event/%s", selectedEvent.ID), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": selectedEvent.ID})
+	w = httptest.NewRecorder()
+	GetEvent(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var foundEvent model.Event
+	err = json.Unmarshal(data, &foundEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "Test Event", foundEvent.Title)
+
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
+}
+
+func Test_GetEvent_WrongEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetEvent_NoEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetEvent_IncorrectEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetEvent_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetEvent(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_GetAllExpenses(t *testing.T) {
@@ -500,13 +1088,71 @@ func Test_GetAllExpenses(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
-	assert.Equal(t, 200, res.StatusCode)
+
 	assert.Greater(t, len(data), 0)
-	t.Logf("response = %+v", string(data))
+	assert.Equal(t, 200, res.StatusCode)
 
 	w = httptest.NewRecorder()
 	GetAllExpenses(w, req, config.CEO_USER)
 	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllExpenses_WrongEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllExpenses(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var foundEvents []model.Event
+	err = json.Unmarshal(data, &foundEvents)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 0, len(foundEvents)) // empty expense list
+}
+
+func Test_GetAllExpenses_NoEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllExpenses(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllExpenses_IncorrectEventID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllExpenses(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllExpenses_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetEvent(w, req, config.CEO_USER)
+	res := w.Result()
+
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
