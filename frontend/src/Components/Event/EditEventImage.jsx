@@ -81,7 +81,7 @@ EditEventImage.defaultProps = {
   setSelectedImage: () => {},
   uploadedImage: {},
   setUploadedImage: () => {},
-  toggleEditImage: false,
+  toggleEditImage: () => {},
   submit: () => {},
   eventID: '',
 };
@@ -91,7 +91,7 @@ EditEventImage.propTypes = {
   setSelectedImage: PropTypes.func,
   uploadedImage: PropTypes.object,
   setUploadedImage: PropTypes.func,
-  toggleEditImage: PropTypes.bool,
+  toggleEditImage: PropTypes.func,
   submit: PropTypes.func,
   eventID: PropTypes.string,
 };

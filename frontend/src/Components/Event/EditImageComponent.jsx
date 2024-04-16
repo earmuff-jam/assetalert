@@ -80,7 +80,7 @@ EditImageComponent.defaultProps = {
   setSelectedImage: () => {},
   uploadedImage: {},
   setUploadedImage: () => {},
-  toggleEditImage: false,
+  toggleEditImage: () => {},
   submit: () => {},
   id: '',
 };
@@ -90,7 +90,7 @@ EditImageComponent.propTypes = {
   setSelectedImage: PropTypes.func,
   uploadedImage: PropTypes.object,
   setUploadedImage: PropTypes.func,
-  toggleEditImage: PropTypes.bool,
+  toggleEditImage: PropTypes.func,
   submit: PropTypes.func,
   id: PropTypes.string,
 };
