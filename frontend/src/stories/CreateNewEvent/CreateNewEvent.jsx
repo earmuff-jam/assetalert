@@ -8,7 +8,7 @@ import ButtonComponent from '../Button/ButtonComponent';
 import TextComponent from '../TextComponent/TextComponent';
 import Title from '../../Components/DialogComponent/Title';
 import AddCommunityEvent from '../../Components/CommunityEvent/AddCommunityEvent';
-import { AddCircleRounded, ContactMailRounded, ViewListRounded } from '@material-ui/icons';
+import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,6 +41,10 @@ const CreateNewEvent = () => {
   const [editMode, setEditMode] = useState(false);
   const handleClick = () => setEditMode(!editMode);
 
+  const navigateProfileNotes = () => {
+    navigate('/profile', { state: { tab: 2 } });
+  };
+
   return (
     <Box className={classes.container} data-tour="1">
       <TextComponent
@@ -60,10 +64,9 @@ const CreateNewEvent = () => {
       <Box className={classes.chipContainer}>
         <ChipComponent
           variant={'outlined'}
-          icon={<ViewListRounded />}
-          label={'Inventory'}
-          disabled={true}
-          onClick={() => navigate('/profile')}
+          icon={<NotesRounded />}
+          label={'Rough Notes'}
+          onClick={navigateProfileNotes}
         />
       </Box>
       <TextComponent

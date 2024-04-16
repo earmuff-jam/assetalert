@@ -27,7 +27,6 @@ const ViewExpenseList = ({ disabled }) => {
     const row = expenses.filter((index) => index === rowIndex).find(() => true);
     const { id: itemID, eventID } = row;
     const userID = !userDetailsLoading && profileDetails.id;
-    console.debug(userID, itemID, eventID, value, column);
     // dispatch(eventActions.updateItemDetails({ itemID, eventID, userID, value, column }));
   };
 

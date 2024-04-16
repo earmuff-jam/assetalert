@@ -127,7 +127,7 @@ const NotesDetails = () => {
       const transformedData = categorizeNotes(notes);
       setFormattedNotes(transformedData);
     }
-  }, [loading]);
+  }, [loading, notes]);
 
   if (loading) {
     return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
