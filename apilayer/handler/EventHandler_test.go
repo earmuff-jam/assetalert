@@ -576,7 +576,7 @@ func Test_UpdateItemDetails(t *testing.T) {
 func Test_UpdateEventAvatar(t *testing.T) {
 }
 
-func Test_GetAllEventReportsApi(t *testing.T) {
+func Test_GetAllEventReports(t *testing.T) {
 
 	draftEvent := &model.Event{
 		Title:          "Test Event",
@@ -627,7 +627,6 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 	}
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	t.Logf("response = %+v", string(data))
 
 	// cleanup
 	var selectedReport model.ReportEvent
@@ -641,6 +640,54 @@ func Test_GetAllEventReportsApi(t *testing.T) {
 	w = httptest.NewRecorder()
 	GetAllEventReports(w, req, config.CEO_USER)
 	res = w.Result()
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllEventReports_WrongItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/report/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllEventReports(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetAllEventReports_NoItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/report/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllEventReports(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllEventReports_IncorrectItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/report/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllEventReports(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllEventReports_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/report/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllEventReports(w, req, config.CEO_USER)
+	res := w.Result()
+
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
