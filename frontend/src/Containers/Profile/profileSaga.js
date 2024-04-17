@@ -216,6 +216,16 @@ export function* fetchRemoveSelectedNote(action) {
   }
 }
 
+export function* fetchRemoveInventoryRows(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories/prune`, { ...action.payload });
+    yield put(profileActions.removeInventoryRowsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.removeInventoryRowsFailure(e));
+  }
+}
+
 /********************************
  * WATCHER FUNCTIONS BELOW HERE
  ********************************/
@@ -230,6 +240,10 @@ export function* watchExistingNotificationsUserDetails() {
 
 export function* watchFetchRemoveSelectedNote() {
   yield takeLatest(`profile/removeSelectedNote`, fetchRemoveSelectedNote);
+}
+
+export function* watchFetchRemoveInventoryRows() {
+  yield takeLatest(`profile/removeInventoryRows`, fetchRemoveInventoryRows);
 }
 
 export function* watchFetchAddNewNote() {
@@ -292,6 +306,7 @@ export default [
   watchFetchAddBulkInventory,
   watchFetchUpdateExistingNote,
   watchFetchRemoveSelectedNote,
+  watchFetchRemoveInventoryRows,
   watchFetchAllInventoriesForUser,
   watchUpdateExistingInventoryDetails,
   watchExistingNotificationsUserDetails,
