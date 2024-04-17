@@ -262,6 +262,24 @@ const profileSlice = createSlice({
       state.error = '';
       state.notes = [];
     },
+    removeInventoryRows: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    removeInventoryRowsSuccess: (state, action) => {
+      const updatedInventoriesID = action.payload;
+      const filteredInventories = state.inventories.filter((inventory) => {
+        return !updatedInventoriesID.includes(inventory.id);
+      });
+      state.loading = false;
+      state.error = '';
+      state.inventories = [...filteredInventories];
+    },
+    removeInventoryRowsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventories = [];
+    },
   },
 });
 

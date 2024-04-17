@@ -19,7 +19,7 @@ const ViewExpenseList = ({ disabled }) => {
   // removing unwanted values from the display column
   const filteredItems = expenses?.map((item) => {
     // eslint-disable-next-line
-    const { id, eventID, category_id, category_name, sharable_groups, created_by, updated_by, ...rest } = item;
+    const { eventID, category_id, category_name, sharable_groups, created_by, updated_by, ...rest } = item;
     return rest;
   });
 
@@ -31,6 +31,7 @@ const ViewExpenseList = ({ disabled }) => {
   };
 
   const columns = Object.keys(!loading && expenses?.length > 0 && expenses[0]); // for header purpose
+  const revisitedCols = columns.filter((v) => v != 'id');
 
   const columnHeaderFormatter = (column) => {
     const header = VIEW_EXPENSE_LIST_COLUMN_HEADERS[column];
@@ -83,7 +84,7 @@ const ViewExpenseList = ({ disabled }) => {
         fileName={'Cumulative Expense Report.xlsx'}
         sheetName={'Expense Report Sheet'}
         data={expenses}
-        columns={columns}
+        columns={revisitedCols}
         filteredData={filteredItems}
         columnHeaderFormatter={columnHeaderFormatter}
         rowFormatter={rowFormatter}

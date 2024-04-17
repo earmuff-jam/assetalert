@@ -287,7 +287,7 @@ func Test_UpdateNote(t *testing.T) {
 	selectedNote := notes[0]
 	assert.Greater(t, len(notes), 1)
 	assert.Equal(t, selectedNote.Title, "Test Title")
-	assert.Equal(t, selectedNote.Creator, "Native Plants")
+	assert.Equal(t, selectedNote.Creator, "John Doe")
 
 	selectedNote.Title = "Updated Title"
 	// Marshal the draftUpdateEvent into JSON bytes

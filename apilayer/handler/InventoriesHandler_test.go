@@ -166,10 +166,7 @@ func Test_AddNewInventory(t *testing.T) {
 	assert.Equal(t, "Broom Closet", selectedInventory.Location)
 
 	// cleanup
-	removeInventory := model.InventoryItemToUpdate{
-		ID: selectedInventory.ID,
-	}
-
+	removeInventory := []string{selectedInventory.ID}
 	db.DeleteInventory(config.CTO_USER, selectedInventory.ID, removeInventory)
 }
 
@@ -315,10 +312,7 @@ func Test_UpdateSelectedInventory(t *testing.T) {
 	assert.Equal(t, "Broom Closet", updatedInventory.Location)
 
 	// cleanup fn
-	removeInventory := model.InventoryItemToUpdate{
-		ID: selectedInventory.ID,
-	}
-
+	removeInventory := []string{selectedInventory.ID}
 	db.DeleteInventory(config.CTO_USER, selectedInventory.ID, removeInventory)
 
 }
@@ -426,9 +420,7 @@ func Test_RemoveSelectedInventory(t *testing.T) {
 	assert.Equal(t, "Alexandro Kitteyy Litter", selectedInventory.Name)
 	assert.Equal(t, "Broom Closet", selectedInventory.Location)
 
-	removeInventory := model.InventoryItemToUpdate{
-		ID: selectedInventory.ID,
-	}
+	removeInventory := map[string]string{"0": selectedInventory.ID}
 
 	// Marshal the draftEvent into JSON bytes
 	requestBody, err = json.Marshal(removeInventory)
@@ -436,7 +428,7 @@ func Test_RemoveSelectedInventory(t *testing.T) {
 		t.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
+	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories/prune", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
 	w = httptest.NewRecorder()
 	RemoveSelectedInventory(w, req, config.CTO_USER)
@@ -448,7 +440,7 @@ func Test_RemoveSelectedInventory(t *testing.T) {
 }
 
 func Test_RemoveSelectedInventory_WrongUserID(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories", nil)
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/prune", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
@@ -460,7 +452,7 @@ func Test_RemoveSelectedInventory_WrongUserID(t *testing.T) {
 }
 
 func Test_RemoveSelectedInventory_NoUserID(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories", nil)
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/prune", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": ""})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
@@ -472,7 +464,7 @@ func Test_RemoveSelectedInventory_NoUserID(t *testing.T) {
 }
 
 func Test_RemoveSelectedInventory_IncorrectUserID(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories", nil)
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/prune", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "request"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
@@ -484,7 +476,7 @@ func Test_RemoveSelectedInventory_IncorrectUserID(t *testing.T) {
 }
 
 func Test_RemoveSelectedInventory_InvalidDBUser(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories", nil)
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/prune", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"github.com/mohit2530/communityCare/model"
 )
 
@@ -374,19 +375,19 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 }
 
 // DeleteInventory ...
-func DeleteInventory(user string, userID string, draftInventory model.InventoryItemToUpdate) error {
+func DeleteInventory(user string, userID string, pruneInventoriesIDs []string) ([]string, error) {
 
 	db, err := SetupDB(user)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM community.inventory WHERE id=$1`
-	_, err = db.Exec(sqlStr, draftInventory.ID)
+	sqlStr := `DELETE FROM community.inventory WHERE id = ANY($1)`
+	_, err = db.Exec(sqlStr, pq.Array(pruneInventoriesIDs))
 	if err != nil {
-		log.Printf("unable to delete selected inventory ID %+v", draftInventory.ID)
-		return err
+		log.Printf("unable to delete selected inventories: %v", pruneInventoriesIDs)
+		return nil, err
 	}
-	return nil
+	return pruneInventoriesIDs, nil
 }

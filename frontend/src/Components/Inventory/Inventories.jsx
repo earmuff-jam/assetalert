@@ -57,6 +57,15 @@ const Inventories = () => {
 
   const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
 
+  // for header purpose
+  const columns = Object.keys(displayData.length > 0 && displayData[0]);
+  const revisitedCols = columns.filter((v) => v != 'id');
+
+  const filteredItems = displayData?.map((item) => {
+    // eslint-disable-next-line
+    const { storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } = item;
+    return rest;
+  });
   const handleEditMode = () => {
     setEditMode(!editMode);
     dispatch(eventActions.getStorageLocations());
@@ -75,12 +84,9 @@ const Inventories = () => {
     setDisplayData([...formattedData]);
   };
 
-  const columns = Object.keys(displayData.length > 0 && displayData[0]); // for header purpose
-  const filteredItems = displayData?.map((item) => {
-    // eslint-disable-next-line
-    const { id, storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } = item;
-    return rest;
-  });
+  const removeSelectedItems = (selectedRows) => {
+    dispatch(profileActions.removeInventoryRows(selectedRows));
+  };
 
   const save = (value, rowIndex, column) => {
     const row = inventories.filter((_, index) => index === rowIndex).find(() => true);
@@ -155,14 +161,16 @@ const Inventories = () => {
           <List
             key={performance.now()}
             open={open}
-            tooltipTitle={'Download all items '}
+            tooltipTitle={'Download all items'}
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
             data={displayData}
-            columns={columns}
+            columns={revisitedCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
+            removeSelectedItems={removeSelectedItems}
+            displayDeleteRowIcon={true}
           />
         );
       case 1:
@@ -174,10 +182,11 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
             data={displayData}
-            columns={columns}
+            columns={revisitedCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
+            removeSelectedItems={removeSelectedItems}
           />
         );
       case 2:
@@ -189,10 +198,11 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
             data={displayData}
-            columns={columns}
+            columns={revisitedCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
+            removeSelectedItems={removeSelectedItems}
           />
         );
       case 3:
@@ -204,10 +214,11 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
             data={displayData}
-            columns={columns}
+            columns={revisitedCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
+            removeSelectedItems={removeSelectedItems}
           />
         );
       default:

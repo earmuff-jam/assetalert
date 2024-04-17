@@ -30,7 +30,7 @@ const ViewItemDetail = ({ disabled }) => {
 
   // removing unwanted values from the display column
   const filteredItems = items?.map((item) => {
-    const { id, eventID, storage_location_id, created_by, updated_by, ...rest } = item;
+    const { eventID, storage_location_id, created_by, updated_by, ...rest } = item;
     return rest;
   });
 
@@ -42,6 +42,7 @@ const ViewItemDetail = ({ disabled }) => {
   };
 
   const columns = Object.keys(!loading && items.length > 0 && items[0]); // for header purpose
+  const revisitedCols = columns.filter((v) => v != 'id');
 
   const columnHeaderFormatter = (column) => {
     const header = VIEW_ITEMS_COLUMN_HEADERS[column];
@@ -98,7 +99,7 @@ const ViewItemDetail = ({ disabled }) => {
         fileName={'Event Inventory.xlsx'}
         sheetName={'Inventory Sheet'}
         data={items}
-        columns={columns}
+        columns={revisitedCols}
         filteredData={filteredItems}
         columnHeaderFormatter={columnHeaderFormatter}
         rowFormatter={rowFormatter}

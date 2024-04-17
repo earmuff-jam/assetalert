@@ -247,14 +247,19 @@ func RemoveSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 		return
 	}
 
-	var draftInventory model.InventoryItemToUpdate
-	if err := json.NewDecoder(r.Body).Decode(&draftInventory); err != nil {
+	var pruneInventoriesIDMap map[string]string
+	if err := json.NewDecoder(r.Body).Decode(&pruneInventoriesIDMap); err != nil {
 		log.Printf("Error decoding data. error: %+v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err := db.DeleteInventory(user, userID, draftInventory)
+	var pruneInventoriesIDs []string
+	for _, v := range pruneInventoriesIDMap {
+		pruneInventoriesIDs = append(pruneInventoriesIDs, v)
+	}
+
+	resp, err := db.DeleteInventory(user, userID, pruneInventoriesIDs)
 	if err != nil {
 		log.Printf("Unable to remove selected inventory. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -263,5 +268,5 @@ func RemoveSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
 }

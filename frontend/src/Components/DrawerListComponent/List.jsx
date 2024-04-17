@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
   Typography,
+  IconButton,
   Box,
   Checkbox,
 } from '@material-ui/core';
@@ -16,6 +17,7 @@ import EmptyComponent from '../../util/EmptyComponent';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 import { useState } from 'react';
 import classNames from 'classnames';
+import { DeleteRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,17 +63,19 @@ const List = ({
   fileName,
   sheetName,
   modifyHeightVariant,
+  displayDeleteRowIcon,
+  removeSelectedItems,
 }) => {
   const classes = useStyles();
 
   const [rowSelected, setRowSelected] = useState([]);
 
-  const handleClick = (event, name) => {
-    const selectedIndex = rowSelected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = rowSelected.indexOf(id);
     let draftSelected = [];
 
     if (selectedIndex === -1) {
-      draftSelected = draftSelected.concat(rowSelected, name);
+      draftSelected = draftSelected.concat(rowSelected, id);
     } else if (selectedIndex === 0) {
       draftSelected = draftSelected.concat(rowSelected.slice(1));
     } else if (selectedIndex === rowSelected.length - 1) {
@@ -89,9 +93,23 @@ const List = ({
         <Box className={classes.rowContainer}>
           <Typography className={classes.text}>{subtitle}</Typography>
           <Box className={classes.rowContainer}>
-            {data.length > 0 && (
-              <DownloadExcelButton data={data} tooltipTitle={tooltipTitle} fileName={fileName} sheetName={sheetName} />
-            )}
+            <Box>
+              {data.length > 0 && (
+                <DownloadExcelButton
+                  data={data}
+                  tooltipTitle={tooltipTitle}
+                  fileName={fileName}
+                  sheetName={sheetName}
+                />
+              )}
+            </Box>
+            <Box>
+              {displayDeleteRowIcon && rowSelected.length > 0 && (
+                <IconButton onClick={() => removeSelectedItems(rowSelected)}>
+                  <DeleteRounded color="primary" />
+                </IconButton>
+              )}
+            </Box>
           </Box>
         </Box>
         {!filteredData.length ? (
@@ -116,11 +134,11 @@ const List = ({
               </TableHead>
               <TableBody>
                 {filteredData.map((row, rowIndex) => {
-                  const isSelected = (name) => rowSelected.indexOf(name) !== -1;
-                  const selectedItem = row.name ? row.name : row.item_name;
-                  const isItemSelected = isSelected(selectedItem);
+                  const isSelected = (id) => rowSelected.indexOf(id) !== -1;
+                  const selectedID = row.id;
+                  const isItemSelected = isSelected(selectedID);
                   return (
-                    <TableRow hover key={rowIndex} onClick={(event) => handleClick(event, selectedItem)}>
+                    <TableRow hover key={rowIndex} onClick={(event) => handleClick(event, selectedID)}>
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
@@ -155,6 +173,8 @@ List.defaultProps = {
   fileName: '',
   sheetName: '',
   modifyHeightVariant: false,
+  removeSelectedItems: () => {},
+  displayDeleteRowIcon: false,
 };
 
 List.propTypes = {
@@ -165,10 +185,12 @@ List.propTypes = {
   rowFormatter: PropTypes.func,
   filteredData: PropTypes.array,
   columnHeaderFormatter: PropTypes.func,
+  removeSelectedItems: PropTypes.func,
   tooltipTitle: PropTypes.string,
   fileName: PropTypes.string,
   sheetName: PropTypes.string,
   modifyHeightVariant: PropTypes.bool,
+  displayDeleteRowIcon: PropTypes.bool,
 };
 
 export default List;
