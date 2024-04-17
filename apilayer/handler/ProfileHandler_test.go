@@ -100,7 +100,7 @@ func Test_GetUsernameApi(t *testing.T) {
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	assert.Equal(t, "native", userName)
+	assert.Equal(t, "john", userName)
 	t.Logf("response = %+v", string(data))
 
 	w = httptest.NewRecorder()
@@ -158,8 +158,8 @@ func Test_UpdateProfileApi(t *testing.T) {
 
 	// cleanup
 	cleanUpProfile := model.Profile{
-		Username:    "native",
-		FullName:    "Native Plants",
+		Username:    "john",
+		FullName:    "John Doe",
 		PhoneNumber: "1234567890",
 		AboutMe:     "I like to climb trees and hike with my friends",
 	}
@@ -188,7 +188,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 	}
 
 	// verify cleanup occured
-	assert.Equal(t, "native", prevProfile.Username)
+	assert.Equal(t, "john", prevProfile.Username)
 
 	w = httptest.NewRecorder()
 	UpdateProfile(w, req, config.CEO_USER)
