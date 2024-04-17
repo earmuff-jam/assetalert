@@ -1,4 +1,4 @@
-import * as xlsx from 'xlsx';
+import * as XLSX from 'xlsx';
 import { useEffect, useState } from 'react';
 import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import TextComponent from '../../stories/TextComponent/TextComponent';
@@ -127,17 +127,37 @@ const Inventories = () => {
     return row[column];
   };
 
+  const handleTemplateDownload = () => {
+    const templatedData = [
+      {
+        name: '',
+        description: '',
+        price: '',
+        barcode: '',
+        sku: '',
+        quantity: '',
+        location: '',
+        bought_at: '',
+      },
+    ];
+    const ws = XLSX.utils.json_to_sheet(templatedData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'inventories');
+    XLSX.writeFile(wb, 'inventory-template.xlsx');
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
-        const workbook = xlsx.read(data, { type: 'array' });
+        const workbook = XLSX.read(data, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        const formattedArr = xlsx.utils.sheet_to_json(worksheet);
+        const formattedArr = XLSX.utils.sheet_to_json(worksheet, { rawNumbers: false });
         setUploadedFileInJson(formattedArr);
+        console.log(formattedArr);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -149,9 +169,10 @@ const Inventories = () => {
   };
 
   const submitExcel = () => {
-    if (Array.isArray(uploadedFileInJson)) {
+    if (Array.isArray(uploadedFileInJson) && uploadedFileInJson.length > 0) {
       dispatch(profileActions.addBulkInventory(Object.values(uploadedFileInJson)));
     }
+    resetData();
   };
 
   const displaySelection = (value) => {
@@ -259,6 +280,10 @@ const Inventories = () => {
             submitButtonStyles={classes.buttonContainer}
             displaySecondaryText={true}
             secondaryText={'Uploading excel data must contain required headers'}
+            disableTemplateDownload={false}
+            onDownloadTemplate={handleTemplateDownload}
+            templateDownloadStyles={classes.buttonContainer}
+            templateDownloadText={'Template'}
           />
         ) : (
           // only display download button under all inventories

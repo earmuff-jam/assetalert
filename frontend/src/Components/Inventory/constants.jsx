@@ -103,9 +103,7 @@ export const ADD_ITEM_PROFILE_FORM = {
         message: 'Price for the selected item is required',
       },
       {
-        validate: (value) =>
-          // test for number first, then
-          !(/^\d+$/.test(value) && parseInt(value) > 0),
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
         message: 'A positive number is required',
       },
     ],
@@ -113,7 +111,7 @@ export const ADD_ITEM_PROFILE_FORM = {
   },
   barcode: {
     label: 'Item barcode',
-    placeholder: 'Item barcode to reference item',
+    placeholder: 'Unique code to reference item',
     value: '',
     name: 'barcode',
     errorMsg: '',
@@ -122,14 +120,14 @@ export const ADD_ITEM_PROFILE_FORM = {
     validators: [
       {
         validate: (value) => value.trim().length >= 100,
-        message: 'barcode should be less than 100 characters',
+        message: 'should be less than 100 characters',
       },
     ],
     ...GENERIC_FORM_FIELDS_VARIANT,
   },
   sku: {
     label: 'Item sku',
-    placeholder: 'SKU of the item',
+    placeholder: 'Unique SKU of the item',
     value: '',
     name: 'sku',
     errorMsg: '',

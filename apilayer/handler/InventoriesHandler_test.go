@@ -127,7 +127,7 @@ func Test_AddNewInventory(t *testing.T) {
 	draftInventory := model.Inventory{
 		Name:        "Alexandro Kitteyy Litter",
 		Description: "Kitty litter for a pro name game",
-		Price:       "23.99",
+		Price:       23.99,
 		Status:      "HIDDEN",
 		Barcode:     "1231231231",
 		SKU:         "1231231231",
@@ -235,7 +235,7 @@ func Test_UpdateSelectedInventory(t *testing.T) {
 	draftInventory := model.Inventory{
 		Name:        "Alexandro Kitteyy Litter",
 		Description: "Kitty litter for a pro name game",
-		Price:       "23.99",
+		Price:       23.99,
 		Status:      "HIDDEN",
 		Barcode:     "1231231231",
 		SKU:         "1231231231",
@@ -382,7 +382,7 @@ func Test_RemoveSelectedInventory(t *testing.T) {
 	draftInventory := model.Inventory{
 		Name:        "Alexandro Kitteyy Litter",
 		Description: "Kitty litter for a pro name game",
-		Price:       "23.99",
+		Price:       23.99,
 		Status:      "HIDDEN",
 		Barcode:     "1231231231",
 		SKU:         "1231231231",

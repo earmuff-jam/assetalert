@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
 	"github.com/mohit2530/communityCare/model"
 )
+
+const defaultHiddenStatus = "HIDDEN"
 
 // GetAllInventories ...
 // swagger:route GET /api/v1/profile/{id}/inventories
@@ -79,7 +82,7 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	var inventoryMap map[string]model.Inventory
+	var inventoryMap map[string]model.RawInventory
 	if err := json.NewDecoder(r.Body).Decode(&inventoryMap); err != nil {
 		log.Printf("Error decoding data. error: %+v", err)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -88,7 +91,32 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 
 	var inventoryList []model.Inventory
 	for _, v := range inventoryMap {
-		inventoryList = append(inventoryList, v)
+
+		formattedQuantity, err := strconv.Atoi(v.Quantity)
+		if err != nil {
+			formattedQuantity = 0
+		}
+
+		formattedPrice, err := strconv.ParseFloat(v.Price, 64)
+		if err != nil {
+			formattedPrice = 0.00
+		}
+		draftInventory := model.Inventory{
+			Name:        v.Name,
+			Description: v.Description,
+			Price:       formattedPrice,
+			Status:      defaultHiddenStatus,
+			Barcode:     v.Barcode,
+			SKU:         v.SKU,
+			Quantity:    formattedQuantity,
+			Location:    v.Location,
+			CreatedAt:   time.Now(),
+			CreatedBy:   userID,
+			UpdatedAt:   time.Now(),
+			UpdatedBy:   userID,
+			BoughtAt:    v.BoughtAt,
+		}
+		inventoryList = append(inventoryList, draftInventory)
 	}
 
 	inventoryListRequest := model.InventoryListRequest{
