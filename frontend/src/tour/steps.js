@@ -39,16 +39,14 @@ const PROFILE_TOUR_STEPS = [
       'Add details to your biography. Update your looks, your username and even write a short description about yourself. You can edit your bio as you would like. Without properly filling out this bio, the chat application will not work as expected. For our user and their safety, these fields are required to chat with other members.',
   },
   {
-    title:
-      'Edit your profile bio with these action items. View list of notifications here as well. Notifications include only added expenses and added items for a specific event.',
+    title: 'Edit your profile bio with these action items. View current username and contact info.',
+  },
+  {
+    title: 'Reshape the definition of yourself with short bio.',
   },
   {
     title:
-      'Reshape events around you with support from your reach. Search your personal inventories to update select event.',
-  },
-  {
-    title:
-      'View current events created by you, hours volunteered and / or count of total expenses accured relative to you as a user. If you did not volunteer on a event or did not add expenses to an event, it will not be visible under recent activities tab.',
+      'View current events created by you, hours volunteered and / or count of total expenses accured relative to you as a user. Actions unrelated to activities other than volunteering or expenses will not be visible under recent activities tab. View your personalized inventory list and write notes for future ease of access.',
   },
 ];
 
