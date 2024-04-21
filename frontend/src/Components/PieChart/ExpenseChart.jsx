@@ -104,9 +104,7 @@ const ExpenseChart = ({ expenses }) => {
       ) : null}
       <Box className={classes.aside}>
         {totalIncurred ? (
-          <Box className={classes.container}>
-            <Line data={data} options={options} />
-          </Box>
+          <Line data={data} options={options} width={300} height={300} />
         ) : (
           <Box className={classes.center}>
             <EmptyComponent subtitle="Add expenses to view data." />

@@ -10,7 +10,7 @@ type Inventory struct {
 	ID                string    `json:"id"`
 	Name              string    `json:"name"`
 	Description       string    `json:"description"`
-	Price             string    `json:"price"`
+	Price             float64   `json:"price"`
 	Status            string    `json:"status"`
 	Barcode           string    `json:"barcode"`
 	SKU               string    `json:"sku"`
@@ -24,6 +24,21 @@ type Inventory struct {
 	UpdatedBy         string    `json:"updated_by"`
 	UpdaterName       string    `json:"updater_name"`
 	BoughtAt          string    `json:"bought_at"`
+}
+
+// RawInventory ...
+// swagger:model RawInventory
+//
+// RawInventory is used to derieve the single row from bulk uploaded excel file
+type RawInventory struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Price       string `json:"price"`
+	Barcode     string `json:"barcode"`
+	SKU         string `json:"sku"`
+	Quantity    string `json:"quantity"`
+	Location    string `json:"location"`
+	BoughtAt    string `json:"bought_at"`
 }
 
 // InventoryListRequest ...

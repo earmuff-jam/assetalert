@@ -91,6 +91,8 @@ const AddInventoryDetail = ({ setDisplayMode }) => {
       if (el.value) {
         if (el.name === 'quantity') {
           acc[el.name] = parseInt(el.value);
+        } else if (el.name === 'price') {
+          acc[el.name] = parseFloat(el.value);
         } else {
           acc[el.name] = el.value;
         }

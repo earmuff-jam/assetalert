@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 const StatusRadioButtons = ({ statusSelection, handleChange }) => {
   const classes = useStyles();
   return (
-    <FormControl>
+    <FormControl required>
       <FormLabel component="legend">Status</FormLabel>
       <RadioGroup aria-label="status" name="status" value={statusSelection} onChange={handleChange}>
         <Box className={classes.rowContainer}>
