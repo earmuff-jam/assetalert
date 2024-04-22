@@ -285,7 +285,7 @@ func populateFakePersonalInventories(user string, limit int, creatorID string) {
 
 		draftInventory.Name = gofakeit.BeerName()
 		draftInventory.Description = gofakeit.HipsterSentence(2)
-		draftInventory.Price = fmt.Sprintf("%f", gofakeit.Price(2, 120))
+		draftInventory.Price = gofakeit.Price(2, 120)
 		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN", "ALL"})
 		draftInventory.Barcode = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())
 		draftInventory.SKU = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())

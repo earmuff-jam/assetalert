@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
+
 import SearchAllEvents from '../Event/SearchAllEvents';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewFilteredEventList from './ViewFilteredEventList';
 import { Typography, Grid, Box, Divider } from '@material-ui/core';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
   searchContainer: {
     alignSelf: 'start',
     width: '25%',
-    paddingBottom: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
@@ -57,7 +58,7 @@ const BLANK_AUTOCOMPLETE_FORM = {
   id: '',
 };
 
-const ViewEventListDetails = ({ currentEvents, isLoading }) => {
+const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -90,7 +91,7 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
         View all events
       </Typography>
       <Box className={classes.searchContainer}>
-        <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} />
+        <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} setLocation={setLocation} />
       </Box>
       <Divider className={classes.divider} />
       {noAvailableProjects ? (
@@ -109,11 +110,13 @@ const ViewEventListDetails = ({ currentEvents, isLoading }) => {
 ViewEventListDetails.defaultProps = {
   currentEvents: [],
   isLoading: true,
+  setLocation: () => {},
 };
 
 ViewEventListDetails.propTypes = {
   currentEvents: PropTypes.array,
   isLoading: PropTypes.bool,
+  setLocation: PropTypes.func,
 };
 
 export default ViewEventListDetails;

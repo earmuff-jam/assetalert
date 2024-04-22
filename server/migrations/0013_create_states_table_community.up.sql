@@ -60,7 +60,8 @@ VALUES ('Alabama', 'AL'),
        ('Washington', 'WA'),
        ('West Virginia', 'WV'),
        ('Wisconsin', 'WI'),
-       ('Wyoming', 'WY');
+       ('Wyoming', 'WY'),
+       ('Other', 'OT');
 
 ALTER TABLE community.states
     OWNER TO community_admin;

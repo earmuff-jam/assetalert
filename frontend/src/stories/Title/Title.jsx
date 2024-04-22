@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontSize: '1.6rem',
     letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

@@ -46,9 +46,7 @@ const Login = () => {
     );
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
+  const validate = (formFields) => {
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {
         return true;
@@ -57,9 +55,13 @@ const Login = () => {
     }, false);
 
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
-    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
+    return containsErr || requiredFormFields.some((el) => el.value.trim() === '');
+  };
 
-    if (containsErr || isRequiredFieldsEmpty) {
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (validate(formFields)) {
       console.log('Empty form fields. Unable to proceed.');
       return;
     } else {
@@ -110,7 +112,7 @@ const Login = () => {
         icon={<ArrowRightRounded />}
         buttonVariant={'text'}
         onClick={handleFormSubmit}
-        disabled={false}
+        disabled={validate(formFields)}
         disableRipple={true}
         disableFocusRipple={true}
       />

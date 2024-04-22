@@ -17,8 +17,7 @@ import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
 import PopupContent from './PopupContent';
 import { Attribution, defaults as defaultControls } from 'ol/control.js';
-
-const center = proj.fromLonLat([-92.0369, 38.9072]);
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomePageHeaderMap = ({ eventList, isLoading }) => {
+const HomePageHeaderMap = ({ location, eventList, isLoading }) => {
   const classes = useStyles();
   const mapRef = useRef(null);
   const popupContentRef = useRef(null);
@@ -35,6 +34,16 @@ const HomePageHeaderMap = ({ eventList, isLoading }) => {
 
   useEffect(() => {
     if (isLoading) return;
+
+    let center = [0, 0];
+    let zoom = 4;
+    if (location) {
+      center = proj.fromLonLat([location.long || 0, location.lat || 0]);
+      if (location.lat != 0 && location.long !== 0) {
+        zoom = 6;
+      }
+    }
+
     const map = new Map({
       target: mapRef.current,
       layers: [
@@ -54,7 +63,7 @@ const HomePageHeaderMap = ({ eventList, isLoading }) => {
       }),
       view: new View({
         center,
-        zoom: 4,
+        zoom,
       }),
     });
     const vectorLayer = new VectorLayer({
@@ -131,7 +140,7 @@ const HomePageHeaderMap = ({ eventList, isLoading }) => {
     return () => {
       map.setTarget(null);
     };
-  }, [eventList]);
+  }, [eventList, JSON.stringify(location)]);
 
   return (
     <div className={classes.mapContainer}>
@@ -149,18 +158,20 @@ const HomePageHeaderMap = ({ eventList, isLoading }) => {
 HomePageHeaderMap.defaultProps = {
   eventList: [],
   isLoading: false,
+  location: {},
 };
 
 HomePageHeaderMap.propTypes = {
   eventList: PropTypes.array,
   isLoading: PropTypes.bool,
+  location: PropTypes.object,
 };
 
 export default HomePageHeaderMap;
 
 /**
  * addMarkers fn is used to mark endpoints with the red dot as svg icons
- * 
+ *
  * @param {Object} vectorLayer contains source that we add features to
  * @param {Array} events contains the lat, lon to display the red dot
  * @returns {Object} updated vectorLayer with red dot for markers

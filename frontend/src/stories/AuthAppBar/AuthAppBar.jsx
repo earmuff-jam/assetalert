@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     padding: theme.spacing(0, 2),
     borderRadius: theme.spacing(0),
-    backgroundColor: theme.palette.common.white,
   },
   text: {
     fontSize: '2.0rem',
