@@ -20,10 +20,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(0, 2),
-    gap: theme.spacing(1),
-    backgroundColor: theme.palette.grey[200],
-    marginBottom: theme.spacing(1),
-    borderRadius: theme.spacing(0.4),
   },
   timelineContainer: {
     display: 'flex',
@@ -89,7 +85,7 @@ const RecentActivity = ({ activity }) => {
                 <CreateNewFolderRounded />
               </TimelineDot>
             </TimelineSeparator>
-            <TimelineContent className={classes.text}>{activity.title}</TimelineContent>
+            <TimelineContent className={classes.text}>Created {activity.title}</TimelineContent>
           </TimelineItem>
 
           {activity.volunteering_hours > 0 ? (
