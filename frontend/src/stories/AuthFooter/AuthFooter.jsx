@@ -4,17 +4,16 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   footer: {
-    backgroundColor: theme.palette.secondary.main,
     color: theme.palette.common.black,
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    gap: theme.spacing(2),
   },
   text: {
-    fontSize: '1.125rem',
+    fontSize: '.925rem',
     letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -22,8 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   privacyLink: {
     color: theme.palette.primary.main,
-    fontSize: '1.125rem',
-    fontFamily: 'Poppins, sans-serif',
+    fontSize: '.925rem',
     textDecoration: 'none',
   },
 }));
@@ -47,7 +45,7 @@ const AuthFooter = () => {
           href={`${encodeURI('https://github.com/earmuff-jam/mashed/blob/main/PRIVACY_POLICY.md')}`}
           className={classes.privacyLink}
         >
-          Privacy
+          Privacy & Legal
         </a>
       </Typography>
     </footer>

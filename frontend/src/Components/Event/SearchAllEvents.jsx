@@ -1,17 +1,16 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, InputAdornment, TextField, Typography } from '@material-ui/core';
-import { FiberManualRecordRounded, SearchRounded } from '@material-ui/icons';
-
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import RetrieveUserLocation from './RetrieveUserLocation';
+import { FiberManualRecordRounded } from '@material-ui/icons';
+import { Box, TextField, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: '1.125rem',
     letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
   },
   optionText: {
     fontSize: '0.825rem',
@@ -29,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    gap: theme.spacing(1),
-    alignItems: 'start',
   },
   statusDot: {
     width: theme.spacing(1),
@@ -50,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchAllEvents = ({ events, setSearchValue }) => {
+const SearchAllEvents = ({ setLocation, events, setSearchValue }) => {
   const classes = useStyles();
   const [options, setOptions] = useState([]);
 
@@ -70,42 +67,47 @@ const SearchAllEvents = ({ events, setSearchValue }) => {
   }, [events]);
 
   return (
-    <Autocomplete
-      id="search-events-autocomplete"
-      fullWidth
-      options={options}
-      onChange={(e, value) => {
-        const selectedEventId = value?.id || '';
-        return handleInputChange('id', selectedEventId);
-      }}
-      getOptionLabel={(option) => option.title}
-      renderOption={(params) => (
-        <Box className={classes.columnContainer}>
-          <Box className={classes.rowContainer}>
-            <Typography className={classes.optionText}>{params.title}</Typography>
-            <Box className={classes.emptyGap}></Box>
-            <FiberManualRecordRounded
-              className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.deactivated })}
-            />
+    <Box className={classes.rowContainer}>
+      <RetrieveUserLocation setLocation={setLocation} />
+      <Autocomplete
+        id="search-events-autocomplete"
+        fullWidth
+        options={options}
+        onChange={(e, value) => {
+          const selectedEventId = value?.id || '';
+          return handleInputChange('id', selectedEventId);
+        }}
+        getOptionLabel={(option) => option.title}
+        renderOption={(params) => (
+          <Box className={classes.columnContainer}>
+            <Box className={classes.rowContainer}>
+              <Typography className={classes.optionText}>{params.title}</Typography>
+              <Box className={classes.emptyGap}></Box>
+              <FiberManualRecordRounded
+                className={classNames(classes.statusDot, { [classes.warningStatusDot]: params.deactivated })}
+              />
+            </Box>
           </Box>
-        </Box>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} placeholder="Search" variant="standard" className={classes.text} />
-      )}
-      forcePopupIcon={true}
-    />
+        )}
+        renderInput={(params) => (
+          <TextField {...params} placeholder="Search" variant="standard" className={classes.text} />
+        )}
+        forcePopupIcon={true}
+      />
+    </Box>
   );
 };
 
 SearchAllEvents.defaultProps = {
   events: [],
   setSearchValue: () => {},
+  setLocation: () => {},
 };
 
 SearchAllEvents.propTypes = {
   events: PropTypes.array,
   setSearchValue: PropTypes.func,
+  setLocation: PropTypes.func,
 };
 
 export default SearchAllEvents;

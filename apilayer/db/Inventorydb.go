@@ -181,20 +181,20 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 
 	db, err := SetupDB(user)
 	if err != nil {
+		log.Printf("unable to start the db. error: %+v", err)
 		return nil, err
 	}
 	defer db.Close()
 
 	tx, err := db.Begin()
 	if err != nil {
+		log.Printf("unable to start tx. error: %+v", err)
 		return nil, err
 	}
 
-	// storage location is unique key in the database.
-	// storage location can be shared across inventories and items that are stored in events.
+	// if UUID is not present, add new storage location
 	parsedStorageLocationID, err := uuid.Parse(draftInventory.Location)
 	if err != nil {
-		// if the location is not a uuid type, then it should resemble a new storage location
 		emptyLocationID := ""
 		err := addNewStorageLocation(user, draftInventory.Location, draftInventory.CreatedBy, &emptyLocationID)
 		if err != nil {
@@ -209,8 +209,17 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		draftInventory.StorageLocationID = emptyLocationID
 	}
 
+	// if UUID is present, retrieve selected storage location
+	sqlStr := `SELECT location FROM community.storage_locations sl WHERE sl.id=$1;`
+	err = tx.QueryRow(sqlStr, parsedStorageLocationID).Scan(&draftInventory.Location)
+	if err != nil {
+		log.Printf("unable to retrieve selected location from storage location id. error: %+v", err)
+		tx.Rollback()
+		return nil, err
+	}
 	parsedCreatedByUUID, err := uuid.Parse(draftInventory.CreatedBy)
 	if err != nil {
+		log.Printf("unable to parse creator userID. error: %+v", err)
 		tx.Rollback()
 		return nil, err
 	}
@@ -219,7 +228,7 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 	draftInventory.CreatedAt = currentTimestamp
 	draftInventory.UpdatedAt = currentTimestamp
 
-	sqlStr := `INSERT INTO community.inventory
+	sqlStr = `INSERT INTO community.inventory
 	(name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, created_at, updated_by, updated_at)
     VALUES
 	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
@@ -239,12 +248,12 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		parsedStorageLocationID,
 		parsedCreatedByUUID,
 		draftInventory.CreatedAt,
-		parsedCreatedByUUID, // created is the same for the first time
+		parsedCreatedByUUID,
 		draftInventory.UpdatedAt,
 	).Scan(&draftInventory.ID)
 
 	if err != nil {
-		// Rollback the transaction if there is an error
+		log.Printf("unable to add selected inventory. error: %+v", err)
 		tx.Rollback()
 		return nil, err
 	}

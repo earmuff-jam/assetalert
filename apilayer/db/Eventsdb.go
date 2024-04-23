@@ -1465,25 +1465,6 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 	return nil
 }
 
-// removeSelectedStorageLocation ...
-//
-// removes the selected location
-func removeSelectedStorageLocation(user string, storageLocationID string) error {
-	db, err := SetupDB(user)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	sqlStr := `DELETE FROM community.storage_location WHERE id=$1`
-	_, err = db.Exec(sqlStr, storageLocationID)
-	if err != nil {
-		log.Printf("unable to remove selected storage location %+v", storageLocationID)
-		return err
-	}
-	return nil
-}
-
 // addNewCategoryLocation ...
 //
 // adds new storage location if not existing

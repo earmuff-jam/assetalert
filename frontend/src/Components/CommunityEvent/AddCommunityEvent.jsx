@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
   },
   textField: {
+    fontFamily: "Roboto",
     marginBottom: theme.spacing(2),
   },
   addButton: {

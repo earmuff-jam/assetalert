@@ -21,17 +21,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   titleText: {
-    fontSize: '1.2rem',
-    fontWeight: 'lighter',
-  },
-  header: {
-    fontSize: '1.6rem',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
+    fontSize: '0.975rem',
   },
   errorText: {
     fontWeight: 'bold',

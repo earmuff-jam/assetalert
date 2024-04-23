@@ -149,7 +149,7 @@ export const ADD_ITEM_PROFILE_FORM = {
     value: '',
     name: 'status',
     errorMsg: '',
-    required: true,
+    required: false,
   },
   quantity: {
     label: 'Quantity',
