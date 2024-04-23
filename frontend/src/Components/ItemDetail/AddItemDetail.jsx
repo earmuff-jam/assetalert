@@ -7,7 +7,7 @@ import { enqueueSnackbar } from 'notistack';
 import { ADD_ITEM_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({

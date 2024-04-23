@@ -1,10 +1,11 @@
-import RecentActivity from './RecentActivity';
-import EmptyComponent from '../../util/EmptyComponent';
-import { Accordion, AccordionDetails, AccordionSummary, Box, makeStyles } from '@material-ui/core';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { useSelector } from 'react-redux';
-import TextComponent from '../../stories/TextComponent/TextComponent';
+import RecentActivity from './RecentActivity';
 import { ExpandMoreRounded } from '@material-ui/icons';
+
+import EmptyComponent from '../../util/EmptyComponent';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
+import TextComponent from '../TextFieldComponent/TextComponent';
+import { Accordion, AccordionDetails, AccordionSummary, Box, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {

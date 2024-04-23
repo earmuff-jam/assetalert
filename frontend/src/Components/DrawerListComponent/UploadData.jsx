@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { Box, Input, Typography } from '@material-ui/core';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { CancelRounded, GetAppRounded } from '@material-ui/icons';
 
 const UploadData = ({
@@ -91,7 +90,6 @@ UploadData.propTypes = {
   onCancelClick: PropTypes.func,
   cancelButtonStyles: PropTypes.string,
   disableCancelButton: PropTypes.bool,
-  buttonSubmitText: PropTypes.string,
   submitButtonStyles: PropTypes.string,
   disableSubmitButton: PropTypes.bool,
   displaySecondaryText: PropTypes.bool,

@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ChipComponent from '../Chip/ChipComponent';
 import { makeStyles } from '@material-ui/core/styles';
-import TextComponent from '../TextComponent/TextComponent';
 import { Box, Tooltip, Typography } from '@material-ui/core';
+import TextFieldComponent from '../../Components/TextFieldComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   headerText: {
@@ -75,7 +75,7 @@ const CardTitleComponent = ({
         </Box>
       </Box>
       <Box data-tour="2">
-        <TextComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'} />
+        <TextFieldComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'} />
       </Box>
     </Box>
   );

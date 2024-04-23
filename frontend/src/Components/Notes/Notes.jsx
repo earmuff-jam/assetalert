@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import TextComponent from '../../stories/TextComponent/TextComponent';
-import { Box, Dialog, makeStyles } from '@material-ui/core';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
-import { AddRounded, ImportExportRounded } from '@material-ui/icons';
-import NotesDetails from './NotesDetails';
-import { useDispatch } from 'react-redux';
-import { profileActions } from '../../Containers/Profile/profileSlice';
-import Title from '../DialogComponent/Title';
 import AddNote from './AddNote';
+import NotesDetails from './NotesDetails';
+import { useEffect, useState } from 'react';
+import Title from '../DialogComponent/Title';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Dialog, makeStyles } from '@material-ui/core';
+import TextComponent from '../TextFieldComponent/TextComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { AddRounded, ImportExportRounded } from '@material-ui/icons';
+import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -27,9 +27,17 @@ const useStyles = makeStyles((theme) => ({
 const Notes = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { loading, notes } = useSelector((state) => state.profile);
 
   const [editMode, setEditMode] = useState(false);
+  const [selecteNoteID, setSelectedNoteID] = useState(null);
+
   const handleEditMode = () => setEditMode(!editMode);
+
+  const resetData = () => {
+    setEditMode(false);
+    setSelectedNoteID(null);
+  };
 
   useEffect(() => {
     dispatch(profileActions.getUserNotes());
@@ -57,13 +65,13 @@ const Notes = () => {
         />
         {editMode && (
           <Dialog open={editMode} width={'md'} fullWidth={true}>
-            <Title onClose={() => setEditMode(false)}>Add New Note</Title>
-            <AddNote editMode={editMode} setEditMode={setEditMode} />
+            <Title onClose={resetData}>Add New Note</Title>
+            <AddNote setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} noteID={selecteNoteID} />
           </Dialog>
         )}
       </Box>
       <Box>
-        <NotesDetails />
+        <NotesDetails notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />
       </Box>
     </Box>
   );

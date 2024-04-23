@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+
 import { Box } from '@material-ui/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
+
 import {
   Timeline,
   TimelineItem,
@@ -12,8 +14,9 @@ import {
   TimelineContent,
   TimelineOppositeContent,
 } from '@material-ui/lab';
+
+import TextComponent from '../TextFieldComponent/TextComponent';
 import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@material-ui/icons';
-import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,7 +88,7 @@ const RecentActivity = ({ activity }) => {
                 <CreateNewFolderRounded />
               </TimelineDot>
             </TimelineSeparator>
-            <TimelineContent className={classes.text}>Created {activity.title}</TimelineContent>
+            <TimelineContent className={classes.text}>Participated in {activity.title}</TimelineContent>
           </TimelineItem>
 
           {activity.volunteering_hours > 0 ? (
@@ -129,7 +132,7 @@ const RecentActivity = ({ activity }) => {
         gutterBottom={true}
         loading={false}
         textStyle={classes.subtitleTextHeader}
-        value={`Updated around ${dayjs(activity?.updated_at).fromNow()} by ${activity?.updator}`}
+        value={`Created around ${dayjs(activity?.created_at).fromNow()} by ${activity?.creator}`}
       />
     </Box>
   );

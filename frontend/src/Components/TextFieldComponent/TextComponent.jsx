@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 
-const TextComponent = ({ textStyle, loading, gutterBottom, value, variant }) => {
+const TextFieldComponent = ({ textStyle, loading, gutterBottom, value, variant }) => {
   if (loading) {
     return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
   }
@@ -13,7 +13,7 @@ const TextComponent = ({ textStyle, loading, gutterBottom, value, variant }) => 
   );
 };
 
-TextComponent.defaultProps = {
+TextFieldComponent.defaultProps = {
   textStyle: '',
   loading: true,
   gutterBottom: true,
@@ -22,7 +22,7 @@ TextComponent.defaultProps = {
   value: 'John Doe',
 };
 
-TextComponent.propTypes = {
+TextFieldComponent.propTypes = {
   textStyle: PropTypes.string,
   gutterBottom: PropTypes.bool,
   variant: PropTypes.string,
@@ -30,4 +30,4 @@ TextComponent.propTypes = {
   value: PropTypes.string,
 };
 
-export default TextComponent;
+export default TextFieldComponent;

@@ -1,12 +1,12 @@
+import Notes from '../Notes/Notes';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Inventories from '../Inventory/Inventories';
 import { PROFILE_NAVIGATION_MENU_BAR } from './constants';
 import { Box, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import RecentActivitiesListContainer from '../RecentActivitiesList/RecentActivitiesListContainer';
-import Notes from '../Notes/Notes';
-import { useLocation } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   textIconContainer: {
     display: 'flex',
     alignItems: 'center',

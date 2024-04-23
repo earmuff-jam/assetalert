@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { createNewEvent } from '../../Containers/Home/homeSaga';
+import PrimaryAppBar from '../../Components/AppBarComponent/PrimaryAppBar';
 
 export default {
-  title: 'HomePage/CreateNewEvent',
-  component: createNewEvent,
+  title: 'HomePage/PrimaryAppBar',
+  component: PrimaryAppBar,
   decorators: [
     withRouter,
     (Story) => (
@@ -26,6 +26,11 @@ export default {
   },
 };
 
-export const PrimaryCreateNewEvent = {
-  args: {},
+export const PrimaryPrimaryAppBar = {
+  args: {
+    title: 'Mashed',
+    titleVariant: 'h5',
+    elevation: 0,
+    selectedID: 1,
+  },
 };

@@ -1,17 +1,18 @@
-import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextComponent from '../../stories/TextComponent/TextComponent';
-import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@material-ui/icons';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, Dialog, IconButton } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
-import EmptyComponent from '../../util/EmptyComponent';
-import Title from '../DialogComponent/Title';
-import AddNote from './AddNote';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
+
+import { useEffect, useState } from 'react';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { makeStyles } from '@material-ui/core/styles';
+import EmptyComponent from '../../util/EmptyComponent';
+
+import LoadingSkeleton from '../../util/LoadingSkeleton';
+import TextComponent from '../TextFieldComponent/TextComponent';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@material-ui/icons';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,66 +50,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/**
- * Takes array of notes and transforms them into objects categorized by the date and time
- *
- * Recently updated - Up to the last week
- * Last Week - Up to the previous week
- * Last month and beyond - everything else
- *
- * @param {Array} notes
- * @returns {Array} refactored notes
- */
-export const categorizeNotes = (notes) => {
-  const currentTime = new Date();
-  const categorizedNotes = notes.reduce((acc, item) => {
-    const updatedTime = new Date(item.updated_at);
-    const differenceInDays = Math.floor((currentTime - updatedTime) / (1000 * 3600 * 24));
-
-    let category;
-    if (differenceInDays <= 7) {
-      category = 'Recently added notes';
-    } else if (differenceInDays <= 14) {
-      category = 'Last Week';
-    } else {
-      category = 'Last Month and Beyond';
-    }
-
-    if (!acc[category]) {
-      acc[category] = {
-        id: acc.length + 1,
-        category: category,
-        totalNotes: 0,
-        details: [],
-      };
-    }
-
-    acc[category].details.push({
-      id: acc[category].details.length + 1,
-      noteID: item.noteID,
-      note_title: item.title,
-      note_description: item.description,
-      updated_by: item.updated_by,
-      updated_at: item.updated_at,
-      updator: item.updator,
-    });
-
-    acc[category].totalNotes++;
-    return acc;
-  }, {});
-
-  return Object.values(categorizedNotes);
-};
-
-const NotesDetails = () => {
+const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   dayjs.extend(relativeTime);
 
-  const { loading, notes } = useSelector((state) => state.profile);
-
-  const [editNote, setEditNote] = useState(false);
-  const [selecteNoteID, setSelectedNoteID] = useState('');
   const [formattedNotes, setFormattedNotes] = useState([]);
 
   const removeSelectedNote = (noteID) => {
@@ -168,19 +114,13 @@ const NotesDetails = () => {
                     </IconButton>
                     <IconButton
                       onClick={() => {
-                        setEditNote(true);
+                        setEditMode(true);
                         setSelectedNoteID(note.noteID);
                       }}
                     >
                       <EditRounded />
                     </IconButton>
                   </Box>
-                  {editNote && (
-                    <Dialog open={editNote} width={'md'} fullWidth={true}>
-                      <Title onClose={() => setEditNote(false)}>Edit Note</Title>
-                      <AddNote editMode={editNote} setEditMode={setEditNote} noteID={selecteNoteID} />
-                    </Dialog>
-                  )}
                   <Box>
                     <TextComponent textStyle={classes.heading} value={note.note_description} loading={loading} />
                     <Box className={classes.rowContainer}>
@@ -201,6 +141,71 @@ const NotesDetails = () => {
       ))}
     </div>
   );
+};
+
+/**
+ * Takes array of notes and transforms them into objects categorized by the date and time
+ *
+ * Recently updated - Up to the last week
+ * Last Week - Up to the previous week
+ * Last month and beyond - everything else
+ *
+ * @param {Array} notes
+ * @returns {Array} refactored notes
+ */
+export const categorizeNotes = (notes) => {
+  const currentTime = new Date();
+  const categorizedNotes = notes.reduce((acc, item) => {
+    const updatedTime = new Date(item.updated_at);
+    const differenceInDays = Math.floor((currentTime - updatedTime) / (1000 * 3600 * 24));
+
+    let category;
+    if (differenceInDays <= 7) {
+      category = 'Recently added notes';
+    } else if (differenceInDays <= 14) {
+      category = 'Last Week';
+    } else {
+      category = 'Last Month and Beyond';
+    }
+
+    if (!acc[category]) {
+      acc[category] = {
+        id: acc.length + 1,
+        category: category,
+        totalNotes: 0,
+        details: [],
+      };
+    }
+
+    acc[category].details.push({
+      id: acc[category].details.length + 1,
+      noteID: item.noteID,
+      note_title: item.title,
+      note_description: item.description,
+      updated_by: item.updated_by,
+      updated_at: item.updated_at,
+      updator: item.updator,
+    });
+
+    acc[category].totalNotes++;
+    return acc;
+  }, {});
+
+  return Object.values(categorizedNotes);
+};
+
+NotesDetails.defaultProps = {
+  notes: [],
+  loading: false,
+  setEditMode: () => {},
+  setSelectedNoteID: () => {},
+};
+
+NotesDetails.propTypes = {
+  setEditMode: PropTypes.func,
+  setSelectedNoteID: PropTypes.func,
+  notes: PropTypes.array,
+  loading: PropTypes.bool,
 };
 
 export default NotesDetails;

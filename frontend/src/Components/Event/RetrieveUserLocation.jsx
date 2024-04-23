@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { LocationOnRounded } from '@material-ui/icons';
 import { IconButton, Tooltip, makeStyles } from '@material-ui/core';

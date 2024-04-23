@@ -1,13 +1,13 @@
 import { store } from '../../Store';
 import { Provider } from 'react-redux';
-import PrimaryAppBar from './PrimaryAppBar';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
+import StatusRadioButtons from '../../Components/Inventory/StatusRadioButtons';
 
 export default {
-  title: 'HomePage/PrimaryAppBar',
-  component: PrimaryAppBar,
+  title: 'ProfilePage/StatusRadioButtons',
+  component: StatusRadioButtons,
   decorators: [
     withRouter,
     (Story) => (
@@ -26,11 +26,30 @@ export default {
   },
 };
 
-export const PrimaryPrimaryAppBar = {
+export const PrimaryDraftStatusRadioButtons = {
   args: {
-    title: 'Mashed',
-    titleVariant: 'h5',
-    elevation: 0,
-    selectedID: 1,
+    statusSelection: 'draft',
+    handleChange: () => {},
+  },
+};
+
+export const PrimaryAllStatusRadioButtons = {
+  args: {
+    statusSelection: 'all',
+    handleChange: () => {},
+  },
+};
+
+export const PrimaryDealsStatusRadioButtons = {
+  args: {
+    statusSelection: 'deals',
+    handleChange: () => {},
+  },
+};
+
+export const PrimaryHiddenStatusRadioButtons = {
+  args: {
+    statusSelection: 'hidden',
+    handleChange: () => {},
   },
 };

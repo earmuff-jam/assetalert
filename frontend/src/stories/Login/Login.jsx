@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { InputAdornment, TextField } from '@material-ui/core';
-
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
-import { LOGIN_FORM_FIELDS } from '../../Containers/Auth/constants';
-import { authActions } from '../../Containers/Auth/authSlice';
+import { makeStyles } from '@material-ui/core/styles';
 import { ArrowRightRounded } from '@material-ui/icons';
-import ButtonComponent from '../Button/ButtonComponent';
+import { authActions } from '../../Containers/Auth/authSlice';
+import { InputAdornment, TextField } from '@material-ui/core';
+import { LOGIN_FORM_FIELDS } from '../../Containers/Auth/constants';
+import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   text: {

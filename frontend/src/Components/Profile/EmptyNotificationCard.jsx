@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { WarningRounded } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import TextComponent from '../../stories/TextComponent/TextComponent';
+import TextComponent from '../TextFieldComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {

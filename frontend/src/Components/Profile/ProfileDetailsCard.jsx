@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Badge, Box, Button, Card, CardContent, IconButton } from '@material-ui/core';
-import { EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
-
 import classNames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
 import UserProfile from '../ViewProfileDetails/UserProfile';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
+import { EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {

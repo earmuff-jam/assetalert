@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   centerRowAlign: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     flexWrap: 'wrap',
     fontWeight: 'bold',
     padding: theme.spacing(1),

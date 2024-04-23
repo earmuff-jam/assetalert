@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Box, Tooltip } from '@material-ui/core';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@material-ui/lab';
-import { enqueueSnackbar } from 'notistack';
-import { ErrorOutlineRounded } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { ErrorOutlineRounded } from '@material-ui/icons';
 import { homeActions } from '../../Containers/Home/homeSlice';
+import { TextField, Button, Box, Tooltip, makeStyles } from '@material-ui/core';
 import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED, SKILLS_REQUIRED_OPTIONS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
   },
   textField: {
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     marginBottom: theme.spacing(2),
   },
   addButton: {

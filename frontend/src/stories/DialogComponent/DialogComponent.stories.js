@@ -2,12 +2,12 @@ import { store } from '../../Store';
 import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
+import Title from '../../Components/DialogComponent/Title';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { createNewEvent } from '../../Containers/Home/homeSaga';
 
 export default {
-  title: 'HomePage/CreateNewEvent',
-  component: createNewEvent,
+  title: 'DialogComponent/Title',
+  component: Title,
   decorators: [
     withRouter,
     (Story) => (
@@ -18,14 +18,24 @@ export default {
       </Provider>
     ),
   ],
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-  tags: ['autodocs'],
-  parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-    layout: 'fullscreen',
+};
+
+export const PrimaryEventTitleComponent = {
+  args: {
+    children: 'Add New Event',
+    onClose: () => {},
   },
 };
 
-export const PrimaryCreateNewEvent = {
-  args: {},
+export const PrimaryReportTitleComponent = {
+  args: {
+    children: 'Add New Report',
+    onClose: () => {},
+  },
+};
+export const PrimaryExpenseTitleComponent = {
+  args: {
+    children: 'Add New Expense',
+    onClose: () => {},
+  },
 };

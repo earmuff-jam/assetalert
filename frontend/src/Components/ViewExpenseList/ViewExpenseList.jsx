@@ -1,20 +1,21 @@
-import PropTypes from 'prop-types';
-import { Container } from '@material-ui/core';
-import { CancelRounded, DoneRounded } from '@material-ui/icons';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { Container } from '@material-ui/core';
+
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useSelector } from 'react-redux';
+
 import EmptyComponent from '../../util/EmptyComponent';
-import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
+import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
+import { CancelRounded, DoneRounded } from '@material-ui/icons';
 
 const ViewExpenseList = ({ disabled }) => {
   dayjs.extend(relativeTime);
 
   const { loading, expenses } = useSelector((state) => state.event);
-  const { loading: userDetailsLoading, profileDetails } = useSelector((state) => state.profile);
 
   // removing unwanted values from the display column
   const filteredItems = expenses?.map((item) => {
@@ -22,13 +23,6 @@ const ViewExpenseList = ({ disabled }) => {
     const { eventID, category_id, category_name, sharable_groups, created_by, updated_by, ...rest } = item;
     return rest;
   });
-
-  const save = (value, rowIndex, column) => {
-    const row = expenses.filter((index) => index === rowIndex).find(() => true);
-    const { id: itemID, eventID } = row;
-    const userID = !userDetailsLoading && profileDetails.id;
-    // dispatch(eventActions.updateItemDetails({ itemID, eventID, userID, value, column }));
-  };
 
   const columns = Object.keys(!loading && expenses?.length > 0 && expenses[0]); // for header purpose
   const revisitedCols = columns.filter((v) => v != 'id');
@@ -40,7 +34,7 @@ const ViewExpenseList = ({ disabled }) => {
     return formattedTitle;
   };
 
-  const rowFormatter = (row, column, rowIndex) => {
+  const rowFormatter = (row, column) => {
     // if any of the row includes timestamp we modify it
     if (['created_at', 'updated_at'].includes(column)) {
       return dayjs(row[column]).fromNow();
@@ -51,10 +45,6 @@ const ViewExpenseList = ({ disabled }) => {
       return (
         <EasyEdit
           type={Types.TEXT}
-          onSave={(value) => {
-            // the column.key is the db column name
-            save(value, rowIndex, VIEW_EXPENSE_LIST_COLUMN_HEADERS[column].key);
-          }}
           onCancel={(o) => o}
           placeholder={row[column]}
           saveButtonLabel={<DoneRounded />}

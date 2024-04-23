@@ -1,10 +1,9 @@
 import React from 'react';
 import { primary_theme } from './util/Theme';
 import { ThemeProvider } from '@material-ui/core';
-
 import HomePage from './Containers/Home/HomePage';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import PrimaryAppBar from './stories/AppBar/PrimaryAppBar';
+import PrimaryAppBar from './Components/AppBarComponent/PrimaryAppBar';
 
 const App = () => {
   return (
