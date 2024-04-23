@@ -1,6 +1,6 @@
 import RecentActivity from './RecentActivity';
 import EmptyComponent from '../../util/EmptyComponent';
-import { Accordion, AccordionSummary, Box, makeStyles } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Box, makeStyles } from '@material-ui/core';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { useSelector } from 'react-redux';
 import TextComponent from '../../stories/TextComponent/TextComponent';
@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(1),
+  },
+  colorVariant: {
+    backgroundColor: theme.palette.secondary.main,
   },
   text: {
     fontSize: '0.925rem',
@@ -33,11 +36,13 @@ const RecentActivities = () => {
     return (
       <Box className={classes.root}>
         {recentActivities.map((event, index) => (
-          <Accordion elevation={0}>
+          <Accordion key={index} elevation={0} className={classes.colorVariant}>
             <AccordionSummary expandIcon={<ExpandMoreRounded />}>
               <TextComponent value={event.title} loading={false} textStyle={classes.text} />
             </AccordionSummary>
-            <RecentActivity key={index} index={index} activity={event} />
+            <AccordionDetails>
+              <RecentActivity key={index} index={index} activity={event} />
+            </AccordionDetails>
           </Accordion>
         ))}
       </Box>

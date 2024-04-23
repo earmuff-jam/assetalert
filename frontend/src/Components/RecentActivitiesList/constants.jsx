@@ -13,6 +13,7 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'created_events',
     icon: <EmojiEventsRounded color="primary" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'events created',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'volunteered_events',
     icon: <TrackChangesRounded color="error" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'events volunteered',
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'reported_events',
     icon: <ReportRounded color="error" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'issues reported',
   },
   {
     id: 4,
@@ -34,6 +37,7 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'deactivated_events',
     icon: <HighlightOffRounded color="inherit" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'events deactivated',
   },
   {
     id: 5,
@@ -41,6 +45,7 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'expenses_reported',
     icon: <LocalAtmRounded color="error" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'expenses created',
   },
   {
     id: 6,
@@ -48,5 +53,6 @@ export const RECENT_TROPHY_COLLECTION_TABS = [
     key: 'inventories_updated',
     icon: <HighlightOffRounded color="inherit" />,
     tooltipPlacement: 'left-start',
+    tooltipContent: 'inventories updated',
   },
 ];
