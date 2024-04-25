@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
-import CardTitleComponent from '../../stories/CardTitleComponent/CardTitleComponent';
-import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
+import { useState, useEffect } from 'react';
 import EditImageComponent from './EditImageComponent';
+import { Avatar, Box, makeStyles } from '@material-ui/core';
+import { eventActions } from '../../Containers/Event/eventSlice';
+import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
+import CardTitleComponent from '../CardTitleComponent/CardTitleComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventProfile = ({ userDetail }) => {
+const EventProfile = ({ userDetail, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -96,9 +96,20 @@ const EventProfile = ({ userDetail }) => {
         titleText={userDetail?.title || ''}
         titleTooltip={userDetail?.title || ''}
         extraSubtitle={userDetail?.description || 'Edit event details to add description'}
+        isLoading={isLoading}
       />
     </Box>
   );
+};
+
+EventProfile.defaultProps = {
+  userDetail: {},
+  isLoading: true,
+};
+
+EventProfile.propTypes = {
+  userDetail: PropTypes.object,
+  isLoading: PropTypes.bool,
 };
 
 export default EventProfile;

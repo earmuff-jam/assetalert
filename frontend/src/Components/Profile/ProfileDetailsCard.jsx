@@ -68,7 +68,12 @@ const ProfileDetailsCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)} data-tour="0">
-          <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
+          <UserProfile
+            formFields={formFields}
+            avatarUrl={profileDetails?.avatar_url}
+            profileID={profileDetails.id}
+            isLoading={isLoading}
+          />
           <Box className={classes.emptyGap}></Box>
           <Box data-tour="1">
             <ButtonComponent

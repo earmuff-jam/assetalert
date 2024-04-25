@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Avatar, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { profileActions } from '../../Containers/Profile/profileSlice';
-import CardTitleComponent from '../../stories/CardTitleComponent/CardTitleComponent';
 import EditImageComponent from '../Event/EditImageComponent';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import CardTitleComponent from '../CardTitleComponent/CardTitleComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = ({ formFields, avatarUrl, profileID }) => {
+const UserProfile = ({ formFields, avatarUrl, profileID, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -95,6 +95,7 @@ const UserProfile = ({ formFields, avatarUrl, profileID }) => {
         secondTooltipLabel={'your phone number'}
         titleText={formFields.name.value || 'Anonymous'}
         extraSubtitle={formFields.aboutMe.value || 'Edit profile details to add description'}
+        isLoading={isLoading}
       />
     </Box>
   );
@@ -104,11 +105,13 @@ UserProfile.defaultProps = {
   formFields: {},
   avatarUrl: '',
   profileID: '',
+  isLoading: false,
 };
 
 UserProfile.propTypes = {
   formFields: PropTypes.object,
   avatarUrl: PropTypes.string,
   profileID: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 export default UserProfile;

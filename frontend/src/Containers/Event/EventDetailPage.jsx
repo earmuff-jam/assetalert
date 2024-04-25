@@ -1,9 +1,9 @@
 import { produce } from 'immer';
 import '../../Components/Map/styles.css';
+import { useEffect, useState } from 'react';
 import { eventActions } from './eventSlice';
 import { Box, Grid } from '@material-ui/core';
 import { homeActions } from '../Home/homeSlice';
-import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
@@ -262,7 +262,7 @@ const EventDetailPage = () => {
             setIsDeactivated={setIsDeactivated}
             handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
-            isLoading={loadingSelectevent}
+            isLoading={loadingSelectevent || loadingProfileDetails}
             onLeave={() => {
               handleLeave(userDetail.sharable_groups, userDetail.userID);
             }}

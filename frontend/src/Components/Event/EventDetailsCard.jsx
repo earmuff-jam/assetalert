@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -30,8 +30,8 @@ import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
 
 import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
-import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -184,7 +184,7 @@ const EventDetailsCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
-          <EventProfile userDetail={userDetail} />
+          <EventProfile userDetail={userDetail} isLoading={isLoading} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             {!isLoading ? (
