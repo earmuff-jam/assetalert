@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventCardTitleWithAvatarComponent = ({ userDetail, isLoading }) => {
+const EventCardTitleWithAvatarComponent = ({ editMode, userDetail, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -87,6 +87,7 @@ const EventCardTitleWithAvatarComponent = ({ userDetail, isLoading }) => {
         )}
       </Box>
       <CardTitleComponent
+        editMode={editMode}
         firstIcon={<CardMembershipRounded />}
         firstLabel={`${userDetail?.sharable_groups?.length || 0}`}
         firstToolTipLabel={'Current members'}
@@ -105,11 +106,13 @@ const EventCardTitleWithAvatarComponent = ({ userDetail, isLoading }) => {
 EventCardTitleWithAvatarComponent.defaultProps = {
   userDetail: {},
   isLoading: true,
+  editMode: false,
 };
 
 EventCardTitleWithAvatarComponent.propTypes = {
   userDetail: PropTypes.object,
   isLoading: PropTypes.bool,
+  editMode: PropTypes.bool,
 };
 
 export default EventCardTitleWithAvatarComponent;

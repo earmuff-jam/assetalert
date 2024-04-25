@@ -62,7 +62,6 @@ const ProfileDetailsCardComponent = ({
   handleClickNotificationBar,
 }) => {
   const classes = useStyles();
-
   const containsUnreadNotifications = notifications.map((v) => !v.is_viewed).filter(Boolean).length;
   return (
     <Card className={classes.root}>
@@ -72,6 +71,7 @@ const ProfileDetailsCardComponent = ({
             formFields={formFields}
             avatarUrl={profileDetails?.avatar_url}
             profileID={profileDetails.id}
+            editMode={editMode}
             isLoading={isLoading}
           />
           <Box className={classes.emptyGap}></Box>

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, isLoading }) => {
+const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, editMode, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -95,6 +95,7 @@ const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, is
         secondTooltipLabel={'your phone number'}
         titleText={formFields.name.value || 'Anonymous'}
         extraSubtitle={formFields.aboutMe.value || 'Edit profile details to add description'}
+        editMode={editMode}
         isLoading={isLoading}
       />
     </Box>
@@ -106,6 +107,7 @@ UserCardTitleWithAvatarComponent.defaultProps = {
   avatarUrl: '',
   profileID: '',
   isLoading: false,
+  editMode: false,
 };
 
 UserCardTitleWithAvatarComponent.propTypes = {
@@ -113,5 +115,6 @@ UserCardTitleWithAvatarComponent.propTypes = {
   avatarUrl: PropTypes.string,
   profileID: PropTypes.string,
   isLoading: PropTypes.bool,
+  editMode: PropTypes.bool,
 };
 export default UserCardTitleWithAvatarComponent;

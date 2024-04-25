@@ -18,12 +18,14 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
 import Title from '../DialogComponent/Title';
-import { isEditingAllowed } from '../Event/constants';
 import Drawer from '../DrawerListComponent/Drawer';
+import { isEditingAllowed } from '../Event/constants';
+import ViewSharableGroups from './ViewSharableGroups';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import { homeActions } from '../../Containers/Home/homeSlice';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
@@ -104,10 +106,12 @@ const EventDetailsCardComponent = ({
   const editingAllowed = isEditingAllowed(disabled, userDetail);
 
   const [display, setDisplay] = useState(0);
+  const [editSharableGroups, setEditSharableGroups] = useState(false);
   const [editMode, setEditMode] = useState(false); // editing general fields for select event
 
   const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
 
+  const handleEditSharableGroups = () => setEditSharableGroups(!editSharableGroups);
   const handleReportEvent = () => setDisplay('Report');
 
   const toggleEditMode = () => {
@@ -181,7 +185,7 @@ const EventDetailsCardComponent = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
-          <EventCardTitleWithAvatarComponent userDetail={userDetail} isLoading={isLoading} />
+          <EventCardTitleWithAvatarComponent userDetail={userDetail} isLoading={isLoading} editMode={editMode} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             {!isLoading ? (
@@ -190,10 +194,19 @@ const EventDetailsCardComponent = ({
                   data-tour="3"
                   variant="text"
                   className={classes.primaryColor}
+                  onClick={handleEditSharableGroups}
+                >
+                  {editMode ? 'Edit sharable groups' : null}
+                </Button>
+                <Button
+                  data-tour="3"
+                  variant="text"
+                  className={classes.primaryColor}
                   onClick={userDetail?.userIsMember ? onLeave : onJoin}
                 >
                   {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
                 </Button>
+
                 <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
                   <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
                     <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
@@ -221,15 +234,22 @@ const EventDetailsCardComponent = ({
               <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} className={classes.chip} />
             ))}
         </Box>
-        <CardActions>
-          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7" className={classes.text}>
-            Add Item
-          </Button>
-          <Button onClick={handleViewItems} data-tour="8" className={classes.text}>
-            View Items
-          </Button>
+        <CardActions data-tour="7">
+          <ButtonComponent
+            disabled={!userDetail?.userIsMember}
+            onClick={handleAddItem}
+            buttonStyles={classes.text}
+            text={'Add Items'}
+            buttonVariant={'text'}
+          />
+          <ButtonComponent
+            onClick={handleViewItems}
+            buttonStyles={classes.text}
+            text={'View Items'}
+            buttonVariant={'text'}
+          />
         </CardActions>
-        <Box className={classes.centerAlign}>
+        <Box className={classes.centerAlign} data-tour="8">
           <PlaceRounded className={classes.colorVariant} />
           <span>{remainingSpots} spots left</span>
         </Box>
@@ -240,6 +260,12 @@ const EventDetailsCardComponent = ({
             isDeactivated={isDeactivated}
             setIsDeactivated={setIsDeactivated}
           />
+        )}
+        {editSharableGroups && (
+          <Dialog open width={'md'} fullWidth={true}>
+            <Title onClose={() => setEditSharableGroups(false)}>Edit User Groups</Title>
+            <ViewSharableGroups selectedEvent={selectedEvent} setEditSharableGroups={setEditSharableGroups} />
+          </Dialog>
         )}
       </CardContent>
       <Drawer open={display === 'View'} toggleDrawer={toggleDrawer}>

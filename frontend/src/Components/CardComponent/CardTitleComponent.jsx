@@ -53,13 +53,16 @@ const CardTitleComponent = ({
   titleTooltip,
   extraSubtitle,
   isLoading,
+  editMode,
 }) => {
   const classes = useStyles();
   return (
     <Box className={classes.userProfileDetailsContainer}>
       <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')} data-tour="1">
         <Tooltip title={titleTooltip}>
-          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
+          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>
+            {editMode ? `Editing ${titleText}` : titleText}
+          </Typography>
         </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)} data-tour="5">
           <Tooltip title={firstToolTipLabel}>
@@ -92,6 +95,7 @@ CardTitleComponent.defaultProps = {
   titleTooltip: '',
   extraSubtitle: '',
   isLoading: true,
+  editMode: true,
 };
 
 CardTitleComponent.propTypes = {
@@ -105,6 +109,7 @@ CardTitleComponent.propTypes = {
   firstToolTipLabel: PropTypes.string,
   secondTooltipLabel: PropTypes.string,
   isLoading: PropTypes.bool,
+  editMode: PropTypes.bool,
 };
 
 export default CardTitleComponent;
