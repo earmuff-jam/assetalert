@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { USER_PROFILE_FORM_FIELDS } from './constants';
 import { Box, Grid, Popover } from '@material-ui/core';
 import Notification from '../../Components/Profile/Notification';
-import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import ProfileNavigationMenu from '../../Components/ProfileNavigationMenu/ProfileNavigationMenu';
+import ProfileDetailsCardComponent from '../../Components/CardComponent/ProfileDetailsCardComponent';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -121,7 +121,7 @@ const ProfileDetailPage = () => {
     <Box className={classes.root}>
       <Grid container>
         <Grid item xs={12}>
-          <ProfileDetailsCard
+          <ProfileDetailsCardComponent
             editMode={editMode}
             formFields={formFields}
             handleInput={handleInput}

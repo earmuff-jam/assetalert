@@ -1,15 +1,14 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { CancelRounded, DoneRounded } from '@material-ui/icons';
-import { CircularProgress, Container } from '@material-ui/core';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
+import { CancelRounded, DoneRounded } from '@material-ui/icons';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import { CircularProgress, Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -30,12 +29,13 @@ const ViewItemDetail = ({ disabled }) => {
 
   // removing unwanted values from the display column
   const filteredItems = items?.map((item) => {
+    // eslint-disable-next-line
     const { eventID, storage_location_id, created_by, updated_by, ...rest } = item;
     return rest;
   });
 
   const save = (value, rowIndex, column) => {
-    const row = items.filter((v, index) => index === rowIndex).find((v) => true);
+    const row = items.filter((v, index) => index === rowIndex).find(() => true);
     const { id: itemID, eventID } = row;
     const userID = !userDetailsLoading && profileDetails.id;
     dispatch(eventActions.updateItemDetails({ itemID, eventID, userID, value, column }));
@@ -107,6 +107,14 @@ const ViewItemDetail = ({ disabled }) => {
       />
     </Container>
   );
+};
+
+ViewItemDetail.defaultProps = {
+  disabled: false,
+};
+
+ViewItemDetail.propTypes = {
+  disabled: PropTypes.string,
 };
 
 export default ViewItemDetail;

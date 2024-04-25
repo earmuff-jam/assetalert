@@ -16,21 +16,18 @@ import {
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import EventProfile from './EventProfile';
 import { enqueueSnackbar } from 'notistack';
-
 import Title from '../DialogComponent/Title';
-import { isEditingAllowed } from './constants';
+import { isEditingAllowed } from '../Event/constants';
 import Drawer from '../DrawerListComponent/Drawer';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
-
 import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
+import EventCardTitleWithAvatarComponent from './EventCardTitleWithAvatarComponent';
 import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventDetailsCard = ({
+const EventDetailsCardComponent = ({
   disabled,
   userDetail,
   handleUserDetail,
@@ -184,7 +181,7 @@ const EventDetailsCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
-          <EventProfile userDetail={userDetail} isLoading={isLoading} />
+          <EventCardTitleWithAvatarComponent userDetail={userDetail} isLoading={isLoading} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             {!isLoading ? (
@@ -264,7 +261,7 @@ const EventDetailsCard = ({
   );
 };
 
-EventDetailsCard.defaultProps = {
+EventDetailsCardComponent.defaultProps = {
   disabled: false,
   userDetail: {},
   handleUserDetail: () => {},
@@ -279,7 +276,7 @@ EventDetailsCard.defaultProps = {
   onJoin: () => {},
 };
 
-EventDetailsCard.propTypes = {
+EventDetailsCardComponent.propTypes = {
   disabled: PropTypes.bool,
   userDetail: PropTypes.object,
   handleUserDetail: PropTypes.func,
@@ -294,4 +291,4 @@ EventDetailsCard.propTypes = {
   onJoin: PropTypes.func,
 };
 
-export default EventDetailsCard;
+export default EventDetailsCardComponent;

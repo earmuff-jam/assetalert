@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import EditImageComponent from './EditImageComponent';
-import { Avatar, Box, makeStyles } from '@material-ui/core';
-import { eventActions } from '../../Containers/Event/eventSlice';
-import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
-import CardTitleComponent from '../CardTitleComponent/CardTitleComponent';
+import { Avatar, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import CardTitleComponent from './CardTitleComponent';
+import EditImageComponent from '../Event/EditImageComponent';
+import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     gap: '1.2rem',
     textOverflow: 'ellipsis',
     textWrap: 'wrap',
-    width: `calc(100% - 40rem)`,
     [theme.breakpoints.down('sm')]: {
       width: `26rem`,
     },
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventProfile = ({ userDetail, isLoading }) => {
+const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -53,15 +52,17 @@ const EventProfile = ({ userDetail, isLoading }) => {
     }
   };
 
-  const handleSubmitImage = async (id) => {
-    dispatch(eventActions.updateEventImage({ selectedImage: uploadedImage, eventID: id }));
+  const handleSubmitImage = async (userID) => {
+    dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
     toggleEditImage();
     setEditImage(!editImage);
   };
 
   useEffect(() => {
-    setSelectedImage(userDetail?.imageUrl);
-  }, [userDetail?.imageUrl]);
+    if (avatarUrl) {
+      setSelectedImage(avatarUrl);
+    }
+  }, [avatarUrl]);
 
   return (
     <Box className={classes.root}>
@@ -74,42 +75,43 @@ const EventProfile = ({ userDetail, isLoading }) => {
             setUploadedImage={setUploadedImage}
             toggleEditImage={toggleEditImage}
             submit={handleSubmitImage}
-            id={userDetail.id}
+            id={profileID}
           />
         ) : (
           <Avatar
-            data-tour="0"
-            alt="event avatar"
-            src={(selectedImage && `data:image/png;base64,${selectedImage}`) || 'blank_canvas.png'}
+            alt="your avatar"
+            src={selectedImage && `data:image/png;base64,${selectedImage}`}
             className={classes.avatar}
             onClick={toggleEditImage}
           />
         )}
       </Box>
       <CardTitleComponent
-        firstIcon={<CardMembershipRounded />}
-        firstLabel={`${userDetail?.sharable_groups.length || 0}`}
-        firstToolTipLabel={'Current members'}
-        secondIcon={<GroupRounded />}
-        secondLabel={` ${userDetail?.attendees.length || 0}`}
-        secondTooltipLabel={'Anticipated members'}
-        titleText={userDetail?.title || ''}
-        titleTooltip={userDetail?.title || ''}
-        extraSubtitle={userDetail?.description || 'Edit event details to add description'}
+        firstIcon={formFields.username.icon}
+        firstLabel={formFields.username.value}
+        firstToolTipLabel={'Your username'}
+        secondIcon={formFields.phone.icon}
+        secondLabel={formFields.phone.value}
+        secondTooltipLabel={'your phone number'}
+        titleText={formFields.name.value || 'Anonymous'}
+        extraSubtitle={formFields.aboutMe.value || 'Edit profile details to add description'}
         isLoading={isLoading}
       />
     </Box>
   );
 };
 
-EventProfile.defaultProps = {
-  userDetail: {},
-  isLoading: true,
+UserCardTitleWithAvatarComponent.defaultProps = {
+  formFields: {},
+  avatarUrl: '',
+  profileID: '',
+  isLoading: false,
 };
 
-EventProfile.propTypes = {
-  userDetail: PropTypes.object,
+UserCardTitleWithAvatarComponent.propTypes = {
+  formFields: PropTypes.object,
+  avatarUrl: PropTypes.string,
+  profileID: PropTypes.string,
   isLoading: PropTypes.bool,
 };
-
-export default EventProfile;
+export default UserCardTitleWithAvatarComponent;

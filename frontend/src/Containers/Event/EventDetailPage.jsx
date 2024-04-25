@@ -8,10 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import EventDetailsCard from '../../Components/Event/EventDetailsCard';
 import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
 import SecondaryAppBar from '../../Components/AppBarComponent/SecondaryAppBar';
 import EventDetailsDrawerComponent from '../../Components/Event/EventDetailsDrawerComponent';
+import EventDetailsCardComponent from '../../Components/CardComponent/EventDetailsCardComponent';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -252,7 +252,7 @@ const EventDetailPage = () => {
       {shouldDisplaySecondMenuBar && <SecondaryAppBar />}
       <Grid container>
         <Grid item xs={12}>
-          <EventDetailsCard
+          <EventDetailsCardComponent
             eventID={eventID}
             reports={reports}
             selectedEvent={selectedEvent}

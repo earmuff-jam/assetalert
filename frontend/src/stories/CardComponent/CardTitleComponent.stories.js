@@ -4,10 +4,10 @@ import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
-import CardTitleComponent from '../../Components/CardTitleComponent/CardTitleComponent';
+import CardTitleComponent from '../../Components/CardComponent/CardTitleComponent';
 
 export default {
-  title: 'CardTitleComponent/CardTitleComponent',
+  title: 'CardComponent/CardTitleComponent',
   component: CardTitleComponent,
   decorators: [
     withRouter,

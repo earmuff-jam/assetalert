@@ -5,7 +5,7 @@ import { ArrowRightRounded, EmojiPeopleRounded } from '@material-ui/icons';
 import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
 
 export default {
-  title: 'Util/ButtonComponent',
+  title: 'ButtonComponent/ButtonComponent',
   component: ButtonComponent,
   decorators: [
     withRouter,

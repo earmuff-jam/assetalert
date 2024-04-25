@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, TextField, Tooltip, Typography } from '@material-ui/core';
 import { produce } from 'immer';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_ITEM_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { Box, TextField, Tooltip, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {

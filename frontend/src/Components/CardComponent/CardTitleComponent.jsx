@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Box, Tooltip, makeStyles } from '@material-ui/core';
 import ChipComponent from '../../stories/Chip/ChipComponent';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
+import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   headerText: {
@@ -59,11 +59,7 @@ const CardTitleComponent = ({
     <Box className={classes.userProfileDetailsContainer}>
       <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')} data-tour="1">
         <Tooltip title={titleTooltip}>
-          <TextFieldComponent
-            textStyle={[classes.headerText, classes.ellipsisContainer].join(' ')}
-            value={titleText}
-            loading={isLoading}
-          />
+          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
         </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)} data-tour="5">
           <Tooltip title={firstToolTipLabel}>
