@@ -1,19 +1,19 @@
+import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { useEffect, useState } from 'react';
-import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
-import TextComponent from '../../stories/TextComponent/TextComponent';
-import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
-import EasyEdit, { Types } from 'react-easy-edit';
-import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
 import Title from '../DialogComponent/Title';
 import List from '../DrawerListComponent/List';
-import dayjs from 'dayjs';
-import { useDispatch, useSelector } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import EasyEdit, { Types } from 'react-easy-edit';
 import AddInventoryDetail from './AddInventoryDetail';
+import { useDispatch, useSelector } from 'react-redux';
 import UploadData from '../DrawerListComponent/UploadData';
+import TextComponent from '../TextFieldComponent/TextComponent';
+import { eventActions } from '../../Containers/Event/eventSlice';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
+import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {

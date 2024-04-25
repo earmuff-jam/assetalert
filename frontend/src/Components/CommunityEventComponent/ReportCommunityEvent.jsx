@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import dayjs from 'dayjs';
 import { produce } from 'immer';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { enqueueSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
-import TextComponent from '../../stories/TextComponent/TextComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import TextFieldComponent from '../TextFieldComponent/TextComponent';
 import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from './constants';
-import { TextField, FormControl, FormControlLabel, FormHelperText, Box, Checkbox } from '@material-ui/core';
+import { TextField, FormControl, FormControlLabel, FormHelperText, Box, Checkbox, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -45,7 +44,7 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
   // if reporting from within the event, prefilling should display necessary items.
   const prefil = (field, value) => {
     if (field === 'id') {
-      const filteredEvents = events.filter((v) => v.id === value).find((v) => true);
+      const filteredEvents = events.filter((v) => v.id === value).find(() => true);
       setReport((prev) =>
         produce(prev, (draft) => {
           draft.event_location = filteredEvents?.display_name || '';
@@ -155,7 +154,7 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
 
   return (
     <Box className={classes.container}>
-      <TextComponent
+      <TextFieldComponent
         value={`
       We take unusual activity seriously. Your report will be reviewed and appropriate action will be taken. Filing a false report can have serious consequences, including legal liability for any damages incurred.`}
         loading={false}
@@ -163,7 +162,7 @@ const ReportCommunityEvent = ({ events, setDisplayMode }) => {
         color={'textSecondary'}
         variant="caption"
       />
-      <TextComponent
+      <TextFieldComponent
         value={`Please provide details about the suspicious activity below.`}
         loading={false}
         gutterBottom={true}

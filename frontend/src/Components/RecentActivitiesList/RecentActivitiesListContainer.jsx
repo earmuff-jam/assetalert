@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import RecentActivities from './RecentActivities';
 import { makeStyles } from '@material-ui/core/styles';
 import RecentTrophyCollections from './RecentTrophyCollections';
-import TextComponent from '../../stories/TextComponent/TextComponent';
+import TextComponent from '../TextFieldComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {

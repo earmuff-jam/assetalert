@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
+  subtext: {
+    fontSize: '0.725rem',
+    fontFamily: 'Roboto',
+  },
   aside: {
     display: 'flex',
     flexDirection: 'column',
@@ -48,8 +52,10 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
 
   const handleSubmit = () => {
     const requiredFields = [selectedActivity, volunteerHours];
-    if (requiredFields?.some((v) => v.length === 0)) {
-      enqueueSnackbar('Cannot update empty fields.', {
+    const isRequiredFieldsEmpty = requiredFields?.some((v) => v.length === 0);
+
+    if (isRequiredFieldsEmpty || isErrorVolunteerHours) {
+      enqueueSnackbar('Unable to update fields.', {
         variant: 'error',
       });
       return;
@@ -107,7 +113,7 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
           value={volunteerHours}
           onChange={(e) => setVolunteerHours(e.target.value)}
           error={isErrorVolunteerHours.length ?? false}
-          helperText={isErrorVolunteerHours ? 'Volunteer Hours must be +ve in nature ' : null}
+          helperText={isErrorVolunteerHours ? 'must be +ve in nature ' : null}
           onKeyDown={(e) => {
             if (e.code === 'Enter') {
               handleSubmit();
@@ -121,6 +127,9 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
             ),
           }}
         />
+        <Typography className={classes.subtext} gutterBottom>
+          Volunteering hours are rounded to the nearest hour
+        </Typography>
       </div>
     </Box>
   );

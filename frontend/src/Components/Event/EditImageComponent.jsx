@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import UploadData from '../DrawerListComponent/UploadData';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,15 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditImageComponent = ({
-  selectedImage,
-  setSelectedImage,
-  uploadedImage,
-  setUploadedImage,
-  toggleEditImage,
-  submit,
-  id,
-}) => {
+const EditImageComponent = ({ selectedImage, setSelectedImage, setUploadedImage, toggleEditImage, submit, id }) => {
   const classes = useStyles();
   const onChange = (event) => {
     const file = event.target.files[0];
@@ -78,7 +70,6 @@ const EditImageComponent = ({
 EditImageComponent.defaultProps = {
   selectedImage: '',
   setSelectedImage: () => {},
-  uploadedImage: {},
   setUploadedImage: () => {},
   toggleEditImage: () => {},
   submit: () => {},
@@ -88,7 +79,6 @@ EditImageComponent.defaultProps = {
 EditImageComponent.propTypes = {
   selectedImage: PropTypes.string,
   setSelectedImage: PropTypes.func,
-  uploadedImage: PropTypes.object,
   setUploadedImage: PropTypes.func,
   toggleEditImage: PropTypes.func,
   submit: PropTypes.func,

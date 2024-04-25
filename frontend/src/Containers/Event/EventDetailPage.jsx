@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Grid } from '@material-ui/core';
-
 import { produce } from 'immer';
 import '../../Components/Map/styles.css';
 import { eventActions } from './eventSlice';
+import { Box, Grid } from '@material-ui/core';
 import { homeActions } from '../Home/homeSlice';
-
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
-import SecondaryAppBar from '../../stories/AppBar/SecondaryAppBar';
+import { useNavigate, useParams } from 'react-router-dom';
 import EventDetailsCard from '../../Components/Event/EventDetailsCard';
 import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
+import SecondaryAppBar from '../../Components/AppBarComponent/SecondaryAppBar';
 import EventDetailsDrawerComponent from '../../Components/Event/EventDetailsDrawerComponent';
 
 const useStyles = makeStyles((theme) => ({

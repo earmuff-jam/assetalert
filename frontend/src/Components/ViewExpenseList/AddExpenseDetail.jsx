@@ -8,7 +8,7 @@ import { ADD_EXPENSE_FORM_FIELDS } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -28,8 +28,8 @@ const AddExpenseDetail = ({ eventID, userID, setDisplayMode }) => {
   const { loading, categories } = useSelector((state) => state.event);
 
   const [options, setOptions] = useState([]);
-  const [selectedCategoryName, setSelectedCategoryName] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState({});
+  const [selectedCategoryName, setSelectedCategoryName] = useState(null);
   const [formFields, setFormFields] = useState(ADD_EXPENSE_FORM_FIELDS);
 
   const handleInput = (event) => {

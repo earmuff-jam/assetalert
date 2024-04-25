@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { createNewEvent } from '../../Containers/Home/homeSaga';
+import AddInventoryDetail from '../../Components/Inventory/AddInventoryDetail';
 
 export default {
-  title: 'HomePage/CreateNewEvent',
-  component: createNewEvent,
+  title: 'ProfilePage/AddInventoryDetail',
+  component: AddInventoryDetail,
   decorators: [
     withRouter,
     (Story) => (
@@ -26,6 +26,8 @@ export default {
   },
 };
 
-export const PrimaryCreateNewEvent = {
-  args: {},
+export const PrimaryInviteSection = {
+  args: {
+    setDisplayMode: () => {},
+  },
 };

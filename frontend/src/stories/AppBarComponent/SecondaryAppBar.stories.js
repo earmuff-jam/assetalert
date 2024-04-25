@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { createNewEvent } from '../../Containers/Home/homeSaga';
+import SecondaryAppBar from '../../Components/AppBarComponent/SecondaryAppBar';
 
 export default {
-  title: 'HomePage/CreateNewEvent',
-  component: createNewEvent,
+  title: 'HomePage/SecondaryAppBar',
+  component: SecondaryAppBar,
   decorators: [
     withRouter,
     (Story) => (
@@ -26,6 +26,6 @@ export default {
   },
 };
 
-export const PrimaryCreateNewEvent = {
+export const PrimarySecondaryAppBar = {
   args: {},
 };

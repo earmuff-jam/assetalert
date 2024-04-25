@@ -1,11 +1,11 @@
-import ButtonComponent from './ButtonComponent';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { ArrowRightRounded, EmojiPeopleRounded } from '@material-ui/icons';
+import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
 
 export default {
-  title: 'LandingPage/ButtonComponent',
+  title: 'Util/ButtonComponent',
   component: ButtonComponent,
   decorators: [
     withRouter,

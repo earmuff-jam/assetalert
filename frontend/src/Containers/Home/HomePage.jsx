@@ -2,13 +2,12 @@ import { homeActions } from './homeSlice';
 import { useEffect, useState } from 'react';
 import { Grid, Box, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { useDispatch, useSelector } from 'react-redux';
-import HomePageHeaderMap from '../../stories/Home/HomePageHeaderMap';
-import CreateNewEvent from '../../stories/CreateNewEvent/CreateNewEvent';
+import CreateNewEvent from '../../Components/Home/CreateNewEvent';
+import HomePageHeaderMap from '../../Components/Home/HomePageHeaderMap';
 import ViewEventListDetails from '../../Components/ViewEventsListDetails/ViewEventListDetails';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     maxWidth: `calc(100% - 2rem)`,
     minHeight: '100vh',

@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Title from '../DialogComponent/Title';
 import { useNavigate } from 'react-router-dom';
-import ChipComponent from '../Chip/ChipComponent';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Dialog, Divider } from '@material-ui/core';
-import ButtonComponent from '../Button/ButtonComponent';
-import TextComponent from '../TextComponent/TextComponent';
-import Title from '../../Components/DialogComponent/Title';
-import AddCommunityEvent from '../../Components/CommunityEvent/AddCommunityEvent';
+import ChipComponent from '../../stories/Chip/ChipComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import TextFieldComponent from '../TextFieldComponent/TextComponent';
 import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@material-ui/icons';
+import AddCommunityEvent from '../CommunityEventComponent/AddCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,13 +47,13 @@ const CreateNewEvent = () => {
 
   return (
     <Box className={classes.container} data-tour="1">
-      <TextComponent
+      <TextFieldComponent
         gutterBottom={true}
         loading={userNameLoading}
         textStyle={classes.titleText}
         value={username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
       />
-      <TextComponent
+      <TextFieldComponent
         gutterBottom={true}
         loading={false}
         textStyle={classes.text}
@@ -69,7 +69,7 @@ const CreateNewEvent = () => {
           onClick={navigateProfileNotes}
         />
       </Box>
-      <TextComponent
+      <TextFieldComponent
         gutterBottom={true}
         loading={false}
         textStyle={classes.text}

@@ -1,27 +1,26 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
 import 'chart.js/auto'; // do not remove this
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
+
 import EmptyComponent from '../../util/EmptyComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { eventActions } from '../../Containers/Event/eventSlice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
+    margin: '0 auto',
     marginTop: theme.spacing(1),
     padding: theme.spacing(1),
-    width: `calc(100% - 12rem)`,
-    height: `calc(100% - 12rem)`,
-    [theme.breakpoints.down('sm')]: {
-      width: `calc(100% - 0rem)`,
-      height: `calc(100% - 0rem)`,
-    },
   },
-  text: {
-    fontSize: '0.925rem',
-    fontFamily: 'Poppins, sans-serif',
+  headerText: {
+    color: theme.palette.primary.main,
+    fontSize: '1.725rem',
   },
   aside: {
     display: 'flex',
@@ -41,9 +40,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ExpenseChart = ({ expenses }) => {
+const ExpenseChart = ({ eventID }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [datasets, setDatasets] = useState([]);
+
+  const { expenses } = useSelector((state) => state.event);
+
+  useEffect(() => {
+    if (eventID) {
+      dispatch(eventActions.getExpenseList({ eventID }));
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const data = {
     labels: datasets.map((v) => v.category_name),
@@ -97,14 +106,14 @@ const ExpenseChart = ({ expenses }) => {
   return (
     <Box className={classes.container}>
       {totalIncurred ? (
-        <Typography className={classes.text}>
+        <Typography className={classes.headerText}>
           Incurred Expenses:
           <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
         </Typography>
       ) : null}
       <Box className={classes.aside}>
         {totalIncurred ? (
-          <Line data={data} options={options} width={300} height={300} />
+          <Bar data={data} options={options} width={300} height={300} />
         ) : (
           <Box className={classes.center}>
             <EmptyComponent subtitle="Add expenses to view data." />
@@ -116,11 +125,11 @@ const ExpenseChart = ({ expenses }) => {
 };
 
 ExpenseChart.defaultProps = {
-  expenses: [],
+  eventID: '',
 };
 
 ExpenseChart.propTypes = {
-  expenses: PropTypes.array,
+  eventID: PropTypes.string,
 };
 
 export default ExpenseChart;

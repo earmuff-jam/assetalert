@@ -6,7 +6,7 @@ import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_ITEM_PROFILE_FORM } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import StatusRadioButtons from './StatusRadioButtons';

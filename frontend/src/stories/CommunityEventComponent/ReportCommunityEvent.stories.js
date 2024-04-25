@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { createNewEvent } from '../../Containers/Home/homeSaga';
+import ReportCommunityEvent from '../../Components/CommunityEventComponent/ReportCommunityEvent';
 
 export default {
-  title: 'HomePage/CreateNewEvent',
-  component: createNewEvent,
+  title: 'CommunityEventComponent/ReportCommunityEvent',
+  component: ReportCommunityEvent,
   decorators: [
     withRouter,
     (Story) => (
@@ -18,14 +18,8 @@ export default {
       </Provider>
     ),
   ],
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-  tags: ['autodocs'],
-  parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-    layout: 'fullscreen',
-  },
 };
 
-export const PrimaryCreateNewEvent = {
+export const PrimaryReportCommunityEvent = {
   args: {},
 };

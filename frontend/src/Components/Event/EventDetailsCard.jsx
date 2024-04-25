@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
   Card,
@@ -12,22 +11,27 @@ import {
   Dialog,
   Tooltip,
   Badge,
+  makeStyles,
 } from '@material-ui/core';
+
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import EventProfile from './EventProfile';
 import { enqueueSnackbar } from 'notistack';
+
 import Title from '../DialogComponent/Title';
+import { isEditingAllowed } from './constants';
 import Drawer from '../DrawerListComponent/Drawer';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
+
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import { homeActions } from '../../Containers/Home/homeSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import EditCommunityEvent from '../CommunityEvent/EditCommunityEvent';
-import ReportCommunityEvent from '../CommunityEvent/ReportCommunityEvent';
-import { ADD_ITEMS_EVENT_FORM, ADD_NEW_EVENT_ITEM_SUBTITLE_TEXT, isEditingAllowed } from './constants';
+
+import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
 import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
+import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
 
 const useStyles = makeStyles((theme) => ({
   root: {

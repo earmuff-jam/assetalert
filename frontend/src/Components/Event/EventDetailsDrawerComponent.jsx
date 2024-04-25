@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import classNames from 'classnames';
-import ExpenseTab from './ExpenseTab';
 import MapComponentFn from '../Map/Map';
 import Host from '../HostComponent/Host';
 import PieChart from '../PieChart/PieChart';
+import ExpenseChart from '../PieChart/ExpenseChart';
 import { makeStyles } from '@material-ui/core/styles';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
+import { Box, Tab, Tabs, Tooltip } from '@material-ui/core';
+import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
-import { Box, Tab, Tabs, Tooltip } from '@material-ui/core';
+import ViewExpenseListHeader from '../ViewExpenseList/ViewExpenseListHeader';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,27 +81,25 @@ const EventDetailsDrawerComponent = ({
     switch (value) {
       case 0:
         return (
-          <Box>
-            <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
-              <Box>
-                <RSVPRegistration
-                  disabled={disabled}
-                  handleRSVP={handleRSVP}
-                  isChecked={userDetail.userHasRsvp || isChecked}
-                />
-                <ImpactTracking
-                  eventID={eventID}
-                  userID={userDetail.userID}
-                  requiredSkills={userDetail.requiredSkills}
-                  disabled={disabled}
-                  isChecked={userDetail.userHasRsvp || isChecked}
-                />
-              </Box>
-              <PieChart
-                volunteeringActivities={volunteeringActivities}
-                totalSkillLimit={userDetail.totalAllocatedMembers || 0}
+          <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
+            <Box>
+              <RSVPRegistration
+                disabled={disabled}
+                handleRSVP={handleRSVP}
+                isChecked={userDetail.userHasRsvp || isChecked}
+              />
+              <ImpactTracking
+                eventID={eventID}
+                userID={userDetail.userID}
+                requiredSkills={userDetail.requiredSkills}
+                disabled={disabled}
+                isChecked={userDetail.userHasRsvp || isChecked}
               />
             </Box>
+            <PieChart
+              volunteeringActivities={volunteeringActivities}
+              totalSkillLimit={userDetail.totalAllocatedMembers || 0}
+            />
           </Box>
         );
       case 1:
@@ -114,10 +114,12 @@ const EventDetailsDrawerComponent = ({
         );
       case 2:
         return (
-          <Box>
-            <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
-              <ExpenseTab eventID={eventID} userID={userDetail.userID} editingAllowed={editingAllowed} />
+          <Box className={classNames(classes.rowContainer, classes.smallVariant)}>
+            <Box>
+              <ViewExpenseListHeader />
+              <ExpenseDetails eventID={eventID} userID={userDetail.userID} editingAllowed={editingAllowed} />
             </Box>
+            <ExpenseChart eventID={eventID} totalSkillLimit={0} />
           </Box>
         );
       case 3:

@@ -11,7 +11,7 @@ import Notification from '../../Components/Profile/Notification';
 import ProfileDetailsCard from '../../Components/Profile/ProfileDetailsCard';
 import ProfileNavigationMenu from '../../Components/ProfileNavigationMenu/ProfileNavigationMenu';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     maxWidth: `calc(100% - 2rem)`,
     minHeight: '100vh',

@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import './map.css';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
@@ -8,16 +5,18 @@ import * as proj from 'ol/proj';
 import ReactDOM from 'react-dom';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import PropTypes from 'prop-types';
+import Overlay from 'ol/Overlay.js';
 import { fromLonLat } from 'ol/proj';
 import { Style, Icon } from 'ol/style';
-import { Vector as VectorLayer } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
-import Overlay from 'ol/Overlay.js';
 import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
+import { useEffect, useRef } from 'react';
 import PopupContent from './PopupContent';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
+import { makeStyles } from '@material-ui/core/styles';
 import { Attribution, defaults as defaultControls } from 'ol/control.js';
-import LoadingSkeleton from '../../util/LoadingSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {

@@ -205,16 +205,17 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
 	}
 	defer db.Close()
 
-	sqlStr := `SELECT 
+	sqlStr := `
+	SELECT 
 	p.id AS project_id,
     p.title AS project_title,
     COALESCE(ps.volunteer_skills, NULL) AS volunteer_skills,
     COALESCE(pv.volunteer_hours, 0) AS volunteer_hours,
     COALESCE(e.expense_item_names, NULL) AS expense_item_names,
     COALESCE(e.expense_item_cost, 0) AS expense_item_cost,
-	p.updated_at,
-    p.updated_by,
-    COALESCE (p2.username , p2.full_name, p2.email_address) as updator
+	p.created_at,
+    p.created_by,
+    COALESCE (p2.username , p2.full_name, p2.email_address) as creator
 FROM 
     community.projects p
 LEFT JOIN (
@@ -285,7 +286,7 @@ ORDER BY p.updated_at DESC;
 		var volunteeringHours sql.NullString
 		var volunteeringActivityList pq.StringArray
 
-		if err := rows.Scan(&eventID, &eventTitle, &volunteeringActivityList, &volunteeringHours, &expenseItemNameList, &expenseItemCost, &recentActivity.UpdatedAt, &recentActivity.UpdatedBy, &recentActivity.Updator); err != nil {
+		if err := rows.Scan(&eventID, &eventTitle, &volunteeringActivityList, &volunteeringHours, &expenseItemNameList, &expenseItemCost, &recentActivity.CreatedAt, &recentActivity.CreatedBy, &recentActivity.Creator); err != nil {
 			return nil, err
 		}
 

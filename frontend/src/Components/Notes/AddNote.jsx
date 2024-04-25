@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, TextField } from '@material-ui/core';
-import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
-import { useDispatch, useSelector } from 'react-redux';
-import ButtonComponent from '../../stories/Button/ButtonComponent';
+import { useEffect, useState } from 'react';
+
+import { Box, TextField } from '@material-ui/core';
 import { ADD_NOTES_FORM_FIELDS } from './constants';
-import { AddRounded } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
+
+import TextComponent from '../TextFieldComponent/TextComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { AddRounded, CheckCircleRounded } from '@material-ui/icons';
 import { profileActions } from '../../Containers/Profile/profileSlice';
-import TextComponent from '../../stories/TextComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddNote = ({ setEditMode, noteID }) => {
+const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -29,29 +30,25 @@ const AddNote = ({ setEditMode, noteID }) => {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-    setFormFields(
-      produce(formFields, (draft) => {
-        draft[name].value = value;
-        draft[name].errorMsg = '';
+    const updatedFormFields = Object.assign({}, formFields, {
+      [name]: {
+        ...formFields[name],
+        value: value,
+        errorMsg: '',
+      },
+    });
 
-        for (const validator of draft[name].validators) {
-          if (validator.validate(value)) {
-            draft[name].errorMsg = validator.message;
-            break;
-          }
-        }
-      })
-    );
+    for (const validator of updatedFormFields[name].validators) {
+      if (validator.validate(value)) {
+        updatedFormFields[name].errorMsg = validator.message;
+        break;
+      }
+    }
+    setFormFields(updatedFormFields);
   };
 
   const submit = () => {
-    const containsErr = Object.values(formFields).reduce((acc, el) => {
-      if (el.errorMsg) {
-        return true;
-      }
-      return acc;
-    }, false);
-
+    const containsErr = Object.values(formFields).some((el) => el.errorMsg);
     const userID = localStorage.getItem('userID');
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
@@ -76,29 +73,38 @@ const AddNote = ({ setEditMode, noteID }) => {
       updated_by: userID,
     };
 
-    // existing noteID support edit mode only
     if (noteID) {
+      // existing noteID support edit mode only
       dispatch(profileActions.updateExistingNote(formattedDraftNotes));
     } else {
       dispatch(profileActions.addNewNote(formattedDraftNotes));
     }
 
     setEditMode(false);
+    setSelectedNoteID(null);
     setFormFields(ADD_NOTES_FORM_FIELDS);
-    enqueueSnackbar('Successfully added new item.', {
+    enqueueSnackbar(noteID ? 'Successfully updated existing item.' : 'Successfully added new item.', {
       variant: 'success',
     });
   };
 
   useEffect(() => {
-    // if noteID exists, we are updating the note
-    if (!loading && noteID) {
+    if (!loading && noteID !== null) {
       const selectedNote = notes.filter((v) => v.noteID === noteID);
       const draftNote = selectedNote[0];
-      const draftFormFields = { ...formFields };
-      draftFormFields.title.value = draftNote?.title || '';
-      draftFormFields.description.value = draftNote?.description || '';
-      setFormFields(draftFormFields);
+      const updatedFormFields = Object.assign({}, formFields, {
+        title: {
+          ...formFields.title,
+          value: draftNote?.title || '',
+        },
+        description: {
+          ...formFields.description,
+          value: draftNote?.description || '',
+        },
+      });
+      setFormFields(updatedFormFields);
+    } else {
+      setFormFields(ADD_NOTES_FORM_FIELDS);
     }
   }, [noteID]);
 
@@ -129,7 +135,13 @@ const AddNote = ({ setEditMode, noteID }) => {
         />
       ))}
       <Box>
-        <ButtonComponent text={'Add'} onClick={submit} buttonVariant={'text'} icon={<AddRounded />} showIcon={true} />
+        <ButtonComponent
+          text={noteID ? 'Edit Note' : 'Add Note'}
+          onClick={submit}
+          buttonVariant={'text'}
+          icon={noteID ? <CheckCircleRounded /> : <AddRounded />}
+          showIcon={true}
+        />
       </Box>
     </Box>
   );
@@ -138,10 +150,12 @@ const AddNote = ({ setEditMode, noteID }) => {
 AddNote.defaultProps = {
   setEditMode: () => {},
   noteID: '',
+  setSelectedNoteID: () => {},
 };
 
 AddNote.propTypes = {
   setEditMode: PropTypes.func,
+  setSelectedNoteID: PropTypes.func,
   noteID: PropTypes.string,
 };
 

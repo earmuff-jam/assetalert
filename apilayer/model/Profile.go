@@ -48,9 +48,9 @@ type RecentActivity struct {
 	VolunteeringID    string    `json:"volunteering_id"`
 	VolunteeringSkill []string  `json:"volunteering_skill"`
 	VolunteeringHours string    `json:"volunteering_hours"`
-	UpdatedAt         time.Time `json:"updated_at"`
-	UpdatedBy         string    `json:"updated_by"`
-	Updator           string    `json:"updator"`
+	CreatedAt         time.Time `json:"created_at"`
+	CreatedBy         string    `json:"created_by"`
+	Creator           string    `json:"creator"`
 }
 
 // RecentHighlight ...
