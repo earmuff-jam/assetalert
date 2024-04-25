@@ -1,8 +1,12 @@
+import { eventActions } from '../../Containers/Event/eventSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Box, TextField, makeStyles } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { profileActions } from '../../Containers/Profile/profileSlice';
+import { homeActions } from '../../Containers/Home/homeSlice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,12 +31,55 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [options, setOptions] = useState([]);
   const [sharableGroups, setSharableGroups] = useState([]);
 
+  const { loading, eventSharedWithUsers } = useSelector((state) => state.event);
+  const { loading: profileDetailsLoading, profiles } = useSelector((state) => state.profile);
+
+  const handleUpdateSharableGroups = () => {
+    // flushUpdate is used to only update the reducer
+    // fn homeActions.updateEvent will try to save in db
+    const userID = localStorage.getItem('userID');
+    const updatedUsers = sharableGroups.map((v) => v.id);
+    dispatch(
+      eventActions.flushUpdate({
+        ...selectedEvent,
+        sharable_groups: [...updatedUsers],
+        updated_by: userID,
+      })
+    );
+    dispatch(
+      homeActions.updateEvent({
+        ...selectedEvent,
+        userID: userID,
+        sharable_groups: [...updatedUsers],
+        updated_by: userID,
+      })
+    );
+    setEditSharableGroups(false);
+  };
+
   useEffect(() => {
-    setOptions(selectedEvent?.sharable_groups || []);
+    dispatch(profileActions.getProfileList());
+    dispatch(eventActions.getEventSharedWithUsers({ eventID: selectedEvent.id }));
+    // eslint-disable-next-line
   }, [selectedEvent]);
+
+  useEffect(() => {
+    if (!loading) {
+      setSharableGroups(eventSharedWithUsers);
+    }
+    // eslint-disable-next-line
+  }, [loading]);
+
+  useEffect(() => {
+    if (!profileDetailsLoading) {
+      setOptions(profiles);
+    }
+    // eslint-disable-next-line
+  }, [profileDetailsLoading]);
 
   return (
     <Box className={classes.container}>
@@ -40,10 +87,8 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
         multiple
         options={options}
         value={sharableGroups}
-        onChange={(event, newValue) => {
-          setSharableGroups(newValue);
-        }}
-        getOptionLabel={(option) => option}
+        onChange={(event, newValue) => setSharableGroups(newValue)}
+        getOptionLabel={(option) => option.email_address}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -54,7 +99,11 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
         )}
       />
       <Box className={classes.rowContainer}>
-        <ButtonComponent text={'Save'} />
+        <ButtonComponent
+          text={'Save'}
+          onClick={() => handleUpdateSharableGroups()}
+          disabled={sharableGroups.length <= 0}
+        />
         <ButtonComponent text={'Cancel'} onClick={() => setEditSharableGroups(false)} />
       </Box>
     </Box>

@@ -884,6 +884,55 @@ func GetEvent(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetUsersSharedWithSelectedEvent ...
+// swagger:route GET /api/v1/event/{id}/shared GetUsersSharedWithSelectedEvent getUsersSharedWithSelectedEvent
+//
+// # Retrieves all users that are associated to an event
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id for any event
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: []Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetUsersSharedWithSelectedEvent(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	eventID, ok := vars["id"]
+	if !ok || len(eventID) <= 0 {
+		log.Printf("Unable to retrieve users associated with events without event id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(eventID)
+	if err != nil {
+		log.Printf("Unable to retrieve users associated with events with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveUsersAssociatedWithEvent(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve users associated with events. err: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // GetAllExpenses ...
 // swagger:route GET /api/v1/expenses/{id} GetAllExpenses getAllExpenses
 //

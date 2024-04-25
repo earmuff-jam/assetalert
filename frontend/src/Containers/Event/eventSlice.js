@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   selectedEvent: {},
+  eventSharedWithUsers: [],
   volunteeringActivities: [],
   storageLocations: [],
   categories: [],
@@ -31,6 +32,21 @@ const eventSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.selectedEvent = {};
+    },
+    getEventSharedWithUsers: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.eventSharedWithUsers = [];
+    },
+    getEventSharedWithUsersSuccess: (state, action) => {
+      state.eventSharedWithUsers = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getEventSharedWithUsersFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.eventSharedWithUsers = [];
     },
     getReportsForSelectedEvent: (state) => {
       state.loading = true;

@@ -993,6 +993,66 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	return &event, nil
 }
 
+// RetrieveUsersAssociatedWithEvent ...
+func RetrieveUsersAssociatedWithEvent(user string, eventID uuid.UUID) ([]model.Profile, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT
+        p2.id,
+        p2.username,
+        p2.full_name,
+        p2.email_address,
+        p2.phone_number
+    FROM
+        community.projects p
+    LEFT JOIN community.profiles p2 ON
+        p2.id = ANY(p.sharable_groups)
+    WHERE
+        p.id =$1;`
+
+	rows, err := db.Query(sqlStr, eventID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var usersAssociatedWithSelectedEvent []model.Profile
+
+	for rows.Next() {
+		var profile model.Profile
+
+		var username, fullName, emailAddress, phoneNumber sql.NullString
+		if err := rows.Scan(&profile.ID, &username, &fullName, &emailAddress, &phoneNumber); err != nil {
+			return nil, err
+		}
+
+		if username.Valid {
+			profile.Username = username.String
+		}
+		if fullName.Valid {
+			profile.FullName = fullName.String
+		}
+
+		if emailAddress.Valid {
+			profile.EmailAddress = emailAddress.String
+		}
+		if phoneNumber.Valid {
+			profile.PhoneNumber = phoneNumber.String
+		}
+		usersAssociatedWithSelectedEvent = append(usersAssociatedWithSelectedEvent, profile)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return usersAssociatedWithSelectedEvent, nil
+}
+
 // RetrieveAllExpenses ...
 func RetrieveAllExpenses(user string, eventID uuid.UUID) ([]model.Expense, error) {
 	db, err := SetupDB(user)

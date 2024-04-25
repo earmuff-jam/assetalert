@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   loading: false,
   error: '',
+  profiles: [],
   profileDetails: {},
   notifications: [],
   inventories: [],
@@ -16,6 +17,21 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
+    getProfileList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.profiles = [];
+    },
+    getProfileListSuccess: (state, action) => {
+      state.profiles = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getProfileListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.profiles = [];
+    },
     getProfileDetails: (state) => {
       state.loading = true;
       state.error = '';
