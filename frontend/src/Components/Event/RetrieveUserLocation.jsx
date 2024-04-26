@@ -20,7 +20,7 @@ const RetrieveUserLocation = ({ setLocation }) => {
 
   return (
     <Tooltip title="Find approximate location">
-      <IconButton onClick={handleLocation} disableRipple={true} className={classes.zeroPadding}>
+      <IconButton onClick={handleLocation} disableRipple={true} className={classes.zeroPadding} data-tour="5">
         <LocationOnRounded />
       </IconButton>
     </Tooltip>
