@@ -9,6 +9,80 @@ import (
 	"github.com/mohit2530/communityCare/model"
 )
 
+// FetchAllUserProfiles ...
+func FetchAllUserProfiles(user string) ([]model.Profile, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `
+        SELECT 
+            id,
+            username,
+            full_name,
+            COALESCE(ENCODE(avatar_url::bytea, 'base64'), '') AS base64,
+            email_address,
+            phone_number,
+            goal,
+            about_me,
+            onlinestatus,
+            role
+        FROM community.profiles;
+    `
+
+	var profiles []model.Profile
+
+	rows, err := db.Query(sqlStr)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var profile model.Profile
+
+		var username, fullName, emailAddress, phoneNumber, avatarUrl, goal, aboutMe, role sql.NullString
+
+		if err := rows.Scan(&profile.ID, &username, &fullName, &avatarUrl, &emailAddress, &phoneNumber, &goal, &aboutMe, &profile.OnlineStatus, &role); err != nil {
+			return nil, err
+		}
+
+		if username.Valid {
+			profile.Username = username.String
+		}
+		if fullName.Valid {
+			profile.FullName = fullName.String
+		}
+		if avatarUrl.Valid {
+			profile.AvatarUrl = avatarUrl.String
+		}
+		if emailAddress.Valid {
+			profile.EmailAddress = emailAddress.String
+		}
+		if phoneNumber.Valid {
+			profile.PhoneNumber = phoneNumber.String
+		}
+		if goal.Valid {
+			profile.Goal = goal.String
+		}
+		if aboutMe.Valid {
+			profile.AboutMe = aboutMe.String
+		}
+		if role.Valid {
+			profile.Role = role.String
+		}
+
+		profiles = append(profiles, profile)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return profiles, nil
+}
+
 // FetchUserProfile ...
 func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 	db, err := SetupDB(user)

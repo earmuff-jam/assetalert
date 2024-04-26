@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
-import UserProfile from '../ViewProfileDetails/UserProfile';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
 import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
+import UserCardTitleWithAvatarComponent from './UserCardTitleWithAvatarComponent';
 import { EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileDetailsCard = ({
+const ProfileDetailsCardComponent = ({
   editMode,
   isLoading,
   formFields,
@@ -62,13 +62,18 @@ const ProfileDetailsCard = ({
   handleClickNotificationBar,
 }) => {
   const classes = useStyles();
-
   const containsUnreadNotifications = notifications.map((v) => !v.is_viewed).filter(Boolean).length;
   return (
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)} data-tour="0">
-          <UserProfile formFields={formFields} avatarUrl={profileDetails?.avatar_url} profileID={profileDetails.id} />
+          <UserCardTitleWithAvatarComponent
+            formFields={formFields}
+            avatarUrl={profileDetails?.avatar_url}
+            profileID={profileDetails.id}
+            editMode={editMode}
+            isLoading={isLoading}
+          />
           <Box className={classes.emptyGap}></Box>
           <Box data-tour="1">
             <ButtonComponent
@@ -96,7 +101,7 @@ const ProfileDetailsCard = ({
   );
 };
 
-ProfileDetailsCard.defaultProps = {
+ProfileDetailsCardComponent.defaultProps = {
   editMode: false,
   isLoading: false,
   formFields: {},
@@ -108,7 +113,7 @@ ProfileDetailsCard.defaultProps = {
   handleClickNotificationBar: () => {},
 };
 
-ProfileDetailsCard.propTypes = {
+ProfileDetailsCardComponent.propTypes = {
   editMode: PropTypes.bool,
   isLoading: PropTypes.bool,
   formFields: PropTypes.object,
@@ -120,4 +125,4 @@ ProfileDetailsCard.propTypes = {
   handleClickNotificationBar: PropTypes.func,
 };
 
-export default ProfileDetailsCard;
+export default ProfileDetailsCardComponent;

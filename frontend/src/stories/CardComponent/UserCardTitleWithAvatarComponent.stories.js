@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import UserProfile from '../../Components/ViewProfileDetails/UserProfile';
+import UserCardTitleWithAvatarComponent from '../../Components/CardComponent/UserCardTitleWithAvatarComponent';
 
 export default {
-  title: 'ProfilePage/UserProfile',
-  component: UserProfile,
+  title: 'CardComponent/UserCardTitleWithAvatarComponent',
+  component: UserCardTitleWithAvatarComponent,
   decorators: [
     withRouter,
     (Story) => (
@@ -20,7 +20,7 @@ export default {
   ],
 };
 
-export const PrimaryUserProfile = {
+export const PrimaryUserCardTitleWithAvatarComponent = {
   args: {
     formFields: {
       name: {
@@ -44,7 +44,7 @@ export const PrimaryUserProfile = {
   },
 };
 
-export const PrimaryUserProfileLongAboutMeText = {
+export const PrimaryUserCardTitleWithAvatarComponentLongAboutMeText = {
   args: {
     formFields: {
       name: {

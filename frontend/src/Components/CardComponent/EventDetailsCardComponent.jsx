@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -16,22 +16,21 @@ import {
 
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import EventProfile from './EventProfile';
 import { enqueueSnackbar } from 'notistack';
-
 import Title from '../DialogComponent/Title';
-import { isEditingAllowed } from './constants';
 import Drawer from '../DrawerListComponent/Drawer';
+import { isEditingAllowed } from '../Event/constants';
+import ViewSharableGroups from './ViewSharableGroups';
 import AddItemDetail from '../ItemDetail/AddItemDetail';
-
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewItemDetail from '../ItemDetail/ViewItemDetail';
 import { homeActions } from '../../Containers/Home/homeSlice';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
-
 import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
-import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
+import EventCardTitleWithAvatarComponent from './EventCardTitleWithAvatarComponent';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventDetailsCard = ({
+const EventDetailsCardComponent = ({
   disabled,
   userDetail,
   handleUserDetail,
@@ -107,10 +106,12 @@ const EventDetailsCard = ({
   const editingAllowed = isEditingAllowed(disabled, userDetail);
 
   const [display, setDisplay] = useState(0);
+  const [editSharableGroups, setEditSharableGroups] = useState(false);
   const [editMode, setEditMode] = useState(false); // editing general fields for select event
 
   const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
 
+  const handleEditSharableGroups = () => setEditSharableGroups(!editSharableGroups);
   const handleReportEvent = () => setDisplay('Report');
 
   const toggleEditMode = () => {
@@ -184,7 +185,7 @@ const EventDetailsCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Box className={classNames(classes.rowContainer, classes.columnVariant)}>
-          <EventProfile userDetail={userDetail} />
+          <EventCardTitleWithAvatarComponent userDetail={userDetail} isLoading={isLoading} editMode={editMode} />
           <Box className={classes.emptyGap}></Box>
           <Box>
             {!isLoading ? (
@@ -193,10 +194,19 @@ const EventDetailsCard = ({
                   data-tour="3"
                   variant="text"
                   className={classes.primaryColor}
+                  onClick={handleEditSharableGroups}
+                >
+                  {editMode ? 'Edit sharable groups' : null}
+                </Button>
+                <Button
+                  data-tour="3"
+                  variant="text"
+                  className={classes.primaryColor}
                   onClick={userDetail?.userIsMember ? onLeave : onJoin}
                 >
                   {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
                 </Button>
+
                 <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
                   <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
                     <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
@@ -224,15 +234,22 @@ const EventDetailsCard = ({
               <Chip key={index} size="small" icon={<LowPriorityRounded />} label={v} className={classes.chip} />
             ))}
         </Box>
-        <CardActions>
-          <Button disabled={!userDetail?.userIsMember} onClick={handleAddItem} data-tour="7" className={classes.text}>
-            Add Item
-          </Button>
-          <Button onClick={handleViewItems} data-tour="8" className={classes.text}>
-            View Items
-          </Button>
+        <CardActions data-tour="7">
+          <ButtonComponent
+            disabled={!userDetail?.userIsMember}
+            onClick={handleAddItem}
+            buttonStyles={classes.text}
+            text={'Add Items'}
+            buttonVariant={'text'}
+          />
+          <ButtonComponent
+            onClick={handleViewItems}
+            buttonStyles={classes.text}
+            text={'View Items'}
+            buttonVariant={'text'}
+          />
         </CardActions>
-        <Box className={classes.centerAlign}>
+        <Box className={classes.centerAlign} data-tour="8">
           <PlaceRounded className={classes.colorVariant} />
           <span>{remainingSpots} spots left</span>
         </Box>
@@ -243,6 +260,12 @@ const EventDetailsCard = ({
             isDeactivated={isDeactivated}
             setIsDeactivated={setIsDeactivated}
           />
+        )}
+        {editSharableGroups && (
+          <Dialog open width={'md'} fullWidth={true}>
+            <Title onClose={() => setEditSharableGroups(false)}>Edit User Groups</Title>
+            <ViewSharableGroups selectedEvent={selectedEvent} setEditSharableGroups={setEditSharableGroups} />
+          </Dialog>
         )}
       </CardContent>
       <Drawer open={display === 'View'} toggleDrawer={toggleDrawer}>
@@ -264,7 +287,7 @@ const EventDetailsCard = ({
   );
 };
 
-EventDetailsCard.defaultProps = {
+EventDetailsCardComponent.defaultProps = {
   disabled: false,
   userDetail: {},
   handleUserDetail: () => {},
@@ -279,7 +302,7 @@ EventDetailsCard.defaultProps = {
   onJoin: () => {},
 };
 
-EventDetailsCard.propTypes = {
+EventDetailsCardComponent.propTypes = {
   disabled: PropTypes.bool,
   userDetail: PropTypes.object,
   handleUserDetail: PropTypes.func,
@@ -294,4 +317,4 @@ EventDetailsCard.propTypes = {
   onJoin: PropTypes.func,
 };
 
-export default EventDetailsCard;
+export default EventDetailsCardComponent;

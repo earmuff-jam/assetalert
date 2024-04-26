@@ -16,6 +16,16 @@ export function* fetchEvent(action) {
   }
 }
 
+export function* fetchEventSharedWithUsers(action) {
+  try {
+    const { eventID } = action.payload;
+    const response = yield call(instance.get, `${BASEURL}/event/${eventID}/shared`);
+    yield put(eventActions.getEventSharedWithUsersSuccess(response.data));
+  } catch (e) {
+    yield put(eventActions.getEventSharedWithUsersFailure(e));
+  }
+}
+
 export function* fetchCategoryList() {
   try {
     const response = yield call(instance.get, `${BASEURL}/categories`);
@@ -141,6 +151,10 @@ export function* watchAddItem() {
   yield takeLatest(`event/addItem`, addItem);
 }
 
+export function* watchFetchEventSharedWithUsers() {
+  yield takeLatest(`event/getEventSharedWithUsers`, fetchEventSharedWithUsers);
+}
+
 export function* watchGetCategoryList() {
   yield takeLatest(`event/getCategoryList`, fetchCategoryList);
 }
@@ -189,6 +203,7 @@ export function* watchFetchReportForSelectedEvent() {
 export default [
   watchAddItem,
   watchFetchEvent,
+  watchFetchEventSharedWithUsers,
   watchFetchExpenseList,
   watchUpdateExpenseList,
   watchGetCategoryList,

@@ -52,6 +52,123 @@ func Test_GetAllEvents(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_GetUsersSharedWithSelectedEvent(t *testing.T) {
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	CreateNewEvent(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	eventsData, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var currentEvent model.Event
+	err = json.Unmarshal(eventsData, &currentEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/event/%s/shared", currentEvent.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": currentEvent.ID})
+	w = httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+
+	res = w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var usersInCurrentEvent []model.Profile
+	err = json.Unmarshal(data, &usersInCurrentEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+
+	// cleanup
+	var selectedEvent model.Event
+	err = json.Unmarshal(eventsData, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
+}
+
+func Test_GetUsersSharedWithSelectedEvent_WrongItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0802c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "200 OK", res.Status)
+}
+
+func Test_GetUsersSharedWithSelectedEvent_NoItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": ""})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetUsersSharedWithSelectedEvent_IncorrectItemID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetUsersSharedWithSelectedEvent_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetUsersSharedWithSelectedEvent(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_GetAllItems(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/items/0902c692-b8e2-4824-a870-e52f4a0cccf8", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0902c692-b8e2-4824-a870-e52f4a0cccf8"})

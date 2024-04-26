@@ -1,17 +1,17 @@
 import { produce } from 'immer';
 import '../../Components/Map/styles.css';
+import { useEffect, useState } from 'react';
 import { eventActions } from './eventSlice';
 import { Box, Grid } from '@material-ui/core';
 import { homeActions } from '../Home/homeSlice';
-import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import EventDetailsCard from '../../Components/Event/EventDetailsCard';
 import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
 import SecondaryAppBar from '../../Components/AppBarComponent/SecondaryAppBar';
 import EventDetailsDrawerComponent from '../../Components/Event/EventDetailsDrawerComponent';
+import EventDetailsCardComponent from '../../Components/CardComponent/EventDetailsCardComponent';
 
 const useStyles = makeStyles((theme) => ({
   spinnerContainer: {
@@ -123,6 +123,7 @@ const EventDetailPage = () => {
   };
 
   const handleRSVP = (isCheckedBoolValue) => {
+    console.log('did i call you ?');
     const existingRsvpMembers = userDetail.attendees;
     const existingMembers = userDetail.sharable_groups;
     if (isCheckedBoolValue) {
@@ -252,7 +253,7 @@ const EventDetailPage = () => {
       {shouldDisplaySecondMenuBar && <SecondaryAppBar />}
       <Grid container>
         <Grid item xs={12}>
-          <EventDetailsCard
+          <EventDetailsCardComponent
             eventID={eventID}
             reports={reports}
             selectedEvent={selectedEvent}
@@ -262,7 +263,7 @@ const EventDetailPage = () => {
             setIsDeactivated={setIsDeactivated}
             handleUserDetail={handleUserDetail}
             disabled={shouldDisplaySecondMenuBar}
-            isLoading={loadingSelectevent}
+            isLoading={loadingSelectevent || loadingProfileDetails}
             onLeave={() => {
               handleLeave(userDetail.sharable_groups, userDetail.userID);
             }}

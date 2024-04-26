@@ -77,11 +77,10 @@ const SINGLE_EVENT_TOUR_STEPS = [
   },
   {
     title:
-      'select option to add a new item to the inventory list. participant must join the event before adding items to the event.',
+      'Select option to add a new item to the inventory list or view existing list. participant must join the event before adding items to the event. To edit certain fields, hover over the fields to edit them.',
   },
   {
-    title:
-      'View list of the items that are stored against the selected event. To edit certain fields, hover over the fields to edit them.',
+    title: 'Displays how many open spots are available. There is currently no limit on the members of the event',
   },
   {
     title:

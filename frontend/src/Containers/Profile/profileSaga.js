@@ -9,6 +9,15 @@ const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
  * User Details related api calls
  */
 
+export function* fetchProfileList() {
+  try {
+    const response = yield call(instance.get, `${BASEURL}/list`);
+    yield put(profileActions.getProfileListSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getProfileListFailure(e));
+  }
+}
+
 export function* fetchExistingUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -234,6 +243,10 @@ export function* watchGetUserNotes() {
   yield takeLatest(`profile/getUserNotes`, fetchUserNotes);
 }
 
+export function* watchFetchProfileList() {
+  yield takeLatest(`profile/getProfileList`, fetchProfileList);
+}
+
 export function* watchExistingNotificationsUserDetails() {
   yield takeLatest(`profile/getProfileNotifications`, fetchExistingNotificationsUserDetails);
 }
@@ -300,6 +313,7 @@ export function* watchFetchUpdateProfileImage() {
 
 // eslint-disable-next-line
 export default [
+  watchFetchProfileList,
   watchGetUserNotes,
   watchFetchAddNewNote,
   watchFetchAddNewInventory,

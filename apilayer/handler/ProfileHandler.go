@@ -31,6 +31,31 @@ func GetProfileHealthCheck(rw http.ResponseWriter, r *http.Request, user string)
 	json.NewEncoder(rw).Encode("Health check concluded. Status shows all services are operational.")
 }
 
+// GetAllUserProfiles ...
+// swagger:route GET /api/v1/profile/list GetAllUserProfiles getAllUserProfiles
+//
+// # Retrieves all the user profiles listed in the database
+//
+// Responses:
+// 200: []Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetAllUserProfiles(rw http.ResponseWriter, r *http.Request, user string) {
+
+	resp, err := db.FetchAllUserProfiles(user)
+	if err != nil {
+		log.Printf("Unable to retrieve all profile details. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // GetProfile ...
 // swagger:route GET /api/v1/profile/{id} GetProfile getProfile
 //

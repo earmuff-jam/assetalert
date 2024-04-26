@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ChipComponent from '../Chip/ChipComponent';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Tooltip, Typography } from '@material-ui/core';
-import TextFieldComponent from '../../Components/TextFieldComponent/TextComponent';
+import ChipComponent from '../../stories/Chip/ChipComponent';
+import TextFieldComponent from '../TextFieldComponent/TextComponent';
+import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   headerText: {
@@ -53,13 +52,17 @@ const CardTitleComponent = ({
   titleText,
   titleTooltip,
   extraSubtitle,
+  isLoading,
+  editMode,
 }) => {
   const classes = useStyles();
   return (
     <Box className={classes.userProfileDetailsContainer}>
       <Box className={[classes.rowContainer, classes.ellipsisContainer].join(' ')} data-tour="1">
         <Tooltip title={titleTooltip}>
-          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>{titleText}</Typography>
+          <Typography className={[classes.headerText, classes.ellipsisContainer].join(' ')}>
+            {editMode ? `Editing ${titleText}` : titleText}
+          </Typography>
         </Tooltip>
         <Box className={classNames(classes.rowContainer, classes.centerContent)} data-tour="5">
           <Tooltip title={firstToolTipLabel}>
@@ -75,7 +78,7 @@ const CardTitleComponent = ({
         </Box>
       </Box>
       <Box data-tour="2">
-        <TextFieldComponent textStyle={classes.extraSubtitle} loading={false} value={extraSubtitle} variant={'body2'} />
+        <TextFieldComponent textStyle={classes.extraSubtitle} loading={isLoading} value={extraSubtitle} />
       </Box>
     </Box>
   );
@@ -91,6 +94,8 @@ CardTitleComponent.defaultProps = {
   titleText: '',
   titleTooltip: '',
   extraSubtitle: '',
+  isLoading: true,
+  editMode: true,
 };
 
 CardTitleComponent.propTypes = {
@@ -103,6 +108,8 @@ CardTitleComponent.propTypes = {
   extraSubtitle: PropTypes.string,
   firstToolTipLabel: PropTypes.string,
   secondTooltipLabel: PropTypes.string,
+  isLoading: PropTypes.bool,
+  editMode: PropTypes.bool,
 };
 
 export default CardTitleComponent;

@@ -2,12 +2,12 @@ import { store } from '../../Store';
 import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
-import CardTitleComponent from './CardTitleComponent';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
+import CardTitleComponent from '../../Components/CardComponent/CardTitleComponent';
 
 export default {
-  title: 'CardTitleComponent/CardTitleComponent',
+  title: 'CardComponent/CardTitleComponent',
   component: CardTitleComponent,
   decorators: [
     withRouter,
@@ -37,6 +37,7 @@ export const PrimaryCardTitleComponentEventDetails = {
     titleText: 'Fall and shelter rescue center',
     titleTooltip: 'Fall and shelter rescue center',
     extraSubtitle: 'A small community group that loves to recsue dogs.',
+    isLoading: false,
   },
 };
 
@@ -51,6 +52,7 @@ export const PrimaryCardTitleComponentProfileDetails = {
     titleText: 'Arthur Morgan',
     titleTooltip: 'Username',
     extraSubtitle: 'Edit event details to add description',
+    isLoading: false,
   },
 };
 
@@ -65,5 +67,21 @@ export const PrimaryCardTitleComponentProfileDetailsLongTitleText = {
     titleText: 'Arthur Morgan from Red Dead Redemtion 2',
     titleTooltip: 'Username',
     extraSubtitle: 'Displays how the ellipsis works for long profile names or event names',
+    isLoading: false,
+  },
+};
+
+export const PrimaryCardTitleComponentProfileDetailsIsLoading = {
+  args: {
+    firstLabel: 'johnny_cash',
+    firstIcon: <CardMembershipRounded />,
+    firstToolTipLabel: 'Current members',
+    secondIcon: <GroupRounded />,
+    secondLabel: 'phone number',
+    secondTooltipLabel: 'Anticipated members',
+    titleText: 'Arthur Morgan from Red Dead Redemtion 2',
+    titleTooltip: 'Username',
+    extraSubtitle: 'Displays how the ellipsis works for long profile names or event names',
+    isLoading: true,
   },
 };

@@ -30,6 +30,43 @@ func Test_GetProfileHealthCheck(t *testing.T) {
 	assert.Equal(t, 200, res.StatusCode)
 }
 
+func Test_GetAllUserProfiles(t *testing.T) {
+
+	db.PreloadAllTestVariables()
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/profile/list", nil)
+	w := httptest.NewRecorder()
+	GetAllUserProfiles(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var currentUsers []model.Profile
+	err = json.Unmarshal(data, &currentUsers)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.GreaterOrEqual(t, 1, len(currentUsers))
+	assert.Equal(t, "john", currentUsers[0].Username)
+}
+
+func Test_GetAllUserProfiles_InvalidDBUser(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllUserProfiles(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_GetProfileApi(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
