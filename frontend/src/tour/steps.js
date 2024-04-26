@@ -20,6 +20,10 @@ const LANDING_PAGE_TOUR_STEPS = [
   },
   {
     title:
+      'Search for events around your location. We do not store this user location data so signing out will remove the location in the map.',
+  },
+  {
+    title:
       'View specific details such as event title, cause and brief description about active events. Event skills can be tagged as required help and such skills are displayed with our custom in-demand meter. View location and event start date on the fly as well. Jump in to view more details about each select event.',
   },
 ];

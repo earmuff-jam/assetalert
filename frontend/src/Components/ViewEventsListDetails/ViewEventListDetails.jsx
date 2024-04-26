@@ -86,11 +86,11 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
   }
 
   return (
-    <Box className={classes.root} data-tour="4">
+    <Box className={classes.root} >
       <Typography gutterBottom className={classNames(classes.header, classes.errorText)}>
         View all events
       </Typography>
-      <Box className={classes.searchContainer}>
+      <Box className={classes.searchContainer} data-tour="4">
         <SearchAllEvents events={currentEvents} setSearchValue={setSearchValue} setLocation={setLocation} />
       </Box>
       <Divider className={classes.divider} />
@@ -99,7 +99,7 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
           <EmptyComponent />
         </div>
       ) : (
-        <Grid container className={classes.cardContainer} data-tour="5">
+        <Grid container className={classes.cardContainer} data-tour="6">
           <ViewFilteredEventList filteredOptions={filteredOptions} handleNavigate={handleNavigate} />
         </Grid>
       )}

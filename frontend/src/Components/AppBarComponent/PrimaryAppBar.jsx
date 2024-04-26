@@ -119,10 +119,10 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
 
   const setTour = () => {
     const stepMap = {
-      '/': { start: 0, end: 6 },
-      '/about': { start: 6, end: 8 },
-      '/profile': { start: 8, end: 12 },
-      '/eventID': { start: 12, end: 25 },
+      '/': { start: 0, end: 7 },
+      '/about': { start: 7, end: 9 },
+      '/profile': { start: 9, end: 13 },
+      '/eventID': { start: 13, end: 26 },
     };
     const currentStep = eventID ? stepMap['/eventID'] : stepMap[location.pathname];
     const formattedSteps = steps.slice(currentStep.start, currentStep.end);
