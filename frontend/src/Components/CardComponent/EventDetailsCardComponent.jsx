@@ -106,8 +106,9 @@ const EventDetailsCardComponent = ({
   const editingAllowed = isEditingAllowed(disabled, userDetail);
 
   const [display, setDisplay] = useState(0);
+  // editing general fields for select event
+  const [editMode, setEditMode] = useState(false);
   const [editSharableGroups, setEditSharableGroups] = useState(false);
-  const [editMode, setEditMode] = useState(false); // editing general fields for select event
 
   const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
 
@@ -190,23 +191,20 @@ const EventDetailsCardComponent = ({
           <Box>
             {!isLoading ? (
               <Box>
+                {editMode ? (
+                  <Button variant="text" className={classes.primaryColor} onClick={handleEditSharableGroups}>
+                    Edit sharable groups
+                  </Button>
+                ) : null}
                 <Button
                   data-tour="3"
                   variant="text"
                   className={classes.primaryColor}
-                  onClick={handleEditSharableGroups}
-                >
-                  {editMode ? 'Edit sharable groups' : null}
-                </Button>
-                <Button
-                  data-tour="3"
-                  variant="text"
-                  className={classes.primaryColor}
+                  disabled={userDetail?.isCreator}
                   onClick={userDetail?.userIsMember ? onLeave : onJoin}
                 >
                   {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
                 </Button>
-
                 <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
                   <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
                     <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
