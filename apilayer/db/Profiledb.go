@@ -433,3 +433,56 @@ WHERE
 
 	return &recentHighlight, nil
 }
+
+// RetrieveEventsSharedWithSelectedUser ...
+func RetrieveEventsSharedWithSelectedUser(user string, eventID uuid.UUID) ([]model.Event, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+		p.id, 
+		p.title, 
+		p.created_by, 
+		p.created_at, 
+		p.updated_by, 
+		p.updated_at, 
+		p.sharable_groups
+	FROM 
+		community.projects p
+	LEFT JOIN community.profiles p2 ON
+		p2.id = ANY(p.sharable_groups)
+	WHERE
+		p2.id = $1;`
+
+	rows, err := db.Query(sqlStr, eventID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var eventsAssociatedWithSelectedProfile []model.Event
+
+	for rows.Next() {
+		var event model.Event
+
+		var title sql.NullString
+		if err := rows.Scan(&event.ID, title, &event.CreatedBy, &event.CreatedAt, &event.UpdatedBy, &event.UpdatedAt, &event.SharableGroups); err != nil {
+			return nil, err
+		}
+
+		if title.Valid {
+			event.Title = title.String
+		}
+
+		eventsAssociatedWithSelectedProfile = append(eventsAssociatedWithSelectedProfile, event)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return eventsAssociatedWithSelectedProfile, nil
+}
