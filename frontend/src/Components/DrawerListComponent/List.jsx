@@ -11,13 +11,13 @@ import {
   IconButton,
   Box,
   Checkbox,
+  Tooltip,
 } from '@material-ui/core';
+import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
+import { DeleteRounded, ShareRounded } from '@material-ui/icons';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
-import { useState } from 'react';
-import classNames from 'classnames';
-import { DeleteRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  disabled: {
+    opacity: 0.3,
+  },
 }));
 
 const List = ({
@@ -64,27 +67,13 @@ const List = ({
   sheetName,
   modifyHeightVariant,
   displayDeleteRowIcon,
+  displayShareIcon,
   removeSelectedItems,
+  handleMenuClick,
+  rowSelected,
+  handleRowSelection,
 }) => {
   const classes = useStyles();
-
-  const [rowSelected, setRowSelected] = useState([]);
-
-  const handleClick = (event, id) => {
-    const selectedIndex = rowSelected.indexOf(id);
-    let draftSelected = [];
-
-    if (selectedIndex === -1) {
-      draftSelected = draftSelected.concat(rowSelected, id);
-    } else if (selectedIndex === 0) {
-      draftSelected = draftSelected.concat(rowSelected.slice(1));
-    } else if (selectedIndex === rowSelected.length - 1) {
-      draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
-    }
-    setRowSelected(draftSelected);
-  };
 
   return (
     <>
@@ -107,6 +96,11 @@ const List = ({
               {displayDeleteRowIcon && rowSelected.length > 0 && (
                 <IconButton onClick={() => removeSelectedItems(rowSelected)}>
                   <DeleteRounded color="primary" />
+                </IconButton>
+              )}
+              {displayShareIcon && (
+                <IconButton onClick={() => handleMenuClick(rowSelected)}>
+                  <ShareRounded color="primary" />
                 </IconButton>
               )}
             </Box>
@@ -137,19 +131,33 @@ const List = ({
                   const isSelected = (id) => rowSelected.indexOf(id) !== -1;
                   const selectedID = row.id;
                   const isItemSelected = isSelected(selectedID);
+                  const isItemDisabled = row.is_transfer_allocated;
                   return (
-                    <TableRow hover key={rowIndex} onClick={(event) => handleClick(event, selectedID)}>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          color="primary"
-                          inputProps={{ 'aria-labelledby': 'labelId' }}
-                        />
-                      </TableCell>
-                      {columns.map((column) => (
-                        <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
-                      ))}
-                    </TableRow>
+                    <Tooltip
+                      key={rowIndex}
+                      title={isItemDisabled ? `Item is associated with ${row.associated_event_title}` : ''}
+                    >
+                      <TableRow
+                        hover
+                        key={rowIndex}
+                        onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
+                        className={classNames({
+                          [classes.disabled]: isItemDisabled,
+                        })}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={!isItemDisabled && isItemSelected}
+                            disabled={isItemDisabled}
+                            color="primary"
+                            inputProps={{ 'aria-labelledby': 'labelId' }}
+                          />
+                        </TableCell>
+                        {columns.map((column) => (
+                          <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
+                        ))}
+                      </TableRow>
+                    </Tooltip>
                   );
                 })}
               </TableBody>
@@ -175,6 +183,10 @@ List.defaultProps = {
   modifyHeightVariant: false,
   removeSelectedItems: () => {},
   displayDeleteRowIcon: false,
+  displayShareIcon: false,
+  handleMenuClick: () => {},
+  rowSelected: [],
+  handleRowSelection: () => {},
 };
 
 List.propTypes = {
@@ -191,6 +203,10 @@ List.propTypes = {
   sheetName: PropTypes.string,
   modifyHeightVariant: PropTypes.bool,
   displayDeleteRowIcon: PropTypes.bool,
+  displayShareIcon: PropTypes.bool,
+  handleMenuClick: PropTypes.func,
+  rowSelected: PropTypes.array,
+  handleRowSelection: PropTypes.func,
 };
 
 export default List;

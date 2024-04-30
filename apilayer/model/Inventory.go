@@ -1,29 +1,34 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // Inventory ...
 // swagger:model Inventory
 //
 // Inventory is the selected row for each inventory
 type Inventory struct {
-	ID                string    `json:"id"`
-	Name              string    `json:"name"`
-	Description       string    `json:"description"`
-	Price             float64   `json:"price"`
-	Status            string    `json:"status"`
-	Barcode           string    `json:"barcode"`
-	SKU               string    `json:"sku"`
-	Quantity          int       `json:"quantity"`
-	Location          string    `json:"location"`
-	StorageLocationID string    `json:"storage_location_id"`
-	CreatedAt         time.Time `json:"created_at"`
-	CreatedBy         string    `json:"created_by"`
-	CreatorName       string    `json:"creator_name"`
-	UpdatedAt         time.Time `json:"updated_at"`
-	UpdatedBy         string    `json:"updated_by"`
-	UpdaterName       string    `json:"updater_name"`
-	BoughtAt          string    `json:"bought_at"`
+	ID                   string    `json:"id"`
+	Name                 string    `json:"name"`
+	Description          string    `json:"description"`
+	Price                float64   `json:"price"`
+	Status               string    `json:"status"`
+	Barcode              string    `json:"barcode"`
+	SKU                  string    `json:"sku"`
+	Quantity             int       `json:"quantity"`
+	Location             string    `json:"location"`
+	IsTransferAllocated  bool      `json:"is_transfer_allocated"`
+	AssociatedEventID    string    `json:"associated_event_id"`
+	AssociatedEventTitle string    `json:"associated_event_title"`
+	StorageLocationID    string    `json:"storage_location_id"`
+	CreatedAt            time.Time `json:"created_at"`
+	CreatedBy            string    `json:"created_by"`
+	CreatorName          string    `json:"creator_name"`
+	UpdatedAt            time.Time `json:"updated_at"`
+	UpdatedBy            string    `json:"updated_by"`
+	UpdaterName          string    `json:"updater_name"`
+	BoughtAt             string    `json:"bought_at"`
 }
 
 // RawInventory ...
@@ -60,4 +65,13 @@ type InventoryItemToUpdate struct {
 	Value  string `json:"value"`
 	ID     string `json:"id"`
 	UserID string `json:"userID"`
+}
+
+// TransferInventory is the object used when a item from the personal well is transfered into the event item well.
+type TransferInventory struct {
+	Column  string   `json:"column"`
+	Value   string   `json:"value"`
+	EventID string   `json:"eventID"`
+	ItemIDs []string `json:"itemIDs"`
+	UserID  string   `json:"userID"`
 }

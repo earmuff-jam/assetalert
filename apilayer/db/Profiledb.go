@@ -455,7 +455,8 @@ func RetrieveEventsSharedWithSelectedUser(user string, eventID uuid.UUID) ([]mod
 	LEFT JOIN community.profiles p2 ON
 		p2.id = ANY(p.sharable_groups)
 	WHERE
-		p2.id = $1;`
+		p2.id = $1
+	ORDER BY p2.updated_at;`
 
 	rows, err := db.Query(sqlStr, eventID)
 	if err != nil {
@@ -468,13 +469,8 @@ func RetrieveEventsSharedWithSelectedUser(user string, eventID uuid.UUID) ([]mod
 	for rows.Next() {
 		var event model.Event
 
-		var title sql.NullString
-		if err := rows.Scan(&event.ID, title, &event.CreatedBy, &event.CreatedAt, &event.UpdatedBy, &event.UpdatedAt, &event.SharableGroups); err != nil {
+		if err := rows.Scan(&event.ID, &event.Title, &event.CreatedBy, &event.CreatedAt, &event.UpdatedBy, &event.UpdatedAt, pq.Array(&event.SharableGroups)); err != nil {
 			return nil, err
-		}
-
-		if title.Valid {
-			event.Title = title.String
 		}
 
 		eventsAssociatedWithSelectedProfile = append(eventsAssociatedWithSelectedProfile, event)

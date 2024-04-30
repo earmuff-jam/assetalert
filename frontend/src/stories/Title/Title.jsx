@@ -47,7 +47,7 @@ const Title = ({ title, headingVariant, displaySubtitle, titleStyle }) => {
 };
 
 Title.defaultProps = {
-  title: 'Find meaning to volunteer',
+  title: 'Default title',
   headingVariant: 'error',
   displaySubtitle: false,
   titleStyle: '', // titleStyle overrides the classes.header since it is cascading styles

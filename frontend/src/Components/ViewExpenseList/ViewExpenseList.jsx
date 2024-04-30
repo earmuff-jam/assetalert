@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
-
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
 import EmptyComponent from '../../util/EmptyComponent';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
@@ -16,6 +15,24 @@ const ViewExpenseList = ({ disabled }) => {
   dayjs.extend(relativeTime);
 
   const { loading, expenses } = useSelector((state) => state.event);
+
+  const [rowSelected, setRowSelected] = useState([]);
+
+  const handleRowSelection = (event, id) => {
+    const selectedIndex = rowSelected.indexOf(id);
+    let draftSelected = [];
+
+    if (selectedIndex === -1) {
+      draftSelected = draftSelected.concat(rowSelected, id);
+    } else if (selectedIndex === 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(1));
+    } else if (selectedIndex === rowSelected.length - 1) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+    }
+    setRowSelected(draftSelected);
+  };
 
   // removing unwanted values from the display column
   const filteredItems = expenses?.map((item) => {
@@ -79,6 +96,8 @@ const ViewExpenseList = ({ disabled }) => {
         columnHeaderFormatter={columnHeaderFormatter}
         rowFormatter={rowFormatter}
         modifyHeightVariant={true}
+        rowSelected={rowSelected}
+        handleRowSelection={handleRowSelection}
       />
     </Container>
   );

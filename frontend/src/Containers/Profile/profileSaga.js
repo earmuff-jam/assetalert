@@ -166,6 +166,16 @@ export function* fetchUpdateExistingInventoryDetails(action) {
   }
 }
 
+export function* fetchTransferItemsToSelectedEvent(action) {
+  try {
+    const { userID } = action.payload;
+    const response = yield call(instance.post, `${BASEURL}/${userID}/inventories/transfer`, { ...action.payload });
+    yield put(profileActions.transferItemsToSelectedEventSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.transferItemsToSelectedEventFailure(e));
+  }
+}
+
 /**
  * Recent Trophy related api calls
  */
@@ -232,6 +242,16 @@ export function* fetchRemoveInventoryRows(action) {
     yield put(profileActions.removeInventoryRowsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.removeInventoryRowsFailure(e));
+  }
+}
+
+export function* fetchEventsSharedWithSelectProfile(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/shared`, { ...action.payload });
+    yield put(profileActions.retrieveEventsSharedWithSelectProfileSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.retrieveEventsSharedWithSelectProfileFailure(e));
   }
 }
 
@@ -311,6 +331,14 @@ export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
 
+export function* watchFetchEventsSharedWithSelectProfile() {
+  yield takeEvery(`profile/retrieveEventsSharedWithSelectProfile`, fetchEventsSharedWithSelectProfile);
+}
+
+export function* watchFetchTransferItemsToSelectedEvent() {
+  yield takeEvery(`profile/transferItemsToSelectedEvent`, fetchTransferItemsToSelectedEvent);
+}
+
 // eslint-disable-next-line
 export default [
   watchFetchProfileList,
@@ -322,13 +350,15 @@ export default [
   watchFetchRemoveSelectedNote,
   watchFetchRemoveInventoryRows,
   watchFetchAllInventoriesForUser,
-  watchUpdateExistingInventoryDetails,
-  watchExistingNotificationsUserDetails,
-  watchFetchRecentActivitiesTrophyList,
   watchFetchRecentActivitiesList,
   watchUpdateProfileNotification,
   watchFetchExistingUserDetails,
   watchUpdateExistingUserDetails,
   watchFetchVolunteeringDetails,
   watchFetchUpdateProfileImage,
+  watchUpdateExistingInventoryDetails,
+  watchFetchRecentActivitiesTrophyList,
+  watchExistingNotificationsUserDetails,
+  watchFetchTransferItemsToSelectedEvent,
+  watchFetchEventsSharedWithSelectProfile,
 ];

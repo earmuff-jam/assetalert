@@ -102,6 +102,7 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.AddNewInventory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories/bulk", CustomRequestHandler(handler.AddInventoryInBulk)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.UpdateSelectedInventory)).Methods(http.MethodPut)
+	router.Handle("/api/v1/profile/{id}/inventories/transfer", CustomRequestHandler(handler.TransferSelectedInventory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories/prune", CustomRequestHandler(handler.RemoveSelectedInventory)).Methods(http.MethodPost)
 
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetUserNotesDetails)).Methods(http.MethodGet)

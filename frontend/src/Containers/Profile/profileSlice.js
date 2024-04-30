@@ -3,14 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   loading: false,
   error: '',
-  profiles: [],
-  profileDetails: {},
-  notifications: [],
-  inventories: [],
-  volunteeringDetails: [],
-  recentActivities: [],
-  recentTrophies: {},
   notes: [],
+  profiles: [],
+  inventories: [],
+  notifications: [],
+  profileDetails: {},
+  recentTrophies: {},
+  recentActivities: [],
+  volunteeringDetails: [],
+  eventsSharedWithSelectProfile: [],
 };
 
 const profileSlice = createSlice({
@@ -294,6 +295,35 @@ const profileSlice = createSlice({
     removeInventoryRowsFailure: (state) => {
       state.loading = false;
       state.error = '';
+      state.inventories = [];
+    },
+    retrieveEventsSharedWithSelectProfile: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    retrieveEventsSharedWithSelectProfileSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = action.payload;
+    },
+    retrieveEventsSharedWithSelectProfileFailure: (state) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = [];
+    },
+    transferItemsToSelectedEvent: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    transferItemsToSelectedEventSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      // once items are marked as associated, they should be marked as such from the response from server
+      state.inventories = action.payload;
+    },
+    transferItemsToSelectedEventFailure: (state) => {
+      state.error = '';
+      state.loading = false;
       state.inventories = [];
     },
   },
