@@ -1,7 +1,7 @@
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Box, TextField, makeStyles } from '@material-ui/core';
+import { Box, Chip, TextField, makeStyles } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
@@ -85,7 +85,9 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
     <Box className={classes.container}>
       <Autocomplete
         multiple
-        options={options}
+        options={options.filter(
+          (option) => !sharableGroups.some((group) => group.email_address === option.email_address)
+        )}
         value={sharableGroups}
         onChange={(event, newValue) => setSharableGroups(newValue)}
         getOptionLabel={(option) => option.email_address}
@@ -97,7 +99,18 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
             placeholder="Currently sharing with ..."
           />
         )}
+        renderTags={(tagVal, getTagProps) =>
+          tagVal.map((option, index) => (
+            <Chip
+              key={index}
+              label={option.email_address}
+              {...getTagProps({ index })}
+              disabled={selectedEvent.created_by === option.id}
+            />
+          ))
+        }
       />
+
       <Box className={classes.rowContainer}>
         <ButtonComponent
           text={'Save'}

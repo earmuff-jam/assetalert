@@ -156,7 +156,6 @@ const Inventories = () => {
         const worksheet = workbook.Sheets[sheetName];
         const formattedArr = XLSX.utils.sheet_to_json(worksheet, { rawNumbers: false });
         setUploadedFileInJson(formattedArr);
-        console.log(formattedArr);
       };
       reader.readAsArrayBuffer(file);
     }

@@ -114,7 +114,7 @@ ViewItemDetail.defaultProps = {
 };
 
 ViewItemDetail.propTypes = {
-  disabled: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default ViewItemDetail;

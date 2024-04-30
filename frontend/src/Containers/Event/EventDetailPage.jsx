@@ -123,7 +123,6 @@ const EventDetailPage = () => {
   };
 
   const handleRSVP = (isCheckedBoolValue) => {
-    console.log('did i call you ?');
     const existingRsvpMembers = userDetail.attendees;
     const existingMembers = userDetail.sharable_groups;
     if (isCheckedBoolValue) {
@@ -222,6 +221,7 @@ const EventDetailPage = () => {
         type: selectedEvent.type,
       };
       userDetailsDraft.userIsMember = userIsMember;
+      userDetailsDraft.isCreator = profileDetails.id === selectedEvent.created_by;
       userDetailsDraft.requiredSkills = requiredSkills;
       userDetailsDraft.sharable_groups = sharableGroups;
       userDetailsDraft.attendees = attendees;

@@ -351,3 +351,52 @@ func GetUserRecentHighlights(rw http.ResponseWriter, r *http.Request, user strin
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode(resp)
 }
+
+// GetEventsSharedWithSelectedUser ...
+// swagger:route GET /api/v1/profile/{id}/shared GetEventsSharedWithSelectedUser getEventsSharedWithSelectedUser
+//
+// # Retrieves all events associated with a selected user / profile
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id for a user
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: []Profile
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetEventsSharedWithSelectedUser(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID, ok := vars["id"]
+	if !ok || len(userID) <= 0 {
+		log.Printf("Unable to retrieve profile related events without user id. ")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(userID)
+	if err != nil {
+		log.Printf("Unable to retrieve profile related events with provided id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveEventsSharedWithSelectedUser(user, parsedUUID)
+	if err != nil {
+		log.Printf("Unable to retrieve events with selected user. err: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
