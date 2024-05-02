@@ -21,7 +21,6 @@ import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    // padding: theme.spacing(1),
     overflow: 'auto',
   },
   modifyHeightVariant: {
@@ -140,7 +139,6 @@ const List = ({
                       <TableRow
                         hover
                         key={rowIndex}
-                        onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
                         className={classNames({
                           [classes.disabled]: isItemDisabled,
                         })}
@@ -150,6 +148,7 @@ const List = ({
                             checked={!isItemDisabled && isItemSelected}
                             disabled={isItemDisabled}
                             color="primary"
+                            onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
                             inputProps={{ 'aria-labelledby': 'labelId' }}
                           />
                         </TableCell>

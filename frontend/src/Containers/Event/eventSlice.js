@@ -2,16 +2,17 @@ import { produce } from 'immer';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  selectedEvent: {},
-  eventSharedWithUsers: [],
-  volunteeringActivities: [],
-  storageLocations: [],
-  categories: [],
+  error: '',
+  loading: false,
   items: [],
   reports: [],
   expenses: [],
-  loading: false,
-  error: '',
+  categories: [],
+  selectedEvent: {},
+  storageLocations: [],
+  eventSharedWithUsers: [],
+  volunteeringActivities: [],
+  inventoriesAssociatedWithSelectedEvent: [],
 };
 
 const eventSlice = createSlice({
@@ -221,6 +222,20 @@ const eventSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.storageLocations = [];
+    },
+    getAllInventoriesAssociatedWithEvent: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    getAllInventoriesAssociatedWithEventSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      state.inventoriesAssociatedWithSelectedEvent = action.payload;
+    },
+    getAllInventoriesAssociatedWithEventFailure: (state) => {
+      state.error = '';
+      state.loading = false;
+      state.inventoriesAssociatedWithSelectedEvent = [];
     },
     // flushUpdate fn is used to only update the reducer
     // no saga action is involved

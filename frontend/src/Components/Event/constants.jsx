@@ -1,8 +1,7 @@
-import { Chip, Tooltip } from '@material-ui/core';
-import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
-
 import dayjs from 'dayjs';
+import { Chip, Tooltip } from '@material-ui/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
 
 dayjs.extend(relativeTime);
 
@@ -185,6 +184,11 @@ export const NAVIGATION_TABS = [
   },
   {
     id: 4,
+    displayName: 'Shared items',
+    subtitle: 'Items shared from users',
+  },
+  {
+    id: 5,
     displayName: 'Details',
     subtitle: 'Event details and settings',
   },
@@ -197,11 +201,11 @@ export const NAVIGATION_TABS = [
  * @param {Object} eventObj - the current selected event to build the table for
  * @returns {Array} tableRows - the combined row with modifiers applied if passed in.
  */
-export const BUILD_TABLE_CONSTANTS = (eventObj) => {
+export const BUILD_TABLE_CONSTANTS = (columnLabels) => (eventObj) => {
   if (!eventObj) {
     return [];
   }
-  const tableRows = LABELS.map(({ id, colName, label, modifier }) => {
+  const tableRows = columnLabels.map(({ id, colName, label, modifier }) => {
     let value = eventObj[colName];
     if (modifier) {
       value = modifier(value, { colName, label });

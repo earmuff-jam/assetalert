@@ -412,6 +412,116 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 	return &updatedInventory, nil
 }
 
+// RetrieveAllInventoriesAssociatedWithSelectEvent ...
+func RetrieveAllInventoriesAssociatedWithSelectEvent(user string, eventID string) ([]model.Inventory, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
+	parsedEventID, err := uuid.Parse(eventID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	sqlStr := `SELECT
+    inv.id,
+    inv.name,
+    inv.description,
+    inv.price,
+    inv.status,
+    inv.barcode,
+    inv.sku,
+    inv.quantity,
+    inv.bought_at,
+    inv.location,
+    inv.is_transfer_allocated,
+    e.title,
+    inv.storage_location_id,
+    inv.created_by,
+    COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
+    inv.created_at,
+    inv.updated_by,
+    COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
+    inv.updated_at
+FROM
+    community.inventory inv
+		LEFT JOIN community.projects e ON inv.associated_event_id = e.id
+        LEFT JOIN community.profiles cp ON inv.created_by = cp.id
+        LEFT JOIN community.profiles up ON inv.updated_by = up.id
+WHERE
+    inv.associated_event_id = $1
+  AND
+    inv.is_transfer_allocated = true
+ORDER BY inv.updated_at DESC;
+	`
+
+	rows, err := db.Query(sqlStr, parsedEventID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.Inventory
+
+	for rows.Next() {
+		var inventory model.Inventory
+
+		var isTransferAllocated sql.NullBool
+		var associatedEventTitle sql.NullString
+
+		if err := rows.Scan(
+			&inventory.ID,
+			&inventory.Name,
+			&inventory.Description,
+			&inventory.Price,
+			&inventory.Status,
+			&inventory.Barcode,
+			&inventory.SKU,
+			&inventory.Quantity,
+			&inventory.BoughtAt,
+			&inventory.Location,
+			&isTransferAllocated,
+			&associatedEventTitle,
+			&inventory.StorageLocationID,
+			&inventory.CreatedBy,
+			&inventory.CreatorName,
+			&inventory.CreatedAt,
+			&inventory.UpdatedBy,
+			&inventory.UpdaterName,
+			&inventory.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+
+		if isTransferAllocated.Valid {
+			inventory.IsTransferAllocated = isTransferAllocated.Bool
+		}
+		if associatedEventTitle.Valid {
+			inventory.AssociatedEventTitle = associatedEventTitle.String
+		}
+
+		data = append(data, inventory)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		// empty array to factor in for null
+		return make([]model.Inventory, 0), nil
+	}
+	return data, nil
+}
+
 // TransferInventory ...
 func TransferInventory(user string, userID string, draftInventory model.TransferInventory) (*[]model.Inventory, error) {
 
@@ -498,6 +608,7 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 		inv.location,
 		inv.is_transfer_allocated,
 		inv.associated_event_id,
+		e.title,
 		inv.storage_location_id,
 		inv.created_at,
 		inv.created_by,
@@ -507,6 +618,7 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 		coalesce (up.full_name, up.username, up.email_address)  as updater_name
 	FROM
 		community.inventory inv
+	LEFT JOIN community.projects e ON inv.associated_event_id = e.id
 	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
 	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
 	LEFT JOIN community.profiles up on up.id  = inv.updated_by
@@ -531,6 +643,7 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 			&updatedInventory.Location,
 			&updatedInventory.IsTransferAllocated,
 			&updatedInventory.AssociatedEventID,
+			&updatedInventory.AssociatedEventTitle,
 			&updatedInventory.StorageLocationID,
 			&updatedInventory.CreatedAt,
 			&updatedInventory.CreatedBy,

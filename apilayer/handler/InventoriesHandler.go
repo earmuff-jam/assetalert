@@ -242,6 +242,50 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetAllInventoriesAssociatedWithSelectEvent ...
+// swagger:route GET /api/v1/profile/{eventID}/associated-inventories GetAllInventoriesAssociatedWithSelectEvent getAllInventoriesAssociatedWithSelectEvent
+//
+// # Retrieves the list of inventories for each users
+//
+// # Updates the selected notification
+//
+// Parameters:
+//   - +name: eventID
+//     in: path
+//     description: The eventID of the selected event
+//     type: string
+//     required: true
+//
+// Responses:
+// 200: []Inventory
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetAllInventoriesAssociatedWithSelectEvent(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+
+	eventID := vars["eventID"]
+
+	if len(eventID) <= 0 {
+		log.Printf("unable to retrieve events with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveAllInventoriesAssociatedWithSelectEvent(user, eventID)
+	if err != nil {
+		log.Printf("Unable to retrieve inventories associated with an event. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // TransferSelectedInventory ...
 // swagger:route POST /api/profile/{id}/inventories/transfer TransferSelectedInventory transferSelectedInventory
 //

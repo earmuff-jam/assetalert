@@ -143,6 +143,16 @@ export function* fetchReportForSelectedEvent(action) {
   }
 }
 
+export function* fetchAllInventoriesAssociatedWithEvent(action) {
+  try {
+    const { eventID } = action.payload;
+    const response = yield call(instance.get, `${BASEURL}/profile/${eventID}/associated-inventories`);
+    yield put(eventActions.getAllInventoriesAssociatedWithEventSuccess(response.data));
+  } catch (e) {
+    yield put(eventActions.getAllInventoriesAssociatedWithEventFailure(e));
+  }
+}
+
 export function* watchFetchEvent() {
   yield takeLatest(`event/getSelectedEvent`, fetchEvent);
 }
@@ -199,6 +209,10 @@ export function* watchFetchReportForSelectedEvent() {
   yield takeLatest(`event/getReportsForSelectedEvent`, fetchReportForSelectedEvent);
 }
 
+export function* watchGetAllInventoriesAssociatedWithEvent() {
+  yield takeLatest(`event/getAllInventoriesAssociatedWithEvent`, fetchAllInventoriesAssociatedWithEvent);
+}
+
 // eslint-disable-next-line
 export default [
   watchAddItem,
@@ -216,4 +230,5 @@ export default [
   watchFetchAllVolunteeringHours,
   watchFetchReportForSelectedEvent,
   watchCreateNewReportAgainstEvent,
+  watchGetAllInventoriesAssociatedWithEvent,
 ];

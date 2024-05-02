@@ -328,7 +328,7 @@ const profileSlice = createSlice({
       state.error = '';
       state.loading = false;
       state.inventories = [];
-    },
+    }
   },
 });
 
