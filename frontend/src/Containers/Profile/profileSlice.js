@@ -318,8 +318,11 @@ const profileSlice = createSlice({
     transferItemsToSelectedEventSuccess: (state, action) => {
       state.error = '';
       state.loading = false;
-      // once items are marked as associated, they should be marked as such from the response from server
-      state.inventories = action.payload;
+      const updatedInventories = action.payload;
+      const filteredStateInventories = state.inventories.filter((existingInventory) => {
+        return !updatedInventories.some((updatedInventory) => updatedInventory.id === existingInventory.id);
+      });
+      state.inventories = [...updatedInventories, ...filteredStateInventories];
     },
     transferItemsToSelectedEventFailure: (state) => {
       state.error = '';

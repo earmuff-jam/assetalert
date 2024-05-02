@@ -232,6 +232,7 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 1:
@@ -251,6 +252,7 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 2:
@@ -270,6 +272,7 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 3:
@@ -289,6 +292,7 @@ const Inventories = () => {
             columnHeaderFormatter={columnHeaderFormatter}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       default:
@@ -358,9 +362,7 @@ const Inventories = () => {
       {openMenu && (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={handleMenuClose}>Share items with Events</Title>
-          <Box>
-            <ViewSharedInventories rowSelected={rowSelected} handleMenuClose={handleMenuClose} />
-          </Box>
+          <ViewSharedInventories rowSelected={rowSelected} handleMenuClose={handleMenuClose} />
         </Dialog>
       )}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">
