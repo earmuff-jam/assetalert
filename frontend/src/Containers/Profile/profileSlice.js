@@ -3,14 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   loading: false,
   error: '',
-  profiles: [],
-  profileDetails: {},
-  notifications: [],
-  inventories: [],
-  volunteeringDetails: [],
-  recentActivities: [],
-  recentTrophies: {},
   notes: [],
+  profiles: [],
+  inventories: [],
+  notifications: [],
+  profileDetails: {},
+  recentTrophies: {},
+  recentActivities: [],
+  volunteeringDetails: [],
+  eventsSharedWithSelectProfile: [],
 };
 
 const profileSlice = createSlice({
@@ -294,6 +295,38 @@ const profileSlice = createSlice({
     removeInventoryRowsFailure: (state) => {
       state.loading = false;
       state.error = '';
+      state.inventories = [];
+    },
+    retrieveEventsSharedWithSelectProfile: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    retrieveEventsSharedWithSelectProfileSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = action.payload;
+    },
+    retrieveEventsSharedWithSelectProfileFailure: (state) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = [];
+    },
+    transferItemsToSelectedEvent: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    transferItemsToSelectedEventSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      const updatedInventories = action.payload;
+      const filteredStateInventories = state.inventories.filter((existingInventory) => {
+        return !updatedInventories.some((updatedInventory) => updatedInventory.id === existingInventory.id);
+      });
+      state.inventories = [...updatedInventories, ...filteredStateInventories];
+    },
+    transferItemsToSelectedEventFailure: (state) => {
+      state.error = '';
+      state.loading = false;
       state.inventories = [];
     },
   },

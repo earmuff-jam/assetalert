@@ -1,16 +1,21 @@
 import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { useEffect, useState } from 'react';
+
 import Title from '../DialogComponent/Title';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
+
 import AddInventoryDetail from './AddInventoryDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadData from '../DrawerListComponent/UploadData';
+import ViewSharedInventories from './ViewSharedInventories';
+
 import TextComponent from '../TextFieldComponent/TextComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
+
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
@@ -48,13 +53,15 @@ const Inventories = () => {
 
   // open the search icon
   const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
   const [value, setValue] = useState(0);
   const [displayData, setDisplayData] = useState([]);
+  const [rowSelected, setRowSelected] = useState([]);
   const [uploadedFileInJson, setUploadedFileInJson] = useState([]);
 
-  const { loading: inventoriesLoading, inventories } = useSelector((state) => state.profile);
+  const { loading, inventories } = useSelector((state) => state.profile);
 
   // for header purpose
   const columns = Object.keys(displayData.length > 0 && displayData[0]);
@@ -62,12 +69,39 @@ const Inventories = () => {
 
   const filteredItems = displayData?.map((item) => {
     // eslint-disable-next-line
-    const { storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } = item;
+    const { associated_event_id, storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } =
+      item;
     return rest;
   });
+
   const handleEditMode = () => {
     setEditMode(!editMode);
     dispatch(eventActions.getStorageLocations());
+  };
+
+  const handleRowSelection = (event, id) => {
+    const selectedIndex = rowSelected.indexOf(id);
+    let draftSelected = [];
+
+    if (selectedIndex === -1) {
+      draftSelected = draftSelected.concat(rowSelected, id);
+    } else if (selectedIndex === 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(1));
+    } else if (selectedIndex === rowSelected.length - 1) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+    }
+    setRowSelected(draftSelected);
+  };
+
+  const handleMenuClick = () => {
+    setOpenMenu(true);
+    dispatch(profileActions.retrieveEventsSharedWithSelectProfile());
+  };
+
+  const handleMenuClose = () => {
+    setOpenMenu(null);
   };
 
   const handleChange = (_, newValue) => {
@@ -105,8 +139,10 @@ const Inventories = () => {
     if (['created_at', 'updated_at'].includes(column)) {
       return dayjs(row[column]).fromNow();
     }
+
+    const isItemDisabled = row.is_transfer_allocated;
     const inputColumns = ['bought_at', 'price', 'status', 'quantity', 'name', 'description', 'barcode', 'sku'];
-    if (inputColumns.includes(column)) {
+    if (!isItemDisabled && inputColumns.includes(column)) {
       return (
         <EasyEdit
           type={Types.TEXT}
@@ -123,7 +159,10 @@ const Inventories = () => {
         />
       );
     }
-    return row[column];
+
+    // remove unwanted items from cluttering the display
+    const { associated_event_title, ...rest } = row;
+    return <span>{rest[column]}</span>;
   };
 
   const handleTemplateDownload = () => {
@@ -190,6 +229,10 @@ const Inventories = () => {
             rowFormatter={rowFormatter}
             removeSelectedItems={removeSelectedItems}
             displayDeleteRowIcon={true}
+            handleMenuClick={handleMenuClick}
+            rowSelected={rowSelected}
+            handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 1:
@@ -206,6 +249,10 @@ const Inventories = () => {
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
             removeSelectedItems={removeSelectedItems}
+            handleMenuClick={handleMenuClick}
+            rowSelected={rowSelected}
+            handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 2:
@@ -222,6 +269,10 @@ const Inventories = () => {
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
             removeSelectedItems={removeSelectedItems}
+            handleMenuClick={handleMenuClick}
+            rowSelected={rowSelected}
+            handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       case 3:
@@ -235,9 +286,13 @@ const Inventories = () => {
             data={displayData}
             columns={revisitedCols}
             filteredData={filteredItems}
-            columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
+            handleMenuClick={handleMenuClick}
             removeSelectedItems={removeSelectedItems}
+            columnHeaderFormatter={columnHeaderFormatter}
+            rowSelected={rowSelected}
+            handleRowSelection={handleRowSelection}
+            displayShareIcon={true}
           />
         );
       default:
@@ -246,14 +301,16 @@ const Inventories = () => {
   };
 
   useEffect(() => {
-    dispatch(profileActions.getAllInventoriesForUser());
-  }, []);
-
-  useEffect(() => {
     if (Array.isArray(inventories)) {
       setDisplayData(inventories);
     }
-  }, [inventoriesLoading]);
+    // eslint-disable-next-line
+  }, [loading]);
+
+  useEffect(() => {
+    dispatch(profileActions.getAllInventoriesForUser());
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Box>
@@ -300,6 +357,12 @@ const Inventories = () => {
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setEditMode(false)}>Add New Item</Title>
           <AddInventoryDetail setDisplayMode={setEditMode} />
+        </Dialog>
+      )}
+      {openMenu && (
+        <Dialog open width={'md'} fullWidth={true}>
+          <Title onClose={handleMenuClose}>Share items with Events</Title>
+          <ViewSharedInventories rowSelected={rowSelected} handleMenuClose={handleMenuClose} />
         </Dialog>
       )}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">

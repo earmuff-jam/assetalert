@@ -1,31 +1,25 @@
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Container } from '@material-ui/core';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
+import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { CancelRounded, DoneRounded } from '@material-ui/icons';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import { CircularProgress, Container, makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  spinnerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-  },
-}));
 
 const ViewItemDetail = ({ disabled }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   dayjs.extend(relativeTime);
 
   const { loading, items } = useSelector((state) => state.event);
   const { loading: userDetailsLoading, profileDetails } = useSelector((state) => state.profile);
+
+  const [rowSelected, setRowSelected] = useState([]);
 
   // removing unwanted values from the display column
   const filteredItems = items?.map((item) => {
@@ -33,6 +27,22 @@ const ViewItemDetail = ({ disabled }) => {
     const { eventID, storage_location_id, created_by, updated_by, ...rest } = item;
     return rest;
   });
+
+  const handleRowSelection = (event, id) => {
+    const selectedIndex = rowSelected.indexOf(id);
+    let draftSelected = [];
+
+    if (selectedIndex === -1) {
+      draftSelected = draftSelected.concat(rowSelected, id);
+    } else if (selectedIndex === 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(1));
+    } else if (selectedIndex === rowSelected.length - 1) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+    }
+    setRowSelected(draftSelected);
+  };
 
   const save = (value, rowIndex, column) => {
     const row = items.filter((v, index) => index === rowIndex).find(() => true);
@@ -79,11 +89,7 @@ const ViewItemDetail = ({ disabled }) => {
   };
 
   if (loading) {
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress />
-      </div>
-    );
+    return <LoadingSkeleton height={'20rem'} width={'20rem'} />;
   }
 
   if (!items || items.length === 0) {
@@ -104,6 +110,8 @@ const ViewItemDetail = ({ disabled }) => {
         columnHeaderFormatter={columnHeaderFormatter}
         rowFormatter={rowFormatter}
         modifyHeightVariant={true}
+        rowSelected={rowSelected}
+        handleRowSelection={handleRowSelection}
       />
     </Container>
   );

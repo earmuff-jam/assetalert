@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"errors"
 	"log"
 	"time"
@@ -30,6 +31,8 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
     inv.quantity,
 	inv.bought_at,
     inv.location,
+	inv.is_transfer_allocated,
+	p.title,
     inv.storage_location_id,
     inv.created_by,
     COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
@@ -39,6 +42,7 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
     inv.updated_at
 FROM
     community.inventory inv
+LEFT JOIN community.projects p ON inv.associated_event_id = p.id
 LEFT JOIN community.profiles cp ON inv.created_by = cp.id
 LEFT JOIN community.profiles up ON inv.updated_by = up.id
 WHERE
@@ -57,6 +61,9 @@ ORDER BY
 	for rows.Next() {
 		var inventory model.Inventory
 
+		var isTransferAllocated sql.NullBool
+		var associatedEventTitle sql.NullString
+
 		if err := rows.Scan(
 			&inventory.ID,
 			&inventory.Name,
@@ -68,6 +75,8 @@ ORDER BY
 			&inventory.Quantity,
 			&inventory.BoughtAt,
 			&inventory.Location,
+			&isTransferAllocated,
+			&associatedEventTitle,
 			&inventory.StorageLocationID,
 			&inventory.CreatedBy,
 			&inventory.CreatorName,
@@ -78,6 +87,14 @@ ORDER BY
 		); err != nil {
 			return nil, err
 		}
+
+		if isTransferAllocated.Valid {
+			inventory.IsTransferAllocated = isTransferAllocated.Bool
+		}
+		if associatedEventTitle.Valid {
+			inventory.AssociatedEventTitle = associatedEventTitle.String
+		}
+
 		data = append(data, inventory)
 	}
 
@@ -138,11 +155,23 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			return nil, err
 		}
 
-		sqlStr := `INSERT INTO community.inventory
-	(name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, created_at, updated_by, updated_at)
-    VALUES
-	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	RETURNING id`
+		sqlStr := `INSERT INTO community.inventory (
+			name, 
+			description, 
+			price, 
+			status, 
+			barcode, 
+			sku, 
+			quantity, 
+			bought_at, 
+			location, 
+			storage_location_id, 
+			created_by, 
+			created_at, 
+			updated_by, 
+			updated_at
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+	RETURNING id;`
 
 		err = tx.QueryRow(
 			sqlStr,
@@ -381,6 +410,151 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 
 	// Return the updated inventory object
 	return &updatedInventory, nil
+}
+
+// TransferInventory ...
+func TransferInventory(user string, userID string, draftInventory model.TransferInventory) (*[]model.Inventory, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
+	parsedEventID, err := uuid.Parse(draftInventory.EventID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	parsedUserID, err := uuid.Parse(draftInventory.UserID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	columnToUpdate := draftInventory.Column
+
+	sqlStr := `
+        UPDATE community.inventory
+        SET ` + columnToUpdate + ` = $1,
+			associated_event_id = $4,
+			updated_by = $2,
+            updated_at = now()
+        WHERE 
+			id = $3
+        RETURNING id;`
+
+	var updatedInventoryItemIDList []model.Inventory
+	for _, itemID := range draftInventory.ItemIDs {
+
+		parsedItemID, err := uuid.Parse(itemID)
+		if err != nil {
+			log.Printf("unable to parse selected item. error: %+v", err)
+			tx.Rollback()
+			return nil, err
+		}
+
+		var updatedInventory model.Inventory
+		err = tx.QueryRow(sqlStr, draftInventory.Value, parsedUserID, parsedItemID, parsedEventID).Scan(&updatedInventory.ID)
+
+		if err != nil {
+			log.Printf("unable to updated selected item. error: %+v", err)
+			tx.Rollback()
+			return nil, err
+		}
+		updatedInventoryItemIDList = append(updatedInventoryItemIDList, updatedInventory)
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to update all items. error: %+v", err)
+		tx.Rollback()
+		return nil, errors.New("commit failed: " + err.Error())
+	}
+
+	// new tx to bring fresh values
+	tx, err = db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	sqlGetUpdatedInventory := `
+	SELECT
+		inv.id,
+		inv.name,
+		inv.description,
+		inv.price,
+		inv.status,
+		inv.barcode,
+		inv.sku,
+		inv.quantity,
+		inv.bought_at,
+		inv.location,
+		inv.is_transfer_allocated,
+		inv.associated_event_id,
+		inv.storage_location_id,
+		inv.created_at,
+		inv.created_by,
+		coalesce (cp.full_name, cp.username, cp.email_address) as creator_name,
+		inv.updated_at,
+		inv.updated_by,
+		coalesce (up.full_name, up.username, up.email_address)  as updater_name
+	FROM
+		community.inventory inv
+	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
+	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
+	LEFT JOIN community.profiles up on up.id  = inv.updated_by
+	WHERE inv.id = $1;`
+
+	var updatedInventoryList []model.Inventory
+
+	for _, v := range updatedInventoryItemIDList {
+		row := tx.QueryRow(sqlGetUpdatedInventory, v.ID)
+
+		updatedInventory := model.Inventory{}
+		err = row.Scan(
+			&updatedInventory.ID,
+			&updatedInventory.Name,
+			&updatedInventory.Description,
+			&updatedInventory.Price,
+			&updatedInventory.Status,
+			&updatedInventory.Barcode,
+			&updatedInventory.SKU,
+			&updatedInventory.Quantity,
+			&updatedInventory.BoughtAt,
+			&updatedInventory.Location,
+			&updatedInventory.IsTransferAllocated,
+			&updatedInventory.AssociatedEventID,
+			&updatedInventory.StorageLocationID,
+			&updatedInventory.CreatedAt,
+			&updatedInventory.CreatedBy,
+			&updatedInventory.CreatorName,
+			&updatedInventory.UpdatedAt,
+			&updatedInventory.UpdatedBy,
+			&updatedInventory.UpdaterName,
+		)
+		updatedInventoryList = append(updatedInventoryList, updatedInventory)
+
+		if err != nil {
+			log.Printf("unable to retrieve all updated items. error: %+v", err)
+			tx.Rollback()
+			return nil, err
+		}
+	}
+
+	// Commit the transaction
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	// Return the updated inventory object
+	return &updatedInventoryList, nil
 }
 
 // DeleteInventory ...
