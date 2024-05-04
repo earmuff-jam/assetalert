@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: theme.spacing(1, 2),
     borderRadius: theme.spacing(0),
+    overflow: 'auto',
     backgroundColor: theme.palette.common.white,
   },
   headerText: {

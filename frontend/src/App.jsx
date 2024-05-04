@@ -1,4 +1,3 @@
-import React from 'react';
 import { primary_theme } from './util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import HomePage from './Containers/Home/HomePage';

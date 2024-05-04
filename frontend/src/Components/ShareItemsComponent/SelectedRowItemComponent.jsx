@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { SHARED_INVENTORY_ITEMS } from './constants';
 import EmptyComponent from '../../util/EmptyComponent';
@@ -64,6 +65,14 @@ const SelectedRowItemComponent = ({ selectedRow }) => {
       </TableBody>
     </Table>
   );
+};
+
+SelectedRowItemComponent.defaultProps = {
+  selectedRow: {},
+};
+
+SelectedRowItemComponent.propTypes = {
+  selectedRow: PropTypes.object,
 };
 
 export default SelectedRowItemComponent;

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { REACT_APP_LOCALHOST_URL } from './Common';
 
+const UNAUTHORIZED_INSTANCES = [400, 401, 500];
+
 const instance = axios.create({
   baseURL: `${REACT_APP_LOCALHOST_URL}/api/v1`,
   headers: {
@@ -17,5 +19,16 @@ instance.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// catch any unauthorized request
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (UNAUTHORIZED_INSTANCES.includes(error.response.status)) {
+      localStorage.removeItem('userID');
+      window.history.replaceState({}, '');
+    }
+  }
+);
 
 export default instance;

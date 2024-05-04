@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, makeStyles } from '@material-ui/core';
 import SelectedRowItemComponent from './SelectedRowItemComponent';
+import { SHARE_ITEM_COMPONENT_TABLE_HEADERS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
+      gap: theme.spacing(2),
     },
   },
   remainingContainer: {
@@ -57,10 +59,12 @@ const ShareItemsComponent = () => {
     ) {
       setOptions(inventoriesAssociatedWithSelectedEvent);
     }
+    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     dispatch(eventActions.getAllInventoriesAssociatedWithEvent({ eventID: eventID }));
+    // eslint-disable-next-line
   }, []);
 
   if (options.length <= 0) {
@@ -73,14 +77,11 @@ const ShareItemsComponent = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Serial No.</TableCell>
-              <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Description</TableCell>
-              <TableCell align="center">Price</TableCell>
-              <TableCell align="center">Quantity</TableCell>
-              <TableCell align="center">Location</TableCell>
-              <TableCell align="center">Last Modified</TableCell>
-              <TableCell align="center">Updated by</TableCell>
+              {SHARE_ITEM_COMPONENT_TABLE_HEADERS.map((v) => (
+                <TableCell key={v.id} align="center">
+                  {v.modifier(v.label)}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>

@@ -20,6 +20,30 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
 	}
 	defer db.Close()
 
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	data, err := retrieveAllInventoryDetailsForUser(tx, userID)
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return make([]model.Inventory, 0), nil
+	}
+
+	return data, nil
+}
+
+func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inventory, error) {
 	sqlStr := `SELECT
     inv.id,
     inv.name,
@@ -50,7 +74,7 @@ WHERE
 ORDER BY
    inv.updated_at  DESC;
 	`
-	rows, err := db.Query(sqlStr, userID)
+	rows, err := tx.Query(sqlStr, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -100,11 +124,6 @@ ORDER BY
 
 	if err := rows.Err(); err != nil {
 		return nil, err
-	}
-
-	if len(data) == 0 {
-		// empty array to factor in for null
-		return make([]model.Inventory, 0), nil
 	}
 	return data, nil
 }
@@ -170,10 +189,9 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			created_at, 
 			updated_by, 
 			updated_at
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	RETURNING id;`
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);`
 
-		err = tx.QueryRow(
+		_, err = tx.Exec(
 			sqlStr,
 			v.Name,
 			v.Description,
@@ -189,7 +207,7 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			time.Now(),
 			parsedCreatedByUUID,
 			time.Now(),
-		).Scan(&v.ID)
+		)
 
 		if err != nil {
 			tx.Rollback()
@@ -199,9 +217,28 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 	}
 
 	if err := tx.Commit(); err != nil {
+		log.Printf("unable to process trasanction with selected db pool. error: %+v", err)
 		return nil, err
 	}
 
+	tx, err = db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	resp, err := retrieveAllInventoryDetailsForUser(tx, userID)
+	if err != nil {
+		log.Printf("unable to retrieve all inventories for selected user. error: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to process trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	draftInventoryList.InventoryList = resp
 	return draftInventoryList.InventoryList, nil
 }
 
@@ -413,23 +450,12 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 }
 
 // RetrieveAllInventoriesAssociatedWithSelectEvent ...
-func RetrieveAllInventoriesAssociatedWithSelectEvent(user string, eventID string) ([]model.Inventory, error) {
+func RetrieveAllInventoriesAssociatedWithSelectEvent(user string, parsedEventID uuid.UUID) ([]model.Inventory, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
-
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
-	parsedEventID, err := uuid.Parse(eventID)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
 
 	sqlStr := `SELECT
     inv.id,
@@ -516,7 +542,6 @@ ORDER BY inv.updated_at DESC;
 	}
 
 	if len(data) == 0 {
-		// empty array to factor in for null
 		return make([]model.Inventory, 0), nil
 	}
 	return data, nil

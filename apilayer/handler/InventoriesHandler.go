@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
 	"github.com/mohit2530/communityCare/model"
@@ -245,9 +246,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 // GetAllInventoriesAssociatedWithSelectEvent ...
 // swagger:route GET /api/v1/profile/{eventID}/associated-inventories GetAllInventoriesAssociatedWithSelectEvent getAllInventoriesAssociatedWithSelectEvent
 //
-// # Retrieves the list of inventories for each users
-//
-// # Updates the selected notification
+// # Retrieves the list of inventories associated with each event regardless of the creator
 //
 // Parameters:
 //   - +name: eventID
@@ -274,7 +273,15 @@ func GetAllInventoriesAssociatedWithSelectEvent(rw http.ResponseWriter, r *http.
 		return
 	}
 
-	resp, err := db.RetrieveAllInventoriesAssociatedWithSelectEvent(user, eventID)
+	parsedEventID, err := uuid.Parse(eventID)
+	if err != nil {
+		log.Printf("unable to retrieve events with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveAllInventoriesAssociatedWithSelectEvent(user, parsedEventID)
 	if err != nil {
 		log.Printf("Unable to retrieve inventories associated with an event. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

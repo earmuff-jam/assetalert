@@ -860,13 +860,65 @@ func Test_GetAllInventoriesAssociatedWithSelectEvent_IncorrectUserID(t *testing.
 }
 
 func Test_GetAllInventoriesAssociatedWithSelectEvent_InvalidDBUser(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/transfer", nil)
-	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
-	w := httptest.NewRecorder()
+
+	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
 	db.PreloadAllTestVariables()
-	GetAllInventoriesAssociatedWithSelectEvent(w, req, config.CEO_USER)
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftEvent := &model.Event{
+		Title:          "Test Event",
+		Cause:          "Celebrations",          // Celebrations
+		ProjectType:    "Community Development", // Community Development
+		Attendees:      []string{prevUser.ID.String()},
+		TotalManHours:  200,
+		StartDate:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		UpdatedBy:      prevUser.ID.String(),
+		SharableGroups: []string{prevUser.ID.String()},
+		ProjectSkills:  []string{"Videography"},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftEvent)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/events", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	CreateNewEvent(w, req, config.CTO_USER)
 	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedEvent model.Event
+	err = json.Unmarshal(data, &selectedEvent)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/associated-inventories", selectedEvent.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"eventID": selectedEvent.ID})
+	w = httptest.NewRecorder()
+	GetAllInventoriesAssociatedWithSelectEvent(w, req, config.CEO_USER)
+	res = w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
+
+	// cleanup
+	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }

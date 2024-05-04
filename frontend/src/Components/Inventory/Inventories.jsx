@@ -181,6 +181,7 @@ const Inventories = () => {
     }
 
     // remove unwanted items from cluttering the display
+    // eslint-disable-next-line
     const { associated_event_title, ...rest } = row;
     return <span>{rest[column]}</span>;
   };
