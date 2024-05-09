@@ -1,21 +1,17 @@
 import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { useEffect, useState } from 'react';
-
 import Title from '../DialogComponent/Title';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
-
 import AddInventoryDetail from './AddInventoryDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadData from '../DrawerListComponent/UploadData';
 import ViewSharedInventories from './ViewSharedInventories';
-
 import TextComponent from '../TextFieldComponent/TextComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
-
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
 import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
@@ -141,7 +137,31 @@ const Inventories = () => {
     }
 
     const isItemDisabled = row.is_transfer_allocated;
-    const inputColumns = ['bought_at', 'price', 'status', 'quantity', 'name', 'description', 'barcode', 'sku'];
+    const inputColumns = ['bought_at', 'price', 'quantity', 'name', 'description', 'barcode', 'sku'];
+
+    if (!isItemDisabled && column === 'status') {
+      return (
+        <EasyEdit
+          type="select"
+          options={[
+            { label: 'All products', value: 'ALL' },
+            { label: 'Coupons/deals products', value: 'DEALS' },
+            { label: 'Draft products', value: 'DRAFT' },
+            { label: 'Hidden products', value: 'HIDDEN' },
+          ]}
+          onSave={(value) => {
+            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].key);
+          }}
+          onCancel={(o) => o}
+          placeholder={row[column].toString()}
+          saveButtonLabel={<DoneRounded />}
+          cancelButtonLabel={<CancelRounded />}
+          attributes={{ name: 'awesome-input', id: 1 }}
+          instructions={`Currently editing ${column}`}
+        />
+      );
+    }
+
     if (!isItemDisabled && inputColumns.includes(column)) {
       return (
         <EasyEdit
@@ -161,6 +181,7 @@ const Inventories = () => {
     }
 
     // remove unwanted items from cluttering the display
+    // eslint-disable-next-line
     const { associated_event_title, ...rest } = row;
     return <span>{rest[column]}</span>;
   };
@@ -252,7 +273,6 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
-            displayShareIcon={true}
           />
         );
       case 2:
@@ -272,7 +292,6 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
-            displayShareIcon={true}
           />
         );
       case 3:
@@ -292,7 +311,6 @@ const Inventories = () => {
             columnHeaderFormatter={columnHeaderFormatter}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
-            displayShareIcon={true}
           />
         );
       default:

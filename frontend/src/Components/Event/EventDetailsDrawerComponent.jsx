@@ -13,6 +13,7 @@ import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
 import ImpactTracking from '../ImpactTrackingDetails/ImpactTracking';
 import ViewExpenseListHeader from '../ViewExpenseList/ViewExpenseListHeader';
+import ShareItemsComponent from '../ShareItemsComponent/ShareItemsComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,6 +124,8 @@ const EventDetailsDrawerComponent = ({
           </Box>
         );
       case 3:
+        return <ShareItemsComponent />;
+      case 4:
         return (
           <Box>
             <Box className={classNames(classes.rowContainer, classes.smallVariant, classes.allowSpace)}>
