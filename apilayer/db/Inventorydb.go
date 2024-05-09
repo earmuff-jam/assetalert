@@ -58,6 +58,12 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
 	inv.is_transfer_allocated,
 	p.title,
     inv.storage_location_id,
+	inv.is_returnable,
+	inv.return_location,
+	inv.max_weight,
+	inv.min_weight,
+	inv.max_height,
+	inv.min_height,
     inv.created_by,
     COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
     inv.created_at,
@@ -102,6 +108,12 @@ ORDER BY
 			&isTransferAllocated,
 			&associatedEventTitle,
 			&inventory.StorageLocationID,
+			&inventory.IsReturnable,
+			&inventory.ReturnLocation,
+			&inventory.MaxWeight,
+			&inventory.MinWeight,
+			&inventory.MaxHeight,
+			&inventory.MinHeight,
 			&inventory.CreatedBy,
 			&inventory.CreatorName,
 			&inventory.CreatedAt,
@@ -294,11 +306,28 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 	draftInventory.CreatedAt = currentTimestamp
 	draftInventory.UpdatedAt = currentTimestamp
 
-	sqlStr = `INSERT INTO community.inventory
-	(name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, created_at, updated_by, updated_at)
-    VALUES
-	($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	RETURNING id`
+	sqlStr = `INSERT INTO community.inventory (name,
+		description,
+		price,
+		status,
+		barcode,
+		sku,
+		quantity,
+		bought_at,
+		location,
+		storage_location_id,
+		is_returnable,
+		return_location,
+		max_weight,
+		min_weight,
+		max_height,
+		min_height,
+		created_by,
+		created_at,
+		updated_by,
+		updated_at)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+RETURNING id;`
 
 	err = tx.QueryRow(
 		sqlStr,
@@ -312,6 +341,12 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		draftInventory.BoughtAt,
 		draftInventory.Location,
 		parsedStorageLocationID,
+		draftInventory.IsReturnable,
+		draftInventory.ReturnLocation,
+		draftInventory.MaxWeight,
+		draftInventory.MinWeight,
+		draftInventory.MaxHeight,
+		draftInventory.MinHeight,
 		parsedCreatedByUUID,
 		draftInventory.CreatedAt,
 		parsedCreatedByUUID,
@@ -399,6 +434,12 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 		inv.bought_at,
 		inv.location,
 		inv.storage_location_id,
+		inv.is_returnable,
+		inv.return_location,
+		inv.max_weight,
+		inv.min_weight,
+		inv.max_height,
+		inv.min_height,
 		inv.created_at,
 		inv.created_by,
 		coalesce (cp.full_name, cp.username, cp.email_address) as creator_name,
@@ -428,6 +469,12 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 		&updatedInventory.BoughtAt,
 		&updatedInventory.Location,
 		&updatedInventory.StorageLocationID,
+		&updatedInventory.IsReturnable,
+		&updatedInventory.ReturnLocation,
+		&updatedInventory.MaxWeight,
+		&updatedInventory.MinWeight,
+		&updatedInventory.MaxHeight,
+		&updatedInventory.MinHeight,
 		&updatedInventory.CreatedAt,
 		&updatedInventory.CreatedBy,
 		&updatedInventory.CreatorName,

@@ -142,14 +142,99 @@ export const ADD_ITEM_PROFILE_FORM = {
     ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
   },
   status: {
-    // status is hidden because its not a textfield. index === 4 is status
-    // status column is skipped in AddInventoryDetails
     label: 'Item Status',
     placeholder: 'Item Status',
     value: '',
     name: 'status',
     errorMsg: '',
     required: false,
+  },
+  is_returnable: {
+    label: 'Is Returnable',
+    value: '',
+    name: 'is_returnable',
+    errorMsg: '',
+    required: false,
+  },
+  return_location: {
+    label: 'Return location',
+    placeholder: 'where to return the item',
+    value: '',
+    name: 'return_location',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => value.trim().length === 0,
+        message: 'Return location is required if intended to return items',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
+  },
+  min_weight: {
+    label: 'Min Weight',
+    placeholder: 'Minimum weight of item',
+    value: '',
+    name: 'min_weight',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
+        message: 'A positive number is required',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
+  },
+  max_weight: {
+    label: 'Max Weight',
+    placeholder: 'Maximum weight of item',
+    value: '',
+    name: 'max_weight',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
+        message: 'A positive number is required',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
+  },
+  min_height: {
+    label: 'Min Height',
+    placeholder: 'Minimum height of item',
+    value: '',
+    name: 'min_height',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
+        message: 'A positive number is required',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
+  },
+  max_height: {
+    label: 'Max Height',
+    placeholder: 'Maximum height of item',
+    value: '',
+    name: 'max_height',
+    errorMsg: '',
+    required: false,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
+        message: 'A positive number is required',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
   },
   quantity: {
     label: 'Quantity',
@@ -160,10 +245,6 @@ export const ADD_ITEM_PROFILE_FORM = {
     required: true,
     fullWidth: true,
     validators: [
-      {
-        validate: (value) => value.trim().length === 0,
-        message: 'Quantity for the selected item is required',
-      },
       {
         validate: (value) =>
           // test for number first, then
@@ -193,63 +274,111 @@ export const ADD_ITEM_PROFILE_FORM = {
 
 export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
   name: {
-    key: 'name',
-    title: 'Item name',
+    id: 1,
+    colName: 'name',
+    label: 'Item name',
     modifier: (title) => `${title}`,
   },
   description: {
-    key: 'description',
-    title: 'Item Description',
+    id: 2,
+    colName: 'description',
+    label: 'Item Description',
     displayName: 'Description',
   },
   price: {
-    key: 'price',
-    title: 'Cost',
+    id: 3,
+    colName: 'price',
+    label: 'Cost',
     modifier: (title) => `${title}`,
   },
   status: {
-    key: 'status',
-    title: 'Status',
+    id: 4,
+    colName: 'status',
+    label: 'Status',
     modifier: (title) => `${title}`,
   },
   barcode: {
-    key: 'barcode',
-    title: 'Barcode',
+    id: 5,
+    colName: 'barcode',
+    label: 'Barcode',
     modifier: (title) => `${title}`,
   },
   sku: {
-    key: 'sku',
-    title: 'SKU',
+    id: 6,
+    colName: 'sku',
+    label: 'SKU',
     modifier: (title) => `${title}`,
   },
   quantity: {
-    key: 'quantity',
-    title: 'Quantity',
+    id: 7,
+    colName: 'quantity',
+    label: 'Quantity',
     modifier: (title) => `${title}`,
   },
   location: {
-    key: 'location',
-    title: 'Location',
+    id: 8,
+    colName: 'location',
+    label: 'Location',
+    modifier: (title) => `${title}`,
+  },
+  is_returnable: {
+    id: 9,
+    colName: 'is_returnable',
+    label: 'Returnable',
+    modifier: (title) => `${title}`,
+  },
+  return_location: {
+    id: 10,
+    colName: 'return_location',
+    label: 'Return Location',
+    modifier: (title) => `${title}`,
+  },
+  max_weight: {
+    id: 11,
+    colName: 'max_weight',
+    label: 'Max Weight',
+    modifier: (title) => `${title}`,
+  },
+  min_weight: {
+    id: 12,
+    colName: 'min_weight',
+    label: 'Min Weight',
+    modifier: (title) => `${title}`,
+  },
+  max_height: {
+    id: 13,
+    colName: 'max_height',
+    label: 'Max Height',
+    modifier: (title) => `${title}`,
+  },
+  min_height: {
+    id: 14,
+    colName: 'min_height',
+    label: 'Min Height',
     modifier: (title) => `${title}`,
   },
   updated_at: {
-    key: 'updated_at',
-    title: 'Updated At',
+    id: 15,
+    colName: 'updated_at',
+    label: 'Updated At',
     modifier: (title) => `${title}`,
   },
   created_at: {
-    key: 'created_at',
-    title: 'Created At',
+    id: 16,
+    colName: 'created_at',
+    label: 'Created At',
     modifier: (title) => `${title}`,
   },
   updater_name: {
-    key: 'updater_name',
-    title: 'Updated By',
+    id: 17,
+    colName: 'updater_name',
+    label: 'Updated By',
     modifier: (title) => `${title}`,
   },
   bought_at: {
-    key: 'bought_at',
-    title: 'Purchase Location',
+    id: 18,
+    colName: 'bought_at',
+    label: 'Purchase Location',
     modifier: (title) => `${title}`,
   },
 };

@@ -1,13 +1,12 @@
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import { Box, makeStyles } from '@material-ui/core';
 import EmptyComponent from '../../util/EmptyComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import { Box, Table, TableBody, TableCell, TableHead, TableRow, makeStyles } from '@material-ui/core';
 import SelectedRowItemComponent from './SelectedRowItemComponent';
-import { SHARE_ITEM_COMPONENT_TABLE_HEADERS } from './constants';
+import { SHARED_INVENTORY_ITEMS, SHARE_ITEM_COMPONENT_TABLE_HEADERS } from './constants';
+import TableComponent from '../TableComponent/TableComponent';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -30,12 +29,7 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
-  row: {
-    cursor: 'pointer',
-  },
 }));
-
-dayjs.extend(relativeTime);
 
 const ShareItemsComponent = () => {
   const classes = useStyles();
@@ -74,34 +68,10 @@ const ShareItemsComponent = () => {
   return (
     <Box className={classes.rowContainer}>
       <Box className={classes.sideContainer}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {SHARE_ITEM_COMPONENT_TABLE_HEADERS.map((v) => (
-                <TableCell key={v.id} align="center">
-                  {v.modifier(v.label)}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {options?.map((item, index) => (
-              <TableRow hover key={item.id} onClick={() => handleClick(item)} className={classes.row}>
-                <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="left">{item.name}</TableCell>
-                <TableCell align="left">{item?.description || 'N/A'}</TableCell>
-                <TableCell align="center">{item.price}</TableCell>
-                <TableCell align="center">{item.quantity}</TableCell>
-                <TableCell align="center">{item.location}</TableCell>
-                <TableCell align="center">{dayjs(item.updated_at).fromNow()}</TableCell>
-                <TableCell align="center">{item.updater_name}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <TableComponent columns={SHARE_ITEM_COMPONENT_TABLE_HEADERS} options={options} handleClick={handleClick} />
       </Box>
       <Box className={classes.remainingContainer}>
-        <SelectedRowItemComponent selectedRow={selectedRow} />
+        <SelectedRowItemComponent selectedRow={selectedRow} columns={SHARED_INVENTORY_ITEMS} />
       </Box>
     </Box>
   );

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SelectedRowItemComponent = ({ selectedRow }) => {
+const SelectedRowItemComponent = ({ selectedRow, columns }) => {
   const classes = useStyles();
 
   if (Object.keys(selectedRow).length === 0) {
@@ -49,7 +49,7 @@ const SelectedRowItemComponent = ({ selectedRow }) => {
   return (
     <Table>
       <TableBody>
-        {BUILD_TABLE_CONSTANTS(SHARED_INVENTORY_ITEMS)(selectedRow).map((row) => (
+        {BUILD_TABLE_CONSTANTS(columns)(selectedRow).map((row) => (
           <TableRow key={row.id} className={classes.tableRow}>
             <TableCell className={classNames(classes.text, classes.blueTableCell)}>{row.id}</TableCell>
             <TableCell
@@ -59,7 +59,13 @@ const SelectedRowItemComponent = ({ selectedRow }) => {
             >
               {row.label}
             </TableCell>
-            <TableCell className={classes.text}>{row.value}</TableCell>
+            <TableCell
+              className={classNames(classes.text, {
+                [classes.darkbackgroundColor]: row.id % 2 === 0,
+              })}
+            >
+              {row.value}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -69,10 +75,12 @@ const SelectedRowItemComponent = ({ selectedRow }) => {
 
 SelectedRowItemComponent.defaultProps = {
   selectedRow: {},
+  columns: [],
 };
 
 SelectedRowItemComponent.propTypes = {
   selectedRow: PropTypes.object,
+  columns: PropTypes.array,
 };
 
 export default SelectedRowItemComponent;
