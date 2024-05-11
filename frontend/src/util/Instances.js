@@ -20,8 +20,6 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-const whichEnv = import.meta.env.NODE_ENV;
-console.log(whichEnv);
 
 // catch any unauthorized request
 instance.interceptors.response.use(
