@@ -4,6 +4,7 @@
 
 1. Docker.
 2. Golang/migrate lib.
+3. Yarn package manager.
 
 ### Development Instance
 
@@ -13,9 +14,7 @@
   - ./main.sh -m
   - ./main.sh -g
 - Run `-e` command first to get all .env variables for build.
-- Run `-f` command to fetch the db container and build it in docker. Pre-req : Docker.
-- Run `-m` command to run all the migration in sequence. Pre-req: Migrate Cmd go/lang lib. https://github.com/golang-migrate/migrate
-- Run `-g` command to insert some test data. This inserts some rows in the database built beforehand. This should be only used for test data purposes.
+- Run `-D` to load dev container and run migration scripts. This add extra data for developers to develop against.
 - If everything is succesful, you should be able to succesfully have a development instance of psql container within docker with required migration files.
 - Continue setup from MakeFile.
 
@@ -24,18 +23,22 @@
 - Use `main.sh` to run test instance.
   - This test instance will have no data. Assumption is that you view mashed app from the scratch.
   - ./main.sh -e
-  - ./main.sh -t
-  - ./main.sh -m
-  - ./main.sh -g
+  - ./main.sh -T
 - Run `-e` command first to get all .env variables for build.
-- Run `-t` for loading test instance and `-m` so that the migration scripts can run.
-- Run `-g` command to insert some test data. This inserts some rows in the database built beforehand. This should be only used for test data purposes.
+- Run `-T` for loading test instance. This will load all migration scripts and also run unit tests.
+- Run `-u` for cleanup purposes. Must be done manually.
 
 ### Production Instance
 
+#### Notes
+
+1. Production instance must be executed in sequence. Since there should be ability to alter data, we have to run migration scripts as well. Please be aware of this.
+2. Only required env variables are copied over.
+3. Since data cannot be modified here, no test data is inserted. A fresh container will have no users. Running flag `-u` will `REMOVE ALL DATA`. `NEVER RUN THIS IN PRODUCTION ENV`
+
 - Use `mainDeploy.sh` to run production instance.
   - This is production isntance. Please be careful. Data is not scrubbed here.
-  - ./main.sh -e
-  - ./main.sh -p
-  - ./main.sh -m
-- Run `-m` to allow for the migration scripts to run.
+  - ./mainDeploy.sh -e
+  - ./mainDeploy.sh -p
+  - ./mainDeploy.sh -m
+- Run `-m` to allow for the migration scripts to run. `must`

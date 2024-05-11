@@ -28,7 +28,7 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
 
 	data, err := retrieveAllInventoryDetailsForUser(tx, userID)
 	if err != nil {
-		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		log.Printf("unable to retrieve all inventories details for user. error: %+v", err)
 		return nil, err
 	}
 
@@ -91,6 +91,11 @@ ORDER BY
 	for rows.Next() {
 		var inventory model.Inventory
 
+		var returnLocation sql.NullString
+		var maxWeight sql.NullString
+		var minWeight sql.NullString
+		var maxHeight sql.NullString
+		var minHeight sql.NullString
 		var isTransferAllocated sql.NullBool
 		var associatedEventTitle sql.NullString
 
@@ -109,11 +114,11 @@ ORDER BY
 			&associatedEventTitle,
 			&inventory.StorageLocationID,
 			&inventory.IsReturnable,
-			&inventory.ReturnLocation,
-			&inventory.MaxWeight,
-			&inventory.MinWeight,
-			&inventory.MaxHeight,
-			&inventory.MinHeight,
+			&returnLocation,
+			&maxWeight,
+			&minWeight,
+			&maxHeight,
+			&minHeight,
 			&inventory.CreatedBy,
 			&inventory.CreatorName,
 			&inventory.CreatedAt,
@@ -129,6 +134,21 @@ ORDER BY
 		}
 		if associatedEventTitle.Valid {
 			inventory.AssociatedEventTitle = associatedEventTitle.String
+		}
+		if returnLocation.Valid {
+			inventory.ReturnLocation = returnLocation.String
+		}
+		if maxWeight.Valid {
+			inventory.MaxWeight = maxWeight.String
+		}
+		if minWeight.Valid {
+			inventory.MinWeight = minWeight.String
+		}
+		if maxHeight.Valid {
+			inventory.MaxHeight = maxHeight.String
+		}
+		if minHeight.Valid {
+			inventory.MinHeight = minHeight.String
 		}
 
 		data = append(data, inventory)

@@ -1,21 +1,23 @@
-
 # Use an official Node.js runtime as a parent image
 FROM node:18-alpine as build
 
 # Set the working directory inside the container
 WORKDIR /app
 
+RUN apk add --no-cache curl && \
+    curl -o- -L https://yarnpkg.com/install.sh | sh
+
+ENV PATH="/root/.yarn/bin:${PATH}"
+
 COPY . .
 
-# Install node packages
-RUN yarn --network-timeout 600000
-
-# Build the app
-RUN NODE_OPTIONS="--max-old-space-size=4096" yarn build --network-timeout 600000
+RUN yarn -v && \
+    yarn install --production && \
+    yarn build
 
 # prod environment
 FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY --from=build /app/nginx/client.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
