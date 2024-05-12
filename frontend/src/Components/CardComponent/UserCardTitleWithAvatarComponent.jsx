@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CardTitleComponent from './CardTitleComponent';
 import EditImageComponent from '../Event/EditImageComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
+import { enqueueSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, editMode, isLoading }) => {
+const UserCardTitleWithAvatarComponent = ({
+  formFields,
+  avatarUrl,
+  profileID,
+  editMode,
+  allowEditProfileImg,
+  isLoading,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -53,6 +61,18 @@ const UserCardTitleWithAvatarComponent = ({ formFields, avatarUrl, profileID, ed
   };
 
   const handleSubmitImage = async (userID) => {
+    if (!allowEditProfileImg) {
+      enqueueSnackbar('Unable to edit. Missing profile details.', {
+        variant: 'error',
+      });
+      return;
+    }
+    if (uploadedImage === null) {
+      enqueueSnackbar('Unable to edit. Missing avatar.', {
+        variant: 'error',
+      });
+      return;
+    }
     dispatch(profileActions.updateProfileImage({ selectedImage: uploadedImage, userID: userID }));
     toggleEditImage();
     setEditImage(!editImage);
@@ -108,6 +128,7 @@ UserCardTitleWithAvatarComponent.defaultProps = {
   profileID: '',
   isLoading: false,
   editMode: false,
+  allowEditProfileImg: false,
 };
 
 UserCardTitleWithAvatarComponent.propTypes = {
@@ -116,5 +137,6 @@ UserCardTitleWithAvatarComponent.propTypes = {
   profileID: PropTypes.string,
   isLoading: PropTypes.bool,
   editMode: PropTypes.bool,
+  allowEditProfileImg: PropTypes.bool,
 };
 export default UserCardTitleWithAvatarComponent;

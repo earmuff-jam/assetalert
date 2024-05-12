@@ -4490,18 +4490,6 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash.memoize@^4.1.7":
-  version "4.1.9"
-  resolved "https://registry.npmjs.org/@types/lodash.memoize/-/lodash.memoize-4.1.9.tgz"
-  integrity sha512-glY1nQuoqX4Ft8Uk+KfJudOD7DQbbEDF6k9XpGncaohW3RW4eSWBlx6AA0fZCrh40tZcQNH4jS/Oc59J6Eq+aw==
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*":
-  version "4.14.201"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.201.tgz"
-  integrity sha512-y9euML0cim1JrykNxADLfaG0FgD1g/yTHwUs/Jg9ZIU7WKj2/4IW9Lbb1WZbvck78W/lfGXFfe+u2EGfIJXdLQ==
-
 "@types/lodash@^4.14.167":
   version "4.14.202"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.202.tgz"
@@ -5015,11 +5003,6 @@
   dependencies:
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
-
-"@wojtekmaj/date-utils@^1.1.3":
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/@wojtekmaj/date-utils/-/date-utils-1.5.1.tgz"
-  integrity sha512-+i7+JmNiE/3c9FKxzWFi2IjRJ+KzZl1QPu6QNrsgaa2MuBgXvUy4gA1TVzf/JMdIIloB76xSKikTWuyYAIVLww==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -5677,6 +5660,18 @@ babel-preset-react-app@^10.0.1:
     babel-plugin-macros "^3.1.0"
     babel-plugin-transform-react-remove-prop-types "^0.4.24"
 
+bad-words@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/bad-words/-/bad-words-3.0.4.tgz#044c83935c4c363a905d47b5e0179f7241fecaec"
+  integrity sha512-v/Q9uRPH4+yzDVLL4vR1+S9KoFgOEUl5s4axd6NIAq8SV2mradgi4E8lma/Y0cw1ltVdvyegCQQKffCPRCp8fg==
+  dependencies:
+    badwords-list "^1.0.0"
+
+badwords-list@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/badwords-list/-/badwords-list-1.0.0.tgz#5e9856dbf13482a295c3b0b304afb9d4cfc5c579"
+  integrity sha512-oWhaSG67e+HQj3OGHQt2ucP+vAPm1wTbdp2aDHeuh4xlGXBdWwzZ//pfu6swf5gZ8iX0b7JgmSo8BhgybbqszA==
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
@@ -6177,11 +6172,6 @@ clsx@^1.0.4, clsx@^1.1.0:
   version "1.2.1"
   resolved "https://registry.npmjs.org/clsx/-/clsx-1.2.1.tgz"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
-
-clsx@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/clsx/-/clsx-2.0.0.tgz"
-  integrity sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==
 
 co@^4.6.0:
   version "4.6.0"
@@ -8454,14 +8444,6 @@ get-symbol-description@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
-get-user-locale@^2.2.1:
-  version "2.3.1"
-  resolved "https://registry.npmjs.org/get-user-locale/-/get-user-locale-2.3.1.tgz"
-  integrity sha512-VEvcsqKYx7zhZYC1CjecrDC5ziPSpl1gSm0qFFJhHSGDrSC+x4+p1KojWC/83QX//j476gFhkVXP/kNUc9q+bQ==
-  dependencies:
-    "@types/lodash.memoize" "^4.1.7"
-    lodash.memoize "^4.1.1"
-
 giget@^1.0.0:
   version "1.2.1"
   resolved "https://registry.npmjs.org/giget/-/giget-1.2.1.tgz"
@@ -10446,7 +10428,7 @@ lodash.keys@^3.0.0:
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
 
-lodash.memoize@^4.1.1, lodash.memoize@^4.1.2:
+lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz"
   integrity sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==
@@ -12164,7 +12146,7 @@ prompts@^2.0.1, prompts@^2.4.0, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -12360,17 +12342,6 @@ react-autocomplete@^1.8.1:
   dependencies:
     dom-scroll-into-view "1.0.1"
     prop-types "^15.5.10"
-
-react-calendar@^4.6.0:
-  version "4.6.1"
-  resolved "https://registry.npmjs.org/react-calendar/-/react-calendar-4.6.1.tgz"
-  integrity sha512-MvCPdvxEvq7wICBhFxlYwxS2+IsVvSjTcmlr0Kl3yDRVhoX7btNg0ySJx5hy9rb1eaM4nDpzQcW5c87nfQ8n8w==
-  dependencies:
-    "@wojtekmaj/date-utils" "^1.1.3"
-    clsx "^2.0.0"
-    get-user-locale "^2.2.1"
-    prop-types "^15.6.0"
-    tiny-warning "^1.0.0"
 
 react-chartjs-2@^5.2.0:
   version "5.2.0"
@@ -14049,7 +14020,7 @@ tiny-invariant@^1.3.1, tiny-invariant@^1.3.3:
   resolved "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz"
   integrity sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==
 
-tiny-warning@^1.0.0, tiny-warning@^1.0.2:
+tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==

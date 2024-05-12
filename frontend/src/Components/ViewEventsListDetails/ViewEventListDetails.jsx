@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
-
 import SearchAllEvents from '../Event/SearchAllEvents';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewFilteredEventList from './ViewFilteredEventList';
@@ -79,6 +77,7 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
       const filteredEventByActivation = currentEvents?.filter((v) => !v.deactivated);
       setFilteredOptions(filteredEventByActivation);
     }
+    // eslint-disable-next-line
   }, [searchValue, currentEvents]);
 
   if (isLoading) {
@@ -90,7 +89,7 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
   }
 
   return (
-    <Box className={classes.root} >
+    <Box className={classes.root}>
       <Typography gutterBottom className={classNames(classes.header, classes.errorText)}>
         View all events
       </Typography>

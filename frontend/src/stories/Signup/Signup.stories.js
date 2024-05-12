@@ -1,13 +1,13 @@
-import SignUp from './Signup';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { Provider } from 'react-redux';
 import { store } from '../../Store';
+import Signup from '../../Components/AuthenticatorComponent/Signup';
 
 export default {
   title: 'LandingPage/SignUp',
-  component: SignUp,
+  component: Signup,
   decorators: [
     withRouter,
     (Story) => (

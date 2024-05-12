@@ -7,6 +7,7 @@ import { Avatar, Box, makeStyles } from '@material-ui/core';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import CardTitleComponent from './CardTitleComponent';
 import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
+import { enqueueSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,13 @@ const EventCardTitleWithAvatarComponent = ({ editMode, userDetail, isLoading }) 
   };
 
   const handleSubmitImage = async (id) => {
+    if (uploadedImage === null) {
+      enqueueSnackbar('Unable to edit. Missing avatar.', {
+        variant: 'error',
+      });
+      return;
+    }
+    console.log('wat');
     dispatch(eventActions.updateEventImage({ selectedImage: uploadedImage, eventID: id }));
     toggleEditImage();
     setEditImage(!editImage);

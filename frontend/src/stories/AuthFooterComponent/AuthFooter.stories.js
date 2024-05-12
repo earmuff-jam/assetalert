@@ -1,13 +1,13 @@
 import { store } from '../../Store';
 import { Provider } from 'react-redux';
-import ChipComponent from './ChipComponent';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
+import AuthFooter from '../../Components/AuthFooterComponent/AuthFooter';
 
 export default {
-  title: 'LandingPage/ChipComponent',
-  component: ChipComponent,
+  title: 'LandingPage/AuthFooter',
+  component: AuthFooter,
   decorators: [
     withRouter,
     (Story) => (
@@ -20,7 +20,6 @@ export default {
   ],
 };
 
-export const PrimaryChipComponent = {
+export const PrimaryAuthFooter = {
   args: {},
 };
-

@@ -1,4 +1,8 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { AllInboxRounded, DraftsRounded, LoyaltyRounded, VisibilityOffRounded } from '@material-ui/icons';
+
+dayjs.extend(relativeTime);
 
 export const ADD_NEW_INVENTORY_SUBTITLE_TEXT =
   'Add items for your own inventory. Store items under here that are for your personal use. All Items stored with due process until the user profile is abandoned.';
@@ -361,13 +365,13 @@ export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
     id: 15,
     colName: 'updated_at',
     label: 'Updated At',
-    modifier: (title) => `${title}`,
+    modifier: (value) => `${dayjs(value).fromNow()}`,
   },
   created_at: {
     id: 16,
     colName: 'created_at',
     label: 'Created At',
-    modifier: (title) => `${title}`,
+    modifier: (value) => `${dayjs(value).fromNow()}`,
   },
   updater_name: {
     id: 17,

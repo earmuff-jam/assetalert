@@ -4,11 +4,11 @@ import Title from '../DialogComponent/Title';
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Dialog, Divider } from '@material-ui/core';
-import ChipComponent from '../../stories/Chip/ChipComponent';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
 import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@material-ui/icons';
 import AddCommunityEvent from '../CommunityEventComponent/AddCommunityEvent';
+import ChipComponent from '../ChipComponent/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {

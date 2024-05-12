@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-
-import Title from '../Title/Title';
+import Title from '../TitleComponent/Title';
 import { useSelector } from 'react-redux';
-import Login from '../Login/Login';
-import Signup from '../Signup/Signup';
+import Signup from './Signup';
 import { FaceRounded, PersonAddRounded } from '@material-ui/icons';
-import ChipComponent from '../Chip/ChipComponent';
+import ChipComponent from '../ChipComponent/ChipComponent';
+import Login from './Login';
 
 const useStyles = makeStyles((theme) => ({
   root: {

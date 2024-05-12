@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { SHARED_INVENTORY_ITEMS } from './constants';
 import EmptyComponent from '../../util/EmptyComponent';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
 import { Table, TableBody, TableCell, TableRow, makeStyles } from '@material-ui/core';

@@ -1,7 +1,7 @@
-import AuthAppBar from './AuthAppBar';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
+import AuthAppBar from '../../Components/AppBarComponent/AuthAppBar';
 
 export default {
   title: 'LandingPage/AuthAppBar',

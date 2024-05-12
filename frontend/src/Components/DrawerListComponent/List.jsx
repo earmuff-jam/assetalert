@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   IconButton,
   Box,
   Checkbox,
@@ -18,6 +17,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
 import { DeleteRounded, OpenInNewRounded, ShareRounded } from '@material-ui/icons';
+import Title from '../TitleComponent/Title';
+import TextFieldComponent from '../TextFieldComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -72,15 +73,16 @@ const List = ({
   rowSelected,
   handleRowSelection,
   handleDisplayMoreDetails,
+  isInventoryPage,
 }) => {
   const classes = useStyles();
 
   return (
     <>
-      <Typography className={classes.headerText}>{title}</Typography>
+      <Title titleStyle={classes.headerText} displaySubtitle={false} title={title} />
       <Box className={classes.container}>
         <Box className={classes.rowContainer}>
-          <Typography className={classes.text}>{subtitle}</Typography>
+          <TextFieldComponent textStyle={classes.text} value={subtitle} loading={false} />
           <Box className={classes.rowContainer}>
             <Box>
               {data.length > 0 && (
@@ -116,7 +118,7 @@ const List = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell padding="checkbox" align='center'>
+                  <TableCell padding="checkbox" align="center">
                     <Checkbox disabled />
                   </TableCell>
                   {columns.map((column) => (
@@ -154,17 +156,19 @@ const List = ({
                               onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
                               inputProps={{ 'aria-labelledby': 'labelId' }}
                             />
-                            <IconButton
-                              size="small"
-                              disableRipple={true}
-                              disableFocusRipple={true}
-                              disabled={isItemDisabled}
-                              onClick={(event) =>
-                                !isItemDisabled ? handleDisplayMoreDetails(event, selectedID) : null
-                              }
-                            >
-                              <OpenInNewRounded />
-                            </IconButton>
+                            {isInventoryPage && (
+                              <IconButton
+                                size="small"
+                                disableRipple={true}
+                                disableFocusRipple={true}
+                                disabled={isItemDisabled}
+                                onClick={(event) =>
+                                  !isItemDisabled ? handleDisplayMoreDetails(event, selectedID) : null
+                                }
+                              >
+                                <OpenInNewRounded />
+                              </IconButton>
+                            )}
                           </Box>
                         </TableCell>
                         {columns.map((column) => (
@@ -202,6 +206,7 @@ List.defaultProps = {
   rowSelected: [],
   handleRowSelection: () => {},
   handleDisplayMoreDetails: () => {},
+  isInventoryPage: false,
 };
 
 List.propTypes = {
@@ -223,6 +228,7 @@ List.propTypes = {
   rowSelected: PropTypes.array,
   handleRowSelection: PropTypes.func,
   handleDisplayMoreDetails: PropTypes.func,
+  isInventoryPage: PropTypes.bool,
 };
 
 export default List;

@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import AppBarNavListItem from '../../stories/NavListItem/AppBarNavListItem';
+import AppBarNavListItem from './AppBarNavListItem';
 import {
   AssignmentIndRounded,
   BarChartRounded,

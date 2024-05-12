@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ChipComponent from '../../stories/Chip/ChipComponent';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import ChipComponent from '../ChipComponent/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({
   headerText: {

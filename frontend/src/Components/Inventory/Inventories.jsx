@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { enqueueSnackbar } from 'notistack';
@@ -95,7 +96,6 @@ const Inventories = () => {
   const filteredCols = columns.filter((v) => !unwantedHeaderValues.includes(v));
 
   const filteredItems = displayData?.map((item) => {
-    // eslint-disable-next-line
     const {
       associated_event_id,
       storage_location_id,
@@ -120,7 +120,7 @@ const Inventories = () => {
     dispatch(eventActions.getStorageLocations());
   };
 
-  const handleRowSelection = (event, id) => {
+  const handleRowSelection = (_, id) => {
     const selectedIndex = rowSelected.indexOf(id);
     let draftSelected = [];
 
@@ -317,6 +317,7 @@ const Inventories = () => {
             handleRowSelection={handleRowSelection}
             displayShareIcon={true}
             handleDisplayMoreDetails={handleDisplayMoreDetails}
+            isInventoryPage={true}
           />
         );
       case 1:
@@ -337,6 +338,7 @@ const Inventories = () => {
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
             handleDisplayMoreDetails={handleDisplayMoreDetails}
+            isInventoryPage={true}
           />
         );
       case 2:
@@ -356,6 +358,7 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            isInventoryPage={true}
           />
         );
       case 3:
@@ -376,6 +379,7 @@ const Inventories = () => {
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
             handleDisplayMoreDetails={handleDisplayMoreDetails}
+            isInventoryPage={true}
           />
         );
       default:

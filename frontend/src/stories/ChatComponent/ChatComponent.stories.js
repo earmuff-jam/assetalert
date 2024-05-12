@@ -25,7 +25,7 @@ export default {
   },
 };
 
-export const PrimaryCardTitleComponentEventDetails = {
+export const PrimaryCommunityMsg = {
   args: {
     userFullName: 'John Doe',
     userID: 'test-user-id',

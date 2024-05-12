@@ -63,6 +63,7 @@ const ProfileDetailsCardComponent = ({
 }) => {
   const classes = useStyles();
   const containsUnreadNotifications = notifications.map((v) => !v.is_viewed).filter(Boolean).length;
+  const allowEditProfileImg = [profileDetails?.full_name, profileDetails?.username].some((v) => v?.length !== 0);
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -73,6 +74,7 @@ const ProfileDetailsCardComponent = ({
             profileID={profileDetails.id}
             editMode={editMode}
             isLoading={isLoading}
+            allowEditProfileImg={allowEditProfileImg}
           />
           <Box className={classes.emptyGap}></Box>
           <Box data-tour="1">

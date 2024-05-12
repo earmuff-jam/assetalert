@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Table, TableBody, TableCell, TableHead, TableRow, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   row: {
     cursor: 'pointer',
   },
@@ -39,6 +40,18 @@ const TableComponent = ({ columns, options, handleClick }) => {
       </TableBody>
     </Table>
   );
+};
+
+TableComponent.defaultProps = {
+  columns: [],
+  options: [],
+  handleClick: () => {},
+};
+
+TableComponent.propTypes = {
+  columns: PropTypes.array,
+  options: PropTypes.array,
+  handleClick: PropTypes.func,
 };
 
 export default TableComponent;

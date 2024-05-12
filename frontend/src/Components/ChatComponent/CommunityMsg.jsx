@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useEffect, useState } from 'react';
 import { TextField, Button, Container, Paper, Typography } from '@material-ui/core';
-
+import badWordsFilter from 'bad-words';
 import useWebSocket from 'react-use-websocket';
 import EmptyComponent from '../../util/EmptyComponent';
+import { enqueueSnackbar } from 'notistack';
+import { REACT_APP_LOCALHOST_URL_SOCKET_BASE_URL } from '../../util/Common';
 
 const useStyles = makeStyles((theme) => ({
   btnContainer: {
@@ -33,12 +35,21 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
 
-  const socketUrl = `ws://localhost:8087/api/v1/event/${eventID}/ws`;
+  const profanityFilter = new badWordsFilter();
+  const socketUrl = `${REACT_APP_LOCALHOST_URL_SOCKET_BASE_URL}/api/v1/event/${eventID}/ws`;
   const { sendMessage, lastMessage } = useWebSocket(socketUrl);
 
   const feedWebsocket = useCallback((draftMsg) => sendMessage(draftMsg), [sendMessage]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
+    const hasProfanity = profanityFilter.isProfane(messageInput);
+    if (hasProfanity) {
+      enqueueSnackbar('Unable to send obscene messages. Are you being safe with chat? ', {
+        variant: 'error',
+      });
+      return;
+    }
+
     const draftMsg = {
       eventID: eventID,
       userID: userID,

@@ -1,9 +1,9 @@
-import Login from './Login';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { store } from '../../Store';
 import { Provider } from 'react-redux';
+import Login from '../../Components/AuthenticatorComponent/Login';
 
 export default {
   title: 'LandingPage/Login',
