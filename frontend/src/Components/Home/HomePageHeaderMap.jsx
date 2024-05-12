@@ -139,6 +139,7 @@ const HomePageHeaderMap = ({ location, eventList, isLoading }) => {
     return () => {
       map.setTarget(null);
     };
+    // eslint-disable-next-line
   }, [eventList, JSON.stringify(location)]);
 
   return (

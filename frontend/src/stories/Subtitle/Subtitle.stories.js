@@ -1,8 +1,8 @@
-import Subtitle from './Subtitle';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { EmojiPeopleRounded } from '@material-ui/icons';
+import Subtitle from '../../Components/TitleComponent/Subtitle';
 
 export default {
   title: 'LandingPage/Subtitle',

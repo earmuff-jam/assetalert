@@ -1,13 +1,13 @@
 import { store } from '../../Store';
 import { Provider } from 'react-redux';
-import AuthFooter from './AuthFooter';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
+import Authenticator from '../../Components/AuthenticatorComponent/Authenticator';
 
 export default {
-  title: 'LandingPage/AuthFooter',
-  component: AuthFooter,
+  title: 'LandingPage/Authenticator',
+  component: Authenticator,
   decorators: [
     withRouter,
     (Story) => (
@@ -20,6 +20,6 @@ export default {
   ],
 };
 
-export const PrimaryAuthFooter = {
+export const PrimaryAuthenticator = {
   args: {},
 };

@@ -152,8 +152,9 @@ const eventSlice = createSlice({
       state.expenses = [];
     },
     addExpenseList: (state) => {
-      state.loading = true;
+      state.expenses = [];
       state.error = '';
+      state.loading = true;
     },
     addExpenseListSuccess: (state, action) => {
       state.expenses = [...state.expenses, action.payload];

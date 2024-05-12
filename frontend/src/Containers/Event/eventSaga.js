@@ -92,6 +92,7 @@ export function* addExpense(action) {
     const response = yield call(instance.post, `${BASEURL}/expenses`, { ...postFormattedData });
     yield put(eventActions.addExpenseListSuccess(response.data));
   } catch (e) {
+    console.log('wat happened - ', e);
     yield put(eventActions.addExpenseListFailure(e));
   }
 }

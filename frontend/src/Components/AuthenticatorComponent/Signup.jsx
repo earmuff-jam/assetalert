@@ -1,12 +1,13 @@
-import { useState } from 'react';
 import { produce } from 'immer';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowRightRounded } from '@material-ui/icons';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { InputAdornment, TextField } from '@material-ui/core';
-import { LOGIN_FORM_FIELDS } from '../../Containers/Auth/constants';
-import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
+import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -22,11 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Signup = ({ setSignUpView }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [formFields, setFormFields] = useState(LOGIN_FORM_FIELDS);
+  const [formFields, setFormFields] = useState(SIGN_UP_FORM_FIELDS);
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -45,7 +47,16 @@ const Login = () => {
     );
   };
 
-  const validate = (formFields) => {
+  const fetchSignupFn = (formattedData) => {
+    dispatch(authActions.getSignup(formattedData));
+  };
+
+  const requiredFormFields = Object.values(formFields).filter((v) => v.required);
+  const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '') || !isChecked;
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {
         return true;
@@ -54,13 +65,9 @@ const Login = () => {
     }, false);
 
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
-    return containsErr || requiredFormFields.some((el) => el.value.trim() === '');
-  };
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    if (validate(formFields)) {
+    if (containsErr || isRequiredFieldsEmpty || !isChecked) {
       console.log('Empty form fields. Unable to proceed.');
       return;
     } else {
@@ -70,7 +77,8 @@ const Login = () => {
         }
         return acc;
       }, {});
-      dispatch(authActions.getUserID(formattedData));
+      fetchSignupFn(formattedData);
+      setSignUpView(false);
     }
   };
 
@@ -105,18 +113,33 @@ const Login = () => {
           />
         ))}
       </form>
+      <FormControl fullWidth>
+        <FormControlLabel
+          control={<Checkbox checked={isChecked} onChange={() => setIsChecked(!isChecked)} color="primary" />}
+          label="Accept terms and conditions."
+          classes={{ label: classes.caption }}
+        />
+      </FormControl>
       <ButtonComponent
-        text={'Submit'}
+        text={'Register'}
         showIcon={true}
-        icon={<ArrowRightRounded />}
         buttonVariant={'text'}
-        onClick={handleFormSubmit}
-        disabled={validate(formFields)}
         disableRipple={true}
+        icon={<ArrowRightRounded />}
         disableFocusRipple={true}
+        onClick={handleFormSubmit}
+        disabled={isRequiredFieldsEmpty}
       />
     </div>
   );
 };
 
-export default Login;
+Signup.defaultProps = {
+  setSignUpView: () => {},
+};
+
+Signup.propTypes = {
+  setSignUpView: PropTypes.func,
+};
+
+export default Signup;

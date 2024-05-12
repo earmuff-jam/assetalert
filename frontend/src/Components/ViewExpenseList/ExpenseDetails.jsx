@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Dialog } from '@material-ui/core';
+import { Box, Dialog } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import Title from '../DialogComponent/Title';
 import ViewExpenseList from './ViewExpenseList';
 import AddExpenseDetail from './AddExpenseDetail';
 import Drawer from '../DrawerListComponent/Drawer';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,22 +40,32 @@ const ExpenseDetails = ({ eventID, userID, editingAllowed }) => {
 
   const toggleDrawer = (boolVal) => setOpenDrawer(boolVal);
 
+  const handleViewExpenses = () => {
+    setOpenDrawer(true);
+    dispatch(eventActions.getExpenseList({ eventID }));
+  };
+
+  const handleAddExpenses = () => {
+    setOpenDialog(true);
+    dispatch(eventActions.getCategoryList());
+  };
+
   return (
     <Box className={classes.root}>
       <Box className={classes.rowContainer}>
-        <Button
+        <ButtonComponent
           disabled={editingAllowed}
-          className={classes.text}
-          onClick={() => {
-            setOpenDialog(true);
-            dispatch(eventActions.getCategoryList());
-          }}
-        >
-          Add Expense
-        </Button>
-        <Button onClick={() => setOpenDrawer(true)} className={classes.text}>
-          View Expense
-        </Button>
+          onClick={handleAddExpenses}
+          buttonStyles={classes.text}
+          text={'Add Expenses'}
+          buttonVariant={'text'}
+        />
+        <ButtonComponent
+          onClick={handleViewExpenses}
+          buttonStyles={classes.text}
+          text={'View Expenses'}
+          buttonVariant={'text'}
+        />
       </Box>
       <Drawer open={openDrawer} toggleDrawer={toggleDrawer} disabled={editingAllowed}>
         <ViewExpenseList disabled={true} />

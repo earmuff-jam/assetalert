@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Subtitle from '../Subtitle/Subtitle';
+import Subtitle from './Subtitle';
 import { EmojiPeopleRounded } from '@material-ui/icons';
 import { Typography, makeStyles } from '@material-ui/core';
 

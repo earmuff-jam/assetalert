@@ -1,13 +1,13 @@
-import AppBarNavListItem from './AppBarNavListItem';
+import { store } from '../../Store';
+import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
 import { ThemeProvider } from '@material-ui/core';
 import { withRouter } from 'storybook-addon-react-router-v6';
-import { Provider } from 'react-redux';
-import { store } from '../../Store';
+import CreateNewEvent from '../../Components/Home/CreateNewEvent';
 
 export default {
-  title: 'HomePage/AppBarNavListItem',
-  component: AppBarNavListItem,
+  title: 'HomePage/CreateNewEvent',
+  component: CreateNewEvent,
   decorators: [
     withRouter,
     (Story) => (
@@ -26,6 +26,6 @@ export default {
   },
 };
 
-export const PrimaryAppBarNavListItem = {
+export const PrimaryCreateNewEvent = {
   args: {},
 };

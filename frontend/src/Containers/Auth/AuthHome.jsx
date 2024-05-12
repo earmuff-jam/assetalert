@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Box } from '@material-ui/core';
-import AppBar from '../../stories/AuthAppBar/AuthAppBar';
-import AuthFooter from '../../stories/AuthFooter/AuthFooter';
-import Authenticator from '../../stories/Authenticator/Authenticator';
-import InviteSection from '../../stories/InviteSection/InviteSection';
+import AppBar from '../../Components/AppBarComponent/AuthAppBar';
+import Authenticator from '../../Components/AuthenticatorComponent/Authenticator';
+import InviteSection from '../../Components/InviteSectionComponent/InviteSection';
+import AuthFooter from '../../Components/AuthFooterComponent/AuthFooter';
 
 const useStyles = makeStyles((theme) => ({
   root: {

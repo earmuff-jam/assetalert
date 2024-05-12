@@ -1,16 +1,3 @@
-import {
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  Box,
-  Badge,
-  Tooltip,
-  CardActions,
-  Chip,
-  Avatar,
-} from '@material-ui/core';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -18,6 +5,8 @@ import { WhatshotRounded } from '@material-ui/icons';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchCurrentColor } from '../../util/Common';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { Typography, Grid, Card, CardContent, Box, Badge, Tooltip, CardActions, Chip, Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -149,9 +138,13 @@ const ViewFilteredEventList = ({ filteredOptions, handleNavigate }) => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button onClick={() => handleNavigate(eventID)} className={classes.buttonContainer}>
-                  Learn More
-                </Button>
+                <ButtonComponent
+                  disabled={false}
+                  onClick={() => handleNavigate(eventID)}
+                  buttonStyles={classes.buttonContainer}
+                  text={'Learn More'}
+                  buttonVariant={'text'}
+                />
               </CardActions>
             </Card>
           </Grid>
