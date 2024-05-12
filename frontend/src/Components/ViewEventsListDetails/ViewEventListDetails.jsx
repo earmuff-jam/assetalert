@@ -81,8 +81,12 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
     }
   }, [searchValue, currentEvents]);
 
-  if (isLoading || noAvailableProjects) {
+  if (isLoading) {
     return <LoadingSkeleton width={`calc(100% - 1rem)`} height={'20rem'} />;
+  }
+
+  if (noAvailableProjects) {
+    return <EmptyComponent subtitle={'Create new event to begin'} />;
   }
 
   return (
