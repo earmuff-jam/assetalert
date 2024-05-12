@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS storage_locations
 
 -- prefil locations ---
 INSERT INTO storage_locations (location)
-VALUES ('Kitchen Pantry'),
+VALUES ('Kitchen Pantry'), -- used for testing
        ('Master Bedroom Closet'),
        ('Garage'),
        ('Living Room Cabinet'),
@@ -28,7 +28,7 @@ VALUES ('Kitchen Pantry'),
        ('Garage Workshop'),
        ('Guest Bedroom Closet'),
        ('Outdoor Shed'),
-       ('Utility Closet'),
+       ('Utility Closet'), -- used for testing
        ('Attic Storage'),
        ('Guest Bathroom Cabinet'),
        ('Children''s Bedroom Closet'),

@@ -53,3 +53,7 @@ psql -h docker_container_ip -p 5432 -U postgres -d <db_name>
   ```
 
 - View list of running containers with `docker ps`
+
+## Troubleshooting with docker
+
+1. `enter a selected container` - `docker exec -it <service_name> bash`

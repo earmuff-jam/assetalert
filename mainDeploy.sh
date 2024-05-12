@@ -25,9 +25,14 @@ loadProdEnv() {
 
     echo "loadProdEnv flag provided. building all containers in production mode."
 
+    chmod +x setup/_loadProdEnvVariables.sh
+    ./setup/_loadProdEnvVariables.sh
+
     docker-compose down
     docker-compose -f docker-compose.deploy.yml up --build -d
 
+    sleep +2
+    loadMigration
 }
 
 loadMigration() {
@@ -40,8 +45,16 @@ loadMigration() {
 
 uninstall() {
 
-    echo "uninstalling software. removing all data..."
-    docker-compose down --remove-orphans --volumes
+    echo " WARNING !!!! PRODUCTION INSTANCE:: PURGING ALL DATA ... Have you backed up? Press 'Y' to confirm, or 'N' to cancel."
+    read -r -p "Are you sure you want to proceed? [Y/n] " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]') 
+    if [[ "$response" =~ ^(yes|y| ) ]]; then
+        echo "PRODUCTION INSTANCE:: PURGING ALL DATA ... hope you know what you are doing..."
+        sleep 10
+        docker-compose down --remove-orphans --volumes
+    else
+        echo "Uninstallation canceled."
+    fi
 }
 
 if [ "$#" -eq 0 ]; then

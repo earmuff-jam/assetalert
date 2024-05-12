@@ -130,19 +130,56 @@ VALUES (
 );
 
 -- ADD INVENTORIES SQL TEST DATA --
-INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location, storage_location_id, created_by, updated_by, sharable_groups)
-VALUES (
-    '4 pounds of kitty litter',
-    'Bought from tractor supply in fm969',
-    12.00,
-    'DRAFT',
-    'barcode#1123928',
-    'sku#123456734',
-    12,
-    'Walmart',
-    'Kitchen Pantry',
-    (SELECT id from community.storage_locations WHERE location = 'Kitchen Pantry'),
-    (SELECT id FROM community.profiles p LIMIT 1),
-    (SELECT id FROM community.profiles p LIMIT 1),
-    ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]
-);
+INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
+                                 storage_location_id, is_returnable, return_location, max_weight, min_weight,
+                                 max_height, min_height, created_by, updated_by, sharable_groups)
+VALUES ('4 pounds of kitty litter',
+        'Bought from tractor supply in fm969',
+        12.00,
+        'DRAFT',
+        'barcode#1123928',
+        'sku#123456734',
+        12,
+        'Walmart',
+        'Kitchen Pantry',
+        (SELECT id from community.storage_locations WHERE location = 'Kitchen Pantry'),
+        false,
+        'amazon return',
+        '12',
+        '4',
+        '20',
+        '12',
+        (SELECT id FROM community.profiles p LIMIT 1),
+        (SELECT id FROM community.profiles p LIMIT 1),
+        ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+
+INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
+                                 storage_location_id, is_returnable, return_location, max_weight, min_weight,
+                                 max_height, min_height, created_by, updated_by, sharable_groups)
+VALUES ('Dog food',
+        '6 pounds of food bought from tractor supply',
+        96.00,
+        'HIDDEN',
+        'barcode#1123928',
+        'sku#123456734',
+        1,
+        'Walmart',
+        'Utility Closet',
+        (SELECT id from community.storage_locations WHERE location = 'Utility Closet'),
+        false,
+        'amazon return',
+        '12',
+        '4',
+        '20',
+        '12',
+        (SELECT id FROM community.profiles p LIMIT 1),
+        (SELECT id FROM community.profiles p LIMIT 1),
+        ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+-- UPDATE INVENTORY TO ASSOCIATE WITH SELECTED EVENT ID --
+UPDATE community.inventory
+    SET is_transfer_allocated = true,
+        associated_event_id = (SELECT id FROM community.projects p WHERE p.title = 'SC Go raiders')
+    WHERE name = 'Dog food';
+

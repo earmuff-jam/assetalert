@@ -121,17 +121,23 @@ func Test_AddNewInventory(t *testing.T) {
 	}
 
 	draftInventory := model.Inventory{
-		Name:        "Alexandro Kitteyy Litter",
-		Description: "Kitty litter for a pro name game",
-		Price:       23.99,
-		Status:      "HIDDEN",
-		Barcode:     "1231231231",
-		SKU:         "1231231231",
-		Quantity:    12,
-		Location:    "Broom Closet",
-		CreatedAt:   time.Now(),
-		CreatedBy:   prevUser.ID.String(),
-		BoughtAt:    "Walmart",
+		Name:           "Alexandro Kitteyy Litter",
+		Description:    "Kitty litter for a pro name game",
+		Price:          23.99,
+		Status:         "HIDDEN",
+		Barcode:        "1231231231",
+		SKU:            "1231231231",
+		Quantity:       12,
+		IsReturnable:   true,
+		ReturnLocation: "Target",
+		MaxWeight:      "12",
+		MinWeight:      "120",
+		MaxHeight:      "24",
+		MinHeight:      "12",
+		Location:       "Broom Closet",
+		CreatedAt:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		BoughtAt:       "Walmart",
 	}
 
 	// Marshal the draftEvent into JSON bytes

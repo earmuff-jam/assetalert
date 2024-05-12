@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
-import { useEffect, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 import Title from '../DialogComponent/Title';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
+import React, { useEffect, useState } from 'react';
 import AddInventoryDetail from './AddInventoryDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadData from '../DrawerListComponent/UploadData';
@@ -13,8 +14,9 @@ import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
-import { Box, Dialog, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
+import { Box, Dialog, Slide, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import SelectedRowItemComponent from '../ShareItemsComponent/SelectedRowItemComponent';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -40,33 +42,76 @@ const useStyles = makeStyles((theme) => ({
     color: 'black',
     fontSize: theme.spacing(1.2),
   },
+  rightAlignPaper: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+  },
 }));
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 const Inventories = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const USER_ID = localStorage.getItem('userID');
 
-  // open the search icon
+  // open the bulk upload
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
-  const [editMode, setEditMode] = useState(false);
 
   const [value, setValue] = useState(0);
+  const [editMode, setEditMode] = useState(false);
   const [displayData, setDisplayData] = useState([]);
   const [rowSelected, setRowSelected] = useState([]);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [displayMoreItems, setDisplayMoreItems] = useState(false);
   const [uploadedFileInJson, setUploadedFileInJson] = useState([]);
 
+  const USER_ID = localStorage.getItem('userID');
   const { loading, inventories } = useSelector((state) => state.profile);
 
   // for header purpose
   const columns = Object.keys(displayData.length > 0 && displayData[0]);
-  const revisitedCols = columns.filter((v) => v != 'id');
+  const unwantedHeaderValues = [
+    'id',
+    'is_transfer_allocated',
+    'associated_event_id',
+    'associated_event_title',
+    'storage_location_id',
+    'price',
+    'is_returnable',
+    'return_location',
+    'barcode',
+    'sku',
+    'max_weight',
+    'min_weight',
+    'max_height',
+    'min_height',
+    'created_at',
+    'created_by',
+    'bought_at',
+  ];
+  const filteredCols = columns.filter((v) => !unwantedHeaderValues.includes(v));
 
   const filteredItems = displayData?.map((item) => {
     // eslint-disable-next-line
-    const { associated_event_id, storage_location_id, created_by, creator_name, updated_by, is_resolved, ...rest } =
-      item;
+    const {
+      associated_event_id,
+      storage_location_id,
+      created_by,
+      creator_name,
+      updated_by,
+      is_resolved,
+      is_returnable,
+      return_location,
+      price,
+      max_weight,
+      min_weight,
+      max_height,
+      min_height,
+      ...rest
+    } = item;
     return rest;
   });
 
@@ -91,6 +136,26 @@ const Inventories = () => {
     setRowSelected(draftSelected);
   };
 
+  const handleDisplayMoreDetails = (event, id) => {
+    if (rowSelected.length > 0) {
+      // if selected > 1 row, throw error
+      resetSelection();
+      enqueueSnackbar('Unable to display more details for multiple rows.', {
+        variant: 'error',
+      });
+      return;
+    }
+    handleRowSelection(event, id);
+    const selectedRow = inventories.filter((v) => v.id === id).find(() => true);
+    setSelectedRow(selectedRow);
+    setDisplayMoreItems(!displayMoreItems);
+  };
+
+  const resetSelection = () => {
+    setDisplayMoreItems(false);
+    setRowSelected([]);
+  };
+
   const handleMenuClick = () => {
     setOpenMenu(true);
     dispatch(profileActions.retrieveEventsSharedWithSelectProfile());
@@ -98,6 +163,7 @@ const Inventories = () => {
 
   const handleMenuClose = () => {
     setOpenMenu(null);
+    resetSelection();
   };
 
   const handleChange = (_, newValue) => {
@@ -125,19 +191,16 @@ const Inventories = () => {
 
   const columnHeaderFormatter = (column) => {
     const header = VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column];
-    // Apply a modifier function if defined
-    const formattedTitle = header?.modifier ? header.modifier(header.title) : header?.displayName;
-    return formattedTitle;
+    return header?.label;
   };
 
   const rowFormatter = (row, column, rowIndex) => {
-    // if any of the row includes timestamp we modify it
+    const isItemDisabled = row.is_transfer_allocated;
+    const inputColumns = ['quantity', 'name', 'description'];
+
     if (['created_at', 'updated_at'].includes(column)) {
       return dayjs(row[column]).fromNow();
     }
-
-    const isItemDisabled = row.is_transfer_allocated;
-    const inputColumns = ['bought_at', 'price', 'quantity', 'name', 'description', 'barcode', 'sku'];
 
     if (!isItemDisabled && column === 'status') {
       return (
@@ -150,7 +213,7 @@ const Inventories = () => {
             { label: 'Hidden products', value: 'HIDDEN' },
           ]}
           onSave={(value) => {
-            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].key);
+            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].colName);
           }}
           onCancel={(o) => o}
           placeholder={row[column].toString()}
@@ -167,8 +230,7 @@ const Inventories = () => {
         <EasyEdit
           type={Types.TEXT}
           onSave={(value) => {
-            // the column.key is the db column name
-            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].key);
+            save(value, rowIndex, VIEW_PERSONAL_INVENTORY_LIST_HEADERS[column].colName);
           }}
           onCancel={(o) => o}
           placeholder={row[column].toString()}
@@ -244,7 +306,7 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'All Inventories'}
             data={displayData}
-            columns={revisitedCols}
+            columns={filteredCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
@@ -254,6 +316,7 @@ const Inventories = () => {
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
             displayShareIcon={true}
+            handleDisplayMoreDetails={handleDisplayMoreDetails}
           />
         );
       case 1:
@@ -265,7 +328,7 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Coupons'}
             data={displayData}
-            columns={revisitedCols}
+            columns={filteredCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
@@ -273,6 +336,7 @@ const Inventories = () => {
             handleMenuClick={handleMenuClick}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            handleDisplayMoreDetails={handleDisplayMoreDetails}
           />
         );
       case 2:
@@ -284,7 +348,7 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Draft Status'}
             data={displayData}
-            columns={revisitedCols}
+            columns={filteredCols}
             filteredData={filteredItems}
             columnHeaderFormatter={columnHeaderFormatter}
             rowFormatter={rowFormatter}
@@ -303,7 +367,7 @@ const Inventories = () => {
             fileName={'inventories.xlsx'}
             sheetName={'Hidden Inventories'}
             data={displayData}
-            columns={revisitedCols}
+            columns={filteredCols}
             filteredData={filteredItems}
             rowFormatter={rowFormatter}
             handleMenuClick={handleMenuClick}
@@ -311,6 +375,7 @@ const Inventories = () => {
             columnHeaderFormatter={columnHeaderFormatter}
             rowSelected={rowSelected}
             handleRowSelection={handleRowSelection}
+            handleDisplayMoreDetails={handleDisplayMoreDetails}
           />
         );
       default:
@@ -397,6 +462,25 @@ const Inventories = () => {
         ))}
       </Tabs>
       {displaySelection(value)}
+      {displayMoreItems && (
+        <Dialog
+          open
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={resetSelection}
+          aria-labelledby="simple-dialog-title"
+          scroll="paper"
+          classes={{
+            scrollPaper: classes.rightAlignPaper,
+          }}
+        >
+          <Title onClose={resetSelection}>More Details</Title>
+          <SelectedRowItemComponent
+            selectedRow={selectedRow}
+            columns={Object.values(VIEW_PERSONAL_INVENTORY_LIST_HEADERS)}
+          />
+        </Dialog>
+      )}
     </Box>
   );
 };

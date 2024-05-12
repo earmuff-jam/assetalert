@@ -16,8 +16,8 @@ import {
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import EmptyComponent from '../../util/EmptyComponent';
-import { DeleteRounded, ShareRounded } from '@material-ui/icons';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
+import { DeleteRounded, OpenInNewRounded, ShareRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -71,6 +71,7 @@ const List = ({
   handleMenuClick,
   rowSelected,
   handleRowSelection,
+  handleDisplayMoreDetails,
 }) => {
   const classes = useStyles();
 
@@ -115,7 +116,7 @@ const List = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell padding="checkbox">
+                  <TableCell padding="checkbox" align='center'>
                     <Checkbox disabled />
                   </TableCell>
                   {columns.map((column) => (
@@ -144,13 +145,27 @@ const List = ({
                         })}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={!isItemDisabled && isItemSelected}
-                            disabled={isItemDisabled}
-                            color="primary"
-                            onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
-                            inputProps={{ 'aria-labelledby': 'labelId' }}
-                          />
+                          <Box className={classes.rowContainer}>
+                            <Checkbox
+                              checked={!isItemDisabled && isItemSelected}
+                              disabled={isItemDisabled}
+                              color="primary"
+                              size="small"
+                              onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
+                              inputProps={{ 'aria-labelledby': 'labelId' }}
+                            />
+                            <IconButton
+                              size="small"
+                              disableRipple={true}
+                              disableFocusRipple={true}
+                              disabled={isItemDisabled}
+                              onClick={(event) =>
+                                !isItemDisabled ? handleDisplayMoreDetails(event, selectedID) : null
+                              }
+                            >
+                              <OpenInNewRounded />
+                            </IconButton>
+                          </Box>
                         </TableCell>
                         {columns.map((column) => (
                           <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
@@ -186,6 +201,7 @@ List.defaultProps = {
   handleMenuClick: () => {},
   rowSelected: [],
   handleRowSelection: () => {},
+  handleDisplayMoreDetails: () => {},
 };
 
 List.propTypes = {
@@ -206,6 +222,7 @@ List.propTypes = {
   handleMenuClick: PropTypes.func,
   rowSelected: PropTypes.array,
   handleRowSelection: PropTypes.func,
+  handleDisplayMoreDetails: PropTypes.func,
 };
 
 export default List;

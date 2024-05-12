@@ -22,6 +22,12 @@ type Inventory struct {
 	AssociatedEventID    string    `json:"associated_event_id"`
 	AssociatedEventTitle string    `json:"associated_event_title"`
 	StorageLocationID    string    `json:"storage_location_id"`
+	IsReturnable         bool      `json:"is_returnable"`
+	ReturnLocation       string    `json:"return_location"`
+	MaxWeight            string    `json:"max_weight"`
+	MinWeight            string    `json:"min_weight"`
+	MaxHeight            string    `json:"max_height"`
+	MinHeight            string    `json:"min_height"`
 	CreatedAt            time.Time `json:"created_at"`
 	CreatedBy            string    `json:"created_by"`
 	CreatorName          string    `json:"creator_name"`
