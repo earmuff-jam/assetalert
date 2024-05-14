@@ -114,8 +114,10 @@ func populateFakeEventDetails(user string, limit int, creatorID string) {
 		draftEvent.Lattitude = fmt.Sprintf("%f", gofakeit.Latitude())
 		draftEvent.Longitude = fmt.Sprintf("%f", gofakeit.Longitude())
 		draftEvent.MaxAttendees = gofakeit.Number(1, 20)
+		draftEvent.Price = gofakeit.Price(2, 120)
 		draftEvent.Attendees = userGroup
 		draftEvent.SharableGroups = userGroup
+		draftEvent.Collaborators = userGroup
 		draftEvent.TotalManHours = gofakeit.Number(40, 100)
 		draftEvent.Deactivated = gofakeit.Bool()
 		draftEvent.StartDate = startDate

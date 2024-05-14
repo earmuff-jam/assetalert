@@ -10,8 +10,8 @@ const initialState = {
   categories: [],
   selectedEvent: {},
   storageLocations: [],
-  eventSharedWithUsers: [],
   volunteeringActivities: [],
+  collaboratorListForSelectEvent: [],
   inventoriesAssociatedWithSelectedEvent: [],
 };
 
@@ -34,20 +34,20 @@ const eventSlice = createSlice({
       state.error = '';
       state.selectedEvent = {};
     },
-    getEventSharedWithUsers: (state) => {
+    getCollaboratorListForSelectedEvent: (state) => {
       state.loading = true;
       state.error = '';
-      state.eventSharedWithUsers = [];
+      state.collaboratorListForSelectEvent = [];
     },
-    getEventSharedWithUsersSuccess: (state, action) => {
-      state.eventSharedWithUsers = action.payload;
+    getCollaboratorListForSelectedEventSuccess: (state, action) => {
+      state.collaboratorListForSelectEvent = action.payload;
       state.loading = false;
       state.error = '';
     },
-    getEventSharedWithUsersFailure: (state) => {
+    getCollaboratorListForSelectedEventFailure: (state) => {
       state.loading = false;
       state.error = '';
-      state.eventSharedWithUsers = [];
+      state.collaboratorListForSelectEvent = [];
     },
     getReportsForSelectedEvent: (state) => {
       state.loading = true;

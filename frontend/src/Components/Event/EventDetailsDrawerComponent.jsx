@@ -7,7 +7,7 @@ import PieChart from '../PieChart/PieChart';
 import ExpenseChart from '../PieChart/ExpenseChart';
 import { makeStyles } from '@material-ui/core/styles';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
-import { Box, Tab, Tabs, Tooltip } from '@material-ui/core';
+import { Box, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
 import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(0.25),
     padding: theme.spacing(0.25),
     gap: theme.spacing(1),
+  },
+  headerText: {
+    fontSize: '1.725rem',
+    fontFamily: 'Poppins, sans-serif',
+    color: theme.palette.error.dark,
   },
   rowContainer: {
     display: 'flex',
@@ -136,6 +141,14 @@ const EventDetailsDrawerComponent = ({
                 <MapComponentFn shrinkSize={true} disabled={disabled} locationDetails={userDetail.location} />
               </Box>
             </Box>
+            {userDetail?.isCreator ? (
+              <>
+                <Typography variant="h5" className={classes.headerText} gutterBottom>
+                  View reported issues
+                </Typography>
+                <ShareItemsComponent displayReports={true} />
+              </>
+            ) : null}
           </Box>
         );
 

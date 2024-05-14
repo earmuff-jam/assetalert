@@ -16,13 +16,13 @@ export function* fetchEvent(action) {
   }
 }
 
-export function* fetchEventSharedWithUsers(action) {
+export function* fetchCollaboratorListForSelectedEvent(action) {
   try {
     const { eventID } = action.payload;
-    const response = yield call(instance.get, `${BASEURL}/event/${eventID}/shared`);
-    yield put(eventActions.getEventSharedWithUsersSuccess(response.data));
+    const response = yield call(instance.get, `${BASEURL}/event/${eventID}/collaborators`);
+    yield put(eventActions.getCollaboratorListForSelectedEventSuccess(response.data));
   } catch (e) {
-    yield put(eventActions.getEventSharedWithUsersFailure(e));
+    yield put(eventActions.getCollaboratorListForSelectedEventFailure(e));
   }
 }
 
@@ -162,8 +162,8 @@ export function* watchAddItem() {
   yield takeLatest(`event/addItem`, addItem);
 }
 
-export function* watchFetchEventSharedWithUsers() {
-  yield takeLatest(`event/getEventSharedWithUsers`, fetchEventSharedWithUsers);
+export function* watchFetchCollaboratorListForSelectedEvent() {
+  yield takeLatest(`event/getCollaboratorListForSelectedEvent`, fetchCollaboratorListForSelectedEvent);
 }
 
 export function* watchGetCategoryList() {
@@ -218,7 +218,6 @@ export function* watchGetAllInventoriesAssociatedWithEvent() {
 export default [
   watchAddItem,
   watchFetchEvent,
-  watchFetchEventSharedWithUsers,
   watchFetchExpenseList,
   watchUpdateExpenseList,
   watchGetCategoryList,
@@ -232,4 +231,5 @@ export default [
   watchFetchReportForSelectedEvent,
   watchCreateNewReportAgainstEvent,
   watchGetAllInventoriesAssociatedWithEvent,
+  watchFetchCollaboratorListForSelectedEvent,
 ];

@@ -108,7 +108,7 @@ const ExpenseChart = ({ eventID }) => {
       {totalIncurred ? (
         <Typography className={classes.headerText}>
           Incurred Expenses:
-          <span className={classes.highlight}> {totalIncurred ? `$ ${totalIncurred}` : 'NA'} </span>
+          <span className={classes.highlight}> {totalIncurred ? `Around $ ${Math.floor(totalIncurred)}` : 'NA'} </span>
         </Typography>
       ) : null}
       <Box className={classes.aside}>

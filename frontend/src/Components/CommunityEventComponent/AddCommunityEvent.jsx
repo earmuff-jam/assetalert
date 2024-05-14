@@ -8,7 +8,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorOutlineRounded } from '@material-ui/icons';
 import { homeActions } from '../../Containers/Home/homeSlice';
-import { TextField, Button, Box, Tooltip, makeStyles } from '@material-ui/core';
+import { TextField, Button, Box, Tooltip, makeStyles, Typography } from '@material-ui/core';
 import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED, SKILLS_REQUIRED_OPTIONS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -137,6 +137,12 @@ const AddCommunityEvent = ({ setEditMode }) => {
         }
         break;
 
+      case 'price':
+        if (isNaN(value) || parseFloat(value) < 0) {
+          error = 'Unit price must be a positive number.';
+        }
+        break;
+
       default:
         break;
     }
@@ -158,6 +164,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
     const currentDate = dayjs().toISOString();
     const draftEvent = {
       ...project,
+      price: parseFloat(project.price),
       max_attendees: parseInt(project.max_attendees),
       required_total_man_hours: parseInt(project.required_total_man_hours),
       start_date: dayjs(project.start_date, 'YYYY-MM-DDTHH:mm').format(),
@@ -167,6 +174,7 @@ const AddCommunityEvent = ({ setEditMode }) => {
       updated_by: userID,
       attendees: [userID],
       sharable_groups: [userID],
+      admins: [userID],
     };
 
     dispatch(homeActions.createEvent({ draftEvent }));
@@ -191,6 +199,11 @@ const AddCommunityEvent = ({ setEditMode }) => {
 
   return (
     <div className={classes.container}>
+      <Typography variant="caption" color="textSecondary">
+        To ensure accurate and comprehensive event listings, please fill in all the required fields below. Your
+        cooperation helps us maintain a high-quality database and ensures that users can easily discover and engage with
+        your event.
+      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth
@@ -261,8 +274,6 @@ const AddCommunityEvent = ({ setEditMode }) => {
             getOptionLabel={(option) => option.name}
             renderInput={(params) => <TextField {...params} label="US State" variant="standard" />}
           />
-        </Box>
-        <Box className={classnames(classes.rowContainer, classes.marginBottom)}>
           <TextField
             required
             fullWidth
@@ -273,6 +284,21 @@ const AddCommunityEvent = ({ setEditMode }) => {
             error={touched.zip && !!errors.zip}
             helperText={touched.zip && errors.zip}
             onChange={(e) => handleInputChange('zip', e.target.value)}
+          />
+        </Box>
+        <Box className={classnames(classes.rowContainer, classes.marginBottom)}>
+          <TextField
+            required
+            fullWidth
+            label="Unit price"
+            variant="standard"
+            value={project.price}
+            className={classes.textField}
+            error={touched.price && !!errors.price}
+            helperText={touched.price && errors.price}
+            onChange={(e) => {
+              handleInputChange('price', e.target.value);
+            }}
           />
           <TextField
             required

@@ -27,9 +27,12 @@ const ViewSharedInventories = ({ rowSelected, handleMenuClose }) => {
     <Box>
       {rowSelected.length <= 0 ? (
         <EmptyComponent subtitle={'Select items to share ...'} />
-      ) : eventsSharedWithSelectProfile.length <= 0 ? (
+      ) : eventsSharedWithSelectProfile === null ||
+        Array.isArray(eventsSharedWithSelectProfile) ||
+        eventsSharedWithSelectProfile.length <= 0 ? (
         <EmptyComponent subtitle={'Create events to share '} shouldRedirect={true} path={'/'} />
       ) : (
+        Array.isArray(eventsSharedWithSelectProfile) &&
         eventsSharedWithSelectProfile.map((v) => (
           <List key={v.id}>
             <ListItem button onClick={() => handleClick(v.id, rowSelected)} disabled={v?.isTransferAllocated || false}>

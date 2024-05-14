@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
 
 dayjs.extend(relativeTime);
 
-const TableComponent = ({ columns, options, handleClick }) => {
+const TableComponent = ({ columns, options, displayReports, handleClick }) => {
   const classes = useStyles();
   return (
     <Table>
@@ -27,14 +27,26 @@ const TableComponent = ({ columns, options, handleClick }) => {
       <TableBody>
         {options?.map((item, index) => (
           <TableRow hover key={item.id} onClick={() => handleClick(item)} className={classes.row}>
-            <TableCell align="center">{index + 1}</TableCell>
-            <TableCell align="left">{item.name}</TableCell>
-            <TableCell align="left">{item?.description || 'N/A'}</TableCell>
-            <TableCell align="center">{item.price}</TableCell>
-            <TableCell align="center">{item.quantity}</TableCell>
-            <TableCell align="center">{item.location}</TableCell>
-            <TableCell align="center">{dayjs(item.updated_at).fromNow()}</TableCell>
-            <TableCell align="center">{item.updater_name}</TableCell>
+            {!displayReports ? (
+              <>
+                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="left">{item.name}</TableCell>
+                <TableCell align="left">{item?.description || 'N/A'}</TableCell>
+                <TableCell align="center">{item.price}</TableCell>
+                <TableCell align="center">{item.quantity}</TableCell>
+                <TableCell align="center">{item.location}</TableCell>
+                <TableCell align="center">{dayjs(item.updated_at).fromNow()}</TableCell>
+                <TableCell align="center">{item.updater_name}</TableCell>
+              </>
+            ) : (
+              <>
+                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="left">{item.subject}</TableCell>
+                <TableCell align="left">{item?.description || 'N/A'}</TableCell>
+                <TableCell align="center">{dayjs(item.updated_at).fromNow()}</TableCell>
+                <TableCell align="center">{item.updator_name}</TableCell>
+              </>
+            )}
           </TableRow>
         ))}
       </TableBody>
@@ -45,12 +57,14 @@ const TableComponent = ({ columns, options, handleClick }) => {
 TableComponent.defaultProps = {
   columns: [],
   options: [],
+  displayReports: false,
   handleClick: () => {},
 };
 
 TableComponent.propTypes = {
   columns: PropTypes.array,
   options: PropTypes.array,
+  displayReports: PropTypes.bool,
   handleClick: PropTypes.func,
 };
 

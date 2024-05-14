@@ -884,10 +884,10 @@ func GetEvent(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// GetUsersSharedWithSelectedEvent ...
-// swagger:route GET /api/v1/event/{id}/shared GetUsersSharedWithSelectedEvent getUsersSharedWithSelectedEvent
+// GetCollaboratorsForSelectedEvent ...
+// swagger:route GET /api/v1/event/{id}/admin GetCollaboratorsForSelectedEvent getCollaboratorsForSelectedEvent
 //
-// # Retrieves all users that are associated to an event
+// # Retrieves all admins that are associated to an event
 //
 // Parameters:
 //   - +name: id
@@ -901,12 +901,12 @@ func GetEvent(rw http.ResponseWriter, r *http.Request, user string) {
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func GetUsersSharedWithSelectedEvent(rw http.ResponseWriter, r *http.Request, user string) {
+func GetCollaboratorsForSelectedEvent(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
 	eventID, ok := vars["id"]
 	if !ok || len(eventID) <= 0 {
-		log.Printf("Unable to retrieve users associated with events without event id. ")
+		log.Printf("Unable to retrieve admin associated with events without event id. ")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
@@ -914,15 +914,15 @@ func GetUsersSharedWithSelectedEvent(rw http.ResponseWriter, r *http.Request, us
 
 	parsedUUID, err := uuid.Parse(eventID)
 	if err != nil {
-		log.Printf("Unable to retrieve users associated with events with provided id")
+		log.Printf("Unable to retrieve admin associated with events with provided id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
 	}
 
-	resp, err := db.RetrieveUsersAssociatedWithEvent(user, parsedUUID)
+	resp, err := db.RetrieveCollaboratorsAssociatedWithSelectedEvent(user, parsedUUID)
 	if err != nil {
-		log.Printf("Unable to retrieve users associated with events. err: %+v", err)
+		log.Printf("Unable to retrieve admin associated with events. err: %+v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return

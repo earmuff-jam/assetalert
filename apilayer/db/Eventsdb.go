@@ -163,9 +163,9 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 
 	sqlStr := `
         INSERT INTO community.projects
-        (title, description, cause, image_url, street, city, state, zip, boundingbox, class, display_name, importance, lat, licence, lon, osm_id, osm_type, place_id, powered_by, type, project_type, comments, registration_link, max_attendees, attendees, required_total_man_hours, deactivated, start_date, created_by, updated_by, sharable_groups)
+        (title, description, cause, image_url, street, city, state, zip, boundingbox, class, display_name, importance, lat, licence, lon, osm_id, osm_type, place_id, powered_by, type, project_type, comments, registration_link, max_attendees, attendees, required_total_man_hours, deactivated, start_date, price, collaborators, created_by, updated_by, sharable_groups)
         VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33)
         RETURNING id`
 
 	var draftEventID string
@@ -199,6 +199,8 @@ func SaveNewEvent(user string, draftEvent *model.Event) (*model.Event, error) {
 		draftEvent.TotalManHours,
 		draftEvent.Deactivated,
 		draftEvent.StartDate,
+		draftEvent.Price,
+		pq.Array(draftEvent.Collaborators),
 		draftEvent.CreatedBy,
 		draftEvent.UpdatedBy,
 		pq.Array(draftEvent.SharableGroups),
@@ -908,6 +910,8 @@ func RetrieveEvent(user string, eventID uuid.UUID) (*model.Event, error) {
        ev.deactivated,
        ev.deactivated_reason,
        ev.start_date,
+	   ev.price,
+	   ev.collaborators,
        ev.created_at,
        ev.created_by,
        COALESCE(cp.full_name, cp.username, cp.email_address) AS creator_name,
@@ -949,6 +953,8 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	var attendees pq.StringArray
 	var deactivatedReason sql.NullString
 	var startDate sql.NullTime
+	var price sql.NullFloat64
+	var collaborators pq.StringArray
 	var createdAt sql.NullTime
 	var creator sql.NullString
 	var updatedAt sql.NullTime
@@ -956,7 +962,7 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	var sharableGroups pq.StringArray
 
 	var event model.Event
-	if err := row.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.Deactivated, &deactivatedReason, &startDate, &createdAt, &event.CreatedBy, &creator, &updatedAt, &event.UpdatedBy, &updater, &sharableGroups); err != nil {
+	if err := row.Scan(&event.ID, &event.Title, &event.Description, &cause, &imageURL, &street, &city, &state, &zip, &boundingbox, &class, &displayName, &importance, &lat, &licence, &lon, &osmID, &osmType, &placeID, &poweredBy, &displayType, &event.ProjectType, &required_skills, &comments, &registrationLink, &maxAttendees, &attendees, &event.TotalManHours, &event.Deactivated, &deactivatedReason, &startDate, &price, &collaborators, &createdAt, &event.CreatedBy, &creator, &updatedAt, &event.UpdatedBy, &updater, &sharableGroups); err != nil {
 		return nil, err
 	}
 
@@ -984,6 +990,8 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	event.Attendees = attendees
 	event.DeactivatedReason = deactivatedReason.String
 	event.StartDate = startDate.Time
+	event.Price = price.Float64
+	event.Collaborators = collaborators
 	event.CreatedAt = createdAt.Time
 	event.CreatorName = creator.String
 	event.UpdatedAt = updatedAt.Time
@@ -993,8 +1001,8 @@ GROUP BY ev.id, ev.updated_at, cp.full_name, cp.username, cp.email_address, up.f
 	return &event, nil
 }
 
-// RetrieveUsersAssociatedWithEvent ...
-func RetrieveUsersAssociatedWithEvent(user string, eventID uuid.UUID) ([]model.Profile, error) {
+// RetrieveCollaboratorsAssociatedWithSelectedEvent ...
+func RetrieveCollaboratorsAssociatedWithSelectedEvent(user string, eventID uuid.UUID) ([]model.Profile, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -1010,7 +1018,7 @@ func RetrieveUsersAssociatedWithEvent(user string, eventID uuid.UUID) ([]model.P
     FROM
         community.projects p
     LEFT JOIN community.profiles p2 ON
-        p2.id = ANY(p.sharable_groups)
+        p2.id = ANY(p.collaborators)
     WHERE
         p.id =$1;`
 
@@ -1020,7 +1028,7 @@ func RetrieveUsersAssociatedWithEvent(user string, eventID uuid.UUID) ([]model.P
 	}
 	defer rows.Close()
 
-	var usersAssociatedWithSelectedEvent []model.Profile
+	var collaboratorsAssociatedWithSelectedEvent []model.Profile
 
 	for rows.Next() {
 		var profile model.Profile
@@ -1043,14 +1051,14 @@ func RetrieveUsersAssociatedWithEvent(user string, eventID uuid.UUID) ([]model.P
 		if phoneNumber.Valid {
 			profile.PhoneNumber = phoneNumber.String
 		}
-		usersAssociatedWithSelectedEvent = append(usersAssociatedWithSelectedEvent, profile)
+		collaboratorsAssociatedWithSelectedEvent = append(collaboratorsAssociatedWithSelectedEvent, profile)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return usersAssociatedWithSelectedEvent, nil
+	return collaboratorsAssociatedWithSelectedEvent, nil
 }
 
 // RetrieveAllExpenses ...

@@ -29,24 +29,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
+const ViewSharableGroups = ({ selectedEvent, setDisplayCollaboratorList }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [options, setOptions] = useState([]);
-  const [sharableGroups, setSharableGroups] = useState([]);
 
-  const { loading, eventSharedWithUsers } = useSelector((state) => state.event);
+  const { loading, collaboratorListForSelectEvent } = useSelector((state) => state.event);
   const { loading: profileDetailsLoading, profiles } = useSelector((state) => state.profile);
 
-  const handleUpdateSharableGroups = () => {
+  const [collaboratorList, setCollaboratorList] = useState([]);
+  const [options, setOptions] = useState([]);
+
+  const handleUpdateAdminList = () => {
     // flushUpdate is used to only update the reducer
     // fn homeActions.updateEvent will try to save in db
     const userID = localStorage.getItem('userID');
-    const updatedUsers = sharableGroups.map((v) => v.id);
+    const updatedUsers = collaboratorList.map((v) => v.id);
     dispatch(
       eventActions.flushUpdate({
         ...selectedEvent,
-        sharable_groups: [...updatedUsers],
+        collaboratorList: [...updatedUsers],
         updated_by: userID,
       })
     );
@@ -54,22 +55,22 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
       homeActions.updateEvent({
         ...selectedEvent,
         userID: userID,
-        sharable_groups: [...updatedUsers],
+        collaboratorList: [...updatedUsers],
         updated_by: userID,
       })
     );
-    setEditSharableGroups(false);
+    setDisplayCollaboratorList(false);
   };
 
   useEffect(() => {
     dispatch(profileActions.getProfileList());
-    dispatch(eventActions.getEventSharedWithUsers({ eventID: selectedEvent.id }));
+    dispatch(eventActions.getCollaboratorListForSelectedEvent({ eventID: selectedEvent.id }));
     // eslint-disable-next-line
   }, [selectedEvent]);
 
   useEffect(() => {
     if (!loading) {
-      setSharableGroups(eventSharedWithUsers);
+      setCollaboratorList(collaboratorListForSelectEvent);
     }
     // eslint-disable-next-line
   }, [loading]);
@@ -86,17 +87,17 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
       <Autocomplete
         multiple
         options={options.filter(
-          (option) => !sharableGroups.some((group) => group.email_address === option.email_address)
+          (option) => !collaboratorList.some((group) => group.email_address === option.email_address)
         )}
-        value={sharableGroups}
-        onChange={(event, newValue) => setSharableGroups(newValue)}
+        value={collaboratorList}
+        onChange={(event, newValue) => setCollaboratorList(newValue)}
         getOptionLabel={(option) => option.email_address}
         renderInput={(params) => (
           <TextField
             {...params}
             variant="outlined"
-            label="Share with other people ..."
-            placeholder="Currently sharing with ..."
+            label="Add or update collaborators ..."
+            placeholder="Add collaborators..."
           />
         )}
         renderTags={(tagVal, getTagProps) =>
@@ -114,10 +115,10 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
       <Box className={classes.rowContainer}>
         <ButtonComponent
           text={'Save'}
-          onClick={() => handleUpdateSharableGroups()}
-          disabled={sharableGroups.length <= 0}
+          onClick={() => handleUpdateAdminList()}
+          disabled={collaboratorList.length <= 0}
         />
-        <ButtonComponent text={'Cancel'} onClick={() => setEditSharableGroups(false)} />
+        <ButtonComponent text={'Cancel'} onClick={() => setDisplayCollaboratorList(false)} />
       </Box>
     </Box>
   );
@@ -125,12 +126,12 @@ const ViewSharableGroups = ({ selectedEvent, setEditSharableGroups }) => {
 
 ViewSharableGroups.defaultProps = {
   selectedEvent: {},
-  setEditSharableGroups: () => {},
+  setDisplayCollaboratorList: () => {},
 };
 
 ViewSharableGroups.propTypes = {
   selectedEvent: PropTypes.object,
-  setEditSharableGroups: PropTypes.func,
+  setDisplayCollaboratorList: PropTypes.func,
 };
 
 export default ViewSharableGroups;

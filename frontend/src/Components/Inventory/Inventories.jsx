@@ -440,18 +440,18 @@ const Inventories = () => {
           )
         )}
       </Box>
-      {editMode && (
+      {editMode ? (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={() => setEditMode(false)}>Add New Item</Title>
           <AddInventoryDetail setDisplayMode={setEditMode} />
         </Dialog>
-      )}
-      {openMenu && (
+      ) : null}
+      {openMenu ? (
         <Dialog open width={'md'} fullWidth={true}>
           <Title onClose={handleMenuClose}>Share items with Events</Title>
           <ViewSharedInventories rowSelected={rowSelected} handleMenuClose={handleMenuClose} />
         </Dialog>
-      )}
+      ) : null}
       <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">
         {INVENTORY_TABS.map((v, index) => (
           <Tooltip title={v.tootipTitle} key={index}>
