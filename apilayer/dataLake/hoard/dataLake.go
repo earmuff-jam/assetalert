@@ -153,7 +153,7 @@ func populateFakeReportDetails(user string, limit int, creatorID string) {
 		startDate := now.AddDate(0, 0, -daysAgo)
 
 		draftReport.Subject = gofakeit.JobTitle()
-		draftReport.Description = gofakeit.JobDescriptor()
+		draftReport.Description = gofakeit.HackerPhrase()
 		draftReport.EventLocation = gofakeit.Address().Address
 		draftReport.OrganizerName = gofakeit.Name()
 		draftReport.EventID = draftEvent.ID
@@ -284,15 +284,35 @@ func populateFakePersonalInventories(user string, limit int, creatorID string) {
 		now := time.Now()
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
+		isReturnableStatus := gofakeit.Bool()
 
 		draftInventory.Name = gofakeit.BeerName()
-		draftInventory.Description = gofakeit.HipsterSentence(2)
+		draftInventory.Description = gofakeit.HipsterSentence(gofakeit.Number(2, 5))
 		draftInventory.Price = gofakeit.Price(2, 120)
 		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN", "ALL"})
 		draftInventory.Barcode = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())
 		draftInventory.SKU = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())
 		draftInventory.Quantity = gofakeit.Number(10, 100)
-		draftInventory.Location = gofakeit.CarMaker()
+		draftInventory.Location = gofakeit.RandString(
+			[]string{"Master Bedroom Closet",
+				"Garage",
+				"Living Room Cabinet",
+				"Bathroom Closet",
+				"Dining Room Hutch",
+				"Home Office Desk",
+				"Basement Storage",
+				"Kids'' Playroom",
+				"Garage Workshop",
+				"Guest Bedroom Closet",
+				"Outdoor Shed"})
+		draftInventory.IsReturnable = isReturnableStatus
+		if isReturnableStatus {
+			draftInventory.ReturnLocation = gofakeit.CarMaker()
+		}
+		draftInventory.MaxWeight = fmt.Sprintf("%d", gofakeit.Number(2, 5))
+		draftInventory.MinWeight = fmt.Sprintf("%d", gofakeit.Number(2, 2))
+		draftInventory.MaxHeight = fmt.Sprintf("%d", gofakeit.Number(2, 5))
+		draftInventory.MinHeight = fmt.Sprintf("%d", gofakeit.Number(2, 2))
 		draftInventory.CreatedAt = startDate
 		draftInventory.UpdatedAt = startDate
 		draftInventory.CreatedBy = creatorID

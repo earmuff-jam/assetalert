@@ -147,7 +147,6 @@ export const VIEW_CURRENT_SUPPLIES_COLUMNS = [
   },
 ];
 
-
 export const VIEW_ITEMS_COLUMN_HEADERS = {
   name: {
     key: 'item_detail',
@@ -157,7 +156,7 @@ export const VIEW_ITEMS_COLUMN_HEADERS = {
   location: {
     key: 'location',
     title: 'Storage Location',
-    displayName: 'Location',
+    displayName: 'Storage Location',
   },
   item_detail: {
     key: 'item_detail',
