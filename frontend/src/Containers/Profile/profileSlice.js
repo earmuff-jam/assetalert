@@ -231,6 +231,7 @@ const profileSlice = createSlice({
     addNewNote: (state) => {
       state.loading = true;
       state.error = '';
+      state.notes = [];
     },
     addNewNoteSuccess: (state, action) => {
       const updatedNotes = action.payload;
@@ -328,7 +329,7 @@ const profileSlice = createSlice({
       state.error = '';
       state.loading = false;
       state.inventories = [];
-    }
+    },
   },
 });
 

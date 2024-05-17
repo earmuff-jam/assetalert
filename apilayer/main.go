@@ -69,7 +69,7 @@ func main() {
 	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.UpdateExistingEvent)).Methods(http.MethodPut)
 	router.Handle("/api/v1/event/{id}/updateAvatar", CustomRequestHandler(handler.UpdateEventAvatar)).Methods(http.MethodPost)
 
-	router.Handle("/api/v1/event/{id}/shared", CustomRequestHandler(handler.GetUsersSharedWithSelectedEvent)).Methods(http.MethodGet)
+	router.Handle("/api/v1/event/{id}/collaborators", CustomRequestHandler(handler.GetCollaboratorsForSelectedEvent)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/shared", CustomRequestHandler(handler.GetEventsSharedWithSelectedUser)).Methods(http.MethodGet)
 
 	router.Handle("/api/v1/expenses/{id}", CustomRequestHandler(handler.GetAllExpenses)).Methods(http.MethodGet)

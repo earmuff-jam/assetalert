@@ -322,7 +322,7 @@ export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
   location: {
     id: 8,
     colName: 'location',
-    label: 'Location',
+    label: 'Storage location',
     modifier: (title) => `${title}`,
   },
   is_returnable: {

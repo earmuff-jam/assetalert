@@ -61,7 +61,6 @@ const EventCardTitleWithAvatarComponent = ({ editMode, userDetail, isLoading }) 
       });
       return;
     }
-    console.log('wat');
     dispatch(eventActions.updateEventImage({ selectedImage: uploadedImage, eventID: id }));
     toggleEditImage();
     setEditImage(!editImage);

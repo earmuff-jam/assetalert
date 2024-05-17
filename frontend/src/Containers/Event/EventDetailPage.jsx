@@ -203,7 +203,7 @@ const EventDetailPage = () => {
         selectedEvent.skills_required.filter((v) => Boolean(v)).length != 0 ? selectedEvent?.skills_required : [];
       const sharableGroups = selectedEvent?.sharable_groups;
       const attendees = selectedEvent.attendees;
-      const comments = selectedEvent.comments;
+      const description = selectedEvent.description;
       const id = selectedEvent.id;
       const deactivated = selectedEvent.deactivated;
       const location = {
@@ -228,7 +228,7 @@ const EventDetailPage = () => {
       userDetailsDraft.title = title;
       userDetailsDraft.totalAllocatedMembers = totalAllocatedMembers;
       userDetailsDraft.location = location;
-      userDetailsDraft.comments = comments;
+      userDetailsDraft.description = description;
       userDetailsDraft.id = id;
       userDetailsDraft.imageUrl = imageUrl;
       setIsDeactivated(deactivated);

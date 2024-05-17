@@ -41,6 +41,7 @@ export const BLANK_NEW_EVENT = {
   required_total_man_hours: '',
   skills_required: [],
   start_date: '',
+  price: '',
 };
 
 export const BLANK_NEW_EVENT_ERROR = {
@@ -56,6 +57,7 @@ export const BLANK_NEW_EVENT_ERROR = {
   required_total_man_hours: '',
   skills_required: '',
   start_date: '',
+  price: '',
 };
 
 export const BLANK_NEW_EVENT_TOUCHED = {
@@ -71,6 +73,7 @@ export const BLANK_NEW_EVENT_TOUCHED = {
   required_total_man_hours: false,
   skills_required: false,
   start_date: false,
+  price: false,
 };
 
 export const BLANK_REPORT_FORM = {

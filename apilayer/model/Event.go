@@ -38,6 +38,8 @@ type Event struct {
 	Deactivated       bool      `json:"deactivated"`
 	DeactivatedReason string    `json:"deactivated_reason"`
 	StartDate         time.Time `json:"start_date"`
+	Price             float64   `json:"price,omitempty"`
+	Collaborators     []string  `json:"collaborators"`
 	CreatedAt         time.Time `json:"created_at"`
 	UpdatedAt         time.Time `json:"updated_at"`
 	CreatedBy         string    `json:"created_by"`

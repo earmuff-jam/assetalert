@@ -52,7 +52,7 @@ func Test_GetAllEvents(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
-func Test_GetUsersSharedWithSelectedEvent(t *testing.T) {
+func Test_GetCollaboratorsForSelectedEvent(t *testing.T) {
 	draftEvent := &model.Event{
 		Title:          "Test Event",
 		Cause:          "Celebrations",          // Celebrations
@@ -62,8 +62,10 @@ func Test_GetUsersSharedWithSelectedEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -94,7 +96,7 @@ func Test_GetUsersSharedWithSelectedEvent(t *testing.T) {
 	req = mux.SetURLVars(req, map[string]string{"id": currentEvent.ID})
 	w = httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	GetCollaboratorsForSelectedEvent(w, req, config.CTO_USER)
 
 	res = w.Result()
 	defer res.Body.Close()
@@ -121,48 +123,48 @@ func Test_GetUsersSharedWithSelectedEvent(t *testing.T) {
 	db.DeleteEvent(config.CTO_USER, selectedEvent.ID)
 }
 
-func Test_GetUsersSharedWithSelectedEvent_WrongItemID(t *testing.T) {
+func Test_GetCollaboratorsForSelectedEvent_WrongItemID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0802c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	GetCollaboratorsForSelectedEvent(w, req, config.CTO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Equal(t, "200 OK", res.Status)
 }
 
-func Test_GetUsersSharedWithSelectedEvent_NoItemID(t *testing.T) {
+func Test_GetCollaboratorsForSelectedEvent_NoItemID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": ""})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	GetCollaboratorsForSelectedEvent(w, req, config.CTO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
-func Test_GetUsersSharedWithSelectedEvent_IncorrectItemID(t *testing.T) {
+func Test_GetCollaboratorsForSelectedEvent_IncorrectItemID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "request"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetUsersSharedWithSelectedEvent(w, req, config.CTO_USER)
+	GetCollaboratorsForSelectedEvent(w, req, config.CTO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
-func Test_GetUsersSharedWithSelectedEvent_InvalidDBUser(t *testing.T) {
+func Test_GetCollaboratorsForSelectedEvent_InvalidDBUser(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/event/0902c692-b8e2-4824-a870-e52f4a0cccf8/shared", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetUsersSharedWithSelectedEvent(w, req, config.CEO_USER)
+	GetCollaboratorsForSelectedEvent(w, req, config.CEO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
@@ -244,8 +246,10 @@ func Test_CreateNewEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -308,8 +312,10 @@ func Test_AddItemToEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -401,8 +407,10 @@ func Test_AddExpenseToEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -492,8 +500,10 @@ func Test_UpdateExistingEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -530,8 +540,10 @@ func Test_UpdateExistingEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 	// Marshal the draftUpdateEvent into JSON bytes
 	updateEventReq, err := json.Marshal(draftUpdateEvent)
@@ -573,8 +585,10 @@ func Test_UpdateItemDetails(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -704,8 +718,10 @@ func Test_GetAllEventReports(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -820,8 +836,10 @@ func Test_CreateNewReport(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -1052,8 +1070,10 @@ func Test_CreateVolunteerHours(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -1130,8 +1150,10 @@ func Test_GetEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
-		ProjectSkills:  []string{"Videography"},
+
+		ProjectSkills: []string{"Videography"},
 	}
 
 	// Marshal the draftEvent into JSON bytes

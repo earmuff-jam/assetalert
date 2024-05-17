@@ -13,7 +13,6 @@ import {
   Badge,
   makeStyles,
 } from '@material-ui/core';
-
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
@@ -108,12 +107,12 @@ const EventDetailsCardComponent = ({
   const [display, setDisplay] = useState(0);
   // editing general fields for select event
   const [editMode, setEditMode] = useState(false);
-  const [editSharableGroups, setEditSharableGroups] = useState(false);
+  const [displayCollaboratorList, setDisplayCollaboratorList] = useState(false);
 
   const remainingSpots = selectedEvent?.max_attendees - selectedEvent?.sharable_groups?.length || 0;
 
-  const handleEditSharableGroups = () => setEditSharableGroups(!editSharableGroups);
   const handleReportEvent = () => setDisplay('Report');
+  const toggleCollaboratorList = () => setDisplayCollaboratorList(!displayCollaboratorList);
 
   const toggleEditMode = () => {
     if (editMode) {
@@ -191,9 +190,9 @@ const EventDetailsCardComponent = ({
           <Box>
             {!isLoading ? (
               <Box>
-                {editMode ? (
-                  <Button variant="text" className={classes.primaryColor} onClick={handleEditSharableGroups}>
-                    Edit sharable groups
+                {userDetail?.isCreator && editMode ? (
+                  <Button variant="text" className={classes.primaryColor} onClick={toggleCollaboratorList}>
+                    Edit Collaborators
                   </Button>
                 ) : null}
                 <Button
@@ -259,10 +258,10 @@ const EventDetailsCardComponent = ({
             setIsDeactivated={setIsDeactivated}
           />
         )}
-        {editSharableGroups && (
+        {displayCollaboratorList && (
           <Dialog open width={'md'} fullWidth={true}>
-            <Title onClose={() => setEditSharableGroups(false)}>Edit User Groups</Title>
-            <ViewSharableGroups selectedEvent={selectedEvent} setEditSharableGroups={setEditSharableGroups} />
+            <Title onClose={() => setDisplayCollaboratorList(false)}>Edit Admin</Title>
+            <ViewSharableGroups selectedEvent={selectedEvent} setDisplayCollaboratorList={setDisplayCollaboratorList} />
           </Dialog>
         )}
       </CardContent>

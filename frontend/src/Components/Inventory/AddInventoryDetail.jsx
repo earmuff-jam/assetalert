@@ -357,6 +357,8 @@ const AddInventoryDetail = ({ setDisplayMode }) => {
             setStorageLocation({
               storageLocation: newValue.inputValue,
             });
+          } else {
+            setStorageLocation({});
           }
         }}
         filterOptions={(options, params) => {

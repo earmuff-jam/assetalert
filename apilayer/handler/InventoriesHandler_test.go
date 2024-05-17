@@ -510,6 +510,7 @@ func Test_TransferSelectedInventory(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		ProjectSkills:  []string{"Videography"},
 	}
@@ -693,6 +694,7 @@ func Test_GetAllInventoriesAssociatedWithSelectEvent(t *testing.T) {
 		StartDate:      time.Now(),
 		CreatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
 		UpdatedBy:      "d1173b89-ca88-4e39-91c1-189dd4678586",
+		Collaborators:  []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		SharableGroups: []string{"d1173b89-ca88-4e39-91c1-189dd4678586"},
 		ProjectSkills:  []string{"Videography"},
 	}
@@ -889,6 +891,7 @@ func Test_GetAllInventoriesAssociatedWithSelectEvent_InvalidDBUser(t *testing.T)
 		StartDate:      time.Now(),
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
+		Collaborators:  []string{prevUser.ID.String()},
 		SharableGroups: []string{prevUser.ID.String()},
 		ProjectSkills:  []string{"Videography"},
 	}

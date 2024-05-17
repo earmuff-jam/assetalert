@@ -383,7 +383,72 @@ RETURNING id;`
 		return nil, err
 	}
 
-	return &draftInventory, nil
+	sqlGetUpdatedInventory := `
+	SELECT
+		inv.id,
+		inv.name,
+		inv.description,
+		inv.price,
+		inv.status,
+		inv.barcode,
+		inv.sku,
+		inv.quantity,
+		inv.bought_at,
+		inv.location,
+		inv.storage_location_id,
+		inv.is_returnable,
+		inv.return_location,
+		inv.max_weight,
+		inv.min_weight,
+		inv.max_height,
+		inv.min_height,
+		inv.created_at,
+		inv.created_by,
+		coalesce (cp.full_name, cp.username, cp.email_address) as creator_name,
+		inv.updated_at,
+		inv.updated_by,
+		coalesce (up.full_name, up.username, up.email_address)  as updater_name
+	FROM
+		community.inventory inv
+	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
+	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
+	LEFT JOIN community.profiles up on up.id  = inv.updated_by
+	WHERE inv.id = $1
+`
+
+	row := db.QueryRow(sqlGetUpdatedInventory, draftInventory.ID)
+
+	updatedInventory := model.Inventory{}
+	err = row.Scan(
+		&updatedInventory.ID,
+		&updatedInventory.Name,
+		&updatedInventory.Description,
+		&updatedInventory.Price,
+		&updatedInventory.Status,
+		&updatedInventory.Barcode,
+		&updatedInventory.SKU,
+		&updatedInventory.Quantity,
+		&updatedInventory.BoughtAt,
+		&updatedInventory.Location,
+		&updatedInventory.StorageLocationID,
+		&updatedInventory.IsReturnable,
+		&updatedInventory.ReturnLocation,
+		&updatedInventory.MaxWeight,
+		&updatedInventory.MinWeight,
+		&updatedInventory.MaxHeight,
+		&updatedInventory.MinHeight,
+		&updatedInventory.CreatedAt,
+		&updatedInventory.CreatedBy,
+		&updatedInventory.CreatorName,
+		&updatedInventory.UpdatedAt,
+		&updatedInventory.UpdatedBy,
+		&updatedInventory.UpdaterName,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedInventory, nil
 }
 
 // UpdateInventory ...
