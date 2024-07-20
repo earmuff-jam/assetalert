@@ -58,11 +58,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build frontend
-        uses: docker://node:latest
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          args: |
-            echo "Attempting to build frontend."
-            cd frontend && yarn
-            CI=false yarn build # stop build failure for warnings.
-            echo "Frontend build successful."
+          node-version: '20.0.0'
+
+      - name: Install dependencies
+        run: |
+          yarn
+
+      - name: Build frontend
+        run: |
+          CI=true yarn build
+          
+      - name: Run linter
+        run: |
+          yarn lint
