@@ -139,10 +139,9 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
   };
   return (
     <Paper elevation={elevation} className={classes.root}>
-      <Typography variant={titleVariant} className={classes.headerText}>
+      <Typography variant="h5" color="primary" sx={{ fontSize: '1.785rem' }}>
         {title}
       </Typography>
-      <BarChartRounded className={classes.logo} />
       <Box className={classes.leftAside}></Box>
       <Box className={classes.navListComponent}>
         {NAVIGATION_MENU_BAR.map((el) => (
@@ -166,7 +165,7 @@ const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
 };
 
 PrimaryAppBar.defaultProps = {
-  title: 'Mashed',
+  title: 'AssetAlert',
   titleVariant: 'h5',
   elevation: 0,
   selectedID: 0,
