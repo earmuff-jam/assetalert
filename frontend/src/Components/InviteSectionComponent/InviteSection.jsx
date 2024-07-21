@@ -1,79 +1,42 @@
-import makeStyles from '@mui/styles/makeStyles';
-import { Typography, Paper } from '@mui/material';
+import { Typography, Stack } from '@mui/material';
 import { DonutLargeRounded, LibraryBooksRounded, TrackChangesRounded } from '@mui/icons-material';
 
-const useStyles = makeStyles((theme) => ({
-  text: {
-    fontSize: '0.975rem',
-    letterSpacing: '0.0125rem',
-    marginBottom: theme.spacing(2),
-    fontFamily: 'Roboto',
-  },
-  container: {
-    padding: theme.spacing(3),
-    backgroundColor: theme.palette.secondary.main,
-    margin: theme.spacing(3, 0),
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-  },
-  header: {
-    fontSize: '1.6rem',
-    fontWeight: 'bold',
-    letterSpacing: '0.0125rem',
-    fontFamily: 'Poppins, sans-serif',
-    marginBottom: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
-}));
+export const Row = ({ icon, label, caption }) => {
+  return (
+    <Stack direction="row" spacing="1rem" alignItems="center">
+      {icon}
+      <Stack>
+        <Typography variant="h6">{label}</Typography>
+        <Typography variant="caption">{caption}</Typography>
+      </Stack>
+    </Stack>
+  );
+};
 
 const InviteSection = () => {
-  const classes = useStyles();
   return (
-    <Paper elevation={0} className={classes.container}>
-      <Typography variant="h6" className={classes.header}>
-        <LibraryBooksRounded />
-        Learn what you can offer.
-      </Typography>
-      <ul>
-        <Typography className={classes.text}>
-          Contribute your skills and time to make a positive impact on your community. Track them and maintain
-          inventories of items. Volunteer for local events, help those in need, and be a part of meaningful initiatives.
-        </Typography>
-        <Typography className={classes.text}>
-          Keep track of your community engagement activities, volunteer hours, and contributions. Monitor your impact on
-          the community and identify areas where you can further contribute or improve.
-        </Typography>
-      </ul>
-
-      <Typography variant="h6" className={classes.header}>
-        <TrackChangesRounded />
-        Target inventory management.
-      </Typography>
-      <ul>
-        <Typography className={classes.text}>
-          Utilize our digital platform to trace and track your inventories effectively. Set up maintenance plans and
+    <Stack spacing="2rem">
+      <Row
+        icon={<LibraryBooksRounded />}
+        label="Learn what you can offer."
+        caption="Contribute your skills and time to make a positive impact on your community. Track them and maintain
+          inventories of items. Volunteer for local events, help those in need, and be a part of meaningful initiatives."
+      />
+      <Row
+        icon={<TrackChangesRounded />}
+        label="Target inventory management."
+        caption=" Utilize our digital platform to trace and track your inventories effectively. Set up maintenance plans and
           threshold limits for inventory items to ensure smooth operations. Enjoy easy access to all your inventory
-          items, enabling seamless management and optimization of resources.
-        </Typography>
-        <Typography className={classes.text}>
-          Setup maintenance plans, threshold limits and enjoy easy access to all your inventory items.
-        </Typography>
-      </ul>
-
-      <Typography variant="h6" className={classes.header}>
-        <DonutLargeRounded />
-        Visualize expense reports.
-      </Typography>
-      <ul>
-        <Typography className={classes.text}>
-          Visualize, analyze, and monitor spending habits with customizable graphs on demand. Log spending on events,
+          items, enabling seamless management and optimization of resources."
+      />
+      <Row
+        icon={<DonutLargeRounded />}
+        label="Visualize expense reports."
+        caption="Visualize, analyze, and monitor spending habits with customizable graphs on demand. Log spending on events,
           projects, or initiatives, get approvals when necessary, and view comprehensive spending habits to make
-          informed decisions and optimize resource allocation effectively.
-        </Typography>
-      </ul>
-    </Paper>
+          informed decisions and optimize resource allocation effectively."
+      />
+    </Stack>
   );
 };
 
