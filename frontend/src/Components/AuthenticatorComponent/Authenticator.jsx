@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Title from '../TitleComponent/Title';
 import { useSelector } from 'react-redux';
 import Signup from './Signup';
@@ -14,9 +14,14 @@ const Authenticator = () => {
   const [signUpView, setSignUpView] = useState(false);
 
   return (
-    <Stack>
-      <Title title={'Find meaning to volunteer'} displaySubtitle={true} />
-      <Title title={signUpView ? 'Sign Up' : 'Sign In'} headingVariant={'general'} displaySubtitle={false} />
+    <Stack width="80rem" spacing="1rem">
+      <Typography variant="h5" color="error.main">
+        Find meaning to volunteer
+      </Typography>
+      <Typography variant="caption">
+        Sign up to be updated with events around your community. You can lend a hand, or even ask for one.
+      </Typography>
+      <Typography>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
       {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
       <Title
         title={signUpView ? `Already have an account ?` : `Do not have an account ?`}

@@ -7,7 +7,7 @@ const AuthFooter = () => {
       <Title
         title={`\u00A9 ${new Date().getFullYear()} Mashed. All Rights Reserved.`}
         displaySubtitle={false}
-        headingVariant={'general'}
+        headingVariant={'caption'}
         titleStyle={{}}
       />
       <Typography>

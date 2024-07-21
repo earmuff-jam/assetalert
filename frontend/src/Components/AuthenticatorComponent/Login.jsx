@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { InputAdornment, TextField } from '@mui/material';
+import { Button, InputAdornment, Stack, TextField } from '@mui/material';
 import { LOGIN_FORM_FIELDS } from '../../Containers/Auth/constants';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 
@@ -75,8 +75,8 @@ const Login = () => {
   };
 
   return (
-    <div className={classes.form}>
-      <form>
+    <>
+      <Stack spacing="1rem">
         {Object.values(formFields).map((v, index) => (
           <TextField
             className={classes.text}
@@ -104,18 +104,18 @@ const Login = () => {
             }}
           />
         ))}
-      </form>
-      <ButtonComponent
-        text={'Submit'}
-        showIcon={true}
-        icon={<ArrowRightRounded />}
-        buttonVariant={'text'}
-        onClick={handleFormSubmit}
+      </Stack>
+      <Button
+        variant="outlined"
+        endIcon={<ArrowRightRounded />}
         disabled={validate(formFields)}
         disableRipple={true}
         disableFocusRipple={true}
-      />
-    </div>
+        onClick={handleFormSubmit}
+      >
+        Submit
+      </Button>
+    </>
   );
 };
 
