@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Avatar, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import UploadData from '../DrawerListComponent/UploadData';
 
 const useStyles = makeStyles((theme) => ({

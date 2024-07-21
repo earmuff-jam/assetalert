@@ -1,8 +1,9 @@
 import { eventActions } from '../../Containers/Event/eventSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Box, Chip, TextField, makeStyles } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Box, Chip, TextField } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Autocomplete } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';

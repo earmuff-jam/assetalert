@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
-import { Box, TextField } from '@material-ui/core';
+import { Box, TextField } from '@mui/material';
 import { ADD_NOTES_FORM_FIELDS } from './constants';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useDispatch, useSelector } from 'react-redux';
 
 import TextComponent from '../TextFieldComponent/TextComponent';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { AddRounded, CheckCircleRounded } from '@material-ui/icons';
+import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({

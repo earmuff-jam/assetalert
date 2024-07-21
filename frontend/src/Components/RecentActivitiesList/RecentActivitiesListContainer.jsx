@@ -1,6 +1,6 @@
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import RecentActivities from './RecentActivities';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import RecentTrophyCollections from './RecentTrophyCollections';
 import TextComponent from '../TextFieldComponent/TextComponent';
 

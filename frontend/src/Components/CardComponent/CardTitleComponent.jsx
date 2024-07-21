@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
-import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { Box, Tooltip, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ChipComponent from '../ChipComponent/ChipComponent';
 
 const useStyles = makeStyles((theme) => ({

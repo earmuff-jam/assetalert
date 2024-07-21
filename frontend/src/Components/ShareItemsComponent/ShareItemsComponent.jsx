@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, makeStyles } from '@material-ui/core';
+import { Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import EmptyComponent from '../../util/EmptyComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import TableComponent from '../TableComponent/TableComponent';
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
       gap: theme.spacing(2),
     },
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 'initial',
     overflow: 'auto',
     width: `calc(100% - 30rem)`,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },

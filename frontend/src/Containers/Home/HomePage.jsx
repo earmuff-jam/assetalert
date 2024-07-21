@@ -1,7 +1,7 @@
 import { homeActions } from './homeSlice';
 import { useEffect, useState } from 'react';
-import { Grid, Box, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Box, Paper } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNewEvent from '../../Components/Home/CreateNewEvent';
 import HomePageHeaderMap from '../../Components/Home/HomePageHeaderMap';

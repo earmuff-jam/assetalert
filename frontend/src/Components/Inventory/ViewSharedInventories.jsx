@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
-import { Box, List, ListItem, ListItemText } from '@material-ui/core';
+import { Box, List, ListItem, ListItemText } from '@mui/material';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const ViewSharedInventories = ({ rowSelected, handleMenuClose }) => {

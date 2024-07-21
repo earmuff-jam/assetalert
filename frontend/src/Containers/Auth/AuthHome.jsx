@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Box } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Grid, Box } from '@mui/material';
 import AppBar from '../../Components/AppBarComponent/AuthAppBar';
 import Authenticator from '../../Components/AuthenticatorComponent/Authenticator';
 import InviteSection from '../../Components/InviteSectionComponent/InviteSection';
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing(4),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: theme.spacing(0.1),
     },
   },

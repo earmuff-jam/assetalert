@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { CakeRounded, EmailRounded, LockRounded } from '@material-ui/icons';
+import { CakeRounded, EmailRounded, LockRounded } from '@mui/icons-material';
 
 export const GENERIC_TEXTFIELD_VARIANT = {
   variant: 'outlined',

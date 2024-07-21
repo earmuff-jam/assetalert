@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import steps from '../../tour/steps';
 import { useTour } from '@reactour/tour';
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Paper, Typography } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Paper, Typography } from '@mui/material';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AppBarNavListItem from './AppBarNavListItem';
@@ -14,7 +14,7 @@ import {
   ContactSupportRounded,
   HomeRounded,
   LockOpenRounded,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {

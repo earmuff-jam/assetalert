@@ -11,8 +11,8 @@ import {
   Dialog,
   Tooltip,
   Badge,
-  makeStyles,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
@@ -29,7 +29,7 @@ import { eventActions } from '../../Containers/Event/eventSlice';
 import EditCommunityEvent from '../CommunityEventComponent/EditCommunityEvent';
 import ReportCommunityEvent from '../CommunityEventComponent/ReportCommunityEvent';
 import EventCardTitleWithAvatarComponent from './EventCardTitleWithAvatarComponent';
-import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@material-ui/icons';
+import { LowPriorityRounded, BugReportRounded, EditRounded, DoneRounded, PlaceRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
   },
   columnVariant: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       gap: theme.spacing(0),
     },
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(1),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
   },
@@ -205,7 +205,11 @@ const EventDetailsCardComponent = ({
                   {userDetail?.userIsMember ? 'Leave Event' : 'Join Event'}
                 </Button>
                 <Tooltip title="Report issue or problem within this event. Also displays the number of reports made against this event. Report can be of various reasons however if emergency please stop and dial 911.">
-                  <IconButton disabled={disabled} onClick={handleReportEvent} data-tour="4">
+                  <IconButton
+                    disabled={disabled}
+                    onClick={handleReportEvent}
+                    data-tour="4"
+                    size="large">
                     <Badge badgeContent={reports?.length || 0} color="error" overlap="rectangular">
                       <BugReportRounded />
                     </Badge>
@@ -213,7 +217,7 @@ const EventDetailsCardComponent = ({
                 </Tooltip>
                 {userDetail?.userIsMember && (
                   <Tooltip title={!editMode ? 'Edit event' : 'Save changes'}>
-                    <IconButton onClick={toggleEditMode}>
+                    <IconButton onClick={toggleEditMode} size="large">
                       {!editMode ? <EditRounded /> : <DoneRounded color="primary" />}
                     </IconButton>
                   </Tooltip>

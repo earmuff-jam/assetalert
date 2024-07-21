@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import EmptyComponent from '../../util/EmptyComponent';
-import { Box, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Tooltip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import RecentTrophyDot from './RecentTrophyDot';
 

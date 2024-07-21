@@ -1,8 +1,10 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Subtitle from './Subtitle';
-import { EmojiPeopleRounded } from '@material-ui/icons';
-import { Typography, makeStyles } from '@material-ui/core';
+import { EmojiPeopleRounded } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   text: {

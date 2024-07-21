@@ -2,12 +2,12 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { ArrowRightRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
+import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   text: {

@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Divider, Tooltip, Typography } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Divider, Tooltip, Typography } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   container: {

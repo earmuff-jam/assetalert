@@ -14,9 +14,10 @@ import TextComponent from '../TextFieldComponent/TextComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
-import { AddRounded, CancelRounded, DoneRounded } from '@material-ui/icons';
+import { AddRounded, CancelRounded, DoneRounded } from '@mui/icons-material';
 import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
-import { Box, Dialog, Slide, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Dialog, Slide, Tab, Tabs, Tooltip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import SelectedRowItemComponent from '../ShareItemsComponent/SelectedRowItemComponent';
 
 const useStyles = makeStyles((theme) => ({

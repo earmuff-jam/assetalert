@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
-import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, makeStyles } from '@material-ui/core';
+import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {

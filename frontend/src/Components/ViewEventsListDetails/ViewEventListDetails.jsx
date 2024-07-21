@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import EmptyComponent from '../../util/EmptyComponent';
 import SearchAllEvents from '../Event/SearchAllEvents';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import ViewFilteredEventList from './ViewFilteredEventList';
-import { Typography, Grid, Box, Divider } from '@material-ui/core';
+import { Typography, Grid, Box, Divider } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   searchContainer: {
     alignSelf: 'start',
     width: '25%',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },

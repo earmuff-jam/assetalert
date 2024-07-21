@@ -1,6 +1,6 @@
-import { Box } from '@material-ui/core';
-import { WarningRounded } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material';
+import { WarningRounded } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import TextComponent from '../TextFieldComponent/TextComponent';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, InputAdornment, TextField } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, InputAdornment, TextField } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   formInputContainer: {

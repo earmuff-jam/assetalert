@@ -1,7 +1,7 @@
 import { primary_theme } from './util/Theme';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from '@mui/material';
 import HomePage from './Containers/Home/HomePage';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import PrimaryAppBar from './Components/AppBarComponent/PrimaryAppBar';
 
 const App = () => {

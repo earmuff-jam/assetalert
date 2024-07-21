@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Inventories from '../Inventory/Inventories';
 import { PROFILE_NAVIGATION_MENU_BAR } from './constants';
-import { Box, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Tab, Tabs, Tooltip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import RecentActivitiesListContainer from '../RecentActivitiesList/RecentActivitiesListContainer';
 
 const useStyles = makeStyles(() => ({

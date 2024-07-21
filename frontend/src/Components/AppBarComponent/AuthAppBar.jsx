@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Typography } from '@material-ui/core';
-import { BarChartRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { Paper, Typography } from '@mui/material';
+import { BarChartRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {

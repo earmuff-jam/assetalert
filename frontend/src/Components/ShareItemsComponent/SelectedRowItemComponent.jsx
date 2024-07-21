@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import EmptyComponent from '../../util/EmptyComponent';
 import { BUILD_TABLE_CONSTANTS } from '../Event/constants';
-import { Table, TableBody, TableCell, TableRow, makeStyles } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   blueTableCell: {

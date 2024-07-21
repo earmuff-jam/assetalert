@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, IconButton } from '@material-ui/core';
-import { TurnedInRounded, TurnedInNotRounded, PersonAddRounded, DoneRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, IconButton } from '@mui/material';
+import { TurnedInRounded, TurnedInNotRounded, PersonAddRounded, DoneRounded } from '@mui/icons-material';
 
 import dayjs from 'dayjs';
 import classNames from 'classnames';
@@ -76,10 +76,17 @@ const UpcommingEvents = (props) => {
         <span className={classes.teaser}> {event.teaser}</span>
       </div>
       <Box>
-        <IconButton className={classes.iconButton} disabled={isJoined} onClick={() => handleSetIsJoined()}>
+        <IconButton
+          className={classes.iconButton}
+          disabled={isJoined}
+          onClick={() => handleSetIsJoined()}
+          size="large">
           {isJoined ? <DoneRounded color="primary" /> : <PersonAddRounded color="primary" />}
         </IconButton>
-        <IconButton className={classes.iconButton} onClick={() => handleSetIsUserRegisteredEvent()}>
+        <IconButton
+          className={classes.iconButton}
+          onClick={() => handleSetIsUserRegisteredEvent()}
+          size="large">
           {isUserRegisteredEvent ? <TurnedInRounded color="primary" /> : <TurnedInNotRounded color="primary" />}
         </IconButton>
       </Box>

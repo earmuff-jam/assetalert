@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Accordion,
   AccordionDetails,
@@ -12,16 +12,16 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import { produce } from 'immer';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_ITEM_PROFILE_FORM } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 import StatusRadioButtons from './StatusRadioButtons';
-import { ExpandMoreRounded } from '@material-ui/icons';
+import { ExpandMoreRounded } from '@mui/icons-material';
 import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({

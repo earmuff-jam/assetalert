@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 import Title from '../TitleComponent/Title';
 import { useSelector } from 'react-redux';
 import Signup from './Signup';
-import { FaceRounded, PersonAddRounded } from '@material-ui/icons';
+import { FaceRounded, PersonAddRounded } from '@mui/icons-material';
 import ChipComponent from '../ChipComponent/ChipComponent';
 import Login from './Login';
 

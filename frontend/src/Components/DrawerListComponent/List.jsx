@@ -11,12 +11,12 @@ import {
   Box,
   Checkbox,
   Tooltip,
-} from '@material-ui/core';
+} from '@mui/material';
 import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import EmptyComponent from '../../util/EmptyComponent';
 import DownloadExcelButton from '../ItemDetail/DownloadExcelButton';
-import { DeleteRounded, OpenInNewRounded, ShareRounded } from '@material-ui/icons';
+import { DeleteRounded, OpenInNewRounded, ShareRounded } from '@mui/icons-material';
 import Title from '../TitleComponent/Title';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
 
@@ -77,114 +77,112 @@ const List = ({
 }) => {
   const classes = useStyles();
 
-  return (
-    <>
-      <Title titleStyle={classes.headerText} displaySubtitle={false} title={title} />
-      <Box className={classes.container}>
+  return <>
+    <Title titleStyle={classes.headerText} displaySubtitle={false} title={title} />
+    <Box className={classes.container}>
+      <Box className={classes.rowContainer}>
+        <TextFieldComponent textStyle={classes.text} value={subtitle} loading={false} />
         <Box className={classes.rowContainer}>
-          <TextFieldComponent textStyle={classes.text} value={subtitle} loading={false} />
-          <Box className={classes.rowContainer}>
-            <Box>
-              {data.length > 0 && (
-                <DownloadExcelButton
-                  data={data}
-                  tooltipTitle={tooltipTitle}
-                  fileName={fileName}
-                  sheetName={sheetName}
-                />
-              )}
-            </Box>
-            <Box>
-              {displayDeleteRowIcon && rowSelected.length > 0 && (
-                <IconButton onClick={() => removeSelectedItems(rowSelected)}>
-                  <DeleteRounded color="primary" />
-                </IconButton>
-              )}
-              {displayShareIcon && (
-                <IconButton onClick={() => handleMenuClick(rowSelected)}>
-                  <ShareRounded color="primary" />
-                </IconButton>
-              )}
-            </Box>
+          <Box>
+            {data.length > 0 && (
+              <DownloadExcelButton
+                data={data}
+                tooltipTitle={tooltipTitle}
+                fileName={fileName}
+                sheetName={sheetName}
+              />
+            )}
+          </Box>
+          <Box>
+            {displayDeleteRowIcon && rowSelected.length > 0 && (
+              <IconButton onClick={() => removeSelectedItems(rowSelected)} size="large">
+                <DeleteRounded color="primary" />
+              </IconButton>
+            )}
+            {displayShareIcon && (
+              <IconButton onClick={() => handleMenuClick(rowSelected)} size="large">
+                <ShareRounded color="primary" />
+              </IconButton>
+            )}
           </Box>
         </Box>
-        {!filteredData.length ? (
-          <EmptyComponent subtitle={'Add inventories to view data.'} />
-        ) : (
-          <TableContainer
-            component={Paper}
-            className={classNames({ [classes.modifyHeightVariant]: modifyHeightVariant })}
-          >
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox" align="center">
-                    <Checkbox disabled />
-                  </TableCell>
-                  {columns.map((column) => (
-                    <TableCell key={column} className={classes.tableHeaderCell}>
-                      {columnHeaderFormatter(column)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredData.map((row, rowIndex) => {
-                  const isSelected = (id) => rowSelected.indexOf(id) !== -1;
-                  const selectedID = row.id;
-                  const isItemSelected = isSelected(selectedID);
-                  const isItemDisabled = row.is_transfer_allocated;
-                  return (
-                    <Tooltip
-                      key={rowIndex}
-                      title={isItemDisabled ? `Item is associated with ${row.associated_event_title}` : ''}
-                    >
-                      <TableRow
-                        hover
-                        key={rowIndex}
-                        className={classNames({
-                          [classes.disabled]: isItemDisabled,
-                        })}
-                      >
-                        <TableCell padding="checkbox">
-                          <Box className={classes.rowContainer}>
-                            <Checkbox
-                              checked={!isItemDisabled && isItemSelected}
-                              disabled={isItemDisabled}
-                              color="primary"
-                              size="small"
-                              onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
-                              inputProps={{ 'aria-labelledby': 'labelId' }}
-                            />
-                            {isInventoryPage && (
-                              <IconButton
-                                size="small"
-                                disableRipple={true}
-                                disableFocusRipple={true}
-                                disabled={isItemDisabled}
-                                onClick={(event) =>
-                                  !isItemDisabled ? handleDisplayMoreDetails(event, selectedID) : null
-                                }
-                              >
-                                <OpenInNewRounded />
-                              </IconButton>
-                            )}
-                          </Box>
-                        </TableCell>
-                        {columns.map((column) => (
-                          <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
-                        ))}
-                      </TableRow>
-                    </Tooltip>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
       </Box>
-    </>
-  );
+      {!filteredData.length ? (
+        <EmptyComponent subtitle={'Add inventories to view data.'} />
+      ) : (
+        <TableContainer
+          component={Paper}
+          className={classNames({ [classes.modifyHeightVariant]: modifyHeightVariant })}
+        >
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell padding="checkbox" align="center">
+                  <Checkbox disabled />
+                </TableCell>
+                {columns.map((column) => (
+                  <TableCell key={column} className={classes.tableHeaderCell}>
+                    {columnHeaderFormatter(column)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData.map((row, rowIndex) => {
+                const isSelected = (id) => rowSelected.indexOf(id) !== -1;
+                const selectedID = row.id;
+                const isItemSelected = isSelected(selectedID);
+                const isItemDisabled = row.is_transfer_allocated;
+                return (
+                  <Tooltip
+                    key={rowIndex}
+                    title={isItemDisabled ? `Item is associated with ${row.associated_event_title}` : ''}
+                  >
+                    <TableRow
+                      hover
+                      key={rowIndex}
+                      className={classNames({
+                        [classes.disabled]: isItemDisabled,
+                      })}
+                    >
+                      <TableCell padding="checkbox">
+                        <Box className={classes.rowContainer}>
+                          <Checkbox
+                            checked={!isItemDisabled && isItemSelected}
+                            disabled={isItemDisabled}
+                            color="primary"
+                            size="small"
+                            onClick={(event) => (!isItemDisabled ? handleRowSelection(event, selectedID) : null)}
+                            inputProps={{ 'aria-labelledby': 'labelId' }}
+                          />
+                          {isInventoryPage && (
+                            <IconButton
+                              size="small"
+                              disableRipple={true}
+                              disableFocusRipple={true}
+                              disabled={isItemDisabled}
+                              onClick={(event) =>
+                                !isItemDisabled ? handleDisplayMoreDetails(event, selectedID) : null
+                              }
+                            >
+                              <OpenInNewRounded />
+                            </IconButton>
+                          )}
+                        </Box>
+                      </TableCell>
+                      {columns.map((column) => (
+                        <TableCell key={column}>{rowFormatter(row, column, rowIndex)}</TableCell>
+                      ))}
+                    </TableRow>
+                  </Tooltip>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Box>
+  </>;
 };
 
 List.defaultProps = {

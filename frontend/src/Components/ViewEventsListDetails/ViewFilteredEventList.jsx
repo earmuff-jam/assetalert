@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { WhatshotRounded } from '@material-ui/icons';
+import { WhatshotRounded } from '@mui/icons-material';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { fetchCurrentColor } from '../../util/Common';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { Typography, Grid, Card, CardContent, Box, Badge, Tooltip, CardActions, Chip, Avatar } from '@material-ui/core';
+import { Typography, Grid, Card, CardContent, Box, Badge, Tooltip, CardActions, Chip, Avatar } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   presetWidth: {
     width: theme.spacing(14),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: theme.spacing(20),
     },
   },

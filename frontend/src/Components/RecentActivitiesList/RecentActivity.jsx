@@ -2,9 +2,9 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {
   Timeline,
@@ -13,10 +13,10 @@ import {
   TimelineDot,
   TimelineContent,
   TimelineOppositeContent,
-} from '@material-ui/lab';
+} from '@mui/lab';
 
 import TextComponent from '../TextFieldComponent/TextComponent';
-import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@material-ui/icons';
+import { CreateNewFolderRounded, LocalAtmRounded, TrackChangesRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {

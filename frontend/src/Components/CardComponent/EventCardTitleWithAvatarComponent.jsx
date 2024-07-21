@@ -3,10 +3,11 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import EditImageComponent from '../Event/EditImageComponent';
-import { Avatar, Box, makeStyles } from '@material-ui/core';
+import { Avatar, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import CardTitleComponent from './CardTitleComponent';
-import { CardMembershipRounded, GroupRounded } from '@material-ui/icons';
+import { CardMembershipRounded, GroupRounded } from '@mui/icons-material';
 import { enqueueSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     textWrap: 'wrap',
     width: `calc(100% - 40rem)`,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: `26rem`,
     },
   },
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
     },
   },

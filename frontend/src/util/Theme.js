@@ -1,6 +1,6 @@
-import { createTheme } from '@material-ui/core';
+import { createTheme, adaptV4Theme } from '@mui/material';
 
-export const primary_theme = createTheme({
+export const primary_theme = createTheme(adaptV4Theme({
   palette: {
     primary: {
       main: '#3F72AF',
@@ -60,9 +60,9 @@ export const primary_theme = createTheme({
       lineHeight: 1.6,
     },
   },
-});
+}));
 
-export const darkTheme = createTheme({
+export const darkTheme = createTheme(adaptV4Theme({
   palette: {
     mode: 'dark',
     primary: {
@@ -144,4 +144,4 @@ export const darkTheme = createTheme({
       color: '#B0B0B0',
     },
   },
-});
+}));

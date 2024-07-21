@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { AllInboxRounded, DraftsRounded, LoyaltyRounded, VisibilityOffRounded } from '@material-ui/icons';
+import { AllInboxRounded, DraftsRounded, LoyaltyRounded, VisibilityOffRounded } from '@mui/icons-material';
 
 dayjs.extend(relativeTime);
 

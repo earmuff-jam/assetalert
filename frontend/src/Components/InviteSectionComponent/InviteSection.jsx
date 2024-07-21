@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Paper } from '@material-ui/core';
-import { DonutLargeRounded, LibraryBooksRounded, TrackChangesRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { Typography, Paper } from '@mui/material';
+import { DonutLargeRounded, LibraryBooksRounded, TrackChangesRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   text: {

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, TextField, IconButton } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Typography, TextField, IconButton } from '@mui/material';
 
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
-import { DoneRounded } from '@material-ui/icons';
+import { DoneRounded } from '@mui/icons-material';
 
 import EmptyComponent from '../../util/EmptyComponent';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -121,7 +121,7 @@ const ImpactTracking = ({ eventID, userID, requiredSkills, isChecked, disabled }
           }}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={handleSubmit} disabled={disabled}>
+              <IconButton onClick={handleSubmit} disabled={disabled} size="large">
                 <DoneRounded />
               </IconButton>
             ),

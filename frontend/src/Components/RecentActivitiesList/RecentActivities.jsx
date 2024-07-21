@@ -1,11 +1,13 @@
 import { useSelector } from 'react-redux';
 import RecentActivity from './RecentActivity';
-import { ExpandMoreRounded } from '@material-ui/icons';
+import { ExpandMoreRounded } from '@mui/icons-material';
 
 import EmptyComponent from '../../util/EmptyComponent';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import TextComponent from '../TextFieldComponent/TextComponent';
-import { Accordion, AccordionDetails, AccordionSummary, Box, makeStyles } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
