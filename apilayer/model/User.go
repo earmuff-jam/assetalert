@@ -97,3 +97,15 @@ type User struct {
 	IsSSOUser                bool            `json:"is_sso_user,omitempty"`
 	DeletedAt                time.Time       `json:"deleted_at,omitempty"`
 }
+
+// WebsocketMsg ...
+// swagger:model WebsocketMsg
+//
+// WebsocketMsg object. Used to communicate between active users
+type WebsocketMsg struct {
+	ActiveUsersCount int    `json:"activeUsersCount"`
+	EventID          string `json:"eventID"`
+	Msg              string `json:"msg"`
+	User             string `json:"user"`
+	UserID           string `json:"userID"`
+}
