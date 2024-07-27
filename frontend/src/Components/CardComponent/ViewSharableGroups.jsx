@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Autocomplete } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import { homeActions } from '../../Containers/Home/homeSlice';
 
 const useStyles = makeStyles((theme) => ({

@@ -115,6 +115,20 @@ Installing docker steps is located in docker_guide.md
 # How to build application
 
 1. Run script in `main.sh` for dev mode. To deploy run script in `mainDeploy.sh`. 
-2. For `dev mode` after `main.sh` commands, open a new terminal and run `make startserver`. Your backend should be built.
+2. For `dev mode` after `main.sh` commands, open a new terminal and run `make startserver`. Your backend should start up.
 3. For `dev mode` after step 2, for first time install, navigate to `frontend` directory and run `yarn` depending on what you have setup.
+4. For `dev mode` if not first time, run `make startclient` from root. UI should start up.
 
+# How to access the db with db tool
+
+## For access via Mac / Linux
+
+1. Run command `ip addr show eth0 | grep -oP 'inet \K[\d.]+'`. Ensure your docker container is up and running. This provides you with the IP Address.
+2. Connection properties can be viewed from `docker ps` however default connection is `PORT:8089`.
+3. Username is `postgres` and password is `home`.
+
+## For windows / access via windows
+
+1. For `dev mode` to access db, run `docker ps` to view container name. Then run `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_name>` to retrieve IP address of container.
+2. Follow steps 2 and 3 above.
+3. For `dev mode` use that container ip address to connect with your db tool.

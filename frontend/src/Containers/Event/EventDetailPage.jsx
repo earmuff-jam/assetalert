@@ -6,7 +6,7 @@ import { Box, Grid } from '@mui/material';
 import { homeActions } from '../Home/homeSlice';
 import makeStyles from '@mui/styles/makeStyles';
 import { useDispatch, useSelector } from 'react-redux';
-import { profileActions } from '../Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BLANK_USER_DETAILS, BLANK_USER_ERROR_DETAILS } from './constants';
 import SecondaryAppBar from '../../Components/AppBarComponent/SecondaryAppBar';
@@ -236,7 +236,7 @@ const EventDetailPage = () => {
       setUserDetail(userDetailsDraft);
     }
     setEditMode(false);
-    // eslint-disable-next-line
+     
   }, [
     loadingProfileDetails,
     loadingSelectevent,

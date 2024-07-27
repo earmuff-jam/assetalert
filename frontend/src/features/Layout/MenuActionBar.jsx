@@ -1,92 +1,96 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 import {
-  PushPinOutlined,
   ExpandLess,
   ExpandMore,
   Inventory2Rounded,
   SettingsRounded,
-  StarOutline,
-  InboxOutlined,
   HomeRounded,
+  PreviewRounded,
+  AccountBoxRounded,
+  AllInboxRounded,
+  PushPinRounded,
+  CategoryRounded,
+  SummarizeRounded,
+  ReportSharp,
 } from '@mui/icons-material';
-
-import {
-  ListSubheader,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Collapse,
-  Stack,
-  Button,
-} from '@mui/material';
-import { authActions } from '../../Containers/Auth/authSlice';
+import { List, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material';
 
 export default function MenuActionBar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
-  const { loading: userNameLoading, username } = useSelector((state) => state.home);
 
   const parentMenuList = [
     {
       id: 1,
-      icon: <HomeRounded />,
-      label: 'Home page',
+      icon: <HomeRounded fontSize="small" color="primary" />,
+      label: 'Home',
       to: '/',
     },
     {
       id: 2,
-      icon: <Inventory2Rounded />,
-      label: 'All Inventories',
+      icon: <Inventory2Rounded fontSize="small" />,
+      label: 'Assets',
       to: '/inventories/list',
+    },
+    {
+      id: 3,
+      icon: <CategoryRounded fontSize="small" />,
+      label: 'Categories',
+      to: '/categories/list',
+    },
+    {
+      id: 4,
+      icon: <SummarizeRounded fontSize="small" />,
+      label: 'Maintenance plans',
+      to: '/plans/list',
+    },
+    {
+      id: 5,
+      icon: <ReportSharp fontSize="small" />,
+      label: 'Reports',
+      to: '/reports',
     },
   ];
 
   const settingsChildren = [
     {
       id: 1,
-      icon: <SettingsRounded />,
+      icon: <PreviewRounded fontSize="small" />,
       label: 'Appearance',
-      to: '/profile',
+      to: '/profile/appearance',
     },
     {
       id: 2,
-      icon: <PushPinOutlined />,
+      icon: <AccountBoxRounded fontSize="small" />,
       label: 'Profile details',
       to: '/profile',
+    },
+  ];
+
+  const pinnedChildren = [
+    {
+      id: 1,
+      icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,
+      label: 'Recent Activities',
+      to: '/recent/activities',
+    },
+    {
+      id: 2,
+      icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,
+      label: 'Personal Notes',
+      to: '/profile/notes',
     },
   ];
 
   const handleSettingsClick = () => setOpenSettings(!openSettings);
   const handlePinnedResourceClick = () => setOpenPinnedResources(!openPinnedResources);
 
-  const handleLogout = () => {
-    dispatch(authActions.getLogout());
-    localStorage.clear();
-    window.location.href = '/';
-  };
-
   return (
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          <Stack direction="row" justifyContent="space-between">
-            {username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
-            <Button onClick={handleLogout}>logout</Button>
-          </Stack>
-        </ListSubheader>
-      }
-    >
+    <List sx={{ width: '100%', maxWidth: 300 }} component="nav" aria-labelledby="nested-list-subheader">
       {parentMenuList.map((v) => (
-        <ListItemButton id={v.id} onClick={() => navigate(v.to)}>
+        <ListItemButton key={v.id} onClick={() => navigate(v.to)}>
           <ListItemIcon>{v.icon}</ListItemIcon>
           <ListItemText primary={v.label} />
         </ListItemButton>
@@ -94,16 +98,16 @@ export default function MenuActionBar() {
 
       <ListItemButton onClick={handleSettingsClick}>
         <ListItemIcon>
-          <SettingsRounded />
+          <SettingsRounded fontSize="small" />
         </ListItemIcon>
         <ListItemText primary="Settings" />
-        {openSettings ? <ExpandLess /> : <ExpandMore />}
+        {openSettings ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
       </ListItemButton>
 
       <Collapse in={openSettings} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {settingsChildren.map((v) => (
-            <ListItemButton id={v.id} onClick={() => navigate(v.to)}>
+            <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => navigate(v.to)}>
               <ListItemIcon>{v.icon}</ListItemIcon>
               <ListItemText primary={v.label} />
             </ListItemButton>
@@ -113,26 +117,20 @@ export default function MenuActionBar() {
 
       <ListItemButton onClick={handlePinnedResourceClick}>
         <ListItemIcon>
-          <InboxOutlined />
+          <AllInboxRounded fontSize="small" />
         </ListItemIcon>
         <ListItemText primary="Pinned Resources" />
-        {openPinnedResources ? <ExpandLess /> : <ExpandMore />}
+        {openPinnedResources ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
       </ListItemButton>
 
       <Collapse in={openPinnedResources} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <PushPinOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Personal Notes" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <PushPinOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Recent Activities" />
-          </ListItemButton>
+          {pinnedChildren.map((v) => (
+            <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => navigate(v.to)}>
+              <ListItemText primary={v.label} />
+              <ListItemIcon>{v.icon}</ListItemIcon>
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
     </List>

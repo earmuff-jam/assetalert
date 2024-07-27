@@ -19,7 +19,7 @@ import { ADD_ITEM_PROFILE_FORM } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import StatusRadioButtons from './StatusRadioButtons';
 import { ExpandMoreRounded } from '@mui/icons-material';
 import classNames from 'classnames';

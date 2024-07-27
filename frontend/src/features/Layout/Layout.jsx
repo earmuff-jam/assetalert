@@ -1,10 +1,32 @@
 import { Outlet } from 'react-router-dom';
-import { Box, CircularProgress, CssBaseline, Stack, ThemeProvider } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  CircularProgress,
+  CssBaseline,
+  IconButton,
+  Stack,
+  ThemeProvider,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { Suspense } from 'react';
 import MenuActionBar from './MenuActionBar';
 import { lightTheme } from '../../util/Theme';
+import { LogoutRounded } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../Containers/Auth/authSlice';
 
 const Layout = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(authActions.getLogout());
+    localStorage.clear();
+    window.location.href = '/';
+  };
+
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
@@ -15,10 +37,24 @@ const Layout = () => {
           </Box>
         }
       >
-        <Box height="100%" bgcolor="background.default">
-          <Stack direction="row" spacing="1rem">
+        <AppBar color="secondary">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              AssetAlert
+            </Typography>
+            <Tooltip title="log out">
+              <IconButton onClick={handleLogout}>
+                <LogoutRounded fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+        </AppBar>
+        <Box>
+          <Stack direction="row" spacing="1rem" sx={{ mt: '5rem' }}>
             <MenuActionBar />
-            <Outlet />
+            <Stack sx={{ py: '1rem', flexGrow: 1 }}>
+              <Outlet />
+            </Stack>
           </Stack>
         </Box>
       </Suspense>
