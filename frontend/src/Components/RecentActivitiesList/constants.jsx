@@ -4,7 +4,7 @@ import {
   ReportRounded,
   LocalAtmRounded,
   TrackChangesRounded,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 export const RECENT_TROPHY_COLLECTION_TABS = [
   {

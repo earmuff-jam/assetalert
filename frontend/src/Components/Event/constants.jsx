@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { Chip, Tooltip } from '@material-ui/core';
+import { Chip, Tooltip } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { AssignmentTurnedInRounded, GroupWorkRounded } from '@material-ui/icons';
+import { AssignmentTurnedInRounded, GroupWorkRounded } from '@mui/icons-material';
 
 dayjs.extend(relativeTime);
 

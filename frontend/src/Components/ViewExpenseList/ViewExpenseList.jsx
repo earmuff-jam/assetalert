@@ -2,14 +2,14 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import EmptyComponent from '../../util/EmptyComponent';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { VIEW_EXPENSE_LIST_COLUMN_HEADERS } from './constants';
-import { CancelRounded, DoneRounded } from '@material-ui/icons';
+import { CancelRounded, DoneRounded } from '@mui/icons-material';
 
 const ViewExpenseList = ({ disabled }) => {
   dayjs.extend(relativeTime);

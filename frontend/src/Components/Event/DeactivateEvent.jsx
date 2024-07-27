@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, FormControl, FormHelperText, CircularProgress, Link } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { TextField, Button, FormControl, FormHelperText, CircularProgress, Link } from '@mui/material';
 
 import {
   EVENT_FORM,
@@ -13,7 +13,7 @@ import {
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import { homeActions } from '../../Containers/Home/homeSlice';
 
 const useStyles = makeStyles((theme) => ({

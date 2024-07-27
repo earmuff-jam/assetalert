@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import { LocationOnRounded } from '@material-ui/icons';
-import { IconButton, Tooltip, makeStyles } from '@material-ui/core';
+import { LocationOnRounded } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   zeroPadding: {
@@ -20,7 +22,12 @@ const RetrieveUserLocation = ({ setLocation }) => {
 
   return (
     <Tooltip title="Find approximate location">
-      <IconButton onClick={handleLocation} disableRipple={true} className={classes.zeroPadding} data-tour="5">
+      <IconButton
+        onClick={handleLocation}
+        disableRipple={true}
+        className={classes.zeroPadding}
+        data-tour="5"
+        size="large">
         <LocationOnRounded />
       </IconButton>
     </Tooltip>

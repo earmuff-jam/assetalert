@@ -5,6 +5,9 @@
 1. Docker.
 2. Golang/migrate lib.
 3. Yarn package manager.
+4  Make
+5. Migrate Cli
+6. Psql Db
 
 ### Development Instance
 

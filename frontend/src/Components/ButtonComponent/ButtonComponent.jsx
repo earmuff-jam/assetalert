@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { SaveRounded } from '@material-ui/icons';
-import { Button, makeStyles } from '@material-ui/core';
+import { SaveRounded } from '@mui/icons-material';
+import { Button } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   disableHover: {

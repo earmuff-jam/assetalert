@@ -1,12 +1,13 @@
 import { store } from './Store';
 import { Provider } from 'react-redux';
-import { primary_theme } from './util/Theme';
+import { lightTheme } from './util/Theme';
 import * as ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@material-ui/styles';
 import ApplicationValidator from './ApplicationValidator';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ThemeProvider theme={primary_theme}>
+  <ThemeProvider theme={lightTheme}>
+    <CssBaseline />
     <Provider store={store}>
       <ApplicationValidator />
     </Provider>

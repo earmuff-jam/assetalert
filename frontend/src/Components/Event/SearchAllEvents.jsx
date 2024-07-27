@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Autocomplete } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
+import { Autocomplete } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import RetrieveUserLocation from './RetrieveUserLocation';
-import { FiberManualRecordRounded } from '@material-ui/icons';
-import { Box, TextField, Typography } from '@material-ui/core';
+import { FiberManualRecordRounded } from '@mui/icons-material';
+import { Box, TextField, Typography } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   text: {

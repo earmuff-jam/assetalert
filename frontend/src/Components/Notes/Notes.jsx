@@ -3,10 +3,11 @@ import NotesDetails from './NotesDetails';
 import { useEffect, useState } from 'react';
 import Title from '../DialogComponent/Title';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Dialog, makeStyles } from '@material-ui/core';
+import { Box, Dialog } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import TextComponent from '../TextFieldComponent/TextComponent';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { AddRounded, ImportExportRounded } from '@material-ui/icons';
+import { AddRounded, ImportExportRounded } from '@mui/icons-material';
 import { profileActions } from '../../Containers/Profile/profileSlice';
 
 const useStyles = makeStyles((theme) => ({

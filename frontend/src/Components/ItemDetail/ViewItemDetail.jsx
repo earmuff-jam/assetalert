@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import List from '../DrawerListComponent/List';
 import EasyEdit, { Types } from 'react-easy-edit';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import EmptyComponent from '../../util/EmptyComponent';
 import { VIEW_ITEMS_COLUMN_HEADERS } from './constants';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
-import { CancelRounded, DoneRounded } from '@material-ui/icons';
+import { CancelRounded, DoneRounded } from '@mui/icons-material';
 import { eventActions } from '../../Containers/Event/eventSlice';
 
 const ViewItemDetail = ({ disabled }) => {

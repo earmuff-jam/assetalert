@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Title from '../DialogComponent/Title';
 import { useNavigate } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Dialog, Divider } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Dialog, Divider } from '@mui/material';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
-import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@material-ui/icons';
+import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@mui/icons-material';
 import AddCommunityEvent from '../CommunityEventComponent/AddCommunityEvent';
 import ChipComponent from '../ChipComponent/ChipComponent';
 

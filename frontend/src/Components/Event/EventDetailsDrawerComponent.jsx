@@ -5,9 +5,9 @@ import MapComponentFn from '../Map/Map';
 import Host from '../HostComponent/Host';
 import PieChart from '../PieChart/PieChart';
 import ExpenseChart from '../PieChart/ExpenseChart';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import CommunityMsg from '../ChatComponent/CommunityMsg';
-import { Box, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
+import { Box, Tab, Tabs, Tooltip, Typography } from '@mui/material';
 import ExpenseDetails from '../ViewExpenseList/ExpenseDetails';
 import { NAVIGATION_TABS, isEditingAllowed } from './constants';
 import RSVPRegistration from '../RsvpComponent/RSVPRegistration';
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
   },
   smallVariant: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
     },
   },

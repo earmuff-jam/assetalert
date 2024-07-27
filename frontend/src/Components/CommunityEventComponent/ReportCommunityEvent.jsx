@@ -4,12 +4,14 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { enqueueSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import TextFieldComponent from '../TextFieldComponent/TextComponent';
 import { BLANK_REPORT_FORM, BLANK_REPORT_FORM_ERROR, BLANK_REPORT_FORM_TOUCHED } from './constants';
-import { TextField, FormControl, FormControlLabel, FormHelperText, Box, Checkbox, makeStyles } from '@material-ui/core';
+import { TextField, FormControl, FormControlLabel, FormHelperText, Box, Checkbox } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   container: {

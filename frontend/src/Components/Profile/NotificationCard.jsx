@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, List, ListItem, ListItemText } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, List, ListItem, ListItemText } from '@mui/material';
 
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { InfoRounded } from '@material-ui/icons';
+import { InfoRounded } from '@mui/icons-material';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 const useStyles = makeStyles((theme) => ({

@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import LoadingSkeleton from '../../util/LoadingSkeleton';
 import { BUILD_TABLE_CONSTANTS, LABELS } from '../Event/constants';
-import { Table, TableBody, TableCell, TableRow, makeStyles } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     minWidth: 'max-content',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       minWidth: 'auto',
     },
   },

@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import EditingUserProfile from '../ViewProfileDetails/EditingUserProfile';
-import { Badge, Box, Card, CardContent, IconButton } from '@material-ui/core';
+import { Badge, Box, Card, CardContent, IconButton } from '@mui/material';
 import UserCardTitleWithAvatarComponent from './UserCardTitleWithAvatarComponent';
-import { EditRounded, CancelRounded, NotificationImportantRounded } from '@material-ui/icons';
+import { EditRounded, CancelRounded, NotificationImportantRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
   },
   columnVariant: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       gap: theme.spacing(0),
     },
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
   },
@@ -85,12 +85,12 @@ const ProfileDetailsCardComponent = ({
               buttonStyles={classes.buttonColor}
               text={'Submit'}
             />
-            <IconButton onClick={handleToggle}>{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
+            <IconButton onClick={handleToggle} size="large">{!editMode ? <EditRounded /> : <CancelRounded />}</IconButton>
             <IconButton
               onClick={handleClickNotificationBar}
               disabled={isLoading || notifications.length <= 0}
               className={classes.iconTilt}
-            >
+              size="large">
               <Badge badgeContent={containsUnreadNotifications} variant="dot" color="error" overlap="rectangular">
                 <NotificationImportantRounded color={containsUnreadNotifications ? 'primary' : 'secondary'} />
               </Badge>

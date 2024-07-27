@@ -1,4 +1,4 @@
-import { MonetizationOnRounded, PostAddRounded } from '@material-ui/icons';
+import { MonetizationOnRounded, PostAddRounded } from '@mui/icons-material';
 
 export const VIEW_EXPENSE_LIST_COLUMN_HEADERS = {
   item_name: {

@@ -1,4 +1,4 @@
-import { FaceRounded, PermIdentityRounded, PhoneRounded } from '@material-ui/icons';
+import { FaceRounded, PermIdentityRounded, PhoneRounded } from '@mui/icons-material';
 
 export const GENERIC_FORM_FIELDS = {
   type: 'text',

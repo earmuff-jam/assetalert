@@ -1,10 +1,10 @@
 import { primary_theme } from '../../util/Theme';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { Provider } from 'react-redux';
 import { store } from '../../Store';
 import AppBarNavListItem from '../../Components/AppBarComponent/AppBarNavListItem';
-import { AssignmentIndRounded, ContactSupportRounded, HomeRounded, LockOpenRounded } from '@material-ui/icons';
+import { AssignmentIndRounded, ContactSupportRounded, HomeRounded, LockOpenRounded } from '@mui/icons-material';
 
 export default {
   title: 'HomePage/AppBarNavListItem',
@@ -13,9 +13,11 @@ export default {
     withRouter,
     (Story) => (
       <Provider store={store}>
-        <ThemeProvider theme={primary_theme}>
-          <Story />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={primary_theme}>
+            <Story />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Provider>
     ),
   ],

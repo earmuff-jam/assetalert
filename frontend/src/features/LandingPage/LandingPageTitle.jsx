@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Typography } from '@material-ui/core';
-import { BarChartRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { Paper, Typography } from '@mui/material';
+import { BarChartRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthAppBar = ({ title, titleVariant, elevation }) => {
+const LandingPageTitle = ({ title, titleVariant, elevation }) => {
   const classes = useStyles();
 
   return (
@@ -38,16 +38,16 @@ const AuthAppBar = ({ title, titleVariant, elevation }) => {
   );
 };
 
-AuthAppBar.defaultProps = {
+LandingPageTitle.defaultProps = {
   title: 'Mashed',
   titleVariant: 'h5',
   elevation: 0,
 };
 
-AuthAppBar.propTypes = {
+LandingPageTitle.propTypes = {
   title: PropTypes.string,
   titleVariant: PropTypes.string,
   elevation: PropTypes.number,
 };
 
-export default AuthAppBar;
+export default LandingPageTitle;

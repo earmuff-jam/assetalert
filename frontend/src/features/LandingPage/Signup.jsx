@@ -2,33 +2,28 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { ArrowRightRounded } from '@material-ui/icons';
+import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { Checkbox, FormControl, FormControlLabel, InputAdornment, TextField } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  text: {
-    fontSize: '1.2rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-    padding: theme.spacing(0, 2),
-  },
-}));
+import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputAdornment,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 const Signup = ({ setSignUpView }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [formFields, setFormFields] = useState(SIGN_UP_FORM_FIELDS);
   const [isChecked, setIsChecked] = useState(false);
+  const [formFields, setFormFields] = useState(SIGN_UP_FORM_FIELDS);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -47,28 +42,25 @@ const Signup = ({ setSignUpView }) => {
     );
   };
 
-  const fetchSignupFn = (formattedData) => {
-    dispatch(authActions.getSignup(formattedData));
-  };
-
-  const requiredFormFields = Object.values(formFields).filter((v) => v.required);
-  const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '') || !isChecked;
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
+  const hasError = (formFields = []) => {
     const containsErr = Object.values(formFields).reduce((acc, el) => {
       if (el.errorMsg) {
         return true;
       }
       return acc;
     }, false);
-
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    if (containsErr || isRequiredFieldsEmpty || !isChecked) {
-      console.log('Empty form fields. Unable to proceed.');
+    return containsErr || isRequiredFieldsEmpty;
+  };
+
+  const fetchSignupFn = (formattedData) => dispatch(authActions.getSignup(formattedData));
+
+  const submit = (e) => {
+    e.preventDefault();
+
+    if (hasError(formFields) || !isChecked) {
       return;
     } else {
       const formattedData = Object.values(formFields).reduce((acc, el) => {
@@ -83,11 +75,10 @@ const Signup = ({ setSignUpView }) => {
   };
 
   return (
-    <div className={classes.form}>
-      <form>
+    <Stack>
+      <Stack spacing="1rem">
         {Object.values(formFields).map((v, index) => (
           <TextField
-            className={classes.text}
             key={index}
             id={v.name}
             name={v.name}
@@ -104,7 +95,7 @@ const Signup = ({ setSignUpView }) => {
             helperText={v.errorMsg}
             onKeyDown={(e) => {
               if (e.code === 'Enter') {
-                handleFormSubmit(e);
+                submit(e);
               }
             }}
             InputProps={{
@@ -112,25 +103,34 @@ const Signup = ({ setSignUpView }) => {
             }}
           />
         ))}
-      </form>
+      </Stack>
       <FormControl fullWidth>
         <FormControlLabel
-          control={<Checkbox checked={isChecked} onChange={() => setIsChecked(!isChecked)} color="primary" />}
+          slotProps={{ typography: { variant: 'caption' } }}
+          control={
+            <Checkbox size="small" checked={isChecked} onChange={() => setIsChecked(!isChecked)} color="primary" />
+          }
           label="Accept terms and conditions."
-          classes={{ label: classes.caption }}
         />
       </FormControl>
-      <ButtonComponent
-        text={'Register'}
-        showIcon={true}
-        buttonVariant={'text'}
-        disableRipple={true}
-        icon={<ArrowRightRounded />}
-        disableFocusRipple={true}
-        onClick={handleFormSubmit}
-        disabled={isRequiredFieldsEmpty}
-      />
-    </div>
+      <Stack direction="row" spacing="0.2rem">
+        <Typography variant="caption">Read about our</Typography>
+        <Link
+          variant="caption"
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`${encodeURI('https://github.com/earmuff-jam/mashed/blob/main/PRIVACY_POLICY.md')}`}
+        >
+          terms and conditions
+        </Link>
+      </Stack>
+
+      <Box>
+        <Button variant="outlined" onClick={submit} disabled={hasError(formFields) || !isChecked}>
+          Register
+        </Button>
+      </Box>
+    </Stack>
   );
 };
 

@@ -1,31 +1,13 @@
 import { useState } from 'react';
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { ArrowRightRounded } from '@material-ui/icons';
+import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from '../../Containers/Auth/authSlice';
-import { InputAdornment, TextField } from '@material-ui/core';
+import { Button, InputAdornment, Stack, TextField } from '@mui/material';
 import { LOGIN_FORM_FIELDS } from '../../Containers/Auth/constants';
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
-
-const useStyles = makeStyles((theme) => ({
-  text: {
-    fontSize: '1.2rem',
-    fontWeight: 'lighter',
-    marginBottom: theme.spacing(2),
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-    padding: theme.spacing(0, 2),
-  },
-}));
 
 const Login = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
-
   const [formFields, setFormFields] = useState(LOGIN_FORM_FIELDS);
 
   const handleInput = (event) => {
@@ -57,11 +39,10 @@ const Login = () => {
     return containsErr || requiredFormFields.some((el) => el.value.trim() === '');
   };
 
-  const handleFormSubmit = (e) => {
+  const submit = (e) => {
     e.preventDefault();
 
     if (validate(formFields)) {
-      console.log('Empty form fields. Unable to proceed.');
       return;
     } else {
       const formattedData = Object.values(formFields).reduce((acc, el) => {
@@ -75,11 +56,10 @@ const Login = () => {
   };
 
   return (
-    <div className={classes.form}>
-      <form>
+    <>
+      <Stack spacing="1rem">
         {Object.values(formFields).map((v, index) => (
           <TextField
-            className={classes.text}
             key={index}
             id={v.name}
             name={v.name}
@@ -96,7 +76,7 @@ const Login = () => {
             helperText={v.errorMsg}
             onKeyDown={(e) => {
               if (e.code === 'Enter') {
-                handleFormSubmit(e);
+                submit(e);
               }
             }}
             InputProps={{
@@ -104,18 +84,18 @@ const Login = () => {
             }}
           />
         ))}
-      </form>
-      <ButtonComponent
-        text={'Submit'}
-        showIcon={true}
-        icon={<ArrowRightRounded />}
-        buttonVariant={'text'}
-        onClick={handleFormSubmit}
+      </Stack>
+      <Button
+        variant="outlined"
+        endIcon={<ArrowRightRounded />}
         disabled={validate(formFields)}
         disableRipple={true}
         disableFocusRipple={true}
-      />
-    </div>
+        onClick={submit}
+      >
+        Submit
+      </Button>
+    </>
   );
 };
 

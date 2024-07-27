@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { Avatar, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import CardTitleComponent from './CardTitleComponent';
 import EditImageComponent from '../Event/EditImageComponent';
 import { profileActions } from '../../Containers/Profile/profileSlice';
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     gap: '1.2rem',
     textOverflow: 'ellipsis',
     textWrap: 'wrap',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: `26rem`,
     },
   },
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
     },
   },

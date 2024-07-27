@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Box, Input, Typography } from '@material-ui/core';
+import { Box, Input, Typography } from '@mui/material';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { CancelRounded, GetAppRounded } from '@material-ui/icons';
+import { CancelRounded, GetAppRounded } from '@mui/icons-material';
 
 const UploadData = ({
   buttonCancelText,

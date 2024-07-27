@@ -1,11 +1,12 @@
 import steps from './tour/steps';
 import { router } from './util/router';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { SnackbarProvider } from 'notistack';
 import { TourProvider } from '@reactour/tour';
 import { RouterProvider } from 'react-router-dom';
 import AuthHome from './Containers/Auth/AuthHome';
+import { Container, Dialog } from '@mui/material';
 
 const ApplicationValidator = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -30,11 +31,17 @@ const ApplicationValidator = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         autoHideDuration={3000}
       >
-        <RouterProvider router={router} />
+        <Container maxWidth="xl">
+          <Suspense fallback={<Dialog title="Loading..." />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </Container>
       </SnackbarProvider>
     </TourProvider>
   ) : (
-    <AuthHome />
+    <Container maxWidth="lg">
+      <AuthHome />
+    </Container>
   );
 };
 

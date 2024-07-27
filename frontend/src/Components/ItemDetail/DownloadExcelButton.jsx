@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import PropTypes from 'prop-types';
-import { IconButton, Tooltip } from '@material-ui/core';
-import { CloudDownloadRounded } from '@material-ui/icons';
+import { IconButton, Tooltip } from '@mui/material';
+import { CloudDownloadRounded } from '@mui/icons-material';
 
 const DownloadExcelButton = ({ data, tooltipTitle, fileName, sheetName }) => {
   const handleDownload = () => {
@@ -13,7 +13,7 @@ const DownloadExcelButton = ({ data, tooltipTitle, fileName, sheetName }) => {
 
   return (
     <Tooltip title={tooltipTitle}>
-      <IconButton onClick={handleDownload}>
+      <IconButton onClick={handleDownload} size="large">
         <CloudDownloadRounded />
       </IconButton>
     </Tooltip>

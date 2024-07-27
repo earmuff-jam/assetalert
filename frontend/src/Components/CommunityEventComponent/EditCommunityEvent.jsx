@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Chip, InputAdornment, TextField } from '@material-ui/core';
-import { EventNoteRounded, EventRounded, FaceRounded } from '@material-ui/icons';
+import Alert from '@mui/material/Alert';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Chip, InputAdornment, TextField } from '@mui/material';
+import { EventNoteRounded, EventRounded, FaceRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   textField: {

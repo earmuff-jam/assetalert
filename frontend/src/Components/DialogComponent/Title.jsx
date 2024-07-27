@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { IconButton, Typography } from '@material-ui/core';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import makeStyles from '@mui/styles/makeStyles';
+import MuiDialogTitle from '@mui/material/DialogTitle';
+import { IconButton, Typography } from '@mui/material';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,7 +31,11 @@ const Title = (props) => {
       <div className={classes.container}>
         <Typography className={classes.text}>{children}</Typography>
         {onClose ? (
-          <IconButton aria-label="close" onClick={onClose} className={classes.errorButton}>
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            className={classes.errorButton}
+            size="large">
             <CloseRoundedIcon />
           </IconButton>
         ) : null}

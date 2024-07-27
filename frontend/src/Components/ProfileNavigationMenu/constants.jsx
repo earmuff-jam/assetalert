@@ -1,4 +1,4 @@
-import { ListRounded, NotesRounded, TimelineRounded } from '@material-ui/icons';
+import { ListRounded, NotesRounded, TimelineRounded } from '@mui/icons-material';
 
 /**
  * Profile Navigation Menu Bar

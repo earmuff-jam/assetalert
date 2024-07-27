@@ -1,10 +1,10 @@
 import { store } from '../../Store';
 import { Provider } from 'react-redux';
 import { primary_theme } from '../../util/Theme';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import ChipComponent from '../../Components/ChipComponent/ChipComponent';
-import { FaceRounded, NotesRounded, PersonAddRounded } from '@material-ui/icons';
+import { FaceRounded, NotesRounded, PersonAddRounded } from '@mui/icons-material';
 
 export default {
   title: 'ChipComponent/ChipComponent',
@@ -13,9 +13,11 @@ export default {
     withRouter,
     (Story) => (
       <Provider store={store}>
-        <ThemeProvider theme={primary_theme}>
-          <Story />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={primary_theme}>
+            <Story />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Provider>
     ),
   ], // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs

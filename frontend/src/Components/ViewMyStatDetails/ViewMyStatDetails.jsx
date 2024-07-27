@@ -1,7 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Badge, Typography } from '@material-ui/core';
-import { EmojiPeopleRounded, EventRounded } from '@material-ui/icons';
+import makeStyles from '@mui/styles/makeStyles';
+import { Badge, Typography } from '@mui/material';
+import { EmojiPeopleRounded, EventRounded } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {

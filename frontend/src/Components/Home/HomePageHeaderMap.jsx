@@ -15,7 +15,7 @@ import { useEffect, useRef } from 'react';
 import PopupContent from './PopupContent';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Attribution, defaults as defaultControls } from 'ol/control.js';
 
 const useStyles = makeStyles((theme) => ({

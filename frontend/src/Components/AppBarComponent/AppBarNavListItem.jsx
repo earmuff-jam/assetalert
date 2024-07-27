@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
-import { AssignmentIndRounded } from '@material-ui/icons';
-import { List, ListItem, ListItemIcon, ListItemText, Tooltip } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { AssignmentIndRounded } from '@mui/icons-material';
+import { List, ListItem, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   list: {

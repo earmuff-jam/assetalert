@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useEffect, useState } from 'react';
-import { TextField, Button, Container, Paper, Typography } from '@material-ui/core';
+import { TextField, Button, Container, Paper, Typography } from '@mui/material';
 import badWordsFilter from 'bad-words';
 import useWebSocket from 'react-use-websocket';
 import EmptyComponent from '../../util/EmptyComponent';
 import { enqueueSnackbar } from 'notistack';
 import { REACT_APP_LOCALHOST_URL_SOCKET_BASE_URL } from '../../util/Common';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 
 const useStyles = makeStyles((theme) => ({
   btnContainer: {
@@ -55,6 +56,7 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
       userID: userID,
       user: userFullName || 'Anonymous',
       msg: messageInput,
+      activeUsersCount: 0,
     };
     setMessageInput('');
     feedWebsocket(JSON.stringify(draftMsg));
@@ -63,7 +65,11 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
   useEffect(() => {
     if (lastMessage !== null) {
       const receivedMessage = JSON.parse(lastMessage.data);
-      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+
+      // Filter out empty messages
+      if (receivedMessage.msg && receivedMessage.user) {
+        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      }
     }
   }, [lastMessage]);
 
@@ -77,6 +83,13 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
 
   return (
     <Container>
+      <ButtonComponent
+        disableFocusRipple
+        disableRipple
+        buttonVariant={'standard'}
+        showIcon={false}
+        text={`${messages[0]?.activeUsersCount || 0} online members`}
+      />
       <TextField
         label="Chat online with available team members"
         fullWidth
@@ -99,27 +112,28 @@ const CommunityMsg = ({ userFullName, userID, eventID, isChecked, disabled }) =>
       </div>
 
       <div className={classes.chatContainer}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            style={{
-              alignSelf: userFullName === message.user ? 'flex-end' : 'flex-start',
-            }}
-          >
-            <Paper
-              className={classes.chatBubble}
+        {messages.length > 0 &&
+          messages.map((message, index) => (
+            <div
+              key={index}
               style={{
-                backgroundColor: userFullName === message.user ? 'lightblue' : 'lightgray',
+                alignSelf: userFullName === message.user ? 'flex-end' : 'flex-start',
               }}
             >
-              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                {userFullName === message.user ? 'You' : message.user}
-              </Typography>
+              <Paper
+                className={classes.chatBubble}
+                style={{
+                  backgroundColor: userFullName === message.user ? 'lightblue' : 'lightgray',
+                }}
+              >
+                <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                  {userFullName === message.user ? 'You' : message.user}
+                </Typography>
 
-              <Typography variant="body1">{message.msg}</Typography>
-            </Paper>
-          </div>
-        ))}
+                <Typography variant="body1">{message.msg}</Typography>
+              </Paper>
+            </div>
+          ))}
       </div>
     </Container>
   );

@@ -1,9 +1,9 @@
 import { primary_theme } from '../../util/Theme';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { Provider } from 'react-redux';
 import { store } from '../../Store';
-import { EmojiEventsRounded, TrackChangesRounded } from '@material-ui/icons';
+import { EmojiEventsRounded, TrackChangesRounded } from '@mui/icons-material';
 import RecentItemTabs from '../../Components/RecentActivitiesList/RecentItemTabs';
 
 export default {
@@ -13,9 +13,11 @@ export default {
     withRouter,
     (Story) => (
       <Provider store={store}>
-        <ThemeProvider theme={primary_theme}>
-          <Story />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={primary_theme}>
+            <Story />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Provider>
     ),
   ],

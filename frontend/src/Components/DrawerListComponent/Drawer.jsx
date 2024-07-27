@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Drawer as DrawerComponent } from '@material-ui/core';
+import { Drawer as DrawerComponent } from '@mui/material';
 
 const Drawer = ({ open, toggleDrawer, children }) => {
   return (
