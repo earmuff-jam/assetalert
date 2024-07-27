@@ -69,6 +69,7 @@ jobs:
 
       - name: Build frontend
         run: |
+          cd frontend &&
           CI=true yarn build
           
       - name: Run linter
