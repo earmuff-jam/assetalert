@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
-import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
 import {
   Box,
   Button,

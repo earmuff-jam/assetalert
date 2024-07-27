@@ -1,13 +1,13 @@
 import { Stack } from '@mui/material';
-import AppBar from '../../Components/AppBarComponent/AuthAppBar';
-import Authenticator from '../../Components/AuthenticatorComponent/Authenticator';
-import InviteSection from '../../Components/InviteSectionComponent/InviteSection';
+import LandingPageTitle from '../../features/LandingPage/LandingPageTitle';
+import Authenticator from '../../features/LandingPage/Authenticator';
+import InviteSection from '../../features/LandingPage/InviteSection';
 import AuthFooter from '../../Components/AuthFooterComponent/AuthFooter';
 
 const AuthHome = () => {
   return (
     <>
-      <AppBar title="AssetAlert" />
+      <LandingPageTitle title="AssetAlert" />
       <Stack sx={{ flexDirection: { sm: 'row' }, gap: 1, my: { sm: 20, xs: 5 } }}>
         <InviteSection />
         <Authenticator />

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthAppBar = ({ title, titleVariant, elevation }) => {
+const LandingPageTitle = ({ title, titleVariant, elevation }) => {
   const classes = useStyles();
 
   return (
@@ -38,16 +38,16 @@ const AuthAppBar = ({ title, titleVariant, elevation }) => {
   );
 };
 
-AuthAppBar.defaultProps = {
+LandingPageTitle.defaultProps = {
   title: 'Mashed',
   titleVariant: 'h5',
   elevation: 0,
 };
 
-AuthAppBar.propTypes = {
+LandingPageTitle.propTypes = {
   title: PropTypes.string,
   titleVariant: PropTypes.string,
   elevation: PropTypes.number,
 };
 
-export default AuthAppBar;
+export default LandingPageTitle;
