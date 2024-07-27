@@ -18,9 +18,9 @@ const InviteSection = () => {
     <Stack spacing="2rem">
       <Row
         icon={<LibraryBooksRounded />}
-        label="Learn what you can offer."
-        caption="Contribute your skills and time to make a positive impact on your community. Track them and maintain
-          inventories of items. Volunteer for local events, help those in need, and be a part of meaningful initiatives."
+        label="Learn what your assets can offer."
+        caption="Own stuffs but have a hard time managing it? Let us offer to consolidate all your assets into one single platform. Keep records
+        of purchases and even manage items via geotracking capabilities. Lets try it out."
       />
       <Row
         icon={<TrackChangesRounded />}

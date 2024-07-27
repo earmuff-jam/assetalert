@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
-import Title from '../TitleComponent/Title';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Signup from './Signup';
 import { FaceRounded, PersonAddRounded } from '@mui/icons-material';
-import ChipComponent from '../ChipComponent/ChipComponent';
 import Login from './Login';
 
 const Authenticator = () => {
@@ -14,29 +12,26 @@ const Authenticator = () => {
   const [signUpView, setSignUpView] = useState(false);
 
   return (
-    <Stack width="80rem" spacing="1rem">
+    <Stack width="80rem">
       <Typography variant="h5" color="error.main">
-        Find meaning to volunteer
+        Find meaning to your assets
       </Typography>
+      <Stack spacing="1rem" sx={{ my: 2 }}>
+        <Typography>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
+        {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
+      </Stack>
+      <Typography variant="h5">{signUpView ? `Already have an account ?` : `Do not have an account ?`}</Typography>
       <Typography variant="caption">
-        Sign up to be updated with events around your community. You can lend a hand, or even ask for one.
+        {signUpView ? `Login to manage your account.` : `Create an account to keep track of all your inventories`}
       </Typography>
-      <Typography>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
-      {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
-      <Title
-        title={signUpView ? `Already have an account ?` : `Do not have an account ?`}
-        headingVariant={'general'}
-        titleStyle={{}}
-        displaySubtitle={false}
-      />
       {hasServerError ? <span>Error</span> : null}
       <Box>
-        <ChipComponent
-          icon={signUpView ? <FaceRounded /> : <PersonAddRounded />}
-          label={signUpView ? 'Login' : 'Create Account'}
-          onClick={() => setSignUpView(!signUpView)}
-          variant={'outlined'}
-        />
+        <Button onClick={() => setSignUpView(!signUpView)}>
+          <Stack direction="row" gap="1rem">
+            {signUpView ? <FaceRounded /> : <PersonAddRounded />}
+            {signUpView ? 'Login' : 'Create Account'}
+          </Stack>
+        </Button>
       </Box>
     </Stack>
   );

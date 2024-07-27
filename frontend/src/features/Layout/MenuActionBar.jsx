@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -10,33 +10,66 @@ import {
   SettingsRounded,
   StarOutline,
   InboxOutlined,
+  HomeRounded,
 } from '@mui/icons-material';
 
-import { ListSubheader, List, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material';
+import {
+  ListSubheader,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Stack,
+  Button,
+} from '@mui/material';
+import { authActions } from '../../Containers/Auth/authSlice';
 
 export default function MenuActionBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
   const { loading: userNameLoading, username } = useSelector((state) => state.home);
 
-  const menuList = [
+  const parentMenuList = [
     {
       id: 1,
-      icon: <StarOutline />,
-      label: 'Starred Inventories',
+      icon: <HomeRounded />,
+      label: 'Home page',
       to: '/',
     },
     {
       id: 2,
       icon: <Inventory2Rounded />,
       label: 'All Inventories',
-      to: '/',
+      to: '/inventories/list',
+    },
+  ];
+
+  const settingsChildren = [
+    {
+      id: 1,
+      icon: <SettingsRounded />,
+      label: 'Appearance',
+      to: '/profile',
+    },
+    {
+      id: 2,
+      icon: <PushPinOutlined />,
+      label: 'Profile details',
+      to: '/profile',
     },
   ];
 
   const handleSettingsClick = () => setOpenSettings(!openSettings);
   const handlePinnedResourceClick = () => setOpenPinnedResources(!openPinnedResources);
+
+  const handleLogout = () => {
+    dispatch(authActions.getLogout());
+    localStorage.clear();
+    window.location.href = '/';
+  };
 
   return (
     <List
@@ -45,11 +78,14 @@ export default function MenuActionBar() {
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          {username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
+          <Stack direction="row" justifyContent="space-between">
+            {username?.length > 0 ? `Welcome ${username} !` : 'Welcome User !'}
+            <Button onClick={handleLogout}>logout</Button>
+          </Stack>
         </ListSubheader>
       }
     >
-      {menuList.map((v) => (
+      {parentMenuList.map((v) => (
         <ListItemButton id={v.id} onClick={() => navigate(v.to)}>
           <ListItemIcon>{v.icon}</ListItemIcon>
           <ListItemText primary={v.label} />
@@ -66,18 +102,12 @@ export default function MenuActionBar() {
 
       <Collapse in={openSettings} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <PushPinOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Appearance" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <PushPinOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Profile details" />
-          </ListItemButton>
+          {settingsChildren.map((v) => (
+            <ListItemButton id={v.id} onClick={() => navigate(v.to)}>
+              <ListItemIcon>{v.icon}</ListItemIcon>
+              <ListItemText primary={v.label} />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
 

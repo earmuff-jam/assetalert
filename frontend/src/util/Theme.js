@@ -60,6 +60,15 @@ export const lightTheme = createTheme({
       lineHeight: 1.6,
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "capitalize",
+        },
+      },
+    },
+  },
 });
 
 export const darkTheme = createTheme({
