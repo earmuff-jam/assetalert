@@ -65,6 +65,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd frontend &&
           yarn
 
       - name: Build frontend
