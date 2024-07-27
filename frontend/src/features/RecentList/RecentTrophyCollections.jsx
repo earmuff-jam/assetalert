@@ -12,6 +12,7 @@ const RecentTrophyCollections = () => {
       const draftData = formattedData.map((v) => ({ ...v, count: recentTrophies[v.key] }));
       setFormattedData(draftData);
     }
+    // eslint-disable-next-line
   }, [recentTrophies]);
 
   return <RecentItemTabs rowData={formattedData} loading={profilePageLoading} />;
