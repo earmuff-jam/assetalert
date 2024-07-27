@@ -8,7 +8,7 @@ const AuthHome = () => {
   return (
     <>
       <AppBar title="AssetAlert" />
-      <Stack direction="row" spacing="2rem" justifyContent="space-between" sx={{ height: '90vh', mt: '5rem' }}>
+      <Stack sx={{ flexDirection: { sm: 'row' }, gap: 1, my: { sm: 20, xs: 5 } }}>
         <InviteSection />
         <Authenticator />
       </Stack>

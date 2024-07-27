@@ -20,7 +20,7 @@ const InviteSection = () => {
         icon={<LibraryBooksRounded />}
         label="Learn what your assets can offer."
         caption="Own stuffs but have a hard time managing it? Let us offer to consolidate all your assets into one single platform. Keep records
-        of purchases and even manage items via geotracking capabilities. Lets try it out."
+        of purchases and even manage items via geotracking capabilities. Try it out."
       />
       <Row
         icon={<TrackChangesRounded />}
