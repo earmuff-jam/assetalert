@@ -57,57 +57,43 @@ func main() {
 
 	// routes below here are treated as they are secure routes
 	router.Handle("/api/v1/health", CustomRequestHandler(handler.GetEventHealthCheck)).Methods(http.MethodGet)
-	router.Handle("/api/v1/states", CustomRequestHandler(handler.GetAllStates)).Methods(http.MethodGet)
-	router.Handle("/api/v1/causes", CustomRequestHandler(handler.GetAllEventCauses)).Methods(http.MethodGet)
-	router.Handle("/api/v1/types", CustomRequestHandler(handler.GetAllProjectTypes)).Methods(http.MethodGet)
+
+	// storage locations
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
+
+	// categories
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
+	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)
 
-	router.Handle("/api/v1/events", CustomRequestHandler(handler.GetAllEvents)).Methods(http.MethodGet)
-	router.Handle("/api/v1/events", CustomRequestHandler(handler.CreateNewEvent)).Methods(http.MethodPost)
-	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.GetEvent)).Methods(http.MethodGet)
-	router.Handle("/api/v1/event/{id}", CustomRequestHandler(handler.UpdateExistingEvent)).Methods(http.MethodPut)
-	router.Handle("/api/v1/event/{id}/updateAvatar", CustomRequestHandler(handler.UpdateEventAvatar)).Methods(http.MethodPost)
-
-	router.Handle("/api/v1/event/{id}/collaborators", CustomRequestHandler(handler.GetCollaboratorsForSelectedEvent)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/shared", CustomRequestHandler(handler.GetEventsSharedWithSelectedUser)).Methods(http.MethodGet)
-
-	router.Handle("/api/v1/expenses/{id}", CustomRequestHandler(handler.GetAllExpenses)).Methods(http.MethodGet)
+	// expenses
 	router.Handle("/api/v1/expenses", CustomRequestHandler(handler.AddExpenseToEvent)).Methods(http.MethodPost)
 
-	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.GetAllItems)).Methods(http.MethodGet)
-	router.Handle("/api/v1/items/{id}", CustomRequestHandler(handler.UpdateItemDetails)).Methods(http.MethodPut)
-	router.Handle("/api/v1/item", CustomRequestHandler(handler.AddItemToEvent)).Methods(http.MethodPost)
-
-	router.Handle("/api/v1/report/{id}", CustomRequestHandler(handler.GetAllEventReports)).Methods(http.MethodGet)
+	// reports
 	router.Handle("/api/v1/report", CustomRequestHandler(handler.CreateNewReport)).Methods(http.MethodPost)
+	router.Handle("/api/v1/report/{id}", CustomRequestHandler(handler.GetAllEventReports)).Methods(http.MethodGet)
 
-	router.Handle("/api/v1/volunteering", CustomRequestHandler(handler.CreateVolunteerHours)).Methods(http.MethodPost)
-	router.Handle("/api/v1/volunteering/{id}", CustomRequestHandler(handler.GetVolunteerHours)).Methods(http.MethodGet)
-
+	// profile
 	router.Handle("/api/v1/profile/list", CustomRequestHandler(handler.GetAllUserProfiles)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.GetProfile)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.UpdateProfile)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
-
 	router.Handle("/api/v1/profile/{id}/notifications", CustomRequestHandler(handler.GetAllNotifications)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/notifications/{notificationID}", CustomRequestHandler(handler.UpdateSingleNotification)).Methods(http.MethodPut)
 
+	// notifications
+	router.Handle("/api/v1/profile/{id}/notifications/{notificationID}", CustomRequestHandler(handler.UpdateSingleNotification)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/recent", CustomRequestHandler(handler.GetUserRecentActivities)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/highlights", CustomRequestHandler(handler.GetUserRecentHighlights)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/volunteering", CustomRequestHandler(handler.GetUserVolunteerDetails)).Methods(http.MethodGet)
 
+	// inventories
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/inventories/{invID}", CustomRequestHandler(handler.GetInventoryByID)).Methods(http.MethodGet)
-
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.AddNewInventory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories/bulk", CustomRequestHandler(handler.AddInventoryInBulk)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.UpdateSelectedInventory)).Methods(http.MethodPut)
-	router.Handle("/api/v1/profile/{eventID}/associated-inventories", CustomRequestHandler(handler.GetAllInventoriesAssociatedWithSelectEvent)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/inventories/transfer", CustomRequestHandler(handler.TransferSelectedInventory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories/prune", CustomRequestHandler(handler.RemoveSelectedInventory)).Methods(http.MethodPost)
 
+	// notes
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetUserNotesDetails)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.AddNewNote)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.UpdateNote)).Methods(http.MethodPut)

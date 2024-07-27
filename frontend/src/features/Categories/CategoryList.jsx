@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { AddRounded } from '@mui/icons-material';
-import SimpleModal from '../../common/SimpleModal';
+import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import HeaderWithButton from '../common/HeaderWithButton';
 import Category from './Category';
 
 const CategoryList = () => {
@@ -14,13 +14,13 @@ const CategoryList = () => {
 
   return (
     <Stack sx={{ py: 2 }}>
-        <HeaderWithButton
-          title="Categories"
-          primaryButtonTextLabel="Add Category"
-          primaryStartIcon={<AddRounded />}
-          handleClickPrimaryButton={toggleModal}
-        />
-        <Category />
+      <HeaderWithButton
+        title="Categories"
+        primaryButtonTextLabel="Add Category"
+        primaryStartIcon={<AddRounded />}
+        handleClickPrimaryButton={toggleModal}
+      />
+      <Category />
       {displayModal && (
         <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="md">
           <AddCategory handleCloseAddCategory={handleClose} />

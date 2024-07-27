@@ -1,7 +1,7 @@
 import { Box, Button, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { BLANK_CATEGORY_DETAILS, BLANK_CATEGORY_DETAILS_ERROR, BLANK_CATEGORY_DETAILS_TOUCHED } from './constants';
-import ColorPicker from '../../common/ColorPicker';
+import ColorPicker from '../common/ColorPicker';
 
 const AddCategory = ({ handleCloseAddCategory }) => {
 
