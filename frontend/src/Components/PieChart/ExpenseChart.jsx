@@ -51,7 +51,6 @@ const ExpenseChart = ({ eventID }) => {
     if (eventID) {
       dispatch(eventActions.getExpenseList({ eventID }));
     }
-    // eslint-disable-next-line
   }, []);
 
   const data = {

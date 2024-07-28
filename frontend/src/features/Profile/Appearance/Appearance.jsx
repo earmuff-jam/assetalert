@@ -26,7 +26,6 @@ const AppearanceSettings = () => {
       setDisplayMode(data?.display_mode);
       setInventoryLayout(data?.inventory_layout);
     }
-    // eslint-disable-next-line
   }, [isLoading]);
 
   if (isLoading) {

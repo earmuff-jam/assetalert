@@ -128,9 +128,19 @@ export function* fetchAllInventoriesForUser() {
   try {
     const USER_ID = localStorage.getItem('userID');
     const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
-    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || []));
+    yield put(profileActions.getAllInventoriesForUserSuccess(response.data || {}));
   } catch (e) {
     yield put(profileActions.getAllInventoriesForUserFailure(e));
+  }
+}
+
+export function* fetchInvByID({ payload }) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories/${payload}`);
+    yield put(profileActions.getInvByIDSuccess(response.data || []));
+  } catch (e) {
+    yield put(profileActions.getInvByIDFailure(e));
   }
 }
 
@@ -325,6 +335,10 @@ export function* watchFetchAllInventoriesForUser() {
   yield takeLatest(`profile/getAllInventoriesForUser`, fetchAllInventoriesForUser);
 }
 
+export function* watchFetchInvByID() {
+  yield takeLatest(`profile/getInvByID`, fetchInvByID);
+}
+
 export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
@@ -337,11 +351,11 @@ export function* watchFetchTransferItemsToSelectedEvent() {
   yield takeEvery(`profile/transferItemsToSelectedEvent`, fetchTransferItemsToSelectedEvent);
 }
 
- 
 export default [
   watchFetchProfileList,
   watchGetUserNotes,
   watchFetchAddNewNote,
+  watchFetchInvByID,
   watchFetchAddNewInventory,
   watchFetchAddBulkInventory,
   watchFetchUpdateExistingNote,

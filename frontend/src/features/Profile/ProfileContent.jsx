@@ -49,7 +49,6 @@ const ProfileContent = () => {
 
   useEffect(() => {
     dispatch(profileActions.getProfileDetails());
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -64,7 +63,6 @@ const ProfileContent = () => {
       draftProfileDetails.updated_on = data.updated_at;
       setFormData(draftProfileDetails);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   return (

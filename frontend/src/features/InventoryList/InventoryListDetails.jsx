@@ -191,7 +191,6 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     if (Array.isArray(inventories)) {
       setOptions(inventories);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   return (

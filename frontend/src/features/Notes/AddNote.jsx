@@ -91,7 +91,6 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
     } else {
       setFormFields(ADD_NOTES_FORM_FIELDS);
     }
-    // eslint-disable-next-line
   }, [noteID]);
 
   return (

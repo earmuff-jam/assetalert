@@ -66,12 +66,10 @@ const ShareItemsComponent = ({ displayReports }) => {
         setOptions(inventoriesAssociatedWithSelectedEvent);
       }
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     dispatch(eventActions.getAllInventoriesAssociatedWithEvent({ eventID: eventID }));
-    // eslint-disable-next-line
   }, []);
 
   if (options.length <= 0) {

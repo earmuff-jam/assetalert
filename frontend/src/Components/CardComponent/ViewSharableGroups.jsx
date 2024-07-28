@@ -66,21 +66,18 @@ const ViewSharableGroups = ({ selectedEvent, setDisplayCollaboratorList }) => {
   useEffect(() => {
     dispatch(profileActions.getProfileList());
     dispatch(eventActions.getCollaboratorListForSelectedEvent({ eventID: selectedEvent.id }));
-    // eslint-disable-next-line
   }, [selectedEvent]);
 
   useEffect(() => {
     if (!loading) {
       setCollaboratorList(collaboratorListForSelectEvent);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     if (!profileDetailsLoading) {
       setOptions(profiles);
     }
-    // eslint-disable-next-line
   }, [profileDetailsLoading]);
 
   return (

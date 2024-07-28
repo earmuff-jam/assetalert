@@ -392,12 +392,10 @@ const Inventories = () => {
     if (Array.isArray(inventories)) {
       setDisplayData(inventories);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     dispatch(profileActions.getAllInventoriesForUser());
-    // eslint-disable-next-line
   }, []);
 
   return (

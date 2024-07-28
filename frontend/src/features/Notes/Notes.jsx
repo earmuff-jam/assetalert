@@ -23,7 +23,6 @@ const Notes = () => {
 
   useEffect(() => {
     dispatch(profileActions.getUserNotes());
-    // eslint-disable-next-line
   }, []);
 
   return (

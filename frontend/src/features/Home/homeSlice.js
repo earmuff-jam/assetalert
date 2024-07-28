@@ -14,21 +14,6 @@ const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    getUsername: (state) => {
-      state.loading = true;
-      state.error = '';
-      state.username = '';
-    },
-    getUsernameSuccess: (state, action) => {
-      state.username = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getUsernameFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.username = '';
-    },
     getEvents: (state) => {
       state.loading = true;
       state.error = '';

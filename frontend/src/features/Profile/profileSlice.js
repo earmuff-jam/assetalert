@@ -5,6 +5,7 @@ const initialState = {
   error: '',
   notes: [],
   profiles: [],
+  inventory: {},
   inventories: [],
   notifications: [],
   profileDetails: {},
@@ -166,6 +167,21 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.inventories = [];
+    },
+    getInvByID: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.inventory = {};
+    },
+    getInvByIDSuccess: (state, action) => {
+      state.inventory = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getInvByIDFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.inventory = {};
     },
     addInventory: (state) => {
       state.loading = true;

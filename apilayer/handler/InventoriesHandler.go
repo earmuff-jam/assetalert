@@ -49,6 +49,48 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetInventoryByID ...
+// swagger:route GET /api/v1/profile/{id}/inventories/{invID}
+//
+// # Retrieves the selected inventory that matches the id. must be created by the user
+//
+// Responses:
+// 200: Inventory
+// 400: Message
+// 404: Message
+// 500: Message
+func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+	invID := vars["invID"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve inventories with empty profile id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+	if len(invID) <= 0 {
+		log.Printf("Unable to retrieve inventories with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveSelectedInv(user, userID, invID)
+	if err != nil {
+		log.Printf("Unable to retrieve all existing inventories. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // AddInventoryInBulk ...
 // swagger:route POST /api/profile/{id}/inventories/bulk AddInventoryInBulk addInventoryInBulk
 //

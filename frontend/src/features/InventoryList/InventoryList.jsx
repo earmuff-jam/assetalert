@@ -14,8 +14,6 @@ export default function InventoryList() {
     const clientLocationCoordinates = localStorage.getItem('client_location');
     const parsedClientLocationCoordinates = JSON.parse(clientLocationCoordinates);
     setLocation(parsedClientLocationCoordinates);
-
-    // eslint-disable-next-line
   }, []);
 
   return <InventoryListDetails />;

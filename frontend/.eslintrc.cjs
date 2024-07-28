@@ -23,5 +23,11 @@ module.exports = {
         'react-refresh/only-export-components': 'off',
       },
     },
+    {
+      files: ['**/*.jsx'],
+      rules: {
+        'react-hooks/exhaustive-deps': 'off',
+      },
+    },
   ],
 };

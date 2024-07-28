@@ -160,6 +160,146 @@ ORDER BY
 	return data, nil
 }
 
+// RetrieveSelectedInv ...
+func RetrieveSelectedInv(user string, userID string, invID string) (*model.Inventory, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	data, err := retrieveSelectedInv(tx, userID, invID)
+	if err != nil {
+		log.Printf("unable to retrieve all inventories details for user. error: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+// retrieveSelectedInv...
+func retrieveSelectedInv(tx *sql.Tx, userID string, invID string) (*model.Inventory, error) {
+	sqlStr := `SELECT
+    inv.id,
+    inv.name,
+    inv.description,
+    inv.price,
+    inv.status,
+    inv.barcode,
+    inv.sku,
+    inv.quantity,
+    inv.bought_at,
+    inv.location,
+    inv.is_transfer_allocated,
+    p.title AS associated_event_title,
+    inv.storage_location_id,
+    inv.is_returnable,
+    inv.return_location,
+    inv.max_weight,
+    inv.min_weight,
+    inv.max_height,
+    inv.min_height,
+    inv.created_by,
+    COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
+    inv.created_at,
+    inv.updated_by,
+    COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
+    inv.updated_at
+FROM
+    community.inventory inv
+LEFT JOIN community.projects p ON inv.associated_event_id = p.id
+LEFT JOIN community.profiles cp ON inv.created_by = cp.id
+LEFT JOIN community.profiles up ON inv.updated_by = up.id
+WHERE
+   inv.created_by = $1
+AND inv.id = $2
+ORDER BY
+   inv.updated_at DESC;
+	`
+
+	row := tx.QueryRow(sqlStr, userID, invID)
+
+	var inventory model.Inventory
+
+	var returnLocation sql.NullString
+	var maxWeight sql.NullString
+	var minWeight sql.NullString
+	var maxHeight sql.NullString
+	var minHeight sql.NullString
+	var isTransferAllocated sql.NullBool
+	var associatedEventTitle sql.NullString
+
+	err := row.Scan(
+		&inventory.ID,
+		&inventory.Name,
+		&inventory.Description,
+		&inventory.Price,
+		&inventory.Status,
+		&inventory.Barcode,
+		&inventory.SKU,
+		&inventory.Quantity,
+		&inventory.BoughtAt,
+		&inventory.Location,
+		&isTransferAllocated,
+		&associatedEventTitle,
+		&inventory.StorageLocationID,
+		&inventory.IsReturnable,
+		&returnLocation,
+		&maxWeight,
+		&minWeight,
+		&maxHeight,
+		&minHeight,
+		&inventory.CreatedBy,
+		&inventory.CreatorName,
+		&inventory.CreatedAt,
+		&inventory.UpdatedBy,
+		&inventory.UpdaterName,
+		&inventory.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // No result found, return nil
+		}
+		return nil, err // An actual error occurred
+	}
+
+	if isTransferAllocated.Valid {
+		inventory.IsTransferAllocated = isTransferAllocated.Bool
+	}
+	if associatedEventTitle.Valid {
+		inventory.AssociatedEventTitle = associatedEventTitle.String
+	}
+	if returnLocation.Valid {
+		inventory.ReturnLocation = returnLocation.String
+	}
+	if maxWeight.Valid {
+		inventory.MaxWeight = maxWeight.String
+	}
+	if minWeight.Valid {
+		inventory.MinWeight = minWeight.String
+	}
+	if maxHeight.Valid {
+		inventory.MaxHeight = maxHeight.String
+	}
+	if minHeight.Valid {
+		inventory.MinHeight = minHeight.String
+	}
+
+	return &inventory, nil
+}
+
 // AddInventoryInBulk ...
 func AddInventoryInBulk(user string, userID string, draftInventoryList model.InventoryListRequest) ([]model.Inventory, error) {
 

@@ -94,7 +94,6 @@ const ProfileDetailPage = () => {
   useEffect(() => {
     dispatch(profileActions.getProfileDetails());
     dispatch(profileActions.getProfileNotifications());
-    // eslint-disable-next-line
   }, []);
 
   // useEffect(() => {
@@ -109,7 +108,6 @@ const ProfileDetailPage = () => {
   //   updatedFormFields.objective.value = profileDetails?.goal || '';
   //   updatedFormFields.aboutMe.value = profileDetails?.about_me || '';
   //   setFormFields(updatedFormFields);
-  //   // eslint-disable-next-line
   // }, [profileDetails]);
 
   return (

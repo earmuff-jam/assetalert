@@ -183,7 +183,6 @@ const EventDetailPage = () => {
       dispatch(eventActions.getReportsForSelectedEvent({ eventID: eventID }));
       dispatch(eventActions.getVolunteeringActivities({ eventID: eventID }));
     }
-    // eslint-disable-next-line
   }, [eventID]);
 
   useEffect(() => {

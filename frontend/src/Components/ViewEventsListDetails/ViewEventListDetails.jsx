@@ -77,7 +77,6 @@ const ViewEventListDetails = ({ setLocation, currentEvents, isLoading }) => {
       const filteredEventByActivation = currentEvents?.filter((v) => !v.deactivated);
       setFilteredOptions(filteredEventByActivation);
     }
-    // eslint-disable-next-line
   }, [searchValue, currentEvents]);
 
   if (isLoading) {

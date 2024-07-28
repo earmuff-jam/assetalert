@@ -52,7 +52,6 @@ const MapComponentFn = ({ shrinkSize = false, locationDetails = {}, disabled }) 
         isMounted.current = false;
       }
     };
-    // eslint-disable-next-line
   }, [locationDetails.lat, locationDetails.lon]);
 
   useEffect(() => {
