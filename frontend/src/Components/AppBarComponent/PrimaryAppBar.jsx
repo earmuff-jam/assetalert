@@ -10,7 +10,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AppBarNavListItem from './AppBarNavListItem';
 import {
   AssignmentIndRounded,
-  BarChartRounded,
   ContactSupportRounded,
   HomeRounded,
   LockOpenRounded,
@@ -64,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PrimaryAppBar = ({ selectedID, title, titleVariant, elevation }) => {
+const PrimaryAppBar = ({ selectedID, title, elevation }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();

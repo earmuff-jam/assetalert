@@ -13,12 +13,12 @@ import ViewSharedInventories from './ViewSharedInventories';
 import TextComponent from '../TextFieldComponent/TextComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import { AddRounded, CancelRounded, DoneRounded } from '@mui/icons-material';
 import { INVENTORY_TABS, VIEW_PERSONAL_INVENTORY_LIST_HEADERS } from './constants';
 import { Box, Dialog, Slide, Tab, Tabs, Tooltip } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import SelectedRowItemComponent from '../ShareItemsComponent/SelectedRowItemComponent';
+import SelectedRowItemComponent from '../../features/InventoryList/SelectedRowItemComponent';
 
 const useStyles = makeStyles((theme) => ({
   rowContainer: {
@@ -244,7 +244,7 @@ const Inventories = () => {
     }
 
     // remove unwanted items from cluttering the display
-    // eslint-disable-next-line
+     
     const { associated_event_title, ...rest } = row;
     return <span>{rest[column]}</span>;
   };
@@ -392,12 +392,10 @@ const Inventories = () => {
     if (Array.isArray(inventories)) {
       setDisplayData(inventories);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     dispatch(profileActions.getAllInventoriesForUser());
-    // eslint-disable-next-line
   }, []);
 
   return (

@@ -64,14 +64,8 @@ func FetchAllUserProfiles(user string) ([]model.Profile, error) {
 		if phoneNumber.Valid {
 			profile.PhoneNumber = phoneNumber.String
 		}
-		if goal.Valid {
-			profile.Goal = goal.String
-		}
 		if aboutMe.Valid {
 			profile.AboutMe = aboutMe.String
-		}
-		if role.Valid {
-			profile.Role = role.String
 		}
 
 		profiles = append(profiles, profile)
@@ -91,22 +85,24 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 	}
 	defer db.Close()
 
-	sqlStr := `SELECT 
-	id,
-	username,
-	full_name,
-	CASE 
-		WHEN avatar_url IS NOT NULL THEN ENCODE(avatar_url::bytea,'base64')
- 		ELSE ''
-	END AS base64,
-	email_address,
-	phone_number,
-	goal,
-	about_me,
-	onlinestatus,
-	role
-	FROM community.profiles
-	WHERE id=$1
+	sqlStr := `
+		SELECT 
+			id,
+			username,
+			full_name,
+			CASE 
+				WHEN avatar_url IS NOT NULL THEN ENCODE(avatar_url::bytea,'base64')
+				ELSE ''
+			END AS base64,
+			email_address,
+			phone_number,
+			goal,
+			about_me,
+			onlinestatus,
+			role,
+			updated_at
+		FROM community.profiles
+		WHERE id=$1
 	`
 
 	var draftProfile model.Profile
@@ -121,6 +117,7 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 	var aboutMe sql.NullString
 	var onlineStatus sql.NullBool
 	var role sql.NullString
+	var updated_at sql.NullTime
 
 	rows, err := db.Query(sqlStr, userID)
 	if err != nil {
@@ -129,7 +126,7 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&profileID, &userName, &fullName, &avatarUrl, &emailAddress, &phoneNumber, &goal, &aboutMe, &onlineStatus, &role); err != nil {
+		if err := rows.Scan(&profileID, &userName, &fullName, &avatarUrl, &emailAddress, &phoneNumber, &goal, &aboutMe, &onlineStatus, &role, &updated_at); err != nil {
 			return nil, err
 		}
 		draftProfile.ID, _ = uuid.Parse(profileID.String)
@@ -138,10 +135,9 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 		draftProfile.AvatarUrl = avatarUrl.String
 		draftProfile.EmailAddress = emailAddress.String
 		draftProfile.PhoneNumber = phoneNumber.String
-		draftProfile.Goal = goal.String
 		draftProfile.AboutMe = aboutMe.String
 		draftProfile.OnlineStatus = onlineStatus.Bool
-		draftProfile.Role = role.String
+		draftProfile.UpdatedAt = updated_at.Time
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -166,38 +162,45 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 
 	sqlStr := `
 		UPDATE community.profiles 
-		SET username=$2, full_name=$3, phone_number=$4, goal=$5, about_me=$6, onlinestatus=$7, role=$8
+		SET username=$2, full_name=$3, email_address=$4, phone_number=$5, about_me=$6, onlinestatus=$7
 		WHERE id=$1
-		RETURNING id, username, full_name, phone_number, goal, about_me, onlinestatus, role
+		RETURNING id, username, full_name, avatar_url, email_address, phone_number, about_me, onlinestatus
 	`
 
 	var updatedProfile model.Profile
+
+	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
 
 	row := tx.QueryRow(sqlStr,
 		userID,
 		draftProfile.Username,
 		draftProfile.FullName,
+		draftProfile.EmailAddress,
 		draftProfile.PhoneNumber,
-		draftProfile.Goal,
 		draftProfile.AboutMe,
 		draftProfile.OnlineStatus,
-		draftProfile.Role,
 	)
 
 	err = row.Scan(
 		&updatedProfile.ID,
 		&updatedProfile.Username,
 		&updatedProfile.FullName,
+		&avatarUrl,
+		&updatedProfile.EmailAddress,
 		&updatedProfile.PhoneNumber,
-		&updatedProfile.Goal,
 		&updatedProfile.AboutMe,
 		&updatedProfile.OnlineStatus,
-		&updatedProfile.Role,
 	)
 
 	if err != nil {
 		tx.Rollback()
 		return nil, err
+	}
+
+	if avatarUrl.Valid {
+		updatedProfile.AvatarUrl = avatarUrl.String
+	} else {
+		updatedProfile.AvatarUrl = ""
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -244,7 +247,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		&goal,
 		&updatedProfile.AboutMe,
 		&updatedProfile.OnlineStatus,
-		&updatedProfile.Role,
 	)
 
 	if err != nil {
@@ -256,11 +258,6 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 		updatedProfile.AvatarUrl = avatarUrl.String
 	} else {
 		updatedProfile.AvatarUrl = ""
-	}
-	if goal.Valid {
-		updatedProfile.Goal = goal.String
-	} else {
-		updatedProfile.Goal = ""
 	}
 
 	if err := tx.Commit(); err != nil {

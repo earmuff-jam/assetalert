@@ -214,7 +214,7 @@ export function* watchGetAllInventoriesAssociatedWithEvent() {
   yield takeLatest(`event/getAllInventoriesAssociatedWithEvent`, fetchAllInventoriesAssociatedWithEvent);
 }
 
-// eslint-disable-next-line
+ 
 export default [
   watchAddItem,
   watchFetchEvent,

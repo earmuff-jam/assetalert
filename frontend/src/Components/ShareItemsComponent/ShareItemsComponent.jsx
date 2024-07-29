@@ -7,7 +7,7 @@ import EmptyComponent from '../../util/EmptyComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import TableComponent from '../TableComponent/TableComponent';
 import { eventActions } from '../../Containers/Event/eventSlice';
-import SelectedRowItemComponent from './SelectedRowItemComponent';
+import SelectedRowItemComponent from '../../features/InventoryList/SelectedRowItemComponent';
 import {
   SELECTED_REPORT_DETAILED_ITEM,
   SHARED_INVENTORY_ITEMS,
@@ -66,12 +66,10 @@ const ShareItemsComponent = ({ displayReports }) => {
         setOptions(inventoriesAssociatedWithSelectedEvent);
       }
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     dispatch(eventActions.getAllInventoriesAssociatedWithEvent({ eventID: eventID }));
-    // eslint-disable-next-line
   }, []);
 
   if (options.length <= 0) {

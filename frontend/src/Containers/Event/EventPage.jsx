@@ -1,14 +1,13 @@
-import React from 'react';
-import EventDetailPage from './EventDetailPage';
-import PrimaryAppBar from '../../Components/AppBarComponent/PrimaryAppBar';
+// import EventDetailPage from './EventDetailPage';
+// import PrimaryAppBar from '../../Components/AppBarComponent/PrimaryAppBar';
 
-const EventPage = () => {
-  return (
-    <>
-      <PrimaryAppBar selectedID={1} />
-      <EventDetailPage />
-    </>
-  );
-};
+// const EventPage = () => {
+//   return (
+//     <>
+//       <PrimaryAppBar selectedID={1} />
+//       <EventDetailPage />
+//     </>
+//   );
+// };
 
-export default EventPage;
+// export default EventPage;

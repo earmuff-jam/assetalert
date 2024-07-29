@@ -1,5 +1,4 @@
 import steps from './tour/steps';
-import { router } from './util/router';
 import { useSelector } from 'react-redux';
 import { Suspense, useEffect, useState } from 'react';
 import { SnackbarProvider } from 'notistack';
@@ -7,6 +6,7 @@ import { TourProvider } from '@reactour/tour';
 import { RouterProvider } from 'react-router-dom';
 import AuthHome from './Containers/Auth/AuthHome';
 import { Container, Dialog } from '@mui/material';
+import { router } from './features/common/router';
 
 const ApplicationValidator = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -32,7 +32,7 @@ const ApplicationValidator = () => {
         autoHideDuration={3000}
       >
         <Container maxWidth="xl">
-          <Suspense fallback={<Dialog title="Loading..." />}>
+          <Suspense fallback={<Dialog open={loading} title="Loading..." />}>
             <RouterProvider router={router} />
           </Suspense>
         </Container>

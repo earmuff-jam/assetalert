@@ -1,4 +1,4 @@
-import Notes from '../Notes/Notes';
+import Notes from '../../features/Notes/Notes';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Inventories from '../Inventory/Inventories';

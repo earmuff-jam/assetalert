@@ -1,4 +1,3 @@
-import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { Box, Button, Input } from '@mui/material';
 
@@ -19,7 +18,6 @@ const EventSplashDetails = ({
   setSelectedImage,
   uploadedImage,
   setUploadedImage,
-  toggleEditMode,
 }) => {
   const classes = useStyles();
 

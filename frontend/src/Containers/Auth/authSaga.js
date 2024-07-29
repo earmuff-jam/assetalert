@@ -80,5 +80,5 @@ export function* watchFetchUserLogout() {
   yield takeLatest(`auth/getLogout`, fetchUserLogout);
 }
 
-// eslint-disable-next-line
+ 
 export default [watchFetchUserLogin, watchFetchUserSignup, watchFetchUserLogout];

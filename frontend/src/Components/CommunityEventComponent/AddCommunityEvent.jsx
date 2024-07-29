@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorOutlineRounded } from '@mui/icons-material';
-import { homeActions } from '../../Containers/Home/homeSlice';
+import { homeActions } from '../../features/Home/homeSlice';
 import { TextField, Button, Box, Tooltip, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { BLANK_NEW_EVENT, BLANK_NEW_EVENT_ERROR, BLANK_NEW_EVENT_TOUCHED, SKILLS_REQUIRED_OPTIONS } from './constants';

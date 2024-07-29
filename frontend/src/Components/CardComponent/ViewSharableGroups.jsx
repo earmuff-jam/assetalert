@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Autocomplete } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import { homeActions } from '../../Containers/Home/homeSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,21 +66,18 @@ const ViewSharableGroups = ({ selectedEvent, setDisplayCollaboratorList }) => {
   useEffect(() => {
     dispatch(profileActions.getProfileList());
     dispatch(eventActions.getCollaboratorListForSelectedEvent({ eventID: selectedEvent.id }));
-    // eslint-disable-next-line
   }, [selectedEvent]);
 
   useEffect(() => {
     if (!loading) {
       setCollaboratorList(collaboratorListForSelectEvent);
     }
-    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
     if (!profileDetailsLoading) {
       setOptions(profiles);
     }
-    // eslint-disable-next-line
   }, [profileDetailsLoading]);
 
   return (

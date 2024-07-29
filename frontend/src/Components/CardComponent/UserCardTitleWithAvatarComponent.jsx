@@ -6,7 +6,7 @@ import { Avatar, Box } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CardTitleComponent from './CardTitleComponent';
 import EditImageComponent from '../Event/EditImageComponent';
-import { profileActions } from '../../Containers/Profile/profileSlice';
+import { profileActions } from '../../features/Profile/profileSlice';
 import { enqueueSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
