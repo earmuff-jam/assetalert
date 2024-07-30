@@ -12,9 +12,9 @@ const Category = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState(-1);
 
-  const handleDelete = (item) => {
+  const handleDelete = (id) => {
     setOpenDialog(true);
-    setIdToDelete(item.id);
+    setIdToDelete(id);
   };
 
   const reset = () => {
@@ -26,7 +26,7 @@ const Category = () => {
     if (id === -1) {
       return;
     }
-    dispatch(categoryActions.removeCategory(id));
+    dispatch(categoryActions.removeCategory({ id }));
     reset();
   };
 
@@ -40,8 +40,6 @@ const Category = () => {
   if (categories.length <= 0) {
     return <DisplayNoMatchingRecordsComponent />;
   }
-
-  console.log(categories);
 
   return (
     <>

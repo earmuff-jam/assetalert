@@ -14,13 +14,13 @@ export function* getCategories() {
   }
 }
 
-export function* removeCategory({ type, payload }) {
+export function* removeCategory(action) {
   try {
     const { id } = action.payload;
     const response = yield call(instance.delete, `${BASEURL}/category/${id}`);
-    yield put(categoryActions.getCategoriesSuccess(response.data));
+    yield put(categoryActions.removeCategorySuccess(response.data));
   } catch (e) {
-    yield put(categoryActions.getCategoriesFailure(e));
+    yield put(categoryActions.removeCategoryFailure(e));
   }
 }
 

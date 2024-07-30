@@ -28,17 +28,16 @@ const categorySlice = createSlice({
     removeCategory: (state) => {
       state.loading = true;
       state.error = '';
-      state.categories = [];
     },
     removeCategorySuccess: (state, action) => {
-      state.categories = action.payload;
+      const draftCategoryID = action.payload;
+      state.categories = state.categories.filter((category) => category.id !== draftCategoryID);
       state.loading = false;
       state.error = '';
     },
     removeCategoryFailure: (state) => {
       state.loading = false;
       state.error = '';
-      state.categories = [];
     },
   },
 });

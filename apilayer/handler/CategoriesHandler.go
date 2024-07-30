@@ -76,5 +76,5 @@ func RemoveCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode("")
+	json.NewEncoder(rw).Encode(categoryID)
 }
