@@ -13,9 +13,11 @@ const CategoryList = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedCategoryID, setSelectedCategoryID] = useState(null);
 
-  const handleClose = () => setDisplayModal(false);
+  const handleClose = () => {
+    setDisplayModal(false);
+    setSelectedCategoryID(null);
+  };
   const toggleModal = () => setDisplayModal(!displayModal);
-
   return (
     <Stack sx={{ py: 2 }}>
       <HeaderWithButton
