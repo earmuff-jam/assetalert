@@ -1,19 +1,18 @@
 import { Card, CardContent, IconButton, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import { DeleteRounded, TrendingUpRounded } from '@mui/icons-material';
-import { useState } from 'react';
-import { ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../../common/utils';
+import { useEffect, useState } from 'react';
+import { ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { categoryActions } from './categoriesSlice';
 
 const Category = () => {
-  const isLoading = false;
-  const data = [];
+  const dispatch = useDispatch();
+  const { categories, loading } = useSelector((state) => state.categories);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState(-1);
 
   const handleDelete = (item) => {
-    if (!item.is_deleteable) {
-      return;
-    }
     setOpenDialog(true);
     setIdToDelete(item.id);
   };
@@ -25,25 +24,30 @@ const Category = () => {
 
   const confirmDelete = (id) => {
     if (id === -1) {
-      // unknown id to delete. protect from confirmation box
       return;
     }
-    // deleteCategory.mutate(id);
+    dispatch(categoryActions.removeCategory(id));
     reset();
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    dispatch(categoryActions.getCategories());
+  }, []);
+
+  if (loading) {
     return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
   }
-  if (data.length <= 0) {
+  if (categories.length <= 0) {
     return <DisplayNoMatchingRecordsComponent />;
   }
+
+  console.log(categories);
 
   return (
     <>
       <Stack>
         <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
-          {data.map((item, index) => (
+          {categories.map((item, index) => (
             <Stack key={index} flexGrow={1}>
               <Tooltip title={item.category_description}>
                 <Card
@@ -63,7 +67,7 @@ const Category = () => {
                           <Typography variant="caption">Total {item?.totalAssignedItems?.length ?? 0} items</Typography>
                         </Stack>
                       </Stack>
-                      <IconButton onClick={() => handleDelete(item)}>
+                      <IconButton onClick={() => handleDelete(item.id)}>
                         <DeleteRounded />
                       </IconButton>
                     </Stack>

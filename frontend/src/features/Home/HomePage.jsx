@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import Overview from './Overview';
-import Collection from '../common/Collection/Collection';
-import CategoryList from './Categories/CategoryList';
+import Collection from './Collection/Collection';
+import CategoryList from '../Categories/CategoryList';
 
 const HomePage = () => {
   return (

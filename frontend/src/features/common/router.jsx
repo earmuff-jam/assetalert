@@ -10,7 +10,7 @@ const EventPage = lazy(() => import('../../Containers/Event/EventPage'));
 const AppearanceSettings = lazy(() => import('../Profile/Appearance/Appearance'));
 const InventoryList = lazy(() => import('../InventoryList/InventoryList'));
 const EditInventory = lazy(() => import('../InventoryList/EditInventory'));
-const CategoryList = lazy(() => import('../Home/Categories/CategoryList'));
+const CategoryList = lazy(() => import('../Categories/CategoryList'));
 const RecentList = lazy(() => import('../RecentList/RecentList'));
 
 export const router = createBrowserRouter([
