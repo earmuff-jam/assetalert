@@ -34,7 +34,7 @@ export const ADD_NOTES_FORM_FIELDS = {
   },
   description: {
     label: 'Description',
-    placeholder: 'Note description is less than 500 characters',
+    placeholder: 'Note description in less than 500 characters',
     value: '',
     name: 'description',
     errorMsg: '',

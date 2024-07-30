@@ -5,9 +5,13 @@ import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
 import HeaderWithButton from '../common/HeaderWithButton';
 import Category from './Category';
+import { useSelector } from 'react-redux';
 
 const CategoryList = () => {
+  const { categories, loading } = useSelector((state) => state.categories);
+
   const [displayModal, setDisplayModal] = useState(false);
+  const [selectedCategoryID, setSelectedCategoryID] = useState(null);
 
   const handleClose = () => setDisplayModal(false);
   const toggleModal = () => setDisplayModal(!displayModal);
@@ -20,10 +24,21 @@ const CategoryList = () => {
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={toggleModal}
       />
-      <Category />
+      <Category
+        categories={categories}
+        loading={loading}
+        setSelectedCategoryID={setSelectedCategoryID}
+        setDisplayModal={setDisplayModal}
+      />
       {displayModal && (
         <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="md">
-          <AddCategory handleCloseAddCategory={handleClose} />
+          <AddCategory
+            categories={categories}
+            loading={loading}
+            handleCloseAddCategory={handleClose}
+            selectedCategoryID={selectedCategoryID}
+            setSelectedCategoryID={setSelectedCategoryID}
+          />
         </SimpleModal>
       )}
     </Stack>
