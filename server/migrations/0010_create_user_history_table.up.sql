@@ -1,5 +1,5 @@
 
--- File: 0020_create_user_history_table_community.up.sql
+-- File: 0020_create_user_history_table.up.sql
 -- Description: Create the user history table
 
 SET search_path TO auth, public;
@@ -24,7 +24,6 @@ CREATE OR REPLACE FUNCTION auth.update_user_auth_history_fn()
     RETURNS TRIGGER AS
 $$
 BEGIN
-     -- Check if the operation is an INSERT or UPDATE
     IF TG_OP = 'INSERT' THEN
          INSERT INTO auth.user_auth_history (
             user_id,
@@ -64,8 +63,8 @@ CREATE TRIGGER update_user_auth_history_trigger
     EXECUTE FUNCTION auth.update_user_auth_history_fn();
 
 ALTER TABLE auth.user_auth_history
-    OWNER TO community_admin;
+    OWNER TO asset_admin;
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON auth.user_auth_history TO community_public;
-GRANT SELECT, INSERT, UPDATE, DELETE ON auth.user_auth_history TO community_test;
-GRANT ALL PRIVILEGES ON TABLE auth.user_auth_history TO community_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON auth.user_auth_history TO asset_public;
+GRANT SELECT, INSERT, UPDATE, DELETE ON auth.user_auth_history TO asset_test;
+GRANT ALL PRIVILEGES ON TABLE auth.user_auth_history TO asset_admin;

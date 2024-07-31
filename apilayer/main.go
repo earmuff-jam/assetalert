@@ -1,6 +1,6 @@
-// Package Mashed Api Layer
+// Package AssetTracker Api Layer
 //
-// # Documentation for the mashed api layer.
+// # Documentation for the AssetTracker api layer.
 //
 // Scehmes: http
 // BasePath: /

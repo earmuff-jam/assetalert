@@ -26,7 +26,7 @@ export default {
 
 export const PrimaryAuthAppBar = {
   args: {
-    title: 'Mashed',
+    title: '',
     titleVariant: 'h6',
   },
 };

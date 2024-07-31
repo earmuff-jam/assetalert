@@ -958,7 +958,7 @@ definitions:
         x-go-package: github.com/mohit2530/communityCare/model
 info:
     description: |-
-        # Documentation for the mashed api layer.
+        # Documentation for the asset tracker api layer.
 
         Scehmes: http
     title: Api Layer

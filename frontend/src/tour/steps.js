@@ -1,11 +1,11 @@
 const LANDING_PAGE_TOUR_STEPS = [
   {
     title:
-      'Welcome to Mashed Application Tutorial. Learn how to navigate the application in thorough detail. For better user experience, each page has their own respective tutorials. Be sure to check them all out for a full learning experience.',
+      'Welcome to Asset Tracker Application Tutorial. Learn how to navigate the application in thorough detail. For better user experience, each page has their own respective tutorials. Be sure to check them all out for a full learning experience.',
   },
   {
     title:
-      'We aim to bring the community together by assisting them in simple auditory tasks. Update your username in your profile section. View inventories, create new events or view your profile and make adjustments to your biography. To access the chat service within any selected event, the user must have a valid profile.',
+      'We aim to bring the your assets together by assisting them in simple auditory tasks. Update your username in your profile section. View inventories, create new events or view your profile and make adjustments to your biography. To access the chat service within any selected event, the user must have a valid profile.',
   },
   {
     title:

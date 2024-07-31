@@ -1,7 +1,8 @@
 
--- File: 0005_create_auth_oauth_table_community.up.sql
+-- File: 0005_create_auth_oauth_table.up.sql
 -- Description: Create the users oauth table and grant permissions on the table.
 
+SET search_path TO auth, public;
 CREATE TABLE auth.oauth
 (
     id                          UUID                        NOT NULL DEFAULT public.uuid_generate_v4() PRIMARY KEY,

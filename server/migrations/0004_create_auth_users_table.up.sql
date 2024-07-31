@@ -1,5 +1,5 @@
 
--- File: 0004_create_auth_users_table_community.up.sql
+-- File: 0004_create_auth_users_table.up.sql
 -- Description: Create the users table and grant permissions on the table.
 
 SET search_path TO auth, public;

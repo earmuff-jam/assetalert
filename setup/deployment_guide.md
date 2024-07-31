@@ -24,7 +24,7 @@
 ### Test Instance
 
 - Use `main.sh` to run test instance.
-  - This test instance will have no data. Assumption is that you view mashed app from the scratch.
+  - This test instance will have no data. Assumption is that you view asset tracker app from the scratch.
   - ./main.sh -e
   - ./main.sh -T
 - Run `-e` command first to get all .env variables for build.

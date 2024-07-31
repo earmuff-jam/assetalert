@@ -55,8 +55,6 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
     inv.quantity,
 	inv.bought_at,
     inv.location,
-	inv.is_transfer_allocated,
-	p.title,
     inv.storage_location_id,
 	inv.is_returnable,
 	inv.return_location,
@@ -71,10 +69,9 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
     COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
     inv.updated_at
 FROM
-    community.inventory inv
-LEFT JOIN community.projects p ON inv.associated_event_id = p.id
-LEFT JOIN community.profiles cp ON inv.created_by = cp.id
-LEFT JOIN community.profiles up ON inv.updated_by = up.id
+    asset.inventory inv
+LEFT JOIN asset.profiles cp ON inv.created_by = cp.id
+LEFT JOIN asset.profiles up ON inv.updated_by = up.id
 WHERE
    inv.created_by = $1
 ORDER BY
@@ -96,8 +93,6 @@ ORDER BY
 		var minWeight sql.NullString
 		var maxHeight sql.NullString
 		var minHeight sql.NullString
-		var isTransferAllocated sql.NullBool
-		var associatedEventTitle sql.NullString
 
 		if err := rows.Scan(
 			&inventory.ID,
@@ -110,8 +105,6 @@ ORDER BY
 			&inventory.Quantity,
 			&inventory.BoughtAt,
 			&inventory.Location,
-			&isTransferAllocated,
-			&associatedEventTitle,
 			&inventory.StorageLocationID,
 			&inventory.IsReturnable,
 			&returnLocation,
@@ -129,12 +122,6 @@ ORDER BY
 			return nil, err
 		}
 
-		if isTransferAllocated.Valid {
-			inventory.IsTransferAllocated = isTransferAllocated.Bool
-		}
-		if associatedEventTitle.Valid {
-			inventory.AssociatedEventTitle = associatedEventTitle.String
-		}
 		if returnLocation.Valid {
 			inventory.ReturnLocation = returnLocation.String
 		}
@@ -217,10 +204,10 @@ func retrieveSelectedInv(tx *sql.Tx, userID string, invID string) (*model.Invent
     COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
     inv.updated_at
 FROM
-    community.inventory inv
-LEFT JOIN community.projects p ON inv.associated_event_id = p.id
-LEFT JOIN community.profiles cp ON inv.created_by = cp.id
-LEFT JOIN community.profiles up ON inv.updated_by = up.id
+    asset.inventory inv
+LEFT JOIN asset.projects p ON inv.associated_event_id = p.id
+LEFT JOIN asset.profiles cp ON inv.created_by = cp.id
+LEFT JOIN asset.profiles up ON inv.updated_by = up.id
 WHERE
    inv.created_by = $1
 AND inv.id = $2
@@ -237,8 +224,6 @@ ORDER BY
 	var minWeight sql.NullString
 	var maxHeight sql.NullString
 	var minHeight sql.NullString
-	var isTransferAllocated sql.NullBool
-	var associatedEventTitle sql.NullString
 
 	err := row.Scan(
 		&inventory.ID,
@@ -251,8 +236,6 @@ ORDER BY
 		&inventory.Quantity,
 		&inventory.BoughtAt,
 		&inventory.Location,
-		&isTransferAllocated,
-		&associatedEventTitle,
 		&inventory.StorageLocationID,
 		&inventory.IsReturnable,
 		&returnLocation,
@@ -275,12 +258,6 @@ ORDER BY
 		return nil, err // An actual error occurred
 	}
 
-	if isTransferAllocated.Valid {
-		inventory.IsTransferAllocated = isTransferAllocated.Bool
-	}
-	if associatedEventTitle.Valid {
-		inventory.AssociatedEventTitle = associatedEventTitle.String
-	}
 	if returnLocation.Valid {
 		inventory.ReturnLocation = returnLocation.String
 	}
@@ -346,7 +323,7 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			return nil, err
 		}
 
-		sqlStr := `INSERT INTO community.inventory (
+		sqlStr := `INSERT INTO asset.inventory (
 			name, 
 			description, 
 			price, 
@@ -448,7 +425,7 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 	}
 
 	// if UUID is present, retrieve selected storage location
-	sqlStr := `SELECT location FROM community.storage_locations sl WHERE sl.id=$1;`
+	sqlStr := `SELECT location FROM asset.storage_locations sl WHERE sl.id=$1;`
 	err = tx.QueryRow(sqlStr, parsedStorageLocationID).Scan(&draftInventory.Location)
 	if err != nil {
 		log.Printf("unable to retrieve selected location from storage location id. error: %+v", err)
@@ -466,7 +443,7 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 	draftInventory.CreatedAt = currentTimestamp
 	draftInventory.UpdatedAt = currentTimestamp
 
-	sqlStr = `INSERT INTO community.inventory (name,
+	sqlStr = `INSERT INTO asset.inventory (name,
 		description,
 		price,
 		status,
@@ -549,10 +526,10 @@ RETURNING id;`
 		inv.updated_by,
 		coalesce (up.full_name, up.username, up.email_address)  as updater_name
 	FROM
-		community.inventory inv
-	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
-	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
-	LEFT JOIN community.profiles up on up.id  = inv.updated_by
+		asset.inventory inv
+	LEFT JOIN asset.storage_locations sl on sl.id = inv.storage_location_id 
+	LEFT JOIN asset.profiles cp on cp.id  = inv.created_by
+	LEFT JOIN asset.profiles up on up.id  = inv.updated_by
 	WHERE inv.id = $1
 `
 
@@ -620,7 +597,7 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 	columnToUpdate := draftInventory.Column
 
 	sqlStr := `
-        UPDATE community.inventory
+        UPDATE asset.inventory
         SET ` + columnToUpdate + ` = $1,
             updated_by = $2,
             updated_at = now()
@@ -672,10 +649,10 @@ func UpdateInventory(user string, userID string, draftInventory model.InventoryI
 		inv.updated_by,
 		coalesce (up.full_name, up.username, up.email_address)  as updater_name
 	FROM
-		community.inventory inv
-	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
-	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
-	LEFT JOIN community.profiles up on up.id  = inv.updated_by
+		asset.inventory inv
+	LEFT JOIN asset.storage_locations sl on sl.id = inv.storage_location_id 
+	LEFT JOIN asset.profiles cp on cp.id  = inv.created_by
+	LEFT JOIN asset.profiles up on up.id  = inv.updated_by
 	WHERE inv.id = $1
 `
 
@@ -750,7 +727,7 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 	columnToUpdate := draftInventory.Column
 
 	sqlStr := `
-        UPDATE community.inventory
+        UPDATE asset.inventory
         SET ` + columnToUpdate + ` = $1,
 			associated_event_id = $4,
 			updated_by = $2,
@@ -805,9 +782,6 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 		inv.quantity,
 		inv.bought_at,
 		inv.location,
-		inv.is_transfer_allocated,
-		inv.associated_event_id,
-		e.title,
 		inv.storage_location_id,
 		inv.created_at,
 		inv.created_by,
@@ -816,11 +790,10 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 		inv.updated_by,
 		coalesce (up.full_name, up.username, up.email_address)  as updater_name
 	FROM
-		community.inventory inv
-	LEFT JOIN community.projects e ON inv.associated_event_id = e.id
-	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
-	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
-	LEFT JOIN community.profiles up on up.id  = inv.updated_by
+		asset.inventory inv
+	LEFT JOIN asset.storage_locations sl on sl.id = inv.storage_location_id 
+	LEFT JOIN asset.profiles cp on cp.id  = inv.created_by
+	LEFT JOIN asset.profiles up on up.id  = inv.updated_by
 	WHERE inv.id = $1;`
 
 	var updatedInventoryList []model.Inventory
@@ -840,9 +813,6 @@ func TransferInventory(user string, userID string, draftInventory model.Transfer
 			&updatedInventory.Quantity,
 			&updatedInventory.BoughtAt,
 			&updatedInventory.Location,
-			&updatedInventory.IsTransferAllocated,
-			&updatedInventory.AssociatedEventID,
-			&updatedInventory.AssociatedEventTitle,
 			&updatedInventory.StorageLocationID,
 			&updatedInventory.CreatedAt,
 			&updatedInventory.CreatedBy,
@@ -878,7 +848,7 @@ func DeleteInventory(user string, userID string, pruneInventoriesIDs []string) (
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM community.inventory WHERE id = ANY($1)`
+	sqlStr := `DELETE FROM asset.inventory WHERE id = ANY($1)`
 	_, err = db.Exec(sqlStr, pq.Array(pruneInventoriesIDs))
 	if err != nil {
 		log.Printf("unable to delete selected inventories: %v", pruneInventoriesIDs)

@@ -3,7 +3,7 @@ import { Link, Stack, Typography } from '@mui/material';
 const AuthFooter = () => {
   return (
     <Stack direction="row" justifyContent="space-around">
-      <Typography variant="caption">{`\u00A9 ${new Date().getFullYear()} Mashed. All Rights Reserved.`}</Typography>
+      <Typography variant="caption">{`\u00A9 ${new Date().getFullYear()} Asset Tracker. All Rights Reserved.`}</Typography>
       <Link
         variant="caption"
         target="_blank"

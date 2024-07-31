@@ -1,5 +1,5 @@
 
--- File: 0002_create_auth_schema_community.up.sql
+-- File: 0002_create_auth_schema.up.sql
 -- Description: Create the auth schema and grant permission to created roles.
 
 CREATE SCHEMA auth;

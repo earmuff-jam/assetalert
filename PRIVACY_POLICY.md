@@ -1,8 +1,8 @@
-# Privacy Policy for Mashed Application
+# Privacy Policy for AssetTracker Application
 
 ### Last Updated: January 24, 2024
 
-Thank you for using Mashed Application! We are committed to protecting your privacy and safeguarding your personal information. This Privacy Policy outlines how we collect, use, disclose, and manage your information when you use our services.
+Thank you for using AssetTracker Application! We are committed to protecting your privacy and safeguarding your personal information. This Privacy Policy outlines how we collect, use, disclose, and manage your information when you use our services.
 
 1. Information We Collect:
 
