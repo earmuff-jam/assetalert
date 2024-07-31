@@ -1,11 +1,18 @@
+import { useDispatch, useSelector } from 'react-redux';
 import RecentActivity from './RecentActivity';
 import { ExpandMoreRounded } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Skeleton, Typography } from '@mui/material';
 import { DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { useEffect } from 'react';
+import { profileActions } from '../Profile/profileSlice';
 
 const RecentActivities = () => {
-  const recentActivities = [];
-  const loading = false;
+  const dispatch = useDispatch();
+  const { loading, recentActivities } = useSelector((state) => state.profile);
+
+  useEffect(() => {
+  dispatch(profileActions.getRecentActivitiesList());
+  }, []);
 
   if (loading) {
     return <Skeleton width={`calc(100% - 1rem)`} height={'20rem'} />;

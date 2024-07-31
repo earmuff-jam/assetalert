@@ -7,7 +7,7 @@ import HeaderWithButton from '../common/HeaderWithButton';
 import Category from './Category';
 import { useSelector } from 'react-redux';
 
-const CategoryList = ({ displayConcise = false }) => {
+const CategoryList = () => {
   const { categories, loading } = useSelector((state) => state.categories);
 
   const [displayModal, setDisplayModal] = useState(false);
@@ -18,7 +18,6 @@ const CategoryList = ({ displayConcise = false }) => {
     setSelectedCategoryID(null);
   };
   const toggleModal = () => setDisplayModal(!displayModal);
-
   return (
     <Stack sx={{ py: 2 }}>
       <HeaderWithButton
@@ -26,10 +25,9 @@ const CategoryList = ({ displayConcise = false }) => {
         primaryButtonTextLabel="Add Category"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={toggleModal}
-        secondaryTitle={displayConcise && `Viewing 4 out of ${categories.length} categories`}
       />
       <Category
-        categories={displayConcise ? categories.filter((v, index) => index <= 3) : categories}
+        categories={categories}
         loading={loading}
         setSelectedCategoryID={setSelectedCategoryID}
         setDisplayModal={setDisplayModal}

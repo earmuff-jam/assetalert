@@ -16,7 +16,7 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 	}
 	defer db.Close()
 
-	sqlStr := "SELECT c.id, c.item_name, c.created_at, c.created_by, c.updated_at, c.updated_by, c.sharable_groups FROM asset.category c ORDER BY c.updated_at"
+	sqlStr := "SELECT id, item_name, created_at, created_by, updated_at, updated_by, sharable_groups FROM asset.category"
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		return nil, err

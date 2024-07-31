@@ -5,6 +5,7 @@ import (
 	"mime/multipart"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"github.com/mohit2530/communityCare/model"
 )
 
@@ -265,4 +266,167 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 
 	updatedProfile.Validate()
 	return &updatedProfile, nil
+}
+
+// RetrieveRecentActivity ...
+func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivity, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `
+	SELECT 
+	p.id AS project_id,
+    p.title AS project_title,
+    COALESCE(ps.volunteer_skills, NULL) AS volunteer_skills,
+    COALESCE(pv.volunteer_hours, 0) AS volunteer_hours,
+    COALESCE(e.expense_item_names, NULL) AS expense_item_names,
+    COALESCE(e.expense_item_cost, 0) AS expense_item_cost,
+	p.created_at,
+    p.created_by,
+    COALESCE (p2.username , p2.full_name, p2.email_address) as creator
+FROM 
+    asset.projects p
+LEFT JOIN (
+    SELECT 
+        pv.project_id,
+        array_agg(DISTINCT skill) AS volunteer_skills,
+		pv.updated_by
+    FROM 
+		asset.projects_volunteer pv
+    JOIN 
+		asset.project_skills ps ON pv.project_skills_id = ps.id
+    WHERE 
+        pv.created_by = $1
+        OR pv.updated_by = $1
+    GROUP BY 
+        pv.project_id, pv.updated_by
+) ps ON p.id = ps.project_id
+LEFT JOIN (
+    SELECT 
+        project_id,
+        SUM(volunteer_hours) AS volunteer_hours,
+		updated_by
+    FROM 
+		asset.projects_volunteer
+    WHERE 
+        created_by = $1
+        OR updated_by = $1
+    GROUP BY 
+        project_id, updated_by
+) pv ON p.id = pv.project_id
+LEFT JOIN (
+    SELECT 
+        project_id,
+        array_agg(DISTINCT item_name) AS expense_item_names,
+        SUM(item_cost) AS expense_item_cost,
+		updated_by
+    FROM 
+		asset.expenses
+    WHERE 
+        created_by = $1
+        OR updated_by = $1
+    GROUP BY 
+        project_id, updated_by
+) e ON p.id = e.project_id
+LEFT JOIN asset.profiles p2 ON p.updated_by = p2.id 
+WHERE 
+    p.created_by = $1
+    OR p.updated_by = $1
+	OR e.updated_by = $1
+	OR pv.updated_by = $1
+ORDER BY p.updated_at DESC;
+`
+
+	rows, err := db.Query(sqlStr, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recentActivities []model.RecentActivity
+
+	for rows.Next() {
+		var recentActivity model.RecentActivity
+		var eventID sql.NullString
+		var eventTitle sql.NullString
+		var expenseItemNameList pq.StringArray
+		var expenseItemCost sql.NullString
+		var volunteeringHours sql.NullString
+		var volunteeringActivityList pq.StringArray
+
+		if err := rows.Scan(&eventID, &eventTitle, &volunteeringActivityList, &volunteeringHours, &expenseItemNameList, &expenseItemCost, &recentActivity.CreatedAt, &recentActivity.CreatedBy, &recentActivity.Creator); err != nil {
+			return nil, err
+		}
+
+		recentActivity.EventID = eventID.String
+		recentActivity.Title = eventTitle.String
+		recentActivity.ExpenseName = expenseItemNameList
+		recentActivity.ExpenseAmount = expenseItemCost.String
+		recentActivity.VolunteeringSkill = volunteeringActivityList
+		recentActivity.VolunteeringHours = volunteeringHours.String
+
+		recentActivities = append(recentActivities, recentActivity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return recentActivities, nil
+}
+
+// RetrieveUserActivityHighlights ...
+func RetrieveUserActivityHighlights(user string, userID uuid.UUID) (*model.RecentHighlight, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT
+    COUNT(DISTINCT p.id) AS created_events,
+    (
+        SELECT COUNT(DISTINCT project_id)
+        FROM asset.projects_volunteer
+        WHERE user_id = $1
+    ) AS volunteered_events,
+    (
+        SELECT COUNT(r.*)
+        FROM asset.reports r
+        WHERE r.created_by = $1
+        AND r.updated_by = $1
+    ) AS reported_events,
+    (
+        SELECT COUNT(e.*)
+        FROM asset.expenses e
+        WHERE e.created_by = $1
+        AND e.updated_by = $1
+    ) AS expenses_reported,
+    (
+        SELECT COUNT(i.*)
+        FROM asset.items i
+        WHERE i.created_by = $1
+        AND i.updated_by = $1
+    ) AS inventories_updated,
+    COUNT(p.*) FILTER (WHERE p.deactivated) AS deactivated_events
+FROM
+    asset.projects p
+LEFT JOIN asset.projects_volunteer pv ON
+    p.id = pv.project_id
+LEFT JOIN asset.project_skills ps ON
+    pv.project_skills_id = ps.id
+WHERE
+    p.created_by = $1
+    AND p.updated_by = $1;`
+
+	var recentHighlight model.RecentHighlight
+	err = db.QueryRow(sqlStr, userID).Scan(&recentHighlight.CreatedEvents, &recentHighlight.VolunteeredEvents, &recentHighlight.ReportedEvents, &recentHighlight.ExpensesReported, &recentHighlight.InventoriesUpdated, &recentHighlight.DeactivatedEvents)
+	if err != nil {
+		return nil, err
+	}
+
+	return &recentHighlight, nil
 }

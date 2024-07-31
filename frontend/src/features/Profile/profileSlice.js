@@ -7,7 +7,12 @@ const initialState = {
   profiles: [],
   inventory: {},
   inventories: [],
+  notifications: [],
   profileDetails: {},
+  recentTrophies: {},
+  recentActivities: [],
+  volunteeringDetails: [],
+  eventsSharedWithSelectProfile: [],
 };
 
 const profileSlice = createSlice({
@@ -44,6 +49,68 @@ const profileSlice = createSlice({
       state.error = '';
       state.profileDetails = {};
     },
+    getRecentActivitiesList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.recentActivities = [];
+    },
+    getRecentActivitiesListSuccess: (state, action) => {
+      state.recentActivities = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getRecentActivitiesListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.recentActivities = [];
+    },
+    getRecentActivitiesTrophyList: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.recentTrophies = {};
+    },
+    getRecentActivitiesTrophyListSuccess: (state, action) => {
+      state.recentTrophies = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getRecentActivitiesTrophyListFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.recentTrophies = {};
+    },
+    getProfileNotifications: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.notifications = [];
+    },
+    getProfileNotificationsSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = action.payload;
+    },
+    getProfileNotificationsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.notifications = [];
+    },
+    updateProfileNotification: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateProfileNotificationSuccess: (state, action) => {
+      const updatedNotification = action.payload;
+      const filteredNotificationList = [...state.notifications].filter((v) => {
+        return v.id !== updatedNotification.id;
+      });
+      state.loading = false;
+      state.error = '';
+      state.notifications = [updatedNotification, ...filteredNotificationList];
+    },
+    updateProfileNotificationFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     updateProfileDetails: (state) => {
       state.loading = true;
       state.error = '';
@@ -70,6 +137,21 @@ const profileSlice = createSlice({
     updateProfileImageFailure: (state) => {
       state.loading = false;
       state.error = '';
+    },
+    getVolunteeringDetails: (state) => {
+      state.loading = true;
+      state.error = '';
+      state.volunteeringDetails = [];
+    },
+    getVolunteeringDetailsSuccess: (state, action) => {
+      state.volunteeringDetails = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getVolunteeringDetailsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.volunteeringDetails = [];
     },
     getAllInventoriesForUser: (state) => {
       state.loading = true;
@@ -230,6 +312,38 @@ const profileSlice = createSlice({
     removeInventoryRowsFailure: (state) => {
       state.loading = false;
       state.error = '';
+      state.inventories = [];
+    },
+    retrieveEventsSharedWithSelectProfile: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    retrieveEventsSharedWithSelectProfileSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = action.payload;
+    },
+    retrieveEventsSharedWithSelectProfileFailure: (state) => {
+      state.error = '';
+      state.loading = false;
+      state.eventsSharedWithSelectProfile = [];
+    },
+    transferItemsToSelectedEvent: (state) => {
+      state.error = '';
+      state.loading = true;
+    },
+    transferItemsToSelectedEventSuccess: (state, action) => {
+      state.error = '';
+      state.loading = false;
+      const updatedInventories = action.payload;
+      const filteredStateInventories = state.inventories.filter((existingInventory) => {
+        return !updatedInventories.some((updatedInventory) => updatedInventory.id === existingInventory.id);
+      });
+      state.inventories = [...updatedInventories, ...filteredStateInventories];
+    },
+    transferItemsToSelectedEventFailure: (state) => {
+      state.error = '';
+      state.loading = false;
       state.inventories = [];
     },
   },
