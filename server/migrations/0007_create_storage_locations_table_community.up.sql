@@ -1,5 +1,5 @@
 
--- File: 0014_create_storage_locations_table_community.up.sql
+-- File: 0007_create_storage_locations_table_community.up.sql
 -- Description: Create the storage locations table
 
 DROP TABLE IF EXISTS storage_locations CASCADE;
