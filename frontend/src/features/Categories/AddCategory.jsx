@@ -1,84 +1,92 @@
-import { Box, Button, Snackbar, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
-import { BLANK_CATEGORY_DETAILS, BLANK_CATEGORY_DETAILS_ERROR, BLANK_CATEGORY_DETAILS_TOUCHED } from './constants';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
+import { ADD_CATEGORY_FORM_FIELDS } from './constants';
 import ColorPicker from '../common/ColorPicker';
+import { useDispatch } from 'react-redux';
+import { categoryActions } from './categoriesSlice';
+import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
 
-const AddCategory = ({ handleCloseAddCategory }) => {
-
+const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCategoryID, setSelectedCategoryID }) => {
+  const dispatch = useDispatch();
   const [planColor, setPlanColor] = useState('#fff');
-  const [categoryDetails, setCategoryDetails] = useState({
-    ...BLANK_CATEGORY_DETAILS,
-  });
-  const [categoryDetailsError, setCategoryDetailsError] = useState({
-    ...BLANK_CATEGORY_DETAILS_ERROR,
-  });
+  const [formFields, setFormFields] = useState(ADD_CATEGORY_FORM_FIELDS);
 
-  const [categoryDetailsTouched, setCategoryDetailsTouched] = useState({
-    ...BLANK_CATEGORY_DETAILS_TOUCHED,
-  });
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    const updatedFormFields = Object.assign({}, formFields, {
+      [name]: {
+        ...formFields[name],
+        value: value,
+        errorMsg: '',
+      },
+    });
+
+    for (const validator of updatedFormFields[name].validators) {
+      if (validator.validate(value)) {
+        updatedFormFields[name].errorMsg = validator.message;
+        break;
+      }
+    }
+    setFormFields(updatedFormFields);
+  };
 
   const handleColorChange = (newValue) => {
     setPlanColor(newValue);
   };
-  const handleInputChange = (event) => {
-    const { id, value } = event.target;
 
-    const draftErrorElements = { ...categoryDetailsError };
-    let errorFound = false;
+  const submit = () => {
+    const containsErr = Object.values(formFields).some((el) => el.errorMsg);
+    const userID = localStorage.getItem('userID');
+    const requiredFormFields = Object.values(formFields).filter((v) => v.required);
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    for (const validator of draftErrorElements[id].validators) {
-      if (validator.validate(value)) {
-        draftErrorElements[id] = {
-          ...draftErrorElements[id],
-          errorMsg: validator.message,
-        };
-        errorFound = true;
-        break;
-      }
+    if (containsErr || isRequiredFieldsEmpty) {
+      enqueueSnackbar('Cannot add new category.', {
+        variant: 'error',
+      });
+      return;
     }
 
-    if (!errorFound) {
-      draftErrorElements[id] = {
-        ...draftErrorElements[id],
-        errorMsg: '',
-      };
+    const draftCategories = {
+      ...formFields,
+      updated_by: userID,
+    };
+
+    console.log('selected cat id' - selectedCategoryID);
+    console.log(draftCategories);
+
+    if (selectedCategoryID) {
+      // existing categoryID support edit mode only
+      dispatch(categoryActions.updateExistingCategory(draftCategories));
+    } else {
+      dispatch(categoryActions.addNewCategory(draftCategories));
     }
 
-    setCategoryDetailsError(draftErrorElements);
-    setCategoryDetailsTouched({ ...categoryDetailsTouched, [id]: true });
-    setCategoryDetails({ ...categoryDetails, [id]: value });
-  };
-
-  const handleSubmit = () => {
-    if (
-      Object.values(categoryDetailsTouched).filter(Boolean).length != 2 ||
-      Object.values(categoryDetailsError).some((v) => v.errorMsg.length > 0)
-    ) {
-      return (
-        <Snackbar
-          autoHideDuration={6000}
-          color="error"
-          message={`Error updating category ${categoryDetails.category_name}`}
-        />
-      );
-    }
-
-    // const draftRequest = {
-    //   ...categoryDetails,
-    //   is_deleteable: true,
-    //   color: planColor,
-    //   created_by: user.id,
-    //   created_on: dayjs(),
-    //   sharable_groups: [user.id],
-    // };
-
-    // api request
-    // createCategory.mutate(draftRequest); 
-    setCategoryDetails({ ...BLANK_CATEGORY_DETAILS });
-    setCategoryDetailsTouched({ ...BLANK_CATEGORY_DETAILS_TOUCHED });
+    setSelectedCategoryID(null);
+    setFormFields(ADD_CATEGORY_FORM_FIELDS);
     setPlanColor('#fff');
     handleCloseAddCategory();
   };
+
+  useEffect(() => {
+    if (!loading && selectedCategoryID !== null) {
+      const draftCategory = categories.filter((v) => v.id === selectedCategoryID).find(() => true);
+      const updatedFormFields = Object.assign({}, formFields, {
+        category_name: {
+          ...formFields.category_name,
+          value: draftCategory?.category_name || '',
+        },
+        category_description: {
+          ...formFields.category_description,
+          value: draftCategory?.category_description || '',
+        },
+      });
+      setFormFields(updatedFormFields);
+    } else {
+      setFormFields(ADD_CATEGORY_FORM_FIELDS);
+    }
+  }, [selectedCategoryID]);
 
   return (
     <Stack>
@@ -89,44 +97,32 @@ const AddCategory = ({ handleCloseAddCategory }) => {
       <Stack alignItems="center">
         <Box component="form" sx={{ maxWidth: 600, width: '100%' }}>
           <Stack spacing={2} useFlexGap>
-            <TextField
-              id="category_name"
-              label="Category name"
-              value={categoryDetails.name}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              error={Boolean(categoryDetailsError.category_name['errorMsg'].length)}
-              helperText={categoryDetailsError.category_name['errorMsg']}
-            />
-            <TextField
-              id="category_description"
-              label="Category description"
-              placeholder="Description of category in less than 500 words"
-              value={categoryDetails.category_description}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              multiline
-              maxRows={4}
-              rows={4}
-              error={Boolean(categoryDetailsError.category_description['errorMsg'].length)}
-              helperText={categoryDetailsError.category_description['errorMsg']}
-            />
+            {Object.values(formFields).map((v, index) => (
+              <TextField
+                key={index}
+                id={v.name}
+                name={v.name}
+                label={v.label}
+                value={v.value}
+                placeholder={v.placeholder}
+                onChange={handleInput}
+                required={v.required}
+                fullWidth={v.fullWidth}
+                error={!!v.errorMsg}
+                helperText={v.errorMsg}
+                variant={v.variant}
+                minRows={v.rows || 4}
+                multiline={v.multiline || false}
+              />
+            ))}
             <ColorPicker value={planColor} handleChange={handleColorChange} />
           </Stack>
           <Button
-            onClick={handleSubmit}
-            variant="outlined"
-            sx={{ mt: 1 }}
-            disabled={
-              Object.values(categoryDetailsTouched).filter(Boolean).length != 2 ||
-              Object.values(categoryDetailsError).some((v) => v.errorMsg.length > 0)
-            }
+            onClick={submit}
+            startIcon={selectedCategoryID ? <CheckCircleRounded /> : <AddRounded />}
+            sx={{ alignSelf: 'flex-start' }}
           >
-            Create new category
+            {selectedCategoryID ? 'Edit Category' : 'Add Category'}
           </Button>
         </Box>
       </Stack>

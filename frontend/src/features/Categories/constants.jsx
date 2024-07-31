@@ -1,16 +1,25 @@
-export const BLANK_CATEGORY_DETAILS = {
-  category_name: '',
-  category_description: '',
+const GENERIC_FORM_FIELDS = {
+  type: 'text',
+  variant: 'outlined',
 };
 
-export const BLANK_CATEGORY_DETAILS_TOUCHED = {
-  category_name: false,
-  category_description: false,
+const GENERIC_TEXTAREA_VARIANT = {
+  type: 'text',
+  multiline: true,
+  rows: 4,
+  variant: 'outlined',
+  fullWidth: true,
 };
 
-export const BLANK_CATEGORY_DETAILS_ERROR = {
+export const ADD_CATEGORY_FORM_FIELDS = {
   category_name: {
+    label: 'Category Title',
+    placeholder: 'Short category title',
+    value: '',
+    name: 'category_name',
     errorMsg: '',
+    required: true,
+    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
@@ -21,18 +30,22 @@ export const BLANK_CATEGORY_DETAILS_ERROR = {
         message: 'Category name should be less than 50 characters',
       },
     ],
+    ...GENERIC_FORM_FIELDS,
   },
   category_description: {
+    label: 'Description',
+    placeholder: 'Category description in less than 500 characters',
+    value: '',
+    name: 'category_description',
     errorMsg: '',
+    required: false,
+    fullWidth: true,
     validators: [
       {
-        validate: (value) => value.trim().length === 0,
-        message: 'Category description is required',
-      },
-      {
         validate: (value) => value.trim().length >= 500,
-        message: 'Category description should be less than 500 characters',
+        message: 'Description should be less than 500 characters',
       },
     ],
+    ...GENERIC_TEXTAREA_VARIANT,
   },
 };

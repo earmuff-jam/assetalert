@@ -64,6 +64,7 @@ func main() {
 	// categories
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)
+	router.Handle("/api/v1/category", CustomRequestHandler(handler.CreateCategory)).Methods(http.MethodPost)
 
 	// expenses
 	router.Handle("/api/v1/expenses", CustomRequestHandler(handler.AddExpenseToEvent)).Methods(http.MethodPost)

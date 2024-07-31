@@ -5,11 +5,18 @@ import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
 import HeaderWithButton from '../common/HeaderWithButton';
 import Category from './Category';
+import { useSelector } from 'react-redux';
 
-const CategoryList = () => {
+const CategoryList = ({ displayConcise = false }) => {
+  const { categories, loading } = useSelector((state) => state.categories);
+
   const [displayModal, setDisplayModal] = useState(false);
+  const [selectedCategoryID, setSelectedCategoryID] = useState(null);
 
-  const handleClose = () => setDisplayModal(false);
+  const handleClose = () => {
+    setDisplayModal(false);
+    setSelectedCategoryID(null);
+  };
   const toggleModal = () => setDisplayModal(!displayModal);
 
   return (
@@ -19,11 +26,23 @@ const CategoryList = () => {
         primaryButtonTextLabel="Add Category"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={toggleModal}
+        secondaryTitle={displayConcise && `Viewing recent 4 out of ${categories.length} categories`}
       />
-      <Category />
+      <Category
+        categories={displayConcise ? categories.slice(0, 4) : categories}
+        loading={loading}
+        setSelectedCategoryID={setSelectedCategoryID}
+        setDisplayModal={setDisplayModal}
+      />
       {displayModal && (
         <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="md">
-          <AddCategory handleCloseAddCategory={handleClose} />
+          <AddCategory
+            categories={categories}
+            loading={loading}
+            handleCloseAddCategory={handleClose}
+            selectedCategoryID={selectedCategoryID}
+            setSelectedCategoryID={setSelectedCategoryID}
+          />
         </SimpleModal>
       )}
     </Stack>

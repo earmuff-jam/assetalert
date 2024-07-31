@@ -41,9 +41,9 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 
 		ec.ID = categoryID.String
 		ec.CategoryName = categoryName.String
-		ec.CreatedAt = createdAt.Time
+		ec.Created = createdAt.Time
 		ec.CreatedBy = createdBy.String
-		ec.UpdatedAt = updatedAt.Time
+		ec.Updated = updatedAt.Time
 		ec.UpdatedBy = updatedBy.String
 		ec.SharableGroups = sharableGroups
 
@@ -55,6 +55,49 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 	}
 
 	return data, nil
+}
+
+// CreateCategory ...
+func CreateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
+	sqlStr := `
+	INSERT INTO community.category(item_name, item_description, created_by, created, updated_by, updated, sharable_groups)
+	VALUES($1, $2, $3, $4, $5, $6, $7)
+	RETURNING id, item_name, item_description, created, created_by, updated, updated_by, sharable_groups
+	`
+
+	row := tx.QueryRow(
+		sqlStr,
+		draftCategory.CategoryName,
+		draftCategory.CategoryDescription,
+		draftCategory.Created,
+		draftCategory.CreatedBy,
+		draftCategory.Updated,
+		draftCategory.UpdatedBy,
+		pq.Array(draftCategory.SharableGroups),
+	)
+
+	err = row.Scan(&draftCategory.ID, &draftCategory.CategoryName, &draftCategory.CategoryDescription, &draftCategory.Created, &draftCategory.CreatedBy, &draftCategory.Updated, &draftCategory.UpdatedBy, draftCategory.SharableGroups)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return draftCategory, nil
 }
 
 // RemoveCategory ...

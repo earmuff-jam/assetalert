@@ -184,17 +184,3 @@ type StorageLocation struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 	SharableGroups []string  `json:"sharable_groups"`
 }
-
-// Category ...
-// swagger:model Category
-//
-// These are the list of categories for each item. Items that are added can be categorized into certain values based on characteristics.
-type Category struct {
-	ID             string    `json:"id"`
-	CategoryName   string    `json:"category_name"`
-	CreatedBy      string    `json:"created_by"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedBy      string    `json:"updated_by"`
-	UpdatedAt      time.Time `json:"updated_at"`
-	SharableGroups []string  `json:"sharable_groups"`
-}

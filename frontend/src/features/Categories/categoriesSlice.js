@@ -25,20 +25,33 @@ const categorySlice = createSlice({
       state.error = '';
       state.categories = [];
     },
+    createCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    createCategorySuccess: (state, action) => {
+      const draftCategory = action.payload;
+      state.categories = [...state.categories, ...draftCategory];
+      state.loading = false;
+      state.error = '';
+    },
+    createCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     removeCategory: (state) => {
       state.loading = true;
       state.error = '';
-      state.categories = [];
     },
     removeCategorySuccess: (state, action) => {
-      state.categories = action.payload;
+      const draftCategoryID = action.payload;
+      state.categories = state.categories.filter((category) => category.id !== draftCategoryID);
       state.loading = false;
       state.error = '';
     },
     removeCategoryFailure: (state) => {
       state.loading = false;
       state.error = '';
-      state.categories = [];
     },
   },
 });
