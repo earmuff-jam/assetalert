@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
@@ -14,6 +15,7 @@ import (
 // swagger:route GET /api/v1/categories GetAllCategories getAllCategories
 //
 // # Retrieves the list of categories that each inventory items can be associated with.
+// Each user can have thier own set of categories. All categories are specific to the selected user
 //
 // Users cannot assign assets to multiple categories.
 //
@@ -25,13 +27,25 @@ import (
 // 500: MessageResponse
 func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 
-	resp, err := db.RetrieveAllCategories(user)
+	userID := r.URL.Query().Get("id")
+	limit := r.URL.Query().Get("limit")
+
+	if userID == "" {
+		log.Printf("Unable to retrieve categories with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+	limitInt, err := strconv.Atoi(limit)
 	if err != nil {
-		log.Printf("Unable to retrieve categories. error: +%v", err)
+		limitInt = 10
+	}
+	resp, err := db.RetrieveAllCategories(user, userID, limitInt)
+	if err != nil {
+		log.Printf("Unable to retrieve categories. error: %v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
-
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)

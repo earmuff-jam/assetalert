@@ -12,11 +12,11 @@ const GENERIC_TEXTAREA_VARIANT = {
 };
 
 export const ADD_CATEGORY_FORM_FIELDS = {
-  category_name: {
+  name: {
     label: 'Category Title',
     placeholder: 'Short category title',
     value: '',
-    name: 'category_name',
+    name: 'name',
     errorMsg: '',
     required: true,
     fullWidth: true,
@@ -32,11 +32,11 @@ export const ADD_CATEGORY_FORM_FIELDS = {
     ],
     ...GENERIC_FORM_FIELDS,
   },
-  category_description: {
+  description: {
     label: 'Description',
     placeholder: 'Category description in less than 500 characters',
     value: '',
-    name: 'category_description',
+    name: 'description',
     errorMsg: '',
     required: false,
     fullWidth: true,

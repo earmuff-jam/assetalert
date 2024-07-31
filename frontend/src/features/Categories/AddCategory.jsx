@@ -70,18 +70,20 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
     if (!loading && selectedCategoryID !== null) {
       const draftCategory = categories.filter((v) => v.id === selectedCategoryID).find(() => true);
       const updatedFormFields = Object.assign({}, formFields, {
-        category_name: {
-          ...formFields.category_name,
-          value: draftCategory?.category_name || '',
+        name: {
+          ...formFields.name,
+          value: draftCategory?.name || '',
         },
-        category_description: {
-          ...formFields.category_description,
-          value: draftCategory?.category_description || '',
+        description: {
+          ...formFields.description,
+          value: draftCategory?.description || '',
         },
       });
       setFormFields(updatedFormFields);
+      setPlanColor(draftCategory.color);
     } else {
       setFormFields(ADD_CATEGORY_FORM_FIELDS);
+      setPlanColor('#fff');
     }
   }, [selectedCategoryID]);
 

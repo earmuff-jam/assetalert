@@ -70,3 +70,12 @@ VALUES ('Dog food',
         (SELECT id FROM community.profiles p LIMIT 1),
         (SELECT id FROM community.profiles p LIMIT 1),
         ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+INSERT INTO community.category (name, description, color, item_limit, created_by, updated_by, sharable_groups) VALUES (
+        'Electronics', 
+        'General electronics equipments', 
+        '#fff', 
+        10, 
+        (SELECT id FROM community.profiles p LIMIT 1),
+        (SELECT id FROM community.profiles p LIMIT 1),
+        ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);

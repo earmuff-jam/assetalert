@@ -9,35 +9,31 @@ SET search_path TO community, public;
 
 CREATE TABLE IF NOT EXISTS community.category
 (
-    id                  UUID PRIMARY KEY         NOT NULL DEFAULT gen_random_uuid(),
-    item_name           VARCHAR(100)             NOT NULL,
-    created_by      UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    updated_by      UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    created_at      TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),
-    updated_at      TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),
-    sharable_groups UUID[]
+    id                  UUID PRIMARY KEY                                                                            NOT NULL DEFAULT gen_random_uuid(),
+    name                VARCHAR(100)                                                                                NOT NULL,
+    description         VARCHAR(500),
+    color               VARCHAR(50),
+    item_limit          INT                                                                                         NOT NULL DEFAULT 1, 
+    created_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    updated_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    created_at          TIMESTAMP WITH TIME ZONE                                                                    NOT NULL DEFAULT NOW(),
+    updated_at          TIMESTAMP WITH TIME ZONE                                                                    NOT NULL DEFAULT NOW(),
+    sharable_groups     UUID[]
 );
 
--- prefil category ---
-INSERT INTO community.category (item_name)
+INSERT INTO community.category (name)
 VALUES ('Groceries'),
        ('Utilities'),
        ('Rent/Mortgage'),
        ('Entertainment'),
-       ('Dining Out'),
        ('Transportation'),
-       ('Healthcare'),
        ('Clothing'),
        ('Home Maintenance'),
        ('Education'),
        ('Travel'),
-       ('Gifts/Donations'),
-       ('Electronics'),
-       ('Insurance'),
-       ('Personal Care'),
        ('Miscellaneous');
 
-COMMENT ON TABLE category IS 'category is incurred expenses that can be grouped on';
+COMMENT ON TABLE category IS 'consists of categories that the asset can be grouped against';
 
 ALTER TABLE community.category
     OWNER TO community_admin;
