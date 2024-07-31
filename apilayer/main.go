@@ -56,9 +56,9 @@ func main() {
 	router.HandleFunc("/api/v1/event/{id}/ws", handler.HandleWebsocket)
 
 	// routes below here are treated as they are secure routes
-	router.Handle("/api/v1/health", CustomRequestHandler(handler.GetEventHealthCheck)).Methods(http.MethodGet)
 
 	// storage locations
+	router.Handle("/api/v1/locations/health", CustomRequestHandler(handler.GetStorageLocationHealthCheck)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
 
 	// categories
@@ -66,25 +66,12 @@ func main() {
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.CreateCategory)).Methods(http.MethodPost)
 
-	// expenses
-	router.Handle("/api/v1/expenses", CustomRequestHandler(handler.AddExpenseToEvent)).Methods(http.MethodPost)
-
-	// reports
-	router.Handle("/api/v1/report", CustomRequestHandler(handler.CreateNewReport)).Methods(http.MethodPost)
-	router.Handle("/api/v1/report/{id}", CustomRequestHandler(handler.GetAllEventReports)).Methods(http.MethodGet)
-
 	// profile
 	router.Handle("/api/v1/profile/list", CustomRequestHandler(handler.GetAllUserProfiles)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.GetProfile)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.UpdateProfile)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
-	router.Handle("/api/v1/profile/{id}/notifications", CustomRequestHandler(handler.GetAllNotifications)).Methods(http.MethodGet)
-
-	// notifications
-	router.Handle("/api/v1/profile/{id}/notifications/{notificationID}", CustomRequestHandler(handler.UpdateSingleNotification)).Methods(http.MethodPut)
-	router.Handle("/api/v1/profile/{id}/recent", CustomRequestHandler(handler.GetUserRecentActivities)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/highlights", CustomRequestHandler(handler.GetUserRecentHighlights)).Methods(http.MethodGet)
 
 	// inventories
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)

@@ -42,10 +42,6 @@ func IngestSvc() {
 	if err != nil {
 		log.Fatalf("error during finding a test user... %+v", err)
 	}
-	GenerateFakeDataWithLimit(currentUser, 20, "event", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "report", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "expense", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "item", creatorID)
 	GenerateFakeDataWithLimit(currentUser, 2, "note", creatorID)
 	GenerateFakeDataWithLimit(currentUser, 2, "inventory", creatorID)
 
@@ -67,58 +63,19 @@ func GenerateFakeDataWithLimit(user string, minCount int, typeOf string, creator
 	switch typeOf {
 	case "note":
 		log.Printf("loading %d of note rows", rowCounts)
-		populateFakePersonalNotes(user, rowCounts, creatorID)
+		populateFakeNotes(user, rowCounts, creatorID)
 	case "inventory":
 		log.Printf("loading %d of inventory rows", rowCounts)
-		populateFakePersonalInventories(user, rowCounts, creatorID)
+		populateFakeInventories(user, rowCounts, creatorID)
 	default:
 	}
 	return nil
 }
 
-// // populateFakeReportDetails ...
-// //
-// // used to generate fake report for the first eventID
-// // generate fake report data to test in the application
-// func populateFakeReportDetails(user string, limit int, creatorID string) {
-
-// 	resp, err := db.RetrieveAllEvents(user)
-// 	if err != nil {
-// 		log.Printf("unable to populate reports without eventID. err %+v", err)
-// 		return
-// 	}
-
-// 	draftEvent := resp[0]
-// 	userGroup := []string{creatorID}
-
-// 	for i := 1; i <= limit; i++ {
-// 		draftReport := model.ReportEvent{}
-
-// 		// time is set for created / updated
-// 		now := time.Now()
-// 		daysAgo := gofakeit.Number(1, 30)
-// 		startDate := now.AddDate(0, 0, -daysAgo)
-
-// 		draftReport.Subject = gofakeit.JobTitle()
-// 		draftReport.Description = gofakeit.HackerPhrase()
-// 		draftReport.EventLocation = gofakeit.Address().Address
-// 		draftReport.OrganizerName = gofakeit.Name()
-// 		draftReport.EventID = draftEvent.ID
-// 		draftReport.CreatedAt = startDate
-// 		draftReport.UpdatedAt = startDate
-// 		draftReport.CreatedBy = creatorID
-// 		draftReport.UpdatedBy = creatorID
-// 		draftReport.SharableGroups = userGroup
-
-// 		db.SaveNewReport(user, &draftReport)
-// 	}
-
-// }
-
-// populateFakePersonalNotes ...
+// populateFakeNotes ...
 //
 // generate fake item data to test in the application
-func populateFakePersonalNotes(user string, limit int, creatorID string) {
+func populateFakeNotes(user string, limit int, creatorID string) {
 
 	for i := 1; i <= limit; i++ {
 		draftNote := model.Note{}
@@ -142,10 +99,10 @@ func populateFakePersonalNotes(user string, limit int, creatorID string) {
 	}
 }
 
-// populateFakePersonalInventories ...
+// populateFakeInventories ...
 //
 // generate fake personal inventories data to test in the application
-func populateFakePersonalInventories(user string, limit int, creatorID string) {
+func populateFakeInventories(user string, limit int, creatorID string) {
 
 	for i := 1; i <= limit; i++ {
 		draftInventory := model.Inventory{}

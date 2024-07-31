@@ -242,7 +242,7 @@ func applyJwtTokenToUser(user string, draftUser *model.UserCredentials) error {
 		tx.Rollback()
 		return err
 	}
-	err = upsertOauthToken(user, draftUser, tx)
+	err = upsertOauthToken(draftUser, tx)
 	if err != nil {
 		log.Printf("unable to add auth token. error: %+v", err)
 		tx.Rollback()
@@ -260,7 +260,7 @@ func applyJwtTokenToUser(user string, draftUser *model.UserCredentials) error {
 // upsertOauthToken ...
 //
 // updates the oauth token table in the database
-func upsertOauthToken(user string, draftUser *model.UserCredentials, tx *sql.Tx) error {
+func upsertOauthToken(draftUser *model.UserCredentials, tx *sql.Tx) error {
 
 	var maskedID string
 

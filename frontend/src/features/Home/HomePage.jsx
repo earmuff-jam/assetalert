@@ -8,6 +8,8 @@ const HomePage = () => {
     <Stack sx={{ flexGrow: 1 }}>
       <Overview />
       <CategoryList displayConcise />
+      <CategoryList />
+      <CategoryList displayConcise />
       <Collection title="Learn more" />
     </Stack>
   );
