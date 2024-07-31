@@ -17,7 +17,6 @@ export function* fetchProfileList() {
 export function* fetchExistingUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
-    console.log('here');
     const response = yield call(instance.get, `${BASEURL}/${USER_ID}`);
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
@@ -29,7 +28,6 @@ export function* updateExistingUserDetails(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
     const { formattedData } = action.payload;
-    console.log(formattedData);
     const response = yield call(instance.put, `${BASEURL}/${USER_ID}`, {
       id: USER_ID,
       username: formattedData.username,
