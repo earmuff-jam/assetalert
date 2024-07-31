@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Stack, Typography } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
-import { profileActions } from '../Profile/profileSlice';
+import { notesActions } from './notesSlice';
 import SimpleModal from '../common/SimpleModal';
 
 const Notes = () => {
   const dispatch = useDispatch();
-  const { loading, notes } = useSelector((state) => state.profile);
+  const { loading, notes } = useSelector((state) => state.notes);
 
   const [editMode, setEditMode] = useState(false);
   const [selecteNoteID, setSelectedNoteID] = useState(null);
@@ -22,7 +22,7 @@ const Notes = () => {
   };
 
   useEffect(() => {
-    dispatch(profileActions.getUserNotes());
+    dispatch(notesActions.getUserNotes());
   }, []);
 
   return (

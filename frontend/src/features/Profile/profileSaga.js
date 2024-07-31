@@ -109,47 +109,6 @@ export function* fetchUpdateExistingInventoryDetails(action) {
   }
 }
 
-export function* fetchUserNotes() {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/notes`);
-    yield put(profileActions.getUserNotesSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.getUserNotesFailure(e));
-  }
-}
-
-export function* fetchAddNewNote(action) {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/notes`, { ...action.payload });
-    yield put(profileActions.addNewNoteSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.addNewNoteFailure(e));
-  }
-}
-
-export function* fetchUpdateExistingNote(action) {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/notes`, { ...action.payload });
-    yield put(profileActions.updateExistingNoteSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.updateExistingNoteFailure(e));
-  }
-}
-
-export function* fetchRemoveSelectedNote(action) {
-  try {
-    const USER_ID = localStorage.getItem('userID');
-    const { noteID } = action.payload;
-    const response = yield call(instance.delete, `${BASEURL}/${USER_ID}/notes/${noteID}`);
-    yield put(profileActions.removeSelectedNoteSuccess(response.data));
-  } catch (e) {
-    yield put(profileActions.removeSelectedNoteFailure(e));
-  }
-}
-
 export function* fetchRemoveInventoryRows(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -200,35 +159,14 @@ export function* watchUpdateExistingInventoryDetails() {
   yield takeLatest(`profile/updateInventory`, fetchUpdateExistingInventoryDetails);
 }
 
-export function* watchGetUserNotes() {
-  yield takeLatest(`profile/getUserNotes`, fetchUserNotes);
-}
-
-export function* watchFetchAddNewNote() {
-  yield takeLatest(`profile/addNewNote`, fetchAddNewNote);
-}
-
-export function* watchFetchUpdateExistingNote() {
-  yield takeLatest(`profile/updateExistingNote`, fetchUpdateExistingNote);
-}
-
-export function* watchFetchRemoveSelectedNote() {
-  yield takeLatest(`profile/removeSelectedNote`, fetchRemoveSelectedNote);
-}
-
 export function* watchFetchRemoveInventoryRows() {
   yield takeLatest(`profile/removeInventoryRows`, fetchRemoveInventoryRows);
 }
 
 export default [
   watchFetchProfileList,
-  watchGetUserNotes,
-  watchFetchAddNewNote,
   watchFetchInvByID,
-  watchFetchAddNewInventory,
   watchFetchAddBulkInventory,
-  watchFetchUpdateExistingNote,
-  watchFetchRemoveSelectedNote,
   watchFetchRemoveInventoryRows,
   watchFetchAllInventoriesForUser,
   watchUpdateExistingUserDetails,
