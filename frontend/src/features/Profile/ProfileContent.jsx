@@ -26,7 +26,6 @@ const ProfileContent = () => {
     }, {});
     formattedData['updated_on'] = dayjs();
     dispatch(profileActions.updateProfileDetails({ formattedData }));
-    // navigate('/');
   };
 
   const handleChange = (ev) => {

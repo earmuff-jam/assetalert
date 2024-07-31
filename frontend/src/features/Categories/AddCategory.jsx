@@ -53,9 +53,6 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
       updated_by: userID,
     };
 
-    console.log('selected cat id' - selectedCategoryID);
-    console.log(draftCategories);
-
     if (selectedCategoryID) {
       // existing categoryID support edit mode only
       dispatch(categoryActions.updateExistingCategory(draftCategories));
