@@ -17,6 +17,7 @@ export function* fetchProfileList() {
 export function* fetchExistingUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
+    console.log('here');
     const response = yield call(instance.get, `${BASEURL}/${USER_ID}`);
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
@@ -166,6 +167,7 @@ export function* watchFetchRemoveInventoryRows() {
 export default [
   watchFetchProfileList,
   watchFetchInvByID,
+  watchFetchExistingUserDetails,
   watchFetchAddBulkInventory,
   watchFetchRemoveInventoryRows,
   watchFetchAllInventoriesForUser,
