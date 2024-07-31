@@ -29,7 +29,7 @@ func FetchAllUserProfiles(user string) ([]model.Profile, error) {
             about_me,
             onlinestatus,
             role
-        FROM asset.profiles;
+        FROM community.profiles;
     `
 
 	var profiles []model.Profile
@@ -101,7 +101,7 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 			onlinestatus,
 			role,
 			updated_at
-		FROM asset.profiles
+		FROM community.profiles
 		WHERE id=$1
 	`
 
@@ -161,7 +161,7 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	}
 
 	sqlStr := `
-		UPDATE asset.profiles 
+		UPDATE community.profiles 
 		SET username=$2, full_name=$3, email_address=$4, phone_number=$5, about_me=$6, onlinestatus=$7
 		WHERE id=$1
 		RETURNING id, username, full_name, avatar_url, email_address, phone_number, about_me, onlinestatus
@@ -227,7 +227,7 @@ func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeade
 	var updatedProfile model.Profile
 
 	sqlStr := `
-		UPDATE asset.profiles 
+		UPDATE community.profiles 
 		SET avatar_url = $2
 		WHERE id = $1
 		RETURNING id, username, full_name, avatar_url, phone_number, goal, about_me, onlinestatus, role
@@ -288,16 +288,16 @@ func RetrieveRecentActivity(user string, userID uuid.UUID) ([]model.RecentActivi
     p.created_by,
     COALESCE (p2.username , p2.full_name, p2.email_address) as creator
 FROM 
-    asset.projects p
+    community.projects p
 LEFT JOIN (
     SELECT 
         pv.project_id,
         array_agg(DISTINCT skill) AS volunteer_skills,
 		pv.updated_by
     FROM 
-		asset.projects_volunteer pv
+		community.projects_volunteer pv
     JOIN 
-		asset.project_skills ps ON pv.project_skills_id = ps.id
+		community.project_skills ps ON pv.project_skills_id = ps.id
     WHERE 
         pv.created_by = $1
         OR pv.updated_by = $1
@@ -310,7 +310,7 @@ LEFT JOIN (
         SUM(volunteer_hours) AS volunteer_hours,
 		updated_by
     FROM 
-		asset.projects_volunteer
+		community.projects_volunteer
     WHERE 
         created_by = $1
         OR updated_by = $1
@@ -324,14 +324,14 @@ LEFT JOIN (
         SUM(item_cost) AS expense_item_cost,
 		updated_by
     FROM 
-		asset.expenses
+		community.expenses
     WHERE 
         created_by = $1
         OR updated_by = $1
     GROUP BY 
         project_id, updated_by
 ) e ON p.id = e.project_id
-LEFT JOIN asset.profiles p2 ON p.updated_by = p2.id 
+LEFT JOIN community.profiles p2 ON p.updated_by = p2.id 
 WHERE 
     p.created_by = $1
     OR p.updated_by = $1
@@ -390,33 +390,33 @@ func RetrieveUserActivityHighlights(user string, userID uuid.UUID) (*model.Recen
     COUNT(DISTINCT p.id) AS created_events,
     (
         SELECT COUNT(DISTINCT project_id)
-        FROM asset.projects_volunteer
+        FROM community.projects_volunteer
         WHERE user_id = $1
     ) AS volunteered_events,
     (
         SELECT COUNT(r.*)
-        FROM asset.reports r
+        FROM community.reports r
         WHERE r.created_by = $1
         AND r.updated_by = $1
     ) AS reported_events,
     (
         SELECT COUNT(e.*)
-        FROM asset.expenses e
+        FROM community.expenses e
         WHERE e.created_by = $1
         AND e.updated_by = $1
     ) AS expenses_reported,
     (
         SELECT COUNT(i.*)
-        FROM asset.items i
+        FROM community.items i
         WHERE i.created_by = $1
         AND i.updated_by = $1
     ) AS inventories_updated,
     COUNT(p.*) FILTER (WHERE p.deactivated) AS deactivated_events
 FROM
-    asset.projects p
-LEFT JOIN asset.projects_volunteer pv ON
+    community.projects p
+LEFT JOIN community.projects_volunteer pv ON
     p.id = pv.project_id
-LEFT JOIN asset.project_skills ps ON
+LEFT JOIN community.project_skills ps ON
     pv.project_skills_id = ps.id
 WHERE
     p.created_by = $1

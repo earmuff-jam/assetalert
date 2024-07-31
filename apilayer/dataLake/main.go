@@ -4,7 +4,7 @@ import "github.com/mohit2530/communityCare/dataLake/hoard"
 
 // Ingest Service
 //
-// Ingest various data for asset tracker application
+// Ingest various data for mashed application
 
 func main() {
 

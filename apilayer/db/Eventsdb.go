@@ -18,7 +18,7 @@ func DeleteStorageLocation(user string, locationID string) error {
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM asset.storage_locations WHERE id=$1`
+	sqlStr := `DELETE FROM community.storage_locations WHERE id=$1`
 	_, err = db.Exec(sqlStr, locationID)
 	if err != nil {
 		log.Printf("unable to delete event ID %+v", locationID)
@@ -81,7 +81,7 @@ func AddExpense(user string, draftExpense *model.Expense) (*model.Expense, error
 	var draftExpenseID uuid.UUID
 
 	sqlStr := `
-        INSERT INTO asset.expenses(
+        INSERT INTO community.expenses(
 			project_id,
 			item_name, 
 			item_cost, 
@@ -144,9 +144,9 @@ func RetrieveAllReports(user string, eventID string) ([]model.ReportEvent, error
 	coalesce (cp.username , cp.full_name , cp.email_address ) as creator_name , 
 	cr.updated_by, 
 	coalesce (up.username , up.full_name , up.email_address ) as updator_name 
-	FROM asset.reports cr
-	LEFT JOIN asset.profiles cp on cp.id  = cr.created_by
-	LEFT JOIN asset.profiles up on up.id  = cr.updated_by
+	FROM community.reports cr
+	LEFT JOIN community.profiles cp on cp.id  = cr.created_by
+	LEFT JOIN community.profiles up on up.id  = cr.updated_by
 	WHERE cr.project_id = $1
 	ORDER BY cr.updated_at DESC
 	`
@@ -188,7 +188,7 @@ func SaveNewReport(user string, draftReport *model.ReportEvent) (*model.ReportEv
 	}
 
 	sqlStr := `
-	INSERT INTO asset.reports(project_id, subject, description, event_location, organizer_name, created_at, updated_at, created_by, updated_by, sharable_groups)
+	INSERT INTO community.reports(project_id, subject, description, event_location, organizer_name, created_at, updated_at, created_by, updated_by, sharable_groups)
 	VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 	RETURNING id
 	`
@@ -229,7 +229,7 @@ func DeleteReport(user string, reportID string) error {
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM asset.reports WHERE id=$1`
+	sqlStr := `DELETE FROM community.reports WHERE id=$1`
 	_, err = db.Exec(sqlStr, reportID)
 	if err != nil {
 		log.Printf("unable to delete report ID %+v", reportID)
@@ -246,7 +246,7 @@ func RetrieveAllStorageLocation(user string) ([]model.StorageLocation, error) {
 	}
 	defer db.Close()
 
-	sqlStr := "SELECT id, location, created_at, created_by, updated_at, updated_by, sharable_groups FROM asset.storage_locations"
+	sqlStr := "SELECT id, location, created_at, created_by, updated_at, updated_by, sharable_groups FROM community.storage_locations"
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		return nil, err
@@ -297,7 +297,7 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 	}
 	defer db.Close()
 
-	fetchSqlStr := `SELECT count(sl.id), sl.id FROM asset.storage_locations sl WHERE sl.location = $1 GROUP BY sl.id`
+	fetchSqlStr := `SELECT count(sl.id), sl.id FROM community.storage_locations sl WHERE sl.location = $1 GROUP BY sl.id`
 	var count int
 	err = db.QueryRow(fetchSqlStr, draftLocation).Scan(&count, emptyLocationID)
 	if err != nil {
@@ -306,7 +306,7 @@ func addNewStorageLocation(user string, draftLocation string, created_by string,
 
 	// save new storage location if it does not already exists
 	if count == 0 {
-		sqlStr := `INSERT INTO asset.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+		sqlStr := `INSERT INTO community.storage_locations(location, created_by, updated_by, created_at, updated_at, sharable_groups) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
 
 		var locationID string
 		var sharableGroups = make([]uuid.UUID, 0)
@@ -351,7 +351,7 @@ func addNewCategoryLocation(user string, draftCategoryName string, created_by st
 		return err
 	}
 
-	sqlStr := `INSERT INTO asset.category(
+	sqlStr := `INSERT INTO community.category(
 		item_name, 
 		created_by, 
 		updated_by, 

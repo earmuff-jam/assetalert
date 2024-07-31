@@ -1,8 +1,8 @@
-# AssetTracker
+# Mashed
 
-## Dynamic platform built to service your asset tracking needs
+## Volunteer and Community Engagement Platform
 
-**AssetTracker** is a dynamic web-based platform designed to foster relationship between your assets and you.. It serves as a central hub where you can categorize, assign maintenance plans and track all from one single click. 
+**Mashed** is a dynamic web-based platform designed to foster connections between passionate volunteers and local community projects and initiatives. It serves as a central hub where individuals and organizations can unite, collaborate, and create a meaningful impact within their neighborhoods. Whether it's environmental conservation, education, social welfare, or arts and culture, we empower users to contribute their time, skills, and hearts to the causes they care deeply about.
 
 ## Key Features
 

@@ -30,7 +30,7 @@ func SetupDB(user string) (*sql.DB, error) {
 
 	database := os.Getenv("POSTGRES_DB")
 	if len(database) == 0 {
-		database = "asset"
+		database = "community"
 	}
 
 	appEnv := os.Getenv("ENVIRONMENT")
@@ -86,7 +86,7 @@ func RetriveTestUser(user string, eventID string) error {
 	}
 	defer db.Close()
 
-	sqlStr := `SELECT id FROM asset.profiles FETCH FIRST ROW ONLY;`
+	sqlStr := `SELECT id FROM community.profiles FETCH FIRST ROW ONLY;`
 	_, err = db.Exec(sqlStr, eventID)
 	if err != nil {
 		log.Printf("unable to delete event ID %+v", eventID)

@@ -44,7 +44,7 @@ const ButtonComponent = ({
 };
 
 ButtonComponent.defaultProps = {
-  text: '',
+  text: 'Mashed',
   buttonVariant: 'outlined',
   showIcon: false,
   icon: <SaveRounded />,

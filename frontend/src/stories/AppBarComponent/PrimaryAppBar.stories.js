@@ -30,7 +30,7 @@ export default {
 
 export const PrimaryPrimaryAppBar = {
   args: {
-    title: '',
+    title: 'Mashed',
     titleVariant: 'h5',
     elevation: 0,
     selectedID: 1,

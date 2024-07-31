@@ -28,10 +28,10 @@ func RetrieveAllNotifications(user string, userID string) ([]model.Notification,
     COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
     n.updated_at
 FROM
-    asset.notifications n
-LEFT JOIN asset.projects p ON n.project_id = p.id
-LEFT JOIN asset.profiles cp ON n.created_by = cp.id
-LEFT JOIN asset.profiles up ON n.updated_by = up.id
+    community.notifications n
+LEFT JOIN community.projects p ON n.project_id = p.id
+LEFT JOIN community.profiles cp ON n.created_by = cp.id
+LEFT JOIN community.profiles up ON n.updated_by = up.id
 WHERE
     n.created_by = $1
 ORDER BY
@@ -92,7 +92,7 @@ func UpdateSelectedNotification(user string, userID string, draftNotification mo
 	}
 
 	sqlStr := `
-	UPDATE asset.notifications 
+	UPDATE community.notifications 
 	SET isviewed = $2, isresolved = $3, updated_by = $4, updated_at = $5
 	WHERE id = $1 
 	RETURNING id, project_id, title, isviewed, isresolved, created_by, created_at, updated_by, updated_at;

@@ -1,8 +1,8 @@
-# Docker Configuration for Asset Tracker
+# Docker Configuration for Mashed
 
 ## General Introduction and Overaching Concepts
 
-To enable interoperability between platforms and to stay independent of deployment strategies, we have come to realize that using docker should suit our needs. The main objective here is to assign proper containers for all services that are required for the `Asset Tracker` to work. As we work towards this effort, we would like to note that breaking away from our heavily dependent system of supabase is not going to be an easy task.
+To enable interoperability between platforms and to stay independent of deployment strategies, we have come to realize that using docker should suit our needs. The main objective here is to assign proper containers for all services that are required for the `Mashed` to work. As we work towards this effort, we would like to note that breaking away from our heavily dependent system of supabase is not going to be an easy task.
 
 ## Tips and Helpful Guide
 

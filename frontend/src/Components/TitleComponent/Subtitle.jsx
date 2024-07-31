@@ -21,7 +21,7 @@ const Subtitle = ({ subtitle, showIcon, icon }) => {
 };
 
 Subtitle.defaultProps = {
-  subtitle: '',
+  subtitle: 'Mashed',
   showIcon: false,
   icon: {},
 };

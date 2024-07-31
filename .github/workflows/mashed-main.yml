@@ -15,7 +15,7 @@ jobs:
         env:
           POSTGRES_USER: runner
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: asset
+          POSTGRES_DB: community
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -32,9 +32,9 @@ jobs:
       - name: Build Server Code
         run: |
           echo "Attempting to build test container and run migrations..."
-          migrate -database "postgres://runner:password@localhost:5432/asset?sslmode=disable" -path ./server/migrations up
+          migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
           echo "Attempting to insert test data into container ..."
-          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d asset -a -f setup/devscript/test_data.sql
+          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f setup/devscript/test_data.sql
 
       - name: Build Go code
         uses: docker://golang:latest

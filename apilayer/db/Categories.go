@@ -16,7 +16,7 @@ func RetrieveAllCategories(user string) ([]model.Category, error) {
 	}
 	defer db.Close()
 
-	sqlStr := "SELECT id, item_name, created_at, created_by, updated_at, updated_by, sharable_groups FROM asset.category"
+	sqlStr := "SELECT id, item_name, created_at, created_by, updated_at, updated_by, sharable_groups FROM community.category"
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 	}
 
 	sqlStr := `
-	INSERT INTO asset.category(item_name, item_description, created_by, created, updated_by, updated, sharable_groups)
+	INSERT INTO community.category(item_name, item_description, created_by, created, updated_by, updated, sharable_groups)
 	VALUES($1, $2, $3, $4, $5, $6, $7)
 	RETURNING id, item_name, item_description, created, created_by, updated, updated_by, sharable_groups
 	`
@@ -108,7 +108,7 @@ func RemoveCategory(user string, catID string) error {
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM asset.category WHERE id=$1`
+	sqlStr := `DELETE FROM community.category WHERE id=$1`
 	_, err = db.Exec(sqlStr, catID)
 	if err != nil {
 		log.Printf("unable to delete selected category. error: %+v", err)

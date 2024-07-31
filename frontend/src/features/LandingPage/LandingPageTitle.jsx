@@ -39,7 +39,7 @@ const LandingPageTitle = ({ title, titleVariant, elevation }) => {
 };
 
 LandingPageTitle.defaultProps = {
-  title: '',
+  title: 'Mashed',
   titleVariant: 'h5',
   elevation: 0,
 };
