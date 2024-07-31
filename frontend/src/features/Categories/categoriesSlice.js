@@ -25,6 +25,20 @@ const categorySlice = createSlice({
       state.error = '';
       state.categories = [];
     },
+    createCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    createCategorySuccess: (state, action) => {
+      const draftCategory = action.payload;
+      state.categories = [...state.categories, ...draftCategory];
+      state.loading = false;
+      state.error = '';
+    },
+    createCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     removeCategory: (state) => {
       state.loading = true;
       state.error = '';

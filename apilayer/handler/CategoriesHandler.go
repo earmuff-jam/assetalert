@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
+	"github.com/mohit2530/communityCare/model"
 )
 
 // GetAllCategories ...
@@ -31,6 +32,56 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(err)
 		return
 
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// CreateCategory ...
+// swagger:route POST /api/v1/category/{id} CreateCategory createCategory
+//
+// # Create category
+//
+// Parameters:
+//   - +name: name
+//     in: query
+//     description: The category name
+//     type: string
+//     required: true
+//   - +name: description
+//     in: query
+//     description: The category description of the item
+//     type: string
+//     required: true
+//   - +name: color
+//     in: query
+//     description: The user assigned color of the selected category
+//     type: int
+//     required: true
+//
+// Responses:
+// 200: Category
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
+
+	draftCategory := &model.Category{}
+	err := json.NewDecoder(r.Body).Decode(draftCategory)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	resp, err := db.CreateCategory(user, draftCategory)
+	if err != nil {
+		log.Printf("Unable to create new category. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
