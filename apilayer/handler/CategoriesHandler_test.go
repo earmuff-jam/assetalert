@@ -13,7 +13,7 @@ import (
 )
 
 func Test_GetAllCategories(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/categories", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/categories?id=0802c692-b8e2-4824-a870-e52f4a0cccf8&limit=5", nil)
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
 	GetAllCategories(w, req, config.CTO_USER)
