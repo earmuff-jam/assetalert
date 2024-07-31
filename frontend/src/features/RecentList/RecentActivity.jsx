@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
 import { Stack, Typography } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {
@@ -52,14 +51,6 @@ const RecentActivity = ({ activity }) => {
       </Stack>
     </>
   );
-};
-
-RecentActivity.defaultProps = {
-  activity: {},
-};
-
-RecentActivity.propTypes = {
-  activity: PropTypes.object,
 };
 
 export default RecentActivity;
