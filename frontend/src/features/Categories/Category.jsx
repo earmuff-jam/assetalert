@@ -83,7 +83,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                         disableFocusRipple
                         disableTouchRipple
                       >
-                        <DeleteRounded fontSize="small" />
+                        <DeleteRounded fontSize="small" sx={{ color: 'error.main' }}/>
                       </IconButton>
                       <IconButton
                         size="small"
@@ -92,7 +92,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                         disableFocusRipple
                         disableTouchRipple
                       >
-                        <EditNoteRounded fontSize="small" />
+                        <EditNoteRounded fontSize="small" sx={{ color: 'primary.main' }} />
                       </IconButton>
                     </Stack>
                   </CardContent>

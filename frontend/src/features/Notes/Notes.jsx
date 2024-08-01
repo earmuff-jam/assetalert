@@ -22,7 +22,7 @@ const Notes = () => {
   };
 
   useEffect(() => {
-    dispatch(notesActions.getUserNotes());
+    dispatch(notesActions.getNotes());
   }, []);
 
   return (
@@ -36,8 +36,18 @@ const Notes = () => {
         </Button>
       </Stack>
       {editMode && (
-        <SimpleModal title="Add New Note" handleClose={resetData} maxSize="sm">
-          <AddNote setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} noteID={selecteNoteID} />
+        <SimpleModal
+          title="Add New Note"
+          subtitle={'Assigned locations are approximate values.'}
+          handleClose={resetData}
+          maxSize="sm"
+        >
+          <AddNote
+            setEditMode={setEditMode}
+            setSelectedNoteID={setSelectedNoteID}
+            noteID={selecteNoteID}
+            notes={notes}
+          />
         </SimpleModal>
       )}
       <NotesDetails notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />

@@ -18,7 +18,7 @@ POSTGRES_HOST=5432
 # general users
 CLIENT_USER="community_public"
 CLIENT_PASSWORD="password"
-TOKEN_VALIDITY_TIME=7
+TOKEN_VALIDITY_TIME=3600
 
 # test users
 COMMUNITY_TEST_USER="community_test"

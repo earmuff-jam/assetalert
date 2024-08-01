@@ -70,19 +70,32 @@ type RecentHighlight struct {
 	DeactivatedEvents  int `json:"deactivated_events"`
 }
 
+// Location ...
+// swagger:model Location
+//
+// Location object. Used to store the lat and lon details
+type Location struct {
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
+}
+
 // Notes ...
 // swagger:model Notes
 //
 // Notes object. Used to store the note details
 type Note struct {
-	ID          string    `json:"noteID"`
-	Title       string    `json:"title"`
-	Status      string    `json:"status"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"created_at"`
-	CreatedBy   string    `json:"created_by"`
-	Creator     string    `json:"creator"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	UpdatedBy   string    `json:"updated_by"`
-	Updator     string    `json:"updator"`
+	ID             string      `json:"noteID"`
+	Title          string      `json:"title"`
+	Description    string      `json:"description"`
+	Status         string      `json:"status"`
+	Color          string      `json:"color"`
+	CompletionDate *time.Time  `json:"completionDate,omitempty"`
+	Location       Location    `json:"location"`
+	CreatedAt      time.Time   `json:"created_at"`
+	CreatedBy      string      `json:"created_by"`
+	Creator        string      `json:"creator"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	UpdatedBy      string      `json:"updated_by"`
+	Updator        string      `json:"updator"`
+	SharableGroups []uuid.UUID `json:"sharable_groups"`
 }

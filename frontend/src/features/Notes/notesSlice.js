@@ -10,42 +10,40 @@ const notesSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    getUserNotes: (state) => {
+    getNotes: (state) => {
       state.loading = true;
       state.error = '';
       state.notes = [];
     },
-    getUserNotesSuccess: (state, action) => {
+    getNotesSuccess: (state, action) => {
       state.notes = action.payload;
       state.loading = false;
       state.error = '';
     },
-    getUserNotesFailure: (state) => {
+    getNotesFailure: (state) => {
       state.loading = false;
       state.error = '';
       state.notes = [];
     },
-    addNewNote: (state) => {
+    createNote: (state) => {
       state.loading = true;
       state.error = '';
-      state.notes = [];
     },
-    addNewNoteSuccess: (state, action) => {
+    createNoteSuccess: (state, action) => {
       const updatedNotes = action.payload;
       state.loading = false;
       state.error = '';
       state.notes = [updatedNotes, ...state.notes];
     },
-    addNewNoteFailure: (state) => {
+    createNoteFailure: (state) => {
       state.loading = false;
       state.error = '';
-      state.notes = [];
     },
-    updateExistingNote: (state) => {
+    updateNote: (state) => {
       state.loading = true;
       state.error = '';
     },
-    updateExistingNoteSuccess: (state, action) => {
+    updateNoteSuccess: (state, action) => {
       const updatedNotes = action.payload;
       const filteredNotes = [...state.notes].filter((v) => {
         return v.noteID !== updatedNotes.noteID;
@@ -54,16 +52,16 @@ const notesSlice = createSlice({
       state.error = '';
       state.notes = [updatedNotes, ...filteredNotes];
     },
-    updateExistingNoteFailure: (state) => {
+    updateNoteFailure: (state) => {
       state.loading = false;
       state.error = '';
       state.notes = [];
     },
-    removeSelectedNote: (state) => {
+    removeNote: (state) => {
       state.loading = true;
       state.error = '';
     },
-    removeSelectedNoteSuccess: (state, action) => {
+    removeNoteSuccess: (state, action) => {
       const updatedNotesID = action.payload;
       const filteredNotes = [...state.notes].filter((v) => {
         return v.noteID !== updatedNotesID;
@@ -72,7 +70,7 @@ const notesSlice = createSlice({
       state.error = '';
       state.notes = [...filteredNotes];
     },
-    removeSelectedNoteFailure: (state) => {
+    removeNoteFailure: (state) => {
       state.loading = false;
       state.error = '';
       state.notes = [];

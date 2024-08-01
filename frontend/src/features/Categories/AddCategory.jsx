@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_CATEGORY_FORM_FIELDS } from './constants';
@@ -103,14 +103,14 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
   }, [selectedCategoryID]);
 
   return (
-    <Stack>
-      <Stack paddingBottom="2rem">
+    <>
+      <Stack>
         <Typography> Fill in the necessary details</Typography>
         <Typography variant="caption">Add new category.</Typography>
       </Stack>
       <Stack alignItems="center">
-        <Box component="form" sx={{ maxWidth: 600, width: '100%' }}>
-          <Stack spacing={2} useFlexGap>
+        <Stack component="form" spacing="1rem" sx={{ maxWidth: 600, width: '100%' }}>
+          <Stack spacing="1rem">
             {Object.values(formFields).map((v, index) => (
               <TextField
                 key={index}
@@ -138,9 +138,9 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
           >
             {selectedCategoryID ? 'Edit Category' : 'Add Category'}
           </Button>
-        </Box>
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 

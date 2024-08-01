@@ -1,17 +1,34 @@
-import PropTypes from 'prop-types';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Button, Stack, TextField } from '@mui/material';
-import { ADD_NOTES_FORM_FIELDS } from './constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { ADD_NOTES_FORM_FIELDS, NOTES_STATUS_OPTIONS } from './constants';
+import { useDispatch } from 'react-redux';
 import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
-import { profileActions } from '../Profile/profileSlice';
+import { notesActions } from './notesSlice';
+import ColorPicker from '../common/ColorPicker';
+import RetrieveUserLocation from '../common/Location/RetrieveUserLocation';
+import LocationPicker from '../common/Location/LocationPicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import dayjs from 'dayjs';
 
-const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
+const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
   const dispatch = useDispatch();
 
-  const { loading, notes } = useSelector((state) => state.profile);
+  const [planColor, setPlanColor] = useState('#fff');
+  const [location, setLocation] = useState({ lat: 0, long: 0 });
+  const [completionDate, setCompletionDate] = useState(dayjs());
   const [formFields, setFormFields] = useState(ADD_NOTES_FORM_FIELDS);
+  const [status, setStatus] = useState(NOTES_STATUS_OPTIONS[0].label);
+
+  const handleColorChange = (newValue) => {
+    setPlanColor(newValue);
+  };
+
+  const handleStatus = (e) => {
+    setStatus(e.target.value);
+  };
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -22,7 +39,6 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
         errorMsg: '',
       },
     });
-
     for (const validator of updatedFormFields[name].validators) {
       if (validator.validate(value)) {
         updatedFormFields[name].errorMsg = validator.message;
@@ -55,18 +71,23 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
 
     const formattedDraftNotes = {
       ...formattedNotes,
+      color: planColor,
+      status: status,
+      location: location,
+      completionDate: completionDate.toISOString(),
       updated_by: userID,
     };
 
     if (noteID) {
-      // existing noteID support edit mode only
-      dispatch(profileActions.updateExistingNote(formattedDraftNotes));
+      dispatch(notesActions.updateNote(formattedDraftNotes));
     } else {
-      dispatch(profileActions.addNewNote(formattedDraftNotes));
+      dispatch(notesActions.createNote(formattedDraftNotes));
     }
 
     setEditMode(false);
     setSelectedNoteID(null);
+    setPlanColor('#fff');
+    setStatus(NOTES_STATUS_OPTIONS[0].label);
     setFormFields(ADD_NOTES_FORM_FIELDS);
     enqueueSnackbar(noteID ? 'Successfully updated existing item.' : 'Successfully added new item.', {
       variant: 'success',
@@ -74,7 +95,7 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
   };
 
   useEffect(() => {
-    if (!loading && noteID !== null) {
+    if (noteID !== null) {
       const selectedNote = notes.filter((v) => v.noteID === noteID);
       const draftNote = selectedNote[0];
       const updatedFormFields = Object.assign({}, formFields, {
@@ -87,53 +108,107 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID }) => {
           value: draftNote?.description || '',
         },
       });
+
+      if (draftNote?.completionDate) {
+        setCompletionDate(dayjs(draftNote.completionDate));
+      }
+
+      setPlanColor(draftNote.color);
+      setStatus(draftNote.status);
+      setLocation(draftNote.location);
       setFormFields(updatedFormFields);
     } else {
       setFormFields(ADD_NOTES_FORM_FIELDS);
+      setStatus(NOTES_STATUS_OPTIONS[0].label);
+      setPlanColor('#fff');
     }
   }, [noteID]);
 
   return (
     <Stack spacing="1rem">
-      {Object.values(formFields).map((v, index) => (
-        <TextField
-          key={index}
-          id={v.name}
-          name={v.name}
-          label={v.label}
-          value={v.value}
-          placeholder={v.placeholder}
-          onChange={handleInput}
-          required={v.required}
-          fullWidth={v.fullWidth}
-          error={!!v.errorMsg}
-          helperText={v.errorMsg}
-          variant={v.variant}
-          minRows={v.rows || 4}
-          multiline={v.multiline || false}
+      <Stack direction="row" spacing="1rem" alignItems="center" flexGrow="1">
+        <RetrieveUserLocation setLocation={setLocation} />
+        {Object.values(formFields)
+          .slice(0, 1)
+          .map((v, index) => (
+            <TextField
+              key={index}
+              id={v.name}
+              name={v.name}
+              label={v.label}
+              value={v.value}
+              placeholder={v.placeholder}
+              onChange={handleInput}
+              required={v.required}
+              fullWidth={v.fullWidth}
+              error={!!v.errorMsg}
+              helperText={v.errorMsg}
+              variant={v.variant}
+              minRows={v.rows || 4}
+              multiline={v.multiline || false}
+            />
+          ))}
+      </Stack>
+      <Stack direction="row" spacing="1rem">
+        <Stack direction="row" spacing="1rem" alignItems="center" flexGrow="1">
+          {Object.values(formFields)
+            .slice(1)
+            .map((v, index) => (
+              <TextField
+                key={index}
+                id={v.name}
+                name={v.name}
+                label={v.label}
+                value={v.value}
+                placeholder={v.placeholder}
+                onChange={handleInput}
+                required={v.required}
+                fullWidth={v.fullWidth}
+                error={!!v.errorMsg}
+                helperText={v.errorMsg}
+                variant={v.variant}
+                minRows={v.rows || 4}
+                multiline={v.multiline || false}
+              />
+            ))}
+        </Stack>
+        <Box sx={{ boxShadow: 1, borderRadius: 2 }}>{location ? <LocationPicker location={location} /> : null}</Box>
+      </Stack>
+      <FormControl fullWidth>
+        <InputLabel id="status-selector-label">Status</InputLabel>
+        <Select
+          labelId="status-selector-labelId"
+          id="status-selector"
+          value={status}
+          name={'status'}
+          onChange={handleStatus}
+          variant="standard"
+        >
+          {NOTES_STATUS_OPTIONS.map((option) => (
+            <MenuItem key={option.id} value={option.label}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <ColorPicker value={planColor} handleChange={handleColorChange} />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label={'Estimated completion date'}
+          disablePast
+          value={completionDate}
+          onChange={setCompletionDate}
         />
-      ))}
+      </LocalizationProvider>
       <Button
         onClick={submit}
         startIcon={noteID ? <CheckCircleRounded /> : <AddRounded />}
         sx={{ alignSelf: 'flex-start' }}
       >
-        {noteID ? 'Edit Note' : 'Add Note'}
+        {noteID ? 'Save' : 'Add'}
       </Button>
     </Stack>
   );
-};
-
-AddNote.defaultProps = {
-  setEditMode: () => {},
-  noteID: '',
-  setSelectedNoteID: () => {},
-};
-
-AddNote.propTypes = {
-  setEditMode: PropTypes.func,
-  setSelectedNoteID: PropTypes.func,
-  noteID: PropTypes.string,
 };
 
 export default AddNote;

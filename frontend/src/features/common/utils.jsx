@@ -101,12 +101,7 @@ export const categorizeNotes = (notes) => {
 
     acc[category].details.push({
       id: acc[category].details.length + 1,
-      noteID: item.noteID,
-      note_title: item.title,
-      note_description: item.description,
-      updated_by: item.updated_by,
-      updated_at: item.updated_at,
-      updator: item.updator,
+      ...item,
     });
 
     acc[category].totalNotes++;

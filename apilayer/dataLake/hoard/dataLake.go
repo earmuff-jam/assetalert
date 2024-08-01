@@ -86,7 +86,6 @@ func populateFakeNotes(user string, limit int, creatorID string) {
 		startDate := now.AddDate(0, 0, -daysAgo)
 
 		draftNote.Title = gofakeit.JobTitle()
-		draftNote.Status = gofakeit.JobLevel()
 		draftNote.Description = gofakeit.HipsterSentence(2)
 		draftNote.CreatedAt = startDate
 		draftNote.UpdatedAt = startDate

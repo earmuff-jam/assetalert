@@ -1,22 +1,25 @@
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { profileActions } from '../Profile/profileSlice';
 import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Chip,
   IconButton,
   Skeleton,
   Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { categorizeNotes, ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { notesActions } from './notesSlice';
+import { NOTES_STATUS_OPTIONS } from './constants';
+import LocationPicker from '../common/Location/LocationPicker';
 
 const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
@@ -37,11 +40,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   };
 
   const removeSelectedNote = (noteID) => {
-    const formattedDraftNotes = {
-      noteID: noteID,
-      updated_by: localStorage.getItem('userID'),
-    };
-    dispatch(profileActions.removeSelectedNote(formattedDraftNotes));
+    dispatch(notesActions.removeNote({ noteID }));
     enqueueSnackbar('Successfully removed notes.', {
       variant: 'success',
     });
@@ -61,7 +60,6 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   if (!notes || notes.length === 0) {
     return <DisplayNoMatchingRecordsComponent subtitle="Add new notes." />;
   }
-
   return (
     <div>
       {formattedNotes.map((v, index) => (
@@ -77,10 +75,18 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
               {v.details.map((note, index) => (
                 <Stack
                   key={index}
-                  sx={{ bgcolor: 'secondary.light', justifyContent: 'space-between', flexGrow: 1, p: 1, borderRadius: '0.2rem' }}
+                  sx={{
+                    bgcolor: 'secondary.light',
+                    justifyContent: 'space-between',
+                    flexGrow: 1,
+                    p: 1,
+                    borderRadius: '0.2rem',
+                    borderLeft: '0.175rem solid',
+                    borderColor: note.color ? `${note.color}` : 'primary.main',
+                  }}
                 >
                   <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h6">{note.note_title}</Typography>
+                    <Typography variant="h6">{note.title}</Typography>
                     <Stack direction="row" alignSelf="flex-end">
                       <IconButton
                         onClick={() => {
@@ -89,7 +95,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                         }}
                         size="small"
                       >
-                        <DeleteRounded fontSize="small" />
+                        <DeleteRounded fontSize="small" color="error" />
                       </IconButton>
                       <IconButton
                         onClick={() => {
@@ -98,13 +104,32 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                         }}
                         size="small"
                       >
-                        <EditRounded fontSize="small" />
+                        <EditRounded fontSize="small" color="primary" />
                       </IconButton>
                     </Stack>
                   </Stack>
-                  <Typography variant="body2">{note.note_description}</Typography>
-                  <Typography variant="caption" alignSelf="flex-end">{note.updator}</Typography>
-                  <Typography variant="caption" alignSelf="flex-end">{dayjs(note.updated_at).fromNow()}</Typography>
+                  <Typography variant="body2">{note.description}</Typography>
+                  <Stack sx={{ mt: '1rem' }}>
+                    <LocationPicker location={note.location} /> {/* Location Picker */}
+                  </Stack>
+                  <Row>
+                    <>
+                      <Box>
+                        <Typography variant="caption">
+                          By {note.updator} {dayjs(note.updated_at).fromNow()}
+                        </Typography>
+                        <Typography variant="caption"></Typography>
+                      </Box>
+                      <Tooltip title={NOTES_STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status).label}>
+                        <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
+                          <Typography variant="caption" alignSelf="flex-end">
+                            Status:
+                          </Typography>
+                          {NOTES_STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status).icon}
+                        </Stack>
+                      </Tooltip>
+                    </>
+                  </Row>
                 </Stack>
               ))}
             </Stack>
@@ -125,18 +150,12 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   );
 };
 
-NotesDetails.defaultProps = {
-  notes: [],
-  loading: false,
-  setEditMode: () => {},
-  setSelectedNoteID: () => {},
-};
-
-NotesDetails.propTypes = {
-  setEditMode: PropTypes.func,
-  setSelectedNoteID: PropTypes.func,
-  notes: PropTypes.array,
-  loading: PropTypes.bool,
+const Row = ({ children }) => {
+  return (
+    <Stack direction="row" spacing="0.2rem" alignItems="center" justifyContent="space-between">
+      {children}
+    </Stack>
+  );
 };
 
 export default NotesDetails;
