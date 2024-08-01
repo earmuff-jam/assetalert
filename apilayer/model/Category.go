@@ -13,8 +13,8 @@ type Category struct {
 	Color          string    `json:"color"`
 	ItemLimit      int       `json:"item_limit"`
 	CreatedBy      string    `json:"created_by"`
-	Created        time.Time `json:"created_at"`
+	CreatedAt      time.Time `json:"created_at"`
 	UpdatedBy      string    `json:"updated_by"`
-	Updated        time.Time `json:"updated_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
 	SharableGroups []string  `json:"sharable_groups"`
 }
