@@ -3,23 +3,38 @@ import { categoryActions } from './categoriesSlice';
 import { REACT_APP_LOCALHOST_URL } from '../../util/Common';
 import instance from '../../util/Instances';
 
+const DEFAULT_LIMIT = 10;
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
 export function* getCategories() {
   try {
-    const response = yield call(instance.get, `${BASEURL}/categories`);
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    params.append('limit', DEFAULT_LIMIT);
+    const response = yield call(instance.get, `${BASEURL}/categories?${params.toString()}`);
     yield put(categoryActions.getCategoriesSuccess(response.data));
   } catch (e) {
     yield put(categoryActions.getCategoriesFailure(e));
   }
 }
 
-export function* createCategory() {
+export function* createCategory(action) {
   try {
-    const response = yield call(instance.post, `${BASEURL}/categories`);
+    const response = yield call(instance.post, `${BASEURL}/category`, { ...action.payload });
     yield put(categoryActions.createCategorySuccess(response.data));
   } catch (e) {
     yield put(categoryActions.createCategoryFailure(e));
+  }
+}
+
+export function* updateCategory(action) {
+  try {
+    const { id } = action.payload;
+    const response = yield call(instance.put, `${BASEURL}/category/${id}`, { ...action.payload });
+    yield put(categoryActions.updateCategorySuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.updateCategoryFailure(e));
   }
 }
 
@@ -41,8 +56,12 @@ export function* watchCreateCategory() {
   yield takeLatest(`category/createCategory`, createCategory);
 }
 
+export function* watchUpdateCategory() {
+  yield takeLatest(`category/updateCategory`, updateCategory);
+}
+
 export function* watchRemoveCategory() {
   yield takeLatest(`category/removeCategory`, removeCategory);
 }
 
-export default [watchGetCategoryList, watchCreateCategory, watchRemoveCategory];
+export default [watchGetCategoryList, watchCreateCategory, watchUpdateCategory, watchRemoveCategory];

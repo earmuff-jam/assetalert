@@ -1,5 +1,5 @@
 import { Card, CardActions, CardContent, IconButton, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
-import { DeleteRounded, EditNoteRounded, TrendingUpRounded } from '@mui/icons-material';
+import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../common/utils';
 import { useDispatch } from 'react-redux';
@@ -61,16 +61,19 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                   flexDirection: 'column',
                 }}
               >
-                <Tooltip title={item.category_description}>
+                <Tooltip title={item.description}>
                   <CardContent>
                     <Stack direction="row">
                       <Stack flexGrow={1}>
                         <Typography variant="h6" component="h3">
-                          {item.category_name}
+                          {item.name}
                         </Typography>
                         <Stack direction="row" alignItems="center" useFlexGap spacing={1}>
-                          <TrendingUpRounded color={index % 2 == 0 ? 'success' : 'error'} />
-                          <Typography variant="caption">Total {item?.totalAssignedItems?.length ?? 0} items</Typography>
+                          <AlarmAddRounded
+                            fontSize="small"
+                            sx={{ color: item.color ? `${item.color}` : 'primary.main' }}
+                          />
+                          <Typography variant="caption">Limit: {item?.item_limit} item </Typography>
                         </Stack>
                       </Stack>
                       <IconButton

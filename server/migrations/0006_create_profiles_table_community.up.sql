@@ -1,5 +1,5 @@
 
--- File: 0008_create_profiles_table_community.up.sql
+-- File: 0006_create_profiles_table_community.up.sql
 -- Description: Create the users profile table and grant permissions on the table.
 
 SET search_path TO community, public;

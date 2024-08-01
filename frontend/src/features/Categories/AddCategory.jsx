@@ -48,16 +48,31 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
       return;
     }
 
-    const draftCategories = {
-      ...formFields,
-      updated_by: userID,
-    };
+    const formattedData = Object.values(formFields).reduce((acc, el) => {
+      if (el.value) {
+        acc[el.name] = el.value;
+      }
+      return acc;
+    }, {});
 
+    // seperated to prevent updating sharable groups
     if (selectedCategoryID) {
-      // existing categoryID support edit mode only
-      dispatch(categoryActions.updateExistingCategory(draftCategories));
+      const draftCategories = {
+        id: selectedCategoryID,
+        ...formattedData,
+        color: planColor,
+        updated_by: userID,
+      };
+      dispatch(categoryActions.updateCategory(draftCategories));
     } else {
-      dispatch(categoryActions.addNewCategory(draftCategories));
+      const draftCategories = {
+        ...formattedData,
+        color: planColor,
+        created_by: userID,
+        updated_by: userID,
+        sharable_groups: [userID],
+      };
+      dispatch(categoryActions.createCategory(draftCategories));
     }
 
     setSelectedCategoryID(null);
@@ -70,18 +85,20 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
     if (!loading && selectedCategoryID !== null) {
       const draftCategory = categories.filter((v) => v.id === selectedCategoryID).find(() => true);
       const updatedFormFields = Object.assign({}, formFields, {
-        category_name: {
-          ...formFields.category_name,
-          value: draftCategory?.category_name || '',
+        name: {
+          ...formFields.name,
+          value: draftCategory?.name || '',
         },
-        category_description: {
-          ...formFields.category_description,
-          value: draftCategory?.category_description || '',
+        description: {
+          ...formFields.description,
+          value: draftCategory?.description || '',
         },
       });
       setFormFields(updatedFormFields);
+      setPlanColor(draftCategory.color);
     } else {
       setFormFields(ADD_CATEGORY_FORM_FIELDS);
+      setPlanColor('#fff');
     }
   }, [selectedCategoryID]);
 

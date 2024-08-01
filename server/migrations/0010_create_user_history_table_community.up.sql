@@ -1,5 +1,5 @@
 
--- File: 0020_create_user_history_table_community.up.sql
+-- File: 0010_create_user_history_table_community.up.sql
 -- Description: Create the user history table
 
 SET search_path TO auth, public;

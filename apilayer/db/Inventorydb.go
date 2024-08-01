@@ -55,8 +55,6 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
     inv.quantity,
 	inv.bought_at,
     inv.location,
-	inv.is_transfer_allocated,
-	p.title,
     inv.storage_location_id,
 	inv.is_returnable,
 	inv.return_location,
@@ -72,7 +70,6 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
     inv.updated_at
 FROM
     community.inventory inv
-LEFT JOIN community.projects p ON inv.associated_event_id = p.id
 LEFT JOIN community.profiles cp ON inv.created_by = cp.id
 LEFT JOIN community.profiles up ON inv.updated_by = up.id
 WHERE
@@ -96,8 +93,6 @@ ORDER BY
 		var minWeight sql.NullString
 		var maxHeight sql.NullString
 		var minHeight sql.NullString
-		var isTransferAllocated sql.NullBool
-		var associatedEventTitle sql.NullString
 
 		if err := rows.Scan(
 			&inventory.ID,
@@ -110,8 +105,6 @@ ORDER BY
 			&inventory.Quantity,
 			&inventory.BoughtAt,
 			&inventory.Location,
-			&isTransferAllocated,
-			&associatedEventTitle,
 			&inventory.StorageLocationID,
 			&inventory.IsReturnable,
 			&returnLocation,
@@ -129,12 +122,6 @@ ORDER BY
 			return nil, err
 		}
 
-		if isTransferAllocated.Valid {
-			inventory.IsTransferAllocated = isTransferAllocated.Bool
-		}
-		if associatedEventTitle.Valid {
-			inventory.AssociatedEventTitle = associatedEventTitle.String
-		}
 		if returnLocation.Valid {
 			inventory.ReturnLocation = returnLocation.String
 		}
@@ -237,8 +224,6 @@ ORDER BY
 	var minWeight sql.NullString
 	var maxHeight sql.NullString
 	var minHeight sql.NullString
-	var isTransferAllocated sql.NullBool
-	var associatedEventTitle sql.NullString
 
 	err := row.Scan(
 		&inventory.ID,
@@ -251,8 +236,6 @@ ORDER BY
 		&inventory.Quantity,
 		&inventory.BoughtAt,
 		&inventory.Location,
-		&isTransferAllocated,
-		&associatedEventTitle,
 		&inventory.StorageLocationID,
 		&inventory.IsReturnable,
 		&returnLocation,
@@ -275,12 +258,6 @@ ORDER BY
 		return nil, err // An actual error occurred
 	}
 
-	if isTransferAllocated.Valid {
-		inventory.IsTransferAllocated = isTransferAllocated.Bool
-	}
-	if associatedEventTitle.Valid {
-		inventory.AssociatedEventTitle = associatedEventTitle.String
-	}
 	if returnLocation.Valid {
 		inventory.ReturnLocation = returnLocation.String
 	}

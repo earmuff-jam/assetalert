@@ -31,11 +31,26 @@ const categorySlice = createSlice({
     },
     createCategorySuccess: (state, action) => {
       const draftCategory = action.payload;
-      state.categories = [...state.categories, ...draftCategory];
+      state.categories = [...state.categories, draftCategory];
       state.loading = false;
       state.error = '';
     },
     createCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    updateCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateCategorySuccess: (state, action) => {
+      const draftCategory = action.payload;
+      const formattedCategories = state.categories.filter((v) => v.id === draftCategory.id);
+      state.categories = [...formattedCategories, draftCategory];
+      state.loading = false;
+      state.error = '';
+    },
+    updateCategoryFailure: (state) => {
       state.loading = false;
       state.error = '';
     },
