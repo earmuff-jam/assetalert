@@ -13,11 +13,13 @@ about_me = 'I like to climb trees and hike with my friends'
 WHERE email_address = 'test@gmail.com';
 
 -- ADD NOTES SQL TEST DATA --
-INSERT INTO community.notes (title, description, status, created_by, updated_by, sharable_groups)
+INSERT INTO community.notes (title, description, status, color, location, created_by, updated_by, sharable_groups)
 VALUES (
     'Buy kitty litter for four of my kittens',
     'Do not buy the brand from walmart, buy from a generic well known place',
-    '',
+    'archived',
+    '#2a6dbc',
+     '(-97.3635584, 30.1268992)',
     (SELECT id FROM community.profiles p LIMIT 1),
     (SELECT id FROM community.profiles p LIMIT 1),
     ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]

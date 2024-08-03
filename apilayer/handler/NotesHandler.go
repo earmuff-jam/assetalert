@@ -11,10 +11,10 @@ import (
 	"github.com/mohit2530/communityCare/model"
 )
 
-// GetUserNotesDetails ...
-// swagger:route GET /api/profile/{id}/notes GetUserNotesDetails getUserNotesDetails
+// GetNotes ...
+// swagger:route GET /api/profile/{id}/notes GetNotes getNotes
 //
-// # Retrieves the list of notes for the user.
+// # Retrieves the list of notes for the selected user
 //
 // Parameters:
 //   - +name: id
@@ -28,7 +28,7 @@ import (
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
+func GetNotes(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
 	if !ok || len(id) <= 0 {
@@ -46,7 +46,7 @@ func GetUserNotesDetails(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	resp, err := db.RetrieveUserNotes(user, parsedUUID)
+	resp, err := db.RetrieveNotes(user, parsedUUID)
 	if err != nil {
 		log.Printf("Unable to retrieve notes. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -150,7 +150,7 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	resp, err := db.UpdateSelectedNote(user, userID, note)
+	resp, err := db.UpdateNote(user, userID, note)
 	if err != nil {
 		log.Printf("Unable to update notes. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -162,8 +162,8 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// RemoveSelectedNote ...
-// swagger:route DELETE /api/profile/{id}/notes RemoveSelectedNote removeSelectedNote
+// RemoveNote ...
+// swagger:route DELETE /api/profile/{id}/notes RemoveNote removeNote
 //
 // # Removes the note from the db
 //
@@ -179,7 +179,7 @@ func UpdateNote(rw http.ResponseWriter, r *http.Request, user string) {
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
+func RemoveNote(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
 	noteID := vars["noteID"]
@@ -201,7 +201,7 @@ func RemoveSelectedNote(rw http.ResponseWriter, r *http.Request, user string) {
 	var note model.Note
 	note.ID = noteID
 
-	err := db.RemoveSelectedNote(user, note.ID)
+	err := db.RemoveNote(user, note.ID)
 	if err != nil {
 		log.Printf("Unable to remove notes. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)

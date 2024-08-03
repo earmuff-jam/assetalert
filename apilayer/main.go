@@ -83,10 +83,10 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/inventories/prune", CustomRequestHandler(handler.RemoveSelectedInventory)).Methods(http.MethodPost)
 
 	// notes
-	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetUserNotesDetails)).Methods(http.MethodGet)
+	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetNotes)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.AddNewNote)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.UpdateNote)).Methods(http.MethodPut)
-	router.Handle("/api/v1/profile/{id}/notes/{noteID}", CustomRequestHandler(handler.RemoveSelectedNote)).Methods(http.MethodDelete)
+	router.Handle("/api/v1/profile/{id}/notes/{noteID}", CustomRequestHandler(handler.RemoveNote)).Methods(http.MethodDelete)
 
 	cors := handlers.CORS(
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),

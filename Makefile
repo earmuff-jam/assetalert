@@ -5,7 +5,7 @@ include .env
 swagger:
 	cd apilayer && swagger generate spec -o swagger.yaml --scan-models
 
-# load api in development instance.
+# load api in development instance
 startserver:
 	cd apilayer && \
 	GO111MODULE=on \
@@ -20,7 +20,18 @@ apitest:
 	cd apilayer/handler && \
 	go test -coverprofile=../logs/coverage.out ./... && go tool cover -func=../logs/coverage.out
 
-# load ui in development instance.
+# load ui for the first time; fresh install and start ui client
+runClient:
+	cd frontend && \
+	yarn && \
+	yarn dev
+
+# load ui in development instance
 startclient:
 	cd frontend && \
 	yarn dev
+
+# run the lint in frontend code
+linter:
+	cd frontend && \
+	yarn lint

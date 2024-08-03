@@ -1,5 +1,23 @@
 import { Button, Stack, Typography } from '@mui/material';
 import SimpleModal from './SimpleModal';
+import CryptoJS from 'crypto-js';
+
+/**
+ * Function used to decrypt the client location from the local storage. To prevent XSS attacks on
+ * the client web provider, we are using CyrptoJS lib to persist a scrambled version of the user location.
+ *
+ * @returns parsed and validated user location data
+ */
+export const RetrieveClientLocation = () => {
+  const ciphertext = localStorage.getItem('client_location');
+  if (ciphertext) {
+    const userID = localStorage.getItem('userID');
+    const bytes = CryptoJS.AES.decrypt(ciphertext, userID);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    return decryptedData;
+  }
+  return null;
+};
 
 /**
  * display no matching records found component if there are no records
@@ -64,7 +82,6 @@ export const generateTitleColor = (row, isCategory, override) => {
   return { title, color };
 };
 
-
 /**
  * Takes array of notes and transforms them into objects categorized by the date and time
  *
@@ -101,12 +118,7 @@ export const categorizeNotes = (notes) => {
 
     acc[category].details.push({
       id: acc[category].details.length + 1,
-      noteID: item.noteID,
-      note_title: item.title,
-      note_description: item.description,
-      updated_by: item.updated_by,
-      updated_at: item.updated_at,
-      updator: item.updator,
+      ...item,
     });
 
     acc[category].totalNotes++;

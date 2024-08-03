@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Autocomplete } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import RetrieveUserLocation from './RetrieveUserLocation';
+import RetrieveUserLocation from '../../features/common/Location/RetrieveUserLocation';
 import { FiberManualRecordRounded } from '@mui/icons-material';
 import { Box, TextField, Typography } from '@mui/material';
 

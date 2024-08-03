@@ -1,3 +1,13 @@
+import {
+  AnnouncementRounded,
+  ArchiveRounded,
+  CancelRounded,
+  CheckCircleRounded,
+  DraftsRounded,
+  NoteRounded,
+  PendingActionsRounded,
+} from '@mui/icons-material';
+
 const GENERIC_FORM_FIELDS = {
   type: 'text',
   variant: 'outlined',
@@ -10,6 +20,45 @@ const GENERIC_TEXTAREA_VARIANT = {
   variant: 'outlined',
   fullWidth: true,
 };
+
+// these options are as enum in db
+export const NOTES_STATUS_OPTIONS = [
+  {
+    id: 1,
+    label: 'draft',
+    icon: <DraftsRounded fontSize="small" color="primary" />,
+  },
+  {
+    id: 2,
+    label: 'archived',
+    icon: <ArchiveRounded fontSize="small" color="secondary" />,
+  },
+  {
+    id: 3,
+    label: 'completed',
+    icon: <CheckCircleRounded fontSize="small" color="primary" />,
+  },
+  {
+    id: 4,
+    label: 'pending',
+    icon: <PendingActionsRounded fontSize="small" color="secondary" />,
+  },
+  {
+    id: 5,
+    label: 'urgent',
+    icon: <AnnouncementRounded fontSize="small" color="info" />,
+  },
+  {
+    id: 6,
+    label: 'general',
+    icon: <NoteRounded fontSize="small" color="info" />,
+  },
+  {
+    id: 7,
+    label: 'cancelled',
+    icon: <CancelRounded fontSize="small" color="error" />,
+  },
+];
 
 export const ADD_NOTES_FORM_FIELDS = {
   title: {
