@@ -16,9 +16,9 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { categorizeNotes, ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { notesActions } from './notesSlice';
-import { NOTES_STATUS_OPTIONS } from './constants';
+import { STATUS_OPTIONS } from './constants';
 import LocationPicker from '../common/Location/LocationPicker';
 
 const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
@@ -58,8 +58,9 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   }
 
   if (!notes || notes.length === 0) {
-    return <DisplayNoMatchingRecordsComponent subtitle="Add new notes." />;
+    return <EmptyComponent subtitle="Add new notes." />;
   }
+
   return (
     <div>
       {formattedNotes.map((v, index) => (
@@ -118,14 +119,13 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                         <Typography variant="caption">
                           By {note.updator} {dayjs(note.updated_at).fromNow()}
                         </Typography>
-                        <Typography variant="caption"></Typography>
                       </Box>
-                      <Tooltip title={NOTES_STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status).label}>
+                      <Tooltip title={STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.display}>
                         <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
                           <Typography variant="caption" alignSelf="flex-end">
                             Status:
                           </Typography>
-                          {NOTES_STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status).icon}
+                          {STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.icon}
                         </Stack>
                       </Tooltip>
                     </>

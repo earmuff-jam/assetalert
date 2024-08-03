@@ -84,18 +84,20 @@ type Location struct {
 //
 // Notes object. Used to store the note details
 type Note struct {
-	ID             string      `json:"noteID"`
-	Title          string      `json:"title"`
-	Description    string      `json:"description"`
-	Status         string      `json:"status"`
-	Color          string      `json:"color"`
-	CompletionDate *time.Time  `json:"completionDate,omitempty"`
-	Location       Location    `json:"location"`
-	CreatedAt      time.Time   `json:"created_at"`
-	CreatedBy      string      `json:"created_by"`
-	Creator        string      `json:"creator"`
-	UpdatedAt      time.Time   `json:"updated_at"`
-	UpdatedBy      string      `json:"updated_by"`
-	Updator        string      `json:"updator"`
-	SharableGroups []uuid.UUID `json:"sharable_groups"`
+	ID                string      `json:"noteID"`
+	Title             string      `json:"title"`
+	Description       string      `json:"description"`
+	Status            string      `json:"status"`
+	StatusName        string      `json:"status_name"`
+	StatusDescription string      `json:"status_description"`
+	Color             string      `json:"color"`
+	CompletionDate    *time.Time  `json:"completionDate,omitempty"`
+	Location          Location    `json:"location,omitempty"`
+	CreatedAt         time.Time   `json:"created_at"`
+	CreatedBy         string      `json:"created_by"`
+	Creator           string      `json:"creator"`
+	UpdatedAt         time.Time   `json:"updated_at"`
+	UpdatedBy         string      `json:"updated_by"`
+	Updator           string      `json:"updator"`
+	SharableGroups    []uuid.UUID `json:"sharable_groups"`
 }

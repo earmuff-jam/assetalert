@@ -3,7 +3,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
-import { ADD_NOTES_FORM_FIELDS, NOTES_STATUS_OPTIONS } from './constants';
+import { ADD_NOTES_FORM_FIELDS, STATUS_OPTIONS } from './constants';
 import { useDispatch } from 'react-redux';
 import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
 import { notesActions } from './notesSlice';
@@ -16,11 +16,11 @@ import dayjs from 'dayjs';
 const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
   const dispatch = useDispatch();
 
-  const [planColor, setPlanColor] = useState('#fff');
+  const [planColor, setPlanColor] = useState('#f7f7f7');
   const [location, setLocation] = useState({ lat: 0, long: 0 });
   const [completionDate, setCompletionDate] = useState(dayjs());
   const [formFields, setFormFields] = useState(ADD_NOTES_FORM_FIELDS);
-  const [status, setStatus] = useState(NOTES_STATUS_OPTIONS[0].label);
+  const [status, setStatus] = useState(STATUS_OPTIONS[0].label);
 
   const handleColorChange = (newValue) => {
     setPlanColor(newValue);
@@ -86,8 +86,8 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
 
     setEditMode(false);
     setSelectedNoteID(null);
-    setPlanColor('#fff');
-    setStatus(NOTES_STATUS_OPTIONS[0].label);
+    setPlanColor('#f7f7f7');
+    setStatus(STATUS_OPTIONS[0].label);
     setFormFields(ADD_NOTES_FORM_FIELDS);
     enqueueSnackbar(noteID ? 'Successfully updated existing item.' : 'Successfully added new item.', {
       variant: 'success',
@@ -114,13 +114,13 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
       }
 
       setPlanColor(draftNote.color);
-      setStatus(draftNote.status);
+      setStatus(draftNote.status_name);
       setLocation(draftNote.location);
       setFormFields(updatedFormFields);
     } else {
       setFormFields(ADD_NOTES_FORM_FIELDS);
-      setStatus(NOTES_STATUS_OPTIONS[0].label);
-      setPlanColor('#fff');
+      setStatus(STATUS_OPTIONS[0].label);
+      setPlanColor('#f7f7f7');
     }
   }, [noteID]);
 
@@ -149,7 +149,13 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
           ))}
         <RetrieveUserLocation setLocation={setLocation} />
       </Stack>
-      <Stack direction="row" spacing="1rem">
+      <Stack
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
         {Object.values(formFields)
           .slice(1)
           .map((v, index) => (
@@ -173,7 +179,7 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
         {location ? <LocationPicker subtitle="Select location" location={location} /> : null}
       </Stack>
       <FormControl fullWidth>
-        <InputLabel id="status-selector-label">Status</InputLabel>
+        <InputLabel id="status-selector-label">Selected status</InputLabel>
         <Select
           labelId="status-selector-labelId"
           id="status-selector"
@@ -182,9 +188,9 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
           onChange={handleStatus}
           variant="standard"
         >
-          {NOTES_STATUS_OPTIONS.map((option) => (
+          {STATUS_OPTIONS.map((option) => (
             <MenuItem key={option.id} value={option.label}>
-              {option.label}
+              {option.display}
             </MenuItem>
           ))}
         </Select>

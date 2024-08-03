@@ -5,7 +5,7 @@ import ColorPicker from '../common/ColorPicker';
 
 const AddPlan = ({ handleCloseAddNewPlan }) => {
 
-  const [planColor, setPlanColor] = useState('#fff');
+  const [planColor, setPlanColor] = useState('#f7f7f7');
   const [planType, setPlanType] = useState('7'); // default annual maintenance plan
   const [formData, setFormData] = useState({
     ...BLANK_MAINTENANCE_PLAN,
@@ -39,7 +39,7 @@ const AddPlan = ({ handleCloseAddNewPlan }) => {
   const resetData = () => {
     setFormData({ ...BLANK_MAINTENANCE_PLAN });
     setPlanType('7'); // annual
-    setPlanColor('#fff');
+    setPlanColor('#f7f7f7');
     handleCloseAddNewPlan();
   };
 

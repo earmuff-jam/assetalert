@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"time"
 
@@ -21,23 +22,26 @@ func RetrieveNotes(user string, userID uuid.UUID) ([]model.Note, error) {
 	sqlStr := `SELECT 
 	n.id,
 	n.title, 
-	n.description, 
-	n.status,
+	n.description,
+	s.id,
+	s.name AS status_name,
+	s.description AS status_description,
 	n.color,
 	n.completionDate,
 	n.location[0] AS lon, -- Extract longitude from POINT
 	n.location[1] AS lat, -- Extract latitude from POINT
-	n.created_at, 
-	n.created_by, 
-	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator_name, 
-	n.updated_at, 
+	n.created_at,
+	n.created_by,
+	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator_name,
+	n.updated_at,
 	n.updated_by,
 	COALESCE(up.full_name, up.username, up.email_address)  AS updater_name
 	FROM community.notes n
+	LEFT JOIN community.statuses s on s.id = n.status
 	LEFT JOIN community.profiles cp on cp.id = n.created_by
 	LEFT JOIN community.profiles up on up.id = n.updated_by
-	WHERE n.created_by = $1 OR n.updated_by = $1 
-	ORDER BY n.updated_at DESC`
+	WHERE $1::UUID = ANY(n.sharable_groups)
+	ORDER BY n.updated_at DESC;`
 
 	rows, err := db.Query(sqlStr, userID)
 	if err != nil {
@@ -50,9 +54,12 @@ func RetrieveNotes(user string, userID uuid.UUID) ([]model.Note, error) {
 	for rows.Next() {
 		var note model.Note
 		var lon, lat sql.NullFloat64
+		var statusID sql.NullString
+		var statusName sql.NullString
+		var statusDescription sql.NullString
 		var completionDate sql.NullTime
 
-		if err := rows.Scan(&note.ID, &note.Title, &note.Description, &note.Status, &note.Color, &completionDate, &lon, &lat, &note.CreatedAt, &note.CreatedBy, &note.Creator, &note.UpdatedAt, &note.UpdatedBy, &note.Updator); err != nil {
+		if err := rows.Scan(&note.ID, &note.Title, &note.Description, &statusID, &statusName, &statusDescription, &note.Color, &completionDate, &lon, &lat, &note.CreatedAt, &note.CreatedBy, &note.Creator, &note.UpdatedAt, &note.UpdatedBy, &note.Updator); err != nil {
 			return nil, err
 		}
 
@@ -60,6 +67,18 @@ func RetrieveNotes(user string, userID uuid.UUID) ([]model.Note, error) {
 			note.CompletionDate = &completionDate.Time
 		} else {
 			note.CompletionDate = nil
+		}
+
+		if statusID.Valid {
+			note.Status = statusID.String
+		}
+
+		if statusName.Valid {
+			note.StatusName = statusName.String
+		}
+
+		if statusDescription.Valid {
+			note.StatusDescription = statusDescription.String
 		}
 
 		if lon.Valid && lat.Valid {
@@ -87,9 +106,18 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	}
 	defer db.Close()
 
+	// retrieve selected status
+	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status)
+	if err != nil {
+		return nil, err
+	}
+	if selectedStatusDetails == nil {
+		return nil, errors.New("unable to find selected status")
+	}
+
 	addSqlStr := `
-		INSERT INTO community.notes (title, description, color, completionDate, location, created_by, updated_by, sharable_groups) 
-		VALUES ($1, $2, $3, $4, POINT($5, $6), $7, $8, $9) 
+		INSERT INTO community.notes (title, description, status, color, completionDate, location, created_by, updated_by, sharable_groups) 
+		VALUES ($1, $2, $3, $4, $5, POINT($6, $7), $8, $9, $10) 
 		RETURNING id;`
 
 	parsedCreatorID, err := uuid.Parse(draftNote.UpdatedBy)
@@ -113,6 +141,7 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		addSqlStr,
 		draftNote.Title,
 		draftNote.Description,
+		selectedStatusDetails.ID,
 		draftNote.Color,
 		draftNote.CompletionDate,
 		draftNote.Location.Lon,
@@ -131,7 +160,30 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		return nil, err
 	}
 
+	retrieveUserDetailsSqlStr := `SELECT id, username, full_name from community.profiles p where p.id = $1;`
+	row := db.QueryRow(retrieveUserDetailsSqlStr, userID)
+
+	var creatorID string
+	var creatorUsername string
+	var creatorFullName string
+	err = row.Scan(&creatorID, &creatorUsername, &creatorFullName)
+	if err != nil {
+		log.Printf("creator not found. error :%+v", err)
+		return nil, err
+	}
+
 	draftNote.ID = draftNoteID
+	draftNote.StatusName = selectedStatusDetails.Name
+	draftNote.StatusDescription = selectedStatusDetails.Description
+
+	if len(creatorUsername) > 0 {
+		// creator === updator for the 1st time
+		draftNote.Creator = creatorUsername
+		draftNote.Updator = creatorUsername
+	} else {
+		draftNote.Creator = creatorFullName
+		draftNote.Updator = creatorFullName
+	}
 	return &draftNote, nil
 }
 
@@ -143,7 +195,25 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	}
 	defer db.Close()
 
-	updateSqlStr := "UPDATE community.notes SET title = $2, description = $3, status = $4, color = $5, updated_by = $6, updated_at = $7 WHERE id = $1  RETURNING id, title, description, status, color, created_at, created_by, updated_at, updated_by;"
+	// retrieve selected status
+	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status)
+	if err != nil {
+		return nil, err
+	}
+	if selectedStatusDetails == nil {
+		return nil, errors.New("unable to find selected status")
+	}
+
+	updateSqlStr := `UPDATE community.notes 
+	SET
+	title = $2,
+	description = $3,
+	status = $4,
+	color = $5,
+	updated_by = $6,
+	updated_at = $7
+	WHERE id = $1
+	RETURNING id, title, description, color, created_at, created_by, updated_at, updated_by;`
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -156,13 +226,14 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		tx.Rollback()
 		return nil, err
 	}
+
 	var updatedNote model.Note
 
 	row := tx.QueryRow(updateSqlStr,
 		draftNote.ID,
 		draftNote.Title,
 		draftNote.Description,
-		draftNote.Status,
+		selectedStatusDetails.ID,
 		draftNote.Color,
 		parsedCreatorID,
 		time.Now(),
@@ -172,13 +243,16 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		&updatedNote.ID,
 		&updatedNote.Title,
 		&updatedNote.Description,
-		&updatedNote.Status,
 		&updatedNote.Color,
 		&updatedNote.CreatedAt,
 		&updatedNote.CreatedBy,
 		&updatedNote.UpdatedAt,
 		&updatedNote.UpdatedBy,
 	)
+
+	updatedNote.Status = selectedStatusDetails.ID.String()
+	updatedNote.StatusName = selectedStatusDetails.Name
+	updatedNote.StatusDescription = selectedStatusDetails.Description
 
 	if err != nil {
 		tx.Rollback()
@@ -205,4 +279,41 @@ func RemoveNote(user string, draftNoteID string) error {
 		return err
 	}
 	return nil
+}
+
+// retrieveStatusDetails ...
+func retrieveStatusDetails(user string, userID string, statusID string) (*model.StatusList, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+
+	row := db.QueryRow(selectedStatusIDSqlStr, userID, statusID)
+
+	var selectedStatusID, selectedStatusName, selectedStatusDescription string
+	err = row.Scan(&selectedStatusID, &selectedStatusName, &selectedStatusDescription)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("unable to find selected status")
+		}
+		log.Printf("invalid status selected. error: %+v", err)
+		return nil, err
+	}
+
+	parsedSelectedStatusID, err := uuid.Parse(selectedStatusID)
+	if err != nil {
+		log.Printf("error in parsing selected status. error: %+v", err)
+		return nil, err
+	}
+
+	selectedStatus := model.StatusList{
+		ID:          parsedSelectedStatusID,
+		Name:        selectedStatusName,
+		Description: selectedStatusDescription,
+	}
+
+	return &selectedStatus, nil
 }

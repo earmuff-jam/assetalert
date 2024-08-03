@@ -1,7 +1,7 @@
 import RecentActivity from './RecentActivity';
 import { ExpandMoreRounded } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Skeleton, Typography } from '@mui/material';
-import { DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { EmptyComponent } from '../common/utils';
 
 const RecentActivities = () => {
   const recentActivities = [];
@@ -11,7 +11,7 @@ const RecentActivities = () => {
     return <Skeleton width={`calc(100% - 1rem)`} height={'20rem'} />;
   }
   if (recentActivities.length <= 0) {
-    return <DisplayNoMatchingRecordsComponent subtitle="Add assets to view details about them" />;
+    return <EmptyComponent subtitle="Add assets to view details about them" />;
   } else {
     return (
       <Box>

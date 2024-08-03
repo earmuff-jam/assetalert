@@ -1,26 +1,15 @@
 
--- File: 0011_create_notes_table.up.sql
+-- File: 0013_create_notes_table.up.sql
 -- Description: Create notes table
 
 SET search_path TO community, public;
 
--- status of the selected notes --
-CREATE TYPE note_status AS ENUM (
-    'draft', 
-    'archived', 
-    'completed', 
-    'pending',
-    'urgent', 
-    'general', 
-    'on_hold', 
-    'cancelled'
-);
 CREATE TABLE IF NOT EXISTS community.notes
 (
     id                  UUID PRIMARY KEY             NOT NULL DEFAULT gen_random_uuid(),
     title               VARCHAR(100)                 NOT NULL,
     description         VARCHAR(500),
-    status              note_status                  NOT NULL DEFAULT 'general',
+    status              UUID                         REFERENCES statuses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     color               VARCHAR(50),
     completionDate      TIMESTAMP WITH TIME ZONE,
     location            POINT,
