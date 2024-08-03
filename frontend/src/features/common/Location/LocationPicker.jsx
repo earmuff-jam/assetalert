@@ -10,16 +10,14 @@ import { useEffect, useRef } from 'react';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { defaults as defaultControls } from 'ol/control.js';
-import { Box } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
-const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled }) => {
+const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled = false, subtitle }) => {
   const mapRef = useRef();
 
   useEffect(() => {
     const defaultCenter = fromLonLat([95.7129, 37.0902]); // USA Default Center
-    const initialCenter = location.lon && location.lat
-      ? fromLonLat([location.lon, location.lat])
-      : defaultCenter;
+    const initialCenter = location.lon && location.lat ? fromLonLat([location.lon, location.lat]) : defaultCenter;
     const zoom = 1;
 
     const map = new Map({
@@ -60,9 +58,12 @@ const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled }) => {
     return null;
   }
   return (
-    <Box sx={{ height: '10vh', width: '15vw' }}>
-      <Box sx={{ height: '100%', width: '100%' }} ref={mapRef} />
-    </Box>
+    <Stack sx={{ height: '10vh', width: '15vw' }}>
+      <Typography variant="caption">{subtitle}</Typography>
+      <Box sx={{ height: '10vh', width: '8vw', boxShadow: 1, borderRadius: 2 }}>
+        <Box sx={{ height: '100%', width: '100%' }} ref={mapRef} />
+      </Box>
+    </Stack>
   );
 };
 

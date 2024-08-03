@@ -2,7 +2,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { ADD_NOTES_FORM_FIELDS, NOTES_STATUS_OPTIONS } from './constants';
 import { useDispatch } from 'react-redux';
 import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
@@ -127,7 +127,6 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
   return (
     <Stack spacing="1rem">
       <Stack direction="row" spacing="1rem" alignItems="center" flexGrow="1">
-        <RetrieveUserLocation setLocation={setLocation} />
         {Object.values(formFields)
           .slice(0, 1)
           .map((v, index) => (
@@ -148,31 +147,30 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
               multiline={v.multiline || false}
             />
           ))}
+        <RetrieveUserLocation setLocation={setLocation} />
       </Stack>
       <Stack direction="row" spacing="1rem">
-        <Stack direction="row" spacing="1rem" alignItems="center" flexGrow="1">
-          {Object.values(formFields)
-            .slice(1)
-            .map((v, index) => (
-              <TextField
-                key={index}
-                id={v.name}
-                name={v.name}
-                label={v.label}
-                value={v.value}
-                placeholder={v.placeholder}
-                onChange={handleInput}
-                required={v.required}
-                fullWidth={v.fullWidth}
-                error={!!v.errorMsg}
-                helperText={v.errorMsg}
-                variant={v.variant}
-                minRows={v.rows || 4}
-                multiline={v.multiline || false}
-              />
-            ))}
-        </Stack>
-        <Box sx={{ boxShadow: 1, borderRadius: 2 }}>{location ? <LocationPicker location={location} /> : null}</Box>
+        {Object.values(formFields)
+          .slice(1)
+          .map((v, index) => (
+            <TextField
+              key={index}
+              id={v.name}
+              name={v.name}
+              label={v.label}
+              value={v.value}
+              placeholder={v.placeholder}
+              onChange={handleInput}
+              required={v.required}
+              fullWidth={v.fullWidth}
+              error={!!v.errorMsg}
+              helperText={v.errorMsg}
+              variant={v.variant}
+              minRows={v.rows || 4}
+              multiline={v.multiline || false}
+            />
+          ))}
+        {location ? <LocationPicker subtitle="Select location" location={location} /> : null}
       </Stack>
       <FormControl fullWidth>
         <InputLabel id="status-selector-label">Status</InputLabel>
