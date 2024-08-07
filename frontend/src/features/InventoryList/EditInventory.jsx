@@ -12,15 +12,16 @@ import {
   createFilterOptions,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BookmarkAddedRounded, CheckRounded, SwapHorizRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BLANK_INVENTORY_FORM } from './constants';
 import HeaderWithButton from '../common/HeaderWithButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { profileActions } from '../Profile/profileSlice';
 import { eventActions } from '../../Containers/Event/eventSlice';
+import { inventoryActions } from './inventorySlice';
+import { enqueueSnackbar } from 'notistack';
 
 const filter = createFilterOptions();
 dayjs.extend(relativeTime);
@@ -28,8 +29,9 @@ dayjs.extend(relativeTime);
 const EditInventory = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { inventory, loading } = useSelector((state) => state.profile);
+  const { inventory, loading } = useSelector((state) => state.inventory);
   const { loading: storageLocationsLoading, storageLocations: options } = useSelector((state) => state.event);
 
   const [storageLocation, setStorageLocation] = useState({});
@@ -75,31 +77,32 @@ const EditInventory = () => {
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
     if (containsErr || isRequiredFieldsEmpty || storageLocation === null || Object.keys(storageLocation).length <= 0) {
+      enqueueSnackbar('Unable to update inventory details.', {
+        variant: 'error',
+      });
       return;
     }
 
-    //   const formattedData = Object.values(formData).reduce((acc, el) => {
-    //     if (el.value) {
-    //       acc[el.id] = el.value;
-    //     }
-    //     return acc;
-    //   }, {});
+    const formattedData = Object.values(formData).reduce((acc, el) => {
+      if (el.value) {
+        acc[el.id] = el.value;
+      }
+      return acc;
+    }, {});
 
-    //   const draftRequest = {
-    //     id: id, // bring id from the params
-    //     ...formattedData,
-    //     location: storageLocation.location,
-    //     updated_by: user.id,
-    //     updated_on: dayjs().toISOString(),
-    //   };
-
-    //   updateInventory.mutate(draftRequest);
-    setFormData({ ...BLANK_INVENTORY_FORM });
+    const draftRequest = {
+      id: id, // bring id from the params
+      ...formattedData,
+      location: storageLocation.location,
+      updated_on: dayjs().toISOString(),
+    };
+    dispatch(inventoryActions.updateInventory(draftRequest));
+    // navigate('/inventory/list');
   };
 
   useEffect(() => {
     if (id.length > 0) {
-      dispatch(profileActions.getInvByID(id));
+      dispatch(inventoryActions.getInvByID(id));
       dispatch(eventActions.getStorageLocations());
     }
   }, [id]);
@@ -127,9 +130,8 @@ const EditInventory = () => {
       draftInventoryForm.updated_by.value = inventory.updated_by || '';
       draftInventoryForm.updated_at.value = inventory.updated_at || '';
       draftInventoryForm.sharable_groups.value = inventory.sharable_groups || [];
-
       draftInventoryForm.creator_name = inventory.creator_name;
-      draftInventoryForm.updator_name = inventory.updator_name;
+      draftInventoryForm.updator_name = inventory.updater_name;
 
       setStorageLocation({ location: inventory.location });
       setFormData(draftInventoryForm);
@@ -368,59 +370,10 @@ const EditInventory = () => {
               />
             ))}
         </Stack>
-
-        <Divider>
-          <Typography variant="caption">User information</Typography>
-        </Divider>
-
-        <Stack direction="row" spacing={2}>
-          {Object.values(formData)
-            .filter((v, index) => index >= 16 && index < 18)
-            .map((v) => (
-              <TextField
-                key={v.id}
-                id={v.id}
-                label={v.id === 'created_on' && 'Created'}
-                value={
-                  'created_on' === v.id
-                    ? dayjs(v.value).fromNow()
-                    : `Created by ${formData?.creator_name?.username || 'Anonymous'}`
-                }
-                disabled
-                fullWidth
-                size="small"
-                variant="standard"
-                onChange={handleInputChange}
-              />
-            ))}
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
-          {Object.values(formData)
-            .filter((v, index) => index >= 18 && index < 20)
-            .map((v) => (
-              <TextField
-                key={v.id}
-                id={v.id}
-                label={v.id === 'updated_on' && 'Last updated around'}
-                value={
-                  v.id === 'updated_on'
-                    ? dayjs(v.value).fromNow()
-                    : `Last updated by ${formData?.updator_name?.username || 'Anonymous'}`
-                }
-                disabled
-                fullWidth
-                size="small"
-                variant="standard"
-                onChange={handleInputChange}
-              />
-            ))}
-        </Stack>
       </Stack>
-
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
         <Box sx={{ flex: '1 1 auto' }} />
-        <Button startIcon={<CheckRounded />} onClick={handleSubmit}>
+        <Button startIcon={<CheckRounded fontSize="small" />} onClick={handleSubmit}>
           Submit
         </Button>
       </Box>
