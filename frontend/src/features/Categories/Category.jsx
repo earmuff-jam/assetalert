@@ -1,11 +1,12 @@
 import { Card, CardActions, CardContent, IconButton, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { ConfirmationBoxModal, DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { useDispatch } from 'react-redux';
 import { categoryActions } from './categoriesSlice';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { STATUS_OPTIONS } from '../Notes/constants';
 
 dayjs.extend(relativeTime);
 
@@ -46,7 +47,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
     return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
   }
   if (categories.length <= 0) {
-    return <DisplayNoMatchingRecordsComponent />;
+    return <EmptyComponent />;
   }
 
   return (
@@ -59,46 +60,50 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
+                  borderRadius: '0.2rem',
+                  borderLeft: '0.175rem solid',
+                  borderColor: item.color ? `${item.color}` : 'primary.main',
                 }}
               >
-                <Tooltip title={item.description}>
-                  <CardContent>
-                    <Stack direction="row">
-                      <Stack flexGrow={1}>
-                        <Typography variant="h6" component="h3">
-                          {item.name}
-                        </Typography>
-                        <Stack direction="row" alignItems="center" useFlexGap spacing={1}>
-                          <AlarmAddRounded
-                            fontSize="small"
-                            sx={{ color: item.color ? `${item.color}` : 'primary.main' }}
-                          />
-                          <Typography variant="caption">Limit: {item?.item_limit} item </Typography>
-                        </Stack>
+                <CardContent>
+                  <Stack direction="row">
+                    <Stack flexGrow={1} sx={{ minWidth: '12rem', minHeight: '6rem' }}>
+                      <Typography variant="h6" component="h3">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="caption" flexWrap={1} color="text.secondary">
+                        {item.description}
+                      </Typography>
+                      <Stack direction="row" alignItems="center" useFlexGap spacing={1}>
+                        <AlarmAddRounded
+                          fontSize="small"
+                          sx={{ color: item.color ? `${item.color}` : 'primary.main' }}
+                        />
+                        <Typography variant="caption">{item?.max_items_limit} items limit </Typography>
                       </Stack>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleDelete(item.id)}
-                        disableRipple
-                        disableFocusRipple
-                        disableTouchRipple
-                      >
-                        <DeleteRounded fontSize="small" sx={{ color: 'error.main' }}/>
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEdit(item.id)}
-                        disableRipple
-                        disableFocusRipple
-                        disableTouchRipple
-                      >
-                        <EditNoteRounded fontSize="small" sx={{ color: 'primary.main' }} />
-                      </IconButton>
                     </Stack>
-                  </CardContent>
-                </Tooltip>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDelete(item.id)}
+                      disableRipple
+                      disableFocusRipple
+                      disableTouchRipple
+                    >
+                      <DeleteRounded fontSize="small" sx={{ color: 'error.main' }} />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleEdit(item.id)}
+                      disableRipple
+                      disableFocusRipple
+                      disableTouchRipple
+                    >
+                      <EditNoteRounded fontSize="small" sx={{ color: 'primary.main' }} />
+                    </IconButton>
+                  </Stack>
+                </CardContent>
 
-                <CardActions sx={{ alignSelf: 'flex-end' }}>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
                   {item.updated_at === null ? (
                     <Typography variant="caption" color="text.secondary">
                       Never updated
@@ -106,10 +111,18 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                   ) : (
                     <Tooltip title={`Last updated around ${dayjs(item?.updated_at).fromNow()}`}>
                       <Typography variant="caption" color="text.secondary">
-                        {dayjs(item?.updated_at).fromNow()}
+                        By {item.updator || 'anonymous'} {dayjs(item.updated_at).fromNow()}
                       </Typography>
                     </Tooltip>
                   )}
+                  <Tooltip title={STATUS_OPTIONS.find((v) => v.label.toLowerCase() === item.status_name)?.display}>
+                    <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
+                      <Typography variant="caption" alignSelf="flex-end">
+                        Status:
+                      </Typography>
+                      {STATUS_OPTIONS.find((v) => v.label.toLowerCase() === item.status_name)?.icon}
+                    </Stack>
+                  </Tooltip>
                 </CardActions>
               </Card>
             </Stack>

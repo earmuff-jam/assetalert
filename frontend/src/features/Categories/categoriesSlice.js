@@ -45,8 +45,10 @@ const categorySlice = createSlice({
     },
     updateCategorySuccess: (state, action) => {
       const draftCategory = action.payload;
-      const formattedCategories = state.categories.filter((v) => v.id === draftCategory.id);
-      state.categories = [...formattedCategories, draftCategory];
+      const filteredCategories = [...state.categories].filter(v => {
+        return v.id !== draftCategory.id;
+      })
+      state.categories = [draftCategory, ...filteredCategories];
       state.loading = false;
       state.error = '';
     },

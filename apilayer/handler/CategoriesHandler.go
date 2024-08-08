@@ -140,7 +140,7 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(err)
 		return
 	}
-	resp, err := db.UpdateCategory(user, draftCategory)
+	resp, err := db.UpdateCategory(user, draftCategory.UpdatedBy, draftCategory)
 	if err != nil {
 		log.Printf("Unable to update new category. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

@@ -1,5 +1,5 @@
 -- File: 0012_create_inventories_table.up.sql
--- Description: create inventory items for selected profile
+-- Description: create inventory items
 
 SET search_path TO community, public;
 CREATE TABLE IF NOT EXISTS community.inventory

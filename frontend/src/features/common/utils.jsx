@@ -22,7 +22,7 @@ export const RetrieveClientLocation = () => {
 /**
  * display no matching records found component if there are no records
  */
-export const DisplayNoMatchingRecordsComponent = ({ subtitle = '' }) => (
+export const EmptyComponent = ({ subtitle = '' }) => (
   <Stack alignItems="center">
     <Typography color="textSecondary">Sorry, no matching records found.</Typography>
     <Typography variant="caption" color="textSecondary">

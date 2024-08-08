@@ -60,7 +60,7 @@ func main() {
 	// storage locations
 	router.Handle("/api/v1/locations/health", CustomRequestHandler(handler.GetStorageLocationHealthCheck)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
-
+	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
 	// categories
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)

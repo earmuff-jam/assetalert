@@ -1,10 +1,10 @@
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import { BUILD_TABLE_CONSTANTS } from './constants';
-import { DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { EmptyComponent } from '../common/utils';
 
 const SelectedRowItem = ({ selectedRow, columns }) => {
   if (Object.keys(selectedRow).length === 0) {
-    return <DisplayNoMatchingRecordsComponent />;
+    return <EmptyComponent />;
   }
 
   return (

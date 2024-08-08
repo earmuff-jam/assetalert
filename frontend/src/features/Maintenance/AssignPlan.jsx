@@ -1,7 +1,7 @@
 import { Alert, Box, Card, CardContent, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useAssignItemsToPlan, useFetchPlans } from '../../features/plan';
-import { DisplayNoMatchingRecordsComponent } from '../../util/util';
+import { EmptyComponent } from '../../util/util';
 import { WarningOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ const AssignPlan = ({ rowSelected, handleCloseAssignFn }) => {
   const assignItemsToPlan = useAssignItemsToPlan();
 
   if (isLoading) return <Skeleton height="1" width="1" variant="rounded" />;
-  if (data.length <= 0) return <DisplayNoMatchingRecordsComponent subtitle="Add maintenance plan to begin" />;
+  if (data.length <= 0) return <EmptyComponent subtitle="Add maintenance plan to begin" />;
 
   const handleAssignMaintenancePlan = (planID, planName, rowSelected) => {
     assignItemsToPlan.mutate({ planID, planName, selectedIDs: rowSelected });

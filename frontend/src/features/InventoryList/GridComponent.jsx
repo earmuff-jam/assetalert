@@ -10,11 +10,11 @@ import {
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { EmptyComponent } from '../common/utils';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   if (isLoading) return <Skeleton height="10vh" width="100%" />;
-  if (data.length <= 0) return <DisplayNoMatchingRecordsComponent />;
+  if (data.length <= 0) return <EmptyComponent />;
 
   return (
     <Stack spacing={{ xs: 1 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">

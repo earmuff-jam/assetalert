@@ -10,7 +10,7 @@ import {
   TrendingUpRounded,
 } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { ConfirmationBoxModal, DisplayNoMatchingRecordsComponent, generateTitleColor } from '../common/utils';
+import { ConfirmationBoxModal, EmptyComponent, generateTitleColor } from '../common/utils';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
 import SimpleModal from '../common/SimpleModal';
 import TableComponent from '../InventoryList/TableComponent';
@@ -91,7 +91,7 @@ const PlanList = () => {
   if (isLoading) {
     return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
   }
-  if (data.length <= 0) return <DisplayNoMatchingRecordsComponent />;
+  if (data.length <= 0) return <EmptyComponent />;
 
   return (
     <>

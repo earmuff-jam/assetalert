@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { EditRounded, FileOpenRounded } from '@mui/icons-material';
-import { DisplayNoMatchingRecordsComponent } from '../common/utils';
+import { EmptyComponent } from '../common/utils';
 
 /**
  * TableComponent React Function - Displays the inventory table
@@ -40,7 +40,7 @@ const TableComponent = ({
 }) => {
   if (isLoading) return <Skeleton variant="rounded" animation="wave" height="10vh" width="100%" />;
   if (!data || data.length === 0) {
-    return <DisplayNoMatchingRecordsComponent />;
+    return <EmptyComponent />;
   }
 
   return (

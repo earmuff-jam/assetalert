@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -159,6 +158,7 @@ func Test_AddNewNote(t *testing.T) {
 	}
 
 	// cleanup
+	// update the same note below, hence not removing it.
 	var note model.Note
 	err = json.Unmarshal(data, &note)
 	if err != nil {
@@ -289,8 +289,12 @@ func Test_UpdateNote(t *testing.T) {
 	assert.Greater(t, len(notes), 1)
 	assert.Equal(t, selectedNote.Title, "Test Title")
 	assert.Equal(t, selectedNote.Creator, "John Doe")
+	assert.Equal(t, selectedNote.StatusName, "archived")
+	assert.Equal(t, selectedNote.Color, "#2a6dbc") // status color
 
 	selectedNote.Title = "Updated Title"
+	selectedNote.Status = "completed" // change status so id is not passed to service
+
 	// Marshal the draftUpdateEvent into JSON bytes
 	updateNoteRequest, err := json.Marshal(selectedNote)
 	if err != nil {
@@ -316,7 +320,6 @@ func Test_UpdateNote(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
-
 	assert.Equal(t, "Updated Title", updatedNote.Title)
 
 	// cleanup
@@ -455,13 +458,13 @@ func Test_RemoveNote(t *testing.T) {
 	}
 
 	draftNote := &model.Note{
-		Title:       "Kitty Litter",
-		Description: "Kitty Litter unit test note description",
-		Status:      "ALL",
-		CreatedAt:   time.Now(),
-		CreatedBy:   prevUser.ID.String(),
-		UpdatedAt:   time.Now(),
-		UpdatedBy:   prevUser.ID.String(),
+		Title:          "Test Title",
+		Description:    "Test Title description",
+		Status:         "archived",
+		Color:          "#2a6dbc",
+		CreatedBy:      prevUser.ID.String(),
+		UpdatedBy:      prevUser.ID.String(),
+		SharableGroups: []uuid.UUID{prevUser.ID},
 	}
 	// Marshal the draftEvent into JSON bytes
 	requestBody, err := json.Marshal(draftNote)
@@ -469,10 +472,10 @@ func Test_RemoveNote(t *testing.T) {
 		t.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/v1/profile/%s/notes", prevUser.ID), bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/notes", prevUser.ID), bytes.NewBuffer(requestBody))
 	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
 	w := httptest.NewRecorder()
-	RemoveNote(w, req, config.CTO_USER)
+	AddNewNote(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -480,48 +483,47 @@ func Test_RemoveNote(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	var removedDraftNote model.Note
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+
+	var selectedNote model.Note
+	err = json.Unmarshal(data, &selectedNote)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/v1/profile/%s/notes/%s", prevUser.ID, selectedNote.ID), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String(), "noteID": selectedNote.ID})
+	w = httptest.NewRecorder()
+	RemoveNote(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var removedDraftNote string
 	err = json.Unmarshal(data, &removedDraftNote)
 	if err != nil {
 		t.Errorf("expected error to be nil got %+v", err)
 	}
 
-	assert.Equal(t, draftNote.ID, removedDraftNote.ID)
+	assert.Equal(t, selectedNote.ID, removedDraftNote)
+	// cleanup
+	db.RemoveNote(config.CTO_USER, selectedNote.ID)
 }
 
-func Test_RemoveNote_NoUserID(t *testing.T) {
-
-	db.PreloadAllTestVariables()
-	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
-	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
-	req = mux.SetURLVars(req, map[string]string{"noteID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
+func Test_RemoveNote_IncorrectUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/incorrect-user-id/notes/incorrect-note-id", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "incorrect-user-id"})
+	req = mux.SetURLVars(req, map[string]string{"noteID": "incorrect-note-id"})
 	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
 	RemoveNote(w, req, config.CTO_USER)
 	res := w.Result()
-	defer res.Body.Close()
-	_, err := io.ReadAll(res.Body)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
 	assert.Equal(t, 400, res.StatusCode)
-}
-
-func Test_RemoveNote_NoNoteID(t *testing.T) {
-
-	db.PreloadAllTestVariables()
-	req := httptest.NewRequest(http.MethodDelete, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/notes/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
-	req = mux.SetURLVars(req, map[string]string{"id": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
-	req = mux.SetURLVars(req, map[string]string{"noteID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"})
-	w := httptest.NewRecorder()
-	RemoveNote(w, req, config.CTO_USER)
-	res := w.Result()
-	defer res.Body.Close()
-	_, err := io.ReadAll(res.Body)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
-
-	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
 func Test_RemoveNote_InvalidDBUser(t *testing.T) {
