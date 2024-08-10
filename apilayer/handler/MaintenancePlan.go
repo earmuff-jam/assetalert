@@ -11,27 +11,27 @@ import (
 	"github.com/mohit2530/communityCare/model"
 )
 
-// GetAllCategories ...
-// swagger:route GET /api/v1/categories GetAllCategories getAllCategories
+// GetAllMaintenancePlans ...
+// swagger:route GET /api/v1/maintenance-plans GetAllMaintenancePlans getAllMaintenancePlans
 //
-// # Retrieves the list of categories that each inventory items can be associated with.
-// Each user can have thier own set of categories. All categories are specific to the selected user
+// # Retrieves the list of maintenance plans that each asset can be associated with.
+// Each user can have thier own set of maintenance plans. All plans are specific to the selected user
 //
-// Users cannot assign assets to multiple categories.
+// Users can assign asset to multiple plans.
 //
 // Responses:
 //
-// 200: []CategoryList
+// 200: []MaintenancePlan
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
+func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string) {
 
 	userID := r.URL.Query().Get("id")
 	limit := r.URL.Query().Get("limit")
 
 	if userID == "" {
-		log.Printf("Unable to retrieve categories with empty id")
+		log.Printf("Unable to retrieve maintenance plans with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
@@ -40,7 +40,7 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 	if err != nil {
 		limitInt = 10
 	}
-	resp, err := db.RetrieveAllCategories(user, userID, limitInt)
+	resp, err := db.RetrieveAllMaintenancePlans(user, userID, limitInt)
 	if err != nil {
 		log.Printf("Unable to retrieve categories. error: %v", err)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -52,37 +52,37 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// CreateCategory ...
-// swagger:route POST /api/v1/category/{id} CreateCategory createCategory
+// CreateMaintenancePlan ...
+// swagger:route POST /api/v1/plan/{id} CreateMaintenancePlan createMaintenancePlan
 //
-// # Create category
+// # Create maintenance plan
 //
 // Parameters:
 //   - +name: name
 //     in: query
-//     description: The category name
+//     description: The maintenance plan name
 //     type: string
 //     required: true
 //   - +name: description
 //     in: query
-//     description: The category description of the item
+//     description: The maintenance plan description of the item
 //     type: string
 //     required: false
 //   - +name: color
 //     in: query
-//     description: The user assigned color of the selected category
+//     description: The user assigned color of the selected maintenance plan
 //     type: int
 //     required: false
 //
 // Responses:
-// 200: Category
+// 200: MaintenancePlan
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
+func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 
-	draftCategory := &model.Category{}
-	err := json.NewDecoder(r.Body).Decode(draftCategory)
+	draftMaintenancePlan := &model.MaintenancePlan{}
+	err := json.NewDecoder(r.Body).Decode(draftMaintenancePlan)
 	r.Body.Close()
 	if err != nil {
 		log.Printf("Unable to decode request parameters. error: +%v", err)
@@ -90,9 +90,9 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(err)
 		return
 	}
-	resp, err := db.CreateCategory(user, draftCategory)
+	resp, err := db.CreateMaintenancePlan(user, draftMaintenancePlan)
 	if err != nil {
-		log.Printf("Unable to create new category. error: +%v", err)
+		log.Printf("unable to create new maintenance plan. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
@@ -102,37 +102,37 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// UpdateCategory ...
-// swagger:route PUT /api/v1/category/{id} UpdateCategory updateCategory
+// UpdateMaintenancePlan ...
+// swagger:route PUT /api/v1/plan/{id} UpdateMaintenancePlan UpdateMaintenancePlan
 //
-// # Update category function updates the selected category with new values
+// # Update maintenance plan function updates the selected maintenance plan with new values
 //
 // Parameters:
 //   - +name: name
 //     in: query
-//     description: The category name
+//     description: The maintenance plan name
 //     type: string
 //     required: true
 //   - +name: description
 //     in: query
-//     description: The category description of the item
+//     description: The maintenance plan description of the item
 //     type: string
 //     required: false
 //   - +name: color
 //     in: query
-//     description: The user assigned color of the selected category
+//     description: The user assigned color of the selected maintenance plan
 //     type: int
 //     required: false
 //
 // Responses:
-// 200: Category
+// 200: MaintenancePlan
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
+func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 
-	draftCategory := &model.Category{}
-	err := json.NewDecoder(r.Body).Decode(draftCategory)
+	draftMaintenancePlan := &model.MaintenancePlan{}
+	err := json.NewDecoder(r.Body).Decode(draftMaintenancePlan)
 	r.Body.Close()
 	if err != nil {
 		log.Printf("Unable to decode request parameters. error: +%v", err)
@@ -140,9 +140,9 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(err)
 		return
 	}
-	resp, err := db.UpdateCategory(user, draftCategory.UpdatedBy, draftCategory)
+	resp, err := db.UpdateMaintenancePlan(user, draftMaintenancePlan.UpdatedBy, draftMaintenancePlan)
 	if err != nil {
-		log.Printf("Unable to update new category. error: +%v", err)
+		log.Printf("Unable to update new maintenance plan. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
@@ -152,15 +152,15 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// RemoveCategory ...
-// swagger:route DELETE /api/v1/category/{id} RemoveCategory removeCategory
+// RemoveMaintenancePlan ...
+// swagger:route DELETE /api/v1/plan/{id} RemoveMaintenancePlan removeMaintenancePlan
 //
-// # Removes a selected category based on the id
+// # Removes a selected maintenance plan based on the id
 //
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the category to delete
+//     description: The id of the maintenance plan to delete
 //     type: string
 //     required: true
 //
@@ -169,21 +169,21 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func RemoveCategory(rw http.ResponseWriter, r *http.Request, user string) {
+func RemoveMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
-	categoryID := vars["id"]
+	maintenancePlanID := vars["id"]
 
-	if len(categoryID) <= 0 {
-		log.Printf("Unable to delete category with empty id")
+	if len(maintenancePlanID) <= 0 {
+		log.Printf("Unable to delete maintenance plan with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
 	}
 
-	err := db.RemoveCategory(user, categoryID)
+	err := db.RemoveMaintenancePlan(user, maintenancePlanID)
 	if err != nil {
-		log.Printf("Unable to remove category. error: +%v", err)
+		log.Printf("Unable to remove maintenance plan. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
@@ -191,5 +191,5 @@ func RemoveCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode(categoryID)
+	json.NewEncoder(rw).Encode(maintenancePlanID)
 }

@@ -119,6 +119,13 @@ Installing docker steps is located in docker_guide.md
 3. For `dev mode` after step 2, for first time install, run `make runClient` or navigate to `frontend` directory and run `yarn` depending on what you have setup.
 4. For `dev mode` if not first time, run `make startclient` from root. UI should start up.
 
+
+# How to debug the api layer ( using VS Code )
+
+1. Vs Code uses launch.json file to process debugging. Use the provided `launch.json` file.
+2. Copy the contents into `.vscode` folder in the root of the project.
+3. To use `postman` or other tools to access the secure routes, you need the `authorization2` header. Sign in with the signIn url. The response header will contain `authorization2` header. Use this `authorization2` header in subsequent requests to login and execute api calls. The token does not get stored into `cookie`.
+
 # How to access the db with db tool
 
 ## For access via Mac / Linux

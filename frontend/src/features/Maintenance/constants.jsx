@@ -2,40 +2,45 @@
  * Item type mapper fn is used to map the maintenance item types to respective indices
  */
 export const ITEM_TYPE_MAPPER = {
-  1: {
-    text: 'Daily',
-    add: 1,
+  daily: {
+    display: 'Daily',
+    value: 'daily',
   },
-  2: {
-    text: 'Weekly',
-    add: 7,
+  weekly: {
+    display: 'Weekly',
+    value: 'weekly',
   },
-  3: {
-    text: 'Bi-Weekly',
-    add: 15,
+  biweekly: {
+    display: 'Bi-Weekly',
+    value: 'biweekly',
   },
-  4: {
-    text: 'Monthly',
-    add: 30,
+  monthly: {
+    display: 'Monthly',
+    value: 'monthly',
   },
-  5: {
-    text: 'Quaterly',
-    add: 90,
+  quaterly: {
+    display: 'Quaterly',
+    value: 'quaterly',
   },
-  6: {
-    text: 'Semi-annually',
-    add: 180,
+  semiannually: {
+    display: 'Semi-annually',
+    value: 'semiannually',
   },
-  7: {
-    text: 'Annually',
-    add: 360,
+  annual: {
+    display: 'Annually',
+    value: 'annual',
   },
 };
 
+const GENERIC_FORM_FIELDS = {
+  type: 'text',
+  variant: 'outlined',
+};
+
 export const BLANK_MAINTENANCE_PLAN = {
-  plan: {
-    id: 'plan',
+  name: {
     value: '',
+    name: 'name',
     required: true,
     errorMsg: '',
     validators: [
@@ -50,8 +55,8 @@ export const BLANK_MAINTENANCE_PLAN = {
     ],
   },
   description: {
-    id: 'description',
     value: '',
+    name: 'description',
     required: true,
     errorMsg: '',
     validators: [
@@ -64,5 +69,59 @@ export const BLANK_MAINTENANCE_PLAN = {
         message: 'Plan description should be less than 500 characters',
       },
     ],
+  },
+  min_items_limit: {
+    label: 'Min items count',
+    placeholder: 'Mininum count of items',
+    value: '',
+    name: 'min_items_limit',
+    errorMsg: '',
+    required: true,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => {
+          const parsedValue = parseInt(value, 10);
+          return isNaN(parsedValue) || parsedValue < 0;
+        },
+        message: 'Minimum threshold limit must be a positive integer',
+      },
+      {
+        validate: (value) => !Number.isInteger(parseFloat(value)),
+        message: 'Minimum threshold must be a number',
+      },
+      {
+        validate: (value) => parseFloat(value) >= Number.MAX_SAFE_INTEGER,
+        message: 'Minimum threshold number is too high',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS,
+  },
+  max_items_limit: {
+    label: 'Max items count',
+    placeholder: 'Maximum count of items',
+    value: '',
+    name: 'max_items_limit',
+    errorMsg: '',
+    required: true,
+    fullWidth: true,
+    validators: [
+      {
+        validate: (value) => {
+          const parsedValue = parseInt(value, 10);
+          return isNaN(parsedValue) || parsedValue < 0;
+        },
+        message: 'Maximum threshold limit must be a positive integer',
+      },
+      {
+        validate: (value) => !Number.isInteger(parseFloat(value)),
+        message: 'Maximum threshold must be a number',
+      },
+      {
+        validate: (value) => parseFloat(value) >= Number.MAX_SAFE_INTEGER,
+        message: 'Maximum threshold number is too high',
+      },
+    ],
+    ...GENERIC_FORM_FIELDS,
   },
 };

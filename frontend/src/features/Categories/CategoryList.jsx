@@ -11,11 +11,11 @@ const CategoryList = ({ displayConcise = false }) => {
   const { categories, loading } = useSelector((state) => state.categories);
 
   const [displayModal, setDisplayModal] = useState(false);
-  const [selectedCategoryID, setSelectedCategoryID] = useState(null);
+  const [selectedCategoryID, setSelectedCategoryID] = useState('');
 
   const handleClose = () => {
     setDisplayModal(false);
-    setSelectedCategoryID(null);
+    setSelectedCategoryID('');
   };
   const toggleModal = () => setDisplayModal(!displayModal);
 
@@ -26,7 +26,11 @@ const CategoryList = ({ displayConcise = false }) => {
         primaryButtonTextLabel="Add Category"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={toggleModal}
-        secondaryTitle={displayConcise && `Viewing recent 4 out of ${categories.length} categories`}
+        secondaryTitle={
+          displayConcise
+            ? `Viewing recent 4 out of ${categories.length} categories`
+            : 'Organize items into categories for easy access.'
+        }
       />
       <Category
         categories={displayConcise ? categories.slice(0, 4) : categories}

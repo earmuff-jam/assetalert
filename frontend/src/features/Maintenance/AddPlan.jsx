@@ -1,12 +1,40 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
-import { BLANK_MAINTENANCE_PLAN } from './constants';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { BLANK_MAINTENANCE_PLAN, ITEM_TYPE_MAPPER } from './constants';
 import ColorPicker from '../common/ColorPicker';
+import { enqueueSnackbar } from 'notistack';
+import dayjs from 'dayjs';
+import { maintenancePlanActions } from './maintenanceSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import RetrieveUserLocation from '../common/Location/RetrieveUserLocation';
+import LocationPicker from '../common/Location/LocationPicker';
 
-const AddPlan = ({ handleCloseAddNewPlan }) => {
+const AddPlan = ({
+  handleCloseAddNewPlan,
+  maintenancePlan,
+  selectedMaintenancePlanID,
+  setSelectedMaintenancePlanID,
+}) => {
+  const dispatch = useDispatch();
 
+  const { statusOptions, loading } = useSelector((state) => state.maintenance);
+
+  const [selectedStatusOption, setSelectedStatusOption] = useState('');
   const [planColor, setPlanColor] = useState('#f7f7f7');
-  const [planType, setPlanType] = useState('7'); // default annual maintenance plan
+  const [location, setLocation] = useState();
+  const [planType, setPlanType] = useState(ITEM_TYPE_MAPPER['daily'].value);
   const [formData, setFormData] = useState({
     ...BLANK_MAINTENANCE_PLAN,
   });
@@ -32,19 +60,20 @@ const AddPlan = ({ handleCloseAddNewPlan }) => {
       value,
       errorMsg,
     };
-
     setFormData(updatedFormData);
   };
 
   const resetData = () => {
     setFormData({ ...BLANK_MAINTENANCE_PLAN });
-    setPlanType('7'); // annual
+    setPlanType(ITEM_TYPE_MAPPER['daily'].value); // annual
     setPlanColor('#f7f7f7');
     handleCloseAddNewPlan();
+    setSelectedStatusOption({});
+    setSelectedMaintenancePlanID('');
   };
 
-  const handlePlanChange = (event) => {
-    setPlanType(event.target.value);
+  const handlePlanChange = (ev) => {
+    setPlanType(ev.target.value);
   };
 
   const handleSubmit = () => {
@@ -56,43 +85,112 @@ const AddPlan = ({ handleCloseAddNewPlan }) => {
     }, false);
 
     const requiredFormFields = Object.values(formData).filter((v) => v.required);
-    const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
+      if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
+        return el.value < 0;
+      }
+      return el.value.trim() === '';
+    });
 
-    if (containsErr || isRequiredFieldsEmpty) {
+    if (containsErr || isRequiredFieldsEmpty || selectedStatusOption == null) {
+      enqueueSnackbar('Cannot add new maintenance plan.', {
+        variant: 'error',
+      });
       return;
     }
 
-    // const formattedData = Object.values(formData).reduce((acc, el) => {
-    //   if (el.value) {
-    //     acc[el.id] = el.value;
-    //   }
-    //   return acc;
-    // }, {});
+    const formattedData = Object.values(formData).reduce((acc, el) => {
+      if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
+        acc[el.name] = parseFloat(el.value);
+      } else if (el.value) {
+        acc[el.name] = el.value;
+      }
+      return acc;
+    }, {});
 
-    // const draftRequest = {
-    //   ...formattedData,
-    //   type: planType,
-    //   color: planColor,
-    //   // created_by: user.id,
-    //   term_limit: dayjs().add(ITEM_TYPE_MAPPER[planType].add, 'day'),
-    //   created_on: dayjs().toISOString(),
-    // };
-
-    // addPlan.mutate(draftRequest);
+    // seperated to prevent updating sharable groups
+    if (selectedMaintenancePlanID) {
+      const draftRequest = {
+        id: selectedMaintenancePlanID,
+        ...formattedData,
+        type: planType,
+        color: planColor,
+        location: location,
+        plan_type: ITEM_TYPE_MAPPER[planType].value,
+        maintenance_status: selectedStatusOption?.name,
+        updated_on: dayjs().toISOString(),
+      };
+      dispatch(maintenancePlanActions.updatePlan(draftRequest));
+    } else {
+      const draftRequest = {
+        ...formattedData,
+        type: planType,
+        color: planColor,
+        plan_type: planType,
+        location: location,
+        maintenance_status: selectedStatusOption?.name,
+        created_on: dayjs().toISOString(),
+      };
+      dispatch(maintenancePlanActions.createPlan(draftRequest));
+    }
     resetData();
   };
 
-  const containsErr = Object.values(formData).reduce((acc, el) => {
-    if (el.errorMsg) {
-      return true;
+  const isDisabled = () => {
+    const containsErr = Object.values(formData).reduce((acc, el) => {
+      if (el.errorMsg) {
+        return true;
+      }
+      return acc;
+    }, false);
+
+    const requiredFormFields = Object.values(formData).filter((v) => v.required);
+    const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
+      if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
+        return el.value < 0;
+      }
+      return el.value.trim() === '';
+    });
+
+    return containsErr || isRequiredFieldsEmpty;
+  };
+
+  useEffect(() => {
+    if (!loading && selectedMaintenancePlanID !== null) {
+      const drafMaintenancePlan = maintenancePlan.filter((v) => v.id === selectedMaintenancePlanID).find(() => true);
+      const updatedFormFields = Object.assign({}, formData, {
+        name: {
+          ...formData.name,
+          value: drafMaintenancePlan?.name || '',
+        },
+        description: {
+          ...formData.description,
+          value: drafMaintenancePlan?.description || '',
+        },
+        min_items_limit: {
+          ...formData.min_items_limit,
+          value: drafMaintenancePlan?.min_items_limit || 0,
+        },
+        max_items_limit: {
+          ...formData.max_items_limit,
+          value: drafMaintenancePlan?.max_items_limit || 10,
+        },
+      });
+      setFormData(updatedFormFields);
+      setSelectedStatusOption({
+        id: drafMaintenancePlan?.maintenance_status,
+        name: drafMaintenancePlan?.maintenance_status_name,
+        description: drafMaintenancePlan?.maintenance_status_description,
+      });
+
+      setPlanType(Object.values(ITEM_TYPE_MAPPER).find((v) => v.value === drafMaintenancePlan?.plan_type)?.value || '');
+      setLocation(drafMaintenancePlan?.location);
+      setPlanColor(drafMaintenancePlan?.color);
+    } else {
+      setFormData(BLANK_MAINTENANCE_PLAN);
+      setPlanColor('#f7f7f7');
     }
-    return acc;
-  }, false);
-
-  const requiredFormFields = Object.values(formData).filter((v) => v.required);
-  const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
-
-  const isDisabled = containsErr || isRequiredFieldsEmpty;
+  }, [selectedMaintenancePlanID]);
 
   return (
     <Stack>
@@ -105,31 +203,84 @@ const AddPlan = ({ handleCloseAddNewPlan }) => {
       <Stack alignItems="center">
         <Box component="form" sx={{ maxWidth: 600, width: '100%' }}>
           <Stack spacing={2} useFlexGap>
-            <TextField
-              id="plan"
-              label="Plan Title"
-              value={formData.plan.value}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              error={Boolean(formData.plan['errorMsg'].length)}
-              helperText={formData.plan['errorMsg']}
-            />
-            <TextField
-              id="description"
-              label="Plan description"
-              placeholder="Description of plan in less than 500 words"
-              value={formData.description.value}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              multiline
-              maxRows={4}
-              rows={4}
-              error={Boolean(formData.description['errorMsg'].length)}
-              helperText={formData.description['errorMsg']}
+            <Stack direction="row">
+              <TextField
+                id="name"
+                label="Plan Title"
+                value={formData.name.value}
+                onChange={handleInputChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                error={Boolean(formData.name['errorMsg'].length)}
+                helperText={formData.name['errorMsg']}
+              />
+              <RetrieveUserLocation setLocation={setLocation} />
+            </Stack>
+            <Stack direction="row" spacing="1rem">
+              <TextField
+                id="description"
+                label="Plan description"
+                placeholder="Description of plan in less than 500 words"
+                value={formData.description.value}
+                onChange={handleInputChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                multiline
+                maxRows={4}
+                rows={4}
+                error={Boolean(formData.description['errorMsg'].length)}
+                helperText={formData.description['errorMsg']}
+              />
+              {location ? <LocationPicker subtitle="Assigned Location" location={location} /> : null}
+            </Stack>
+            <Stack direction="row" spacing="1rem">
+              {Object.values(formData)
+                .slice(2, 4)
+                .map((v, index) => (
+                  <TextField
+                    key={index}
+                    id={v.name}
+                    name={v.name}
+                    label={v.label}
+                    value={v.value}
+                    placeholder={v.placeholder}
+                    onChange={handleInputChange}
+                    required={v.required}
+                    fullWidth={v.fullWidth}
+                    error={!!v.errorMsg}
+                    helperText={v.errorMsg}
+                    variant={v.variant}
+                    minRows={v.rows || 4}
+                    multiline={v.multiline || false}
+                  />
+                ))}
+            </Stack>
+            <Autocomplete
+              id="status-options"
+              isOptionEqualToValue={(option, value) => option.name === value.name}
+              getOptionLabel={(option) => option.name || ''}
+              options={statusOptions}
+              loading={loading}
+              value={selectedStatusOption}
+              onOpen={() => dispatch(maintenancePlanActions.getStatusOptions())}
+              onChange={(_, newValue) => setSelectedStatusOption(newValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Overall item status"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
             />
             <ColorPicker value={planColor} handleChange={handleColorChange} />
             <Box sx={{ minWidth: 120 }}>
@@ -143,18 +294,16 @@ const AddPlan = ({ handleCloseAddNewPlan }) => {
                   label="Plan type"
                   onChange={handlePlanChange}
                 >
-                  <MenuItem value={1}>Daily</MenuItem>
-                  <MenuItem value={2}>Weekly</MenuItem>
-                  <MenuItem value={3}>Bi-weekly</MenuItem>
-                  <MenuItem value={4}>Monthly</MenuItem>
-                  <MenuItem value={5}>Quaterly</MenuItem>
-                  <MenuItem value={6}>Semi-annually</MenuItem>
-                  <MenuItem value={7}>Annually</MenuItem>
+                  {Object.values(ITEM_TYPE_MAPPER).map((v, index) => (
+                    <MenuItem key={index} value={v.value}>
+                      {v.display}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
           </Stack>
-          <Button onClick={handleSubmit} variant="outlined" sx={{ mt: 1 }} disabled={isDisabled}>
+          <Button onClick={handleSubmit} variant="outlined" sx={{ mt: 1 }} disabled={isDisabled()}>
             Add new plan
           </Button>
         </Box>
