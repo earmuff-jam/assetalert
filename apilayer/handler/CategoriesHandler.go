@@ -14,10 +14,8 @@ import (
 // GetAllCategories ...
 // swagger:route GET /api/v1/categories GetAllCategories getAllCategories
 //
-// # Retrieves the list of categories that each inventory items can be associated with.
-// Each user can have thier own set of categories. All categories are specific to the selected user
-//
-// Users cannot assign assets to multiple categories.
+// # Retrieves the list of categories that each assets can be associated with.
+// Each user can have their own set of categories. All categories are specific to the selected user
 //
 // Responses:
 //
@@ -43,6 +41,96 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 	resp, err := db.RetrieveAllCategories(user, userID, limitInt)
 	if err != nil {
 		log.Printf("Unable to retrieve categories. error: %v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// GetCategory ...
+// swagger:route GET /api/v1/category GetCategory getCategory
+//
+// # Retrieves the selected category
+//
+// Responses:
+//
+// 200: Category
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
+
+	userID := r.URL.Query().Get("id")
+	categoryID := r.URL.Query().Get("catID")
+
+	if userID == "" {
+		log.Printf("Unable to retrieve associated item for selected category with empty user id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	if categoryID == "" {
+		log.Printf("Unable to retrieve associated items with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RetrieveCategory(user, userID, categoryID)
+	if err != nil {
+		log.Printf("Unable to retrieve categories. error: %v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// GetAllCategoryItems ...
+// swagger:route GET /api/v1/categories GetAllCategoryItems getAllCategoryItems
+//
+// # Retrieves the list of assets for a specific category.
+//
+// Responses:
+//
+// 200: []CategoryItems
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetAllCategoryItems(rw http.ResponseWriter, r *http.Request, user string) {
+
+	userID := r.URL.Query().Get("id")
+	limit := r.URL.Query().Get("limit")
+	categoryID := r.URL.Query().Get("catID")
+
+	if userID == "" {
+		log.Printf("Unable to retrieve associated item for selected category with empty user id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	if categoryID == "" {
+		log.Printf("Unable to retrieve associated items with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil {
+		limitInt = 10
+	}
+
+	resp, err := db.RetrieveAllCategoryItems(user, userID, categoryID, limitInt)
+	if err != nil {
+		log.Printf("Unable to retrieve associated items. error: %v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return

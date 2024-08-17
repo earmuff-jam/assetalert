@@ -34,15 +34,6 @@ export const INVENTORY_TABS = [
   },
 ];
 
-const GENERIC_FORM_FIELDS_VARIANT = {
-  type: 'text',
-  variant: 'standard',
-};
-
-const GENERIC_FORM_FIELDS_OUTLINED_VARIANT = {
-  variant: 'outlined',
-};
-
 export const GENERIC_TEXTAREA_VARIANT = {
   type: 'text',
   multiline: true,
@@ -52,55 +43,51 @@ export const GENERIC_TEXTAREA_VARIANT = {
 };
 
 /**
- * ADD ITEM PROFILE FORM.
+ * ADD ITEM FORM.
  *
- * Used to add new item in user's personal profile.
+ * Used to add new asset.
  */
-export const ADD_ITEM_PROFILE_FORM = {
+export const ADD_ASSET_FORM = {
   name: {
-    label: 'Item Name',
-    placeholder: 'Enter product name',
+    id: 'name',
+    label: 'Item name',
     value: '',
-    name: 'name',
+    isRequired: true,
     errorMsg: '',
-    required: true,
-    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Name is required',
+        message: 'Item name is required',
       },
       {
-        validate: (value) => value.trim().length >= 50,
-        message: 'Name should be less than 50 characters',
+        validate: (value) => value.trim().length >= 200,
+        message: 'Item name should be less than 50 characters',
       },
     ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
   },
   description: {
+    id: 'description',
     label: 'Item description',
-    placeholder: 'Enter item description in less than 500 characters',
     value: '',
-    name: 'description',
+    isRequired: true,
     errorMsg: '',
-    required: false,
-    fullWidth: true,
     validators: [
       {
-        validate: (value) => value.trim().length >= 50,
-        message: 'Description should be less than 50 characters',
+        validate: (value) => value.trim().length === 0,
+        message: 'Item description is required',
+      },
+      {
+        validate: (value) => value.trim().length >= 500,
+        message: 'Item description should be less than 50 characters',
       },
     ],
-    ...GENERIC_TEXTAREA_VARIANT,
   },
   price: {
-    label: 'Price',
-    placeholder: 'Total price of each item',
+    id: 'price',
+    label: 'Item price (per unit)',
     value: '',
-    name: 'price',
+    isRequired: false,
     errorMsg: '',
-    required: true,
-    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
@@ -111,170 +98,159 @@ export const ADD_ITEM_PROFILE_FORM = {
         message: 'A positive number is required',
       },
     ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
   },
   barcode: {
-    label: 'Item barcode',
-    placeholder: 'Unique code to reference item',
+    id: 'barcode',
+    label: 'Barcode of item',
     value: '',
-    name: 'barcode',
+    isRequired: false,
     errorMsg: '',
-    required: true,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) => value.trim().length >= 100,
-        message: 'should be less than 100 characters',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
-  },
-  sku: {
-    label: 'Item sku',
-    placeholder: 'Unique SKU of the item',
-    value: '',
-    name: 'sku',
-    errorMsg: '',
-    required: true,
-    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length >= 50,
-        message: 'sku should be less than 50 characters',
+        message: 'Item barcode should be less than 50 characters',
       },
     ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
   },
-  status: {
-    label: 'Item Status',
-    placeholder: 'Item Status',
+  sku: {
+    id: 'sku',
+    label: 'Sku of item',
     value: '',
-    name: 'status',
+    isRequired: false,
     errorMsg: '',
-    required: false,
+    validators: [
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'SKU of item should be less than 50 characters',
+      },
+    ],
   },
-  is_returnable: {
-    label: 'Is Returnable',
+  quantity: {
+    id: 'quantity',
+    label: 'Item quantity',
     value: '',
-    name: 'is_returnable',
+    isRequired: true,
     errorMsg: '',
-    required: false,
-  },
-  return_location: {
-    label: 'Return location',
-    placeholder: 'where to return the item',
-    value: '',
-    name: 'return_location',
-    errorMsg: '',
-    required: false,
-    fullWidth: true,
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Return location is required if intended to return items',
+        message: 'Quantity for the selected item is required',
       },
-    ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
-  },
-  min_weight: {
-    label: 'Min Weight',
-    placeholder: 'Minimum weight of item',
-    value: '',
-    name: 'min_weight',
-    errorMsg: '',
-    required: false,
-    fullWidth: true,
-    validators: [
       {
-        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
         message: 'A positive number is required',
       },
     ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
-  },
-  max_weight: {
-    label: 'Max Weight',
-    placeholder: 'Maximum weight of item',
-    value: '',
-    name: 'max_weight',
-    errorMsg: '',
-    required: false,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
-        message: 'A positive number is required',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
-  },
-  min_height: {
-    label: 'Min Height',
-    placeholder: 'Minimum height of item',
-    value: '',
-    name: 'min_height',
-    errorMsg: '',
-    required: false,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
-        message: 'A positive number is required',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
-  },
-  max_height: {
-    label: 'Max Height',
-    placeholder: 'Maximum height of item',
-    value: '',
-    name: 'max_height',
-    errorMsg: '',
-    required: false,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) => !(/^\d+$/.test(value) && parseInt(value) > 0),
-        message: 'A positive number is required',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS_OUTLINED_VARIANT,
-  },
-  quantity: {
-    label: 'Quantity',
-    placeholder: 'The total number of items',
-    value: '',
-    name: 'quantity',
-    errorMsg: '',
-    required: true,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) =>
-          // test for number first, then
-          !(/^\d+$/.test(value) && parseInt(value) > 0),
-        message: 'A positive number is required',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
   },
   bought_at: {
-    label: 'Place of purchase',
-    placeholder: 'Walmart...',
+    id: 'bought_at',
+    label: 'Where did you buy the item',
     value: '',
-    name: 'bought_at',
+    isRequired: false,
     errorMsg: '',
-    required: true,
-    fullWidth: true,
+    validators: [],
+  },
+  location: {
+    id: 'location',
+    label: 'Where do you want to store the item',
+    isRequired: false,
+    errorMsg: '',
+    validators: [],
+  },
+  is_bookmarked: {
+    id: 'is_bookmarked',
+    value: false,
+    isRequired: false,
+    errorMsg: '',
+    validators: [],
+  },
+  is_returnable: {
+    id: 'is_returnable',
+    value: false,
+    isRequired: false,
+    errorMsg: '',
+    validators: [],
+  },
+  return_location: {
+    id: 'return_location',
+    label: 'Where to return the item',
+    value: '',
+    isRequired: false,
+    errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length >= 50,
-        message: 'Place of purchase should be less than 50 characters',
+        message: 'Return location should be less than 50 characters',
       },
     ],
-    ...GENERIC_FORM_FIELDS_VARIANT,
+  },
+  return_datetime: {
+    id: 'return_datetime',
+    value: '',
+    type: 'datetime',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => value < new Date().toISOString(),
+        message: 'Return datetime cannot be an eariler date or time',
+      },
+    ],
+  },
+  max_weight: {
+    id: 'max_weight',
+    label: 'Max weight in kg',
+    value: '',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
+        message: 'A positive number is required',
+      },
+    ],
+  },
+  min_weight: {
+    id: 'min_weight',
+    label: 'Min weight in kg',
+    value: '',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
+        message: 'A positive number is required',
+      },
+    ],
+  },
+  max_height: {
+    id: 'max_height',
+    label: 'Max height in kg',
+    value: '',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
+        message: 'A positive number is required',
+      },
+    ],
+  },
+  min_height: {
+    id: 'min_height',
+    label: 'Min height in kg',
+    value: '',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => isNaN(value) || parseInt(value) <= 0,
+        message: 'A positive number is required',
+      },
+    ],
   },
 };
+
 
 export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
   name: {

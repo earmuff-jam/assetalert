@@ -61,8 +61,13 @@ func main() {
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
 	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
 
+	//summary
+	router.Handle("/api/v1/summary", CustomRequestHandler(handler.GetAssetSummary)).Methods(http.MethodGet)
+
 	// categories
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
+	router.Handle("/api/v1/category/items", CustomRequestHandler(handler.GetAllCategoryItems)).Methods(http.MethodGet)
+	router.Handle("/api/v1/category", CustomRequestHandler(handler.GetCategory)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.CreateCategory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.UpdateCategory)).Methods(http.MethodPut)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)
@@ -79,6 +84,7 @@ func main() {
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.UpdateProfile)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
+
 	// inventories
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/inventories/{invID}", CustomRequestHandler(handler.GetInventoryByID)).Methods(http.MethodGet)
@@ -86,6 +92,7 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/inventories/bulk", CustomRequestHandler(handler.AddInventoryInBulk)).Methods(http.MethodPost)
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.UpdateSelectedInventory)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/inventories/prune", CustomRequestHandler(handler.RemoveSelectedInventory)).Methods(http.MethodPost)
+
 	// notes
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.GetNotes)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.AddNewNote)).Methods(http.MethodPost)

@@ -4,6 +4,7 @@ import { inventoryActions } from './inventorySlice';
 import instance from '../../util/Instances';
 
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
+const STORAGE_LOCATIONS_BASE_URL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
 export function* fetchAllInventoriesForUser() {
   try {
@@ -65,6 +66,15 @@ export function* fetchRemoveInventoryRows(action) {
   }
 }
 
+export function* fetchStorageLocations() {
+  try {
+    const response = yield call(instance.get, `${STORAGE_LOCATIONS_BASE_URL}/locations`);
+    yield put(inventoryActions.getStorageLocationsSuccess(response.data || []));
+  } catch (e) {
+    yield put(inventoryActions.getStorageLocationsFailure(e));
+  }
+}
+
 /********************************
  * WATCHER FUNCTIONS BELOW HERE
  ********************************/
@@ -93,10 +103,14 @@ export function* watchFetchRemoveInventoryRows() {
   yield takeLatest(`inventory/removeInventoryRows`, fetchRemoveInventoryRows);
 }
 
+export function* watchFetchAllStorageLocations() {
+  yield takeLatest(`inventory/getStorageLocations`, fetchStorageLocations);
+}
+
 export default [
   watchFetchInvByID,
   watchFetchAddBulkInventory,
-  watchFetchRemoveInventoryRows,
+  watchFetchAllStorageLocations,
   watchFetchAllInventoriesForUser,
   watchUpdateExistingInventoryDetails,
 ];

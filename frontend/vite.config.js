@@ -9,6 +9,9 @@ export default defineConfig({
       '/src': path.resolve(__dirname, 'src'),
     },
   },
+  optimizeDeps: {
+    include: ['@mui/material', '@emotion/react', '@emotion/styled'],
+  },
   server: {
     watch: {
      usePolling: true,

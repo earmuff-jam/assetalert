@@ -19,6 +19,35 @@ export function* getCategories() {
   }
 }
 
+export function* getCategory(action) {
+  try {
+    const catID = action.payload;
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    params.append('catID', catID);
+    const response = yield call(instance.get, `${BASEURL}/category?${params.toString()}`);
+    yield put(categoryActions.getCategorySuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.getCategoryFailure(e));
+  }
+}
+
+export function* getItemsForCategory(action) {
+  try {
+    const catID = action.payload;
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    params.append('catID', catID);
+    params.append('limit', DEFAULT_LIMIT);
+    const response = yield call(instance.get, `${BASEURL}/category/items?${params.toString()}`);
+    yield put(categoryActions.getItemsForCategorySuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.getItemsForCategoryFailure(e));
+  }
+}
+
 export function* createCategory(action) {
   try {
     const response = yield call(instance.post, `${BASEURL}/category`, { ...action.payload });
@@ -52,6 +81,14 @@ export function* watchGetCategoryList() {
   yield takeLatest(`category/getCategories`, getCategories);
 }
 
+export function* watchGetCategory() {
+  yield takeLatest(`category/getCategory`, getCategory);
+}
+
+export function* watchGetItemsForCategory() {
+  yield takeLatest(`category/getItemsForCategory`, getItemsForCategory);
+}
+
 export function* watchCreateCategory() {
   yield takeLatest(`category/createCategory`, createCategory);
 }
@@ -64,4 +101,11 @@ export function* watchRemoveCategory() {
   yield takeLatest(`category/removeCategory`, removeCategory);
 }
 
-export default [watchGetCategoryList, watchCreateCategory, watchUpdateCategory, watchRemoveCategory];
+export default [
+  watchGetCategoryList,
+  watchGetCategory,
+  watchGetItemsForCategory,
+  watchCreateCategory,
+  watchUpdateCategory,
+  watchRemoveCategory,
+];
