@@ -5,14 +5,18 @@ import AddPlan from './AddPlan';
 import PlanList from './PlanList';
 import HeaderWithButton from '../common/HeaderWithButton';
 import SimpleModal from '../common/SimpleModal';
+import { useSelector } from 'react-redux';
 
 const Plan = () => {
+  const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
+
   const [displayModal, setDisplayModal] = useState(false);
-  const handleAddNewPlan = () => {
-    setDisplayModal(!displayModal);
-  };
+  const [selectedMaintenancePlanID, setSelectedMaintenancePlanID] = useState('');
+
+  const handleAddNewPlan = () => setDisplayModal(!displayModal);
   const handleCloseAddNewPlan = () => {
     setDisplayModal(false);
+    setSelectedMaintenancePlanID('');
   };
 
   return (
@@ -23,18 +27,23 @@ const Plan = () => {
           primaryButtonTextLabel="Add Plan"
           primaryStartIcon={<AddRounded />}
           handleClickPrimaryButton={handleAddNewPlan}
-          showRedirectLink={false}
-          secondaryTitle="Select total items in each maintenance plan(s) to view all items associated that plan"
+          secondaryTitle="Assign items to maintenance plan(s) to keep them up to date."
         />
-        <PlanList /> {/* plan component */}
+        <PlanList
+          maintenancePlan={maintenancePlan}
+          loading={loading}
+          setDisplayModal={setDisplayModal}
+          setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
+        />
       </Container>
       {displayModal && (
-        <SimpleModal
-          title="Add new maintenance plan"
-          handleClose={handleCloseAddNewPlan}
-          maxSize="md"
-        >
-          <AddPlan handleCloseAddNewPlan={handleCloseAddNewPlan} />
+        <SimpleModal title="Add new maintenance plan" handleClose={handleCloseAddNewPlan} maxSize="md">
+          <AddPlan
+            handleCloseAddNewPlan={handleCloseAddNewPlan}
+            maintenancePlan={maintenancePlan}
+            selectedMaintenancePlanID={selectedMaintenancePlanID}
+            setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
+          />
         </SimpleModal>
       )}
     </Box>

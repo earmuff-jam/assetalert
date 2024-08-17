@@ -40,15 +40,16 @@ func GetStatusesListHealthCheck(rw http.ResponseWriter, r *http.Request, user st
 func GetStatusList(rw http.ResponseWriter, r *http.Request, user string) {
 
 	userID := r.URL.Query().Get("id")
+	statusOptionType := r.URL.Query().Get("type")
 
-	if userID == "" {
-		log.Printf("Unable to retrieve status list with empty id")
+	if userID == "" || statusOptionType == "" {
+		log.Printf("Unable to retrieve status list with empty params")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
 	}
 
-	resp, err := db.FetchStatusList(user, userID)
+	resp, err := db.FetchStatusList(user, userID, statusOptionType)
 	if err != nil {
 		log.Printf("Unable to retrieve status list. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

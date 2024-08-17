@@ -30,7 +30,7 @@ VALUES (
     'Do not buy the brand from walmart, buy from a generic well known place',
     (SELECT id FROM community.statuses s LIMIT 1),
     '#2a6dbc',
-     '(-97.3635584, 30.1268992)',
+     '(-72.625481, 42.203217)',
     (SELECT id FROM community.profiles p LIMIT 1),
     (SELECT id FROM community.profiles p LIMIT 1),
     ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]
@@ -46,6 +46,23 @@ VALUES ('Groceries', 'used for grocery related items', (SELECT id FROM community
        ('Home Maintenance', 'store tools such as belts, screwdrivers, nails etc', (SELECT id FROM community.statuses s LIMIT 1), '#465760', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
        ('Education', 'used to store books and study materials', (SELECT id FROM community.statuses s LIMIT 1), '#138ed3', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
        ('Miscellaneous', 'used to store stuffs that are totally random', (SELECT id FROM community.statuses s LIMIT 1), '#28b391', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+-- ADD MAINTENANCE PLAN STATUS SQL TEST DATA --
+INSERT INTO community.maintenance_status (name, description, created_by, updated_by, sharable_groups)
+VALUES
+    ('Ready for Review', 'The maintenance plan is ready to be reviewed by the appropriate person or team.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('In Review', 'The maintenance plan is currently under review.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('Passed Review', 'The maintenance plan has successfully passed the review process.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('Failed Review', 'The maintenance plan did not pass the review process and requires adjustments.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('Pending Approval', 'The maintenance plan is awaiting final approval before proceeding.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('Approved', 'The maintenance plan has been approved and is ready for execution.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+    ('Rejected', 'The maintenance plan has been rejected and will not proceed.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+-- ADD MAINTENANCE PLAN SQL TEST DATA --
+INSERT INTO community.maintenance_plan (name, description, maintenance_status, color, min_items_limit, max_items_limit, plan_type, location, created_by, updated_by, sharable_groups)
+VALUES ('Daily maintenance plan', 'used to validate daily items', (SELECT id FROM community.maintenance_status mps LIMIT 1), '#d20a0a', 1, 100, 'annual',  '(-119.170898,  34.196411)', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+       ('Weekly maintenance plan', 'used for weekely maintenance', (SELECT id FROM community.maintenance_status mps LIMIT 1), '#28b391', 1, 100, 'weekly',  '(-117.182541, 34.055569)', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
 
 -- ADD INVENTORIES SQL TEST DATA --
 INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
@@ -71,7 +88,7 @@ VALUES ('4 pounds of kitty litter',
         (SELECT id FROM community.profiles p LIMIT 1),
         ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
 
--- return with a null datetime --
+-- insert a null datetime --
 INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
                                  storage_location_id, is_returnable, return_location, max_weight, min_weight,
                                  max_height, min_height, created_by, updated_by, sharable_groups)

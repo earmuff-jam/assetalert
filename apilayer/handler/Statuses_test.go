@@ -41,7 +41,7 @@ func Test_GetStatusList(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/status/list?id=%s", prevUser.ID), nil)
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/status/list?id=%s&type=%s", prevUser.ID, "maintenance"), nil)
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
 	GetStatusList(w, req, config.CTO_USER)

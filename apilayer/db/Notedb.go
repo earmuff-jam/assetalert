@@ -107,7 +107,8 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status, selectedStatusIDSqlStr)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +197,8 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status, selectedStatusIDSqlStr)
 	if err != nil {
 		return nil, err
 	}
@@ -282,16 +284,15 @@ func RemoveNote(user string, draftNoteID string) error {
 }
 
 // retrieveStatusDetails ...
-func retrieveStatusDetails(user string, userID string, statusID string) (*model.StatusList, error) {
+func retrieveStatusDetails(user string, userID string, statusID string, sqlStr string) (*model.StatusList, error) {
+
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-
-	row := db.QueryRow(selectedStatusIDSqlStr, userID, statusID)
+	row := db.QueryRow(sqlStr, userID, statusID)
 
 	var selectedStatusID, selectedStatusName, selectedStatusDescription string
 	err = row.Scan(&selectedStatusID, &selectedStatusName, &selectedStatusDescription)

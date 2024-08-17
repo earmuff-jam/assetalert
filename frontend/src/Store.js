@@ -9,6 +9,7 @@ import event from './Containers/Event/eventSlice';
 import profile from './features/Profile/profileSlice';
 import notes from './features/Notes/notesSlice';
 import categories from './features/Categories/categoriesSlice';
+import maintenance from './features/Maintenance/maintenanceSlice';
 import inventory from './features/InventoryList/inventorySlice';
 
 import { all } from 'redux-saga/effects'; // Import 'all' from redux-saga
@@ -19,6 +20,7 @@ import eventSaga from './Containers/Event/eventSaga';
 import profileSaga from './features/Profile/profileSaga';
 import notesSaga from './features/Notes/notesSaga';
 import categoriesSaga from './features/Categories/categoriesSaga';
+import maintenanceSaga from './features/Maintenance/maintenanceSaga';
 import inventorySaga from './features/InventoryList/inventorySaga';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -33,6 +35,7 @@ function* rootSaga() {
     ...categoriesSaga.map((saga) => saga()),
     ...notesSaga.map((saga) => saga()),
     ...inventorySaga.map((saga) => saga()),
+    ...maintenanceSaga.map((saga) => saga()),
   ]);
 }
 
@@ -45,6 +48,7 @@ export const store = configureStore({
     categories,
     inventory,
     notes,
+    maintenance,
   },
   middleware: [sagaMiddleware],
   // devTools: process.env.NODE_ENV !== 'production',

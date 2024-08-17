@@ -24,7 +24,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
   const dispatch = useDispatch();
 
   const [planColor, setPlanColor] = useState('#f7f7f7');
-  const [location, setLocation] = useState({ lat: 0, long: 0 });
+  const [location, setLocation] = useState();
   const [formFields, setFormFields] = useState(ADD_CATEGORY_FORM_FIELDS);
   const [status, setStatus] = useState(STATUS_OPTIONS[0].label);
 
@@ -104,7 +104,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
       dispatch(categoryActions.createCategory(draftCategories));
     }
 
-    setSelectedCategoryID(null);
+    setSelectedCategoryID('');
     setFormFields(ADD_CATEGORY_FORM_FIELDS);
     setPlanColor('#f7f7f7');
     handleCloseAddCategory();
@@ -117,7 +117,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
   };
 
   useEffect(() => {
-    if (!loading && selectedCategoryID !== null) {
+    if (!loading && selectedCategoryID !== '') {
       const draftCategory = categories.filter((v) => v.id === selectedCategoryID).find(() => true);
       const updatedFormFields = Object.assign({}, formFields, {
         name: {

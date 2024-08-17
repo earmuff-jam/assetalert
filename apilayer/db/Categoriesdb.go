@@ -83,9 +83,11 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 	}
 	defer db.Close()
 
-	selectedStatusDetails, err := retrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status)
+	// retrieve selected status
+	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+	selectedStatusDetails, err := retrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status, selectedStatusIDSqlStr)
 	if err != nil {
-		log.Printf("Error retrieving status details: %v", err)
+		log.Printf("error retrieving status details: %v", err)
 		return nil, err
 	}
 	if selectedStatusDetails == nil {
@@ -162,7 +164,8 @@ func UpdateCategory(user string, userID string, draftCategory *model.Category) (
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftCategory.Status)
+	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftCategory.Status, selectedStatusIDSqlStr)
 	if err != nil {
 		return nil, err
 	}

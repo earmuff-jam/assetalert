@@ -15,7 +15,7 @@ import {
 import { Suspense, useEffect } from 'react';
 import MenuActionBar from './MenuActionBar';
 import { darkTheme, lightTheme } from '../../util/Theme';
-import { LogoutRounded } from '@mui/icons-material';
+import { DarkModeRounded, LightModeOutlined, LogoutRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { profileActions } from '../Profile/profileSlice';
@@ -30,12 +30,17 @@ const Layout = () => {
     window.location.href = '/';
   };
 
+  const handleAppearance = () => {
+    const draftData = { ...profileDetails, appearance: !profileDetails.appearance || false };
+    dispatch(profileActions.updateProfileDetails({ draftData }));
+  };
+
   useEffect(() => {
     dispatch(profileActions.getProfileDetails());
   }, []);
 
   if (loading) {
-    return <Skeleton width="100%" height="100%" />;
+    return <Skeleton width="100%" height="100vh" />;
   }
 
   return (
@@ -53,6 +58,9 @@ const Layout = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               AssetAlert
             </Typography>
+            <IconButton onClick={() => handleAppearance()}>
+              {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+            </IconButton>
             <Tooltip title="log out">
               <IconButton onClick={handleLogout}>
                 <LogoutRounded fontSize="small" />
