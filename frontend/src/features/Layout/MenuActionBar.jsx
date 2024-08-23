@@ -13,11 +13,25 @@ import {
   CategoryRounded,
   SummarizeRounded,
   ReportSharp,
+  ChevronLeftRounded,
+  ChevronRightRounded,
 } from '@mui/icons-material';
-import { List, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material';
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Stack,
+  Drawer,
+  IconButton,
+  Divider,
+} from '@mui/material';
+import { useTheme } from '@emotion/react';
 
-export default function MenuActionBar() {
+export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
 
@@ -84,55 +98,72 @@ export default function MenuActionBar() {
     },
   ];
 
+  // the timeout allows to close the drawer first before navigation occurs. Without this, the drawer
+  // behaves weird.
+  const handleMenuItemClick = (to) => {
+    handleDrawerClose();
+    setTimeout(() => {
+      navigate(to);
+    }, 200);
+  };
+
   const handleSettingsClick = () => setOpenSettings(!openSettings);
   const handlePinnedResourceClick = () => setOpenPinnedResources(!openPinnedResources);
 
   return (
-    <List sx={{ width: '100%', maxWidth: 300 }} component="nav" aria-labelledby="nested-list-subheader">
-      {parentMenuList.map((v) => (
-        <ListItemButton key={v.id} onClick={() => navigate(v.to)}>
-          <ListItemIcon>{v.icon}</ListItemIcon>
-          <ListItemText primary={v.label} />
-        </ListItemButton>
-      ))}
-
-      <ListItemButton onClick={handleSettingsClick}>
-        <ListItemIcon>
-          <SettingsRounded fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Settings" />
-        {openSettings ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
-      </ListItemButton>
-
-      <Collapse in={openSettings} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {settingsChildren.map((v) => (
-            <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => navigate(v.to)}>
+    <Stack display="flex">
+      <Drawer variant="temporary" open={openDrawer} onClose={handleDrawerClose} aria-modal="true">
+        <IconButton onClick={handleDrawerClose} sx={{ alignSelf: 'flex-end' }}>
+          {theme.direction === 'rtl' ? <ChevronRightRounded /> : <ChevronLeftRounded />}
+        </IconButton>
+        <Divider />
+        <List sx={{ width: '100%' }} component="nav" aria-labelledby="nested-list-subheader">
+          {parentMenuList.map((v) => (
+            <ListItemButton key={v.id} onClick={() => handleMenuItemClick(v.to)}>
               <ListItemIcon>{v.icon}</ListItemIcon>
               <ListItemText primary={v.label} />
             </ListItemButton>
           ))}
-        </List>
-      </Collapse>
 
-      <ListItemButton onClick={handlePinnedResourceClick}>
-        <ListItemIcon>
-          <AllInboxRounded fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Pinned Resources" />
-        {openPinnedResources ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
-      </ListItemButton>
+          <ListItemButton onClick={handleSettingsClick}>
+            <ListItemIcon>
+              <SettingsRounded fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+            {openSettings ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+          </ListItemButton>
 
-      <Collapse in={openPinnedResources} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {pinnedChildren.map((v) => (
-            <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => navigate(v.to)}>
-              <ListItemText primary={v.label} />
-              <ListItemIcon>{v.icon}</ListItemIcon>
-            </ListItemButton>
-          ))}
+          <Collapse in={openSettings} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {settingsChildren.map((v) => (
+                <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => handleMenuItemClick(v.to)}>
+                  <ListItemIcon>{v.icon}</ListItemIcon>
+                  <ListItemText primary={v.label} />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+
+          <ListItemButton onClick={handlePinnedResourceClick}>
+            <ListItemIcon>
+              <AllInboxRounded fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Pinned Resources" />
+            {openPinnedResources ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+          </ListItemButton>
+
+          <Collapse in={openPinnedResources} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {pinnedChildren.map((v) => (
+                <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => handleMenuItemClick(v.to)}>
+                  <ListItemText primary={v.label} />
+                  <ListItemIcon>{v.icon}</ListItemIcon>
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
         </List>
-      </Collapse>
-    </List>
+      </Drawer>
+    </Stack>
   );
 }
