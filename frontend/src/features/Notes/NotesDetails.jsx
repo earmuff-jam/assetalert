@@ -62,7 +62,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   }
 
   return (
-    <div>
+    <>
       {formattedNotes.map((v, index) => (
         <Accordion key={index} elevation={0}>
           <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1a-content" id="panel1a-header">
@@ -147,7 +147,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
         deleteID={deleteID}
         confirmDelete={handleConfirmDelete}
       />
-    </div>
+    </>
   );
 };
 
