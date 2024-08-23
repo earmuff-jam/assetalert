@@ -31,7 +31,7 @@ const Notes = () => {
         <Typography variant="h5" gutterBottom>
           Rough Notes
         </Typography>
-        <Button startIcon={<AddRounded />} onClick={handleEditMode}>
+        <Button startIcon={<AddRounded />} onClick={handleEditMode} variant='outlined'>
           Add note
         </Button>
       </Stack>
