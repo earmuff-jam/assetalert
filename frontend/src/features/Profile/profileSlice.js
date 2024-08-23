@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as XLSX from 'xlsx';
+import dayjs from 'dayjs';
 
 const initialState = {
   loading: false,
   error: '',
   profiles: [],
   profileDetails: {},
+  recentActivities: [],
 };
 
 const profileSlice = createSlice({
@@ -25,6 +28,45 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.profiles = [];
+    },
+    getRecentActivities: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    getRecentActivitiesSuccess: (state, action) => {
+      state.recentActivities = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getRecentActivitiesFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.recentActivities = [];
+    },
+    downloadRecentActivities: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    downloadRecentActivitiesSuccess: (state, action) => {
+      const rawData = action.payload;
+      const formattedData = rawData.map((v) => {
+        // eslint-disable-next-line no-unused-vars
+        const { id, activity_id, created_by, updated_by, sharable_groups, ...rest } = v;
+        return rest;
+      });
+
+      const ws = XLSX.utils.json_to_sheet(formattedData);
+      const wsColsWidth = Object.values(formattedData[0]).map((v) => ({ wch: v.length > 10 ? v.length : 10 }));
+      ws['!cols'] = wsColsWidth;
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, dayjs().format('YYYY-MM-DD'));
+      XLSX.writeFile(wb, 'assetAlert.xlsx');
+      state.loading = false;
+      state.error = '';
+    },
+    downloadRecentActivitiesFailure: (state) => {
+      state.loading = false;
+      state.error = '';
     },
     getProfileDetails: (state) => {
       state.loading = true;

@@ -40,38 +40,6 @@ func (p *Profile) Validate() error {
 	return nil
 }
 
-// RecentActivity ...
-// swagger:model RecentActivity
-//
-// RecentActivity is a activity that happened in the past. Used primarily to retrieve list of recent activities for the user.
-type RecentActivity struct {
-	Type              string    `json:"type"`
-	EventID           string    `json:"id"`
-	Title             string    `json:"title"`
-	ExpenseID         string    `json:"expenseID"`
-	ExpenseName       []string  `json:"expense_name"`
-	ExpenseAmount     string    `json:"expense_amount"`
-	VolunteeringID    string    `json:"volunteering_id"`
-	VolunteeringSkill []string  `json:"volunteering_skill"`
-	VolunteeringHours string    `json:"volunteering_hours"`
-	CreatedAt         time.Time `json:"created_at"`
-	CreatedBy         string    `json:"created_by"`
-	Creator           string    `json:"creator"`
-}
-
-// RecentHighlight ...
-// swagger:model RecentHighlight
-//
-// RecentHighlight object of the user. Stores count of different types of events
-type RecentHighlight struct {
-	CreatedEvents      int `json:"created_events"`
-	VolunteeredEvents  int `json:"volunteered_events"`
-	ReportedEvents     int `json:"reported_events"`
-	ExpensesReported   int `json:"expenses_reported"`
-	InventoriesUpdated int `json:"inventories_updated"`
-	DeactivatedEvents  int `json:"deactivated_events"`
-}
-
 // Location ...
 // swagger:model Location
 //
