@@ -12,10 +12,10 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import MenuActionBar from './MenuActionBar';
 import { darkTheme, lightTheme } from '../../util/Theme';
-import { DarkModeRounded, LightModeOutlined, LogoutRounded } from '@mui/icons-material';
+import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../Containers/Auth/authSlice';
 import { profileActions } from '../Profile/profileSlice';
@@ -23,6 +23,11 @@ import { profileActions } from '../Profile/profileSlice';
 const Layout = () => {
   const dispatch = useDispatch();
   const { loading, profileDetails } = useSelector((state) => state.profile);
+
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const handleDrawerOpen = () => setOpenDrawer(true);
+  const handleDrawerClose = () => setOpenDrawer(false);
 
   const handleLogout = () => {
     dispatch(authActions.getLogout());
@@ -55,6 +60,9 @@ const Layout = () => {
       >
         <AppBar color="secondary">
           <Toolbar>
+            <IconButton onClick={handleDrawerOpen}>
+              <MenuOutlined />
+            </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               AssetAlert
             </Typography>
@@ -70,7 +78,7 @@ const Layout = () => {
         </AppBar>
         <Box>
           <Stack direction="row" spacing="1rem" sx={{ mt: '5rem' }}>
-            <MenuActionBar />
+            <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
             <Stack sx={{ py: '1rem', flexGrow: 1 }}>
               <Outlet />
             </Stack>
