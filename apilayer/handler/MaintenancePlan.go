@@ -42,7 +42,7 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 	}
 	resp, err := db.RetrieveAllMaintenancePlans(user, userID, limitInt)
 	if err != nil {
-		log.Printf("Unable to retrieve categories. error: %v", err)
+		log.Printf("Unable to retrieve maintenance plans. error: %v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return

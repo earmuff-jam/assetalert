@@ -24,3 +24,15 @@ type Category struct {
 	Updator           string    `json:"updator"`
 	SharableGroups    []string  `json:"sharable_groups"`
 }
+
+type CategoryItem struct {
+	ID             string    `json:"id"`
+	CategoryID     string    `json:"category_id"`
+	CreatedBy      string    `json:"created_by"`
+	CreatedAt      time.Time `json:"created_at"`
+	Creator        string    `json:"creator"`
+	UpdatedBy      string    `json:"updated_by"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	Updator        string    `json:"updator"`
+	SharableGroups []string  `json:"sharable_groups"`
+}

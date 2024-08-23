@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Autocomplete,
-  Dialog,
-  DialogTitle,
-  FormControlLabel,
-  FormGroup,
-  IconButton,
-  Slide,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Autocomplete, Dialog, DialogTitle, IconButton, Slide, Stack, TextField, Typography } from '@mui/material';
 import {
   CheckRounded,
   CircleRounded,
@@ -30,7 +18,8 @@ import { VIEW_INVENTORY_LIST_HEADERS } from './constants';
 import { useSelector } from 'react-redux';
 import SelectedRowItem from './SelectedRowItemComponent';
 import { useNavigate } from 'react-router-dom';
-import AddInventoryDetail from '../../Components/Inventory/AddInventoryDetail';
+import AddInventoryDetail from './AddInventory/AddInventoryDetail';
+import VerticalMenu from './AddInventory/VerticalMenu';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
@@ -61,8 +50,8 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
   const [modalState, setModalState] = useState(MODAL_STATE.NONE);
 
   const handleCloseModal = () => setModalState(MODAL_STATE.NONE);
-  // const handleAddCategory = () => setModalState(MODAL_STATE.ASSIGN_CATEGORY);
-  // const handleAddInventory = () => setModalState(MODAL_STATE.ASSIGN_MAINTENANCE_PLAN);
+  const handleAddInventory = () => setModalState(MODAL_STATE.ADD_ITEM);
+  const handleBulkInventory = () => setModalState(MODAL_STATE.BULK_ITEM);
 
   // checkbox actions
   const handleRowSelection = (_, id) => {
@@ -88,6 +77,17 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     }
   };
 
+  // const updateSelectedColumn = (rowID, column, inputColumn, price, quantity) => {
+  // const draftRequest = {
+  //   id: rowID,
+  //   price: column === 'price' ? inputColumn : price,
+  //   quantity: column === 'quantity' ? inputColumn : quantity,
+  //   updated_by: user.id,
+  //   updated_on: dayjs(),
+  // };
+  // updateInventory.mutate({ ...draftRequest });
+  // };
+
   const populateIcon = (editLineItem, row, column, inputColumn, setInputColumn) => {
     if (editLineItem.editItem && editLineItem.rowID === row.id && editLineItem.column === column && inputColumn) {
       return (
@@ -95,14 +95,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
           sx={{ height: '1rem', width: '1rem', marginLeft: '0.5rem', cursor: 'pointer' }}
           color="primary"
           onClick={() => {
-            // const draftRequest = {
-            //   id: row.id,
-            //   price: editLineItem.column === 'price' ? inputColumn : row.price,
-            //   quantity: editLineItem.column === 'quantity' ? inputColumn : row.quantity,
-            //   updated_by: user.id,
-            //   updated_on: dayjs(),
-            // };
-            // updateInventory.mutate({ ...draftRequest });
+            // updateSelectedColumn(row.id, editLineItem.column, inputColumn, row.price, row.quantity);
             setInputColumn('');
             setEditLineItem({ editItem: false, rowID: -1, column: '' });
           }}
@@ -175,10 +168,10 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     handleCloseModal();
   };
 
-  // const handleDeleteInventory = () => {
-  //   setOpenDialog(true);
-  //   setIdToDelete(rowSelected);
-  // };
+  const handleRemoveInventory = () => {
+    setOpenDialog(true);
+    setIdToDelete(rowSelected);
+  };
 
   const reset = () => {
     setOpenDialog(false);
@@ -208,23 +201,21 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     <Stack flexGrow="1">
       <Stack direction="row" justifyContent="space-between">
         <HeaderWithButton title="Assets" />
-        <FormGroup>
-          <FormControlLabel
-            control={<Switch defaultChecked size="small" />}
-            sx={{
-              alignItems: 'unset',
-            }}
-            label={
-              gridMode ? (
-                <GridViewRounded color="primary" fontSize="small" />
-              ) : (
-                <ViewListRounded color="primary" fontSize="small" />
-              )
-            }
-            labelPlacement="end"
-            onClick={() => setGridMode(!gridMode)}
+        <Stack direction="row" alignItems="center">
+          <IconButton size="small" onClick={() => setGridMode(!gridMode)}>
+            {gridMode ? (
+              <GridViewRounded color="primary" fontSize="small" />
+            ) : (
+              <ViewListRounded color="primary" fontSize="small" />
+            )}
+          </IconButton>
+          <VerticalMenu
+            rowSelected={rowSelected}
+            handleAddInventory={handleAddInventory}
+            handleBulkInventory={handleBulkInventory}
+            handleRemoveInventory={handleRemoveInventory}
           />
-        </FormGroup>
+        </Stack>
       </Stack>
 
       <Autocomplete
@@ -259,7 +250,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
         />
       )}
       {modalState === MODAL_STATE.ADD_ITEM && (
-        <SimpleModal title="Add New Item" handleClose={handleCloseModal}>
+        <SimpleModal title="Add New Item" handleClose={handleCloseModal} maxSize="md">
           <AddInventoryDetail handleClose={handleCloseModal} />
         </SimpleModal>
       )}

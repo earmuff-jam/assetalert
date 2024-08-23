@@ -1,12 +1,30 @@
 import { Card, CardContent, Divider, IconButton, Skeleton, Stack, Typography } from '@mui/material';
 import { CategoryRounded, EngineeringRounded, WarningRounded } from '@mui/icons-material';
 import PieBarChart from '../../util/Chart/PieBarChart';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { assetSummaryActions } from './SummarySlice';
 
 const Overview = () => {
-  const itemsWithAssociatedCosts = []?.reduce((acc, el) => {
-    acc = acc + el.price;
+  const dispatch = useDispatch();
+  const { assetSummary = [], loading } = useSelector((state) => state.summary);
+
+  const totalCategories = assetSummary.filter((v) => v.type.toUpperCase() === 'C');
+  const totalMaintenancePlans = assetSummary.filter((v) => v.type.toUpperCase() === 'M');
+  const totalAssets = assetSummary.filter((v) => v.type.toUpperCase() === 'A');
+  const zeroCostItems = totalAssets.filter((v) => v.price === 0);
+  const totalAssetCosts = totalAssets.reduce((acc, el) => {
+    acc += el?.price || 0;
     return acc;
   }, 0);
+
+  useEffect(() => {
+    dispatch(assetSummaryActions.getAssetSummary());
+  }, []);
+
+  if (loading) {
+    return <Skeleton height="50vh" width="100%" />;
+  }
 
   return (
     <>
@@ -50,15 +68,11 @@ const Overview = () => {
             <Stack direction="row" justifyContent="space-between" spacing="2rem" useFlexGap flexWrap="wrap">
               <Stack spacing="2rem">
                 <Typography variant="h5">Cost Summary</Typography>
-                <RowItem
-                  label="Estimated valuation of items"
-                  color="text.secondary"
-                  dataValue={itemsWithAssociatedCosts}
-                />
+                <RowItem label="Estimated valuation of items" color="text.secondary" dataValue={totalAssetCosts} />
                 <RowItem
                   label="Unestimated items"
                   color="text.secondary"
-                  dataValue={1 - [1]?.filter((v) => v.price > 0).length || 0}
+                  dataValue={zeroCostItems.length || 0}
                 />
               </Stack>
               <Stack>
@@ -67,10 +81,13 @@ const Overview = () => {
                 </Typography>
                 <Stack direction="row" spacing="2rem">
                   <Stack spacing="2rem">
-                    <RowItem label="Overdue items" color="error.main" dataValue={0} />
-                    <RowItem label="All categories" color="text.secondary" dataValue={0} />
-                    <RowItem label="All maintenance plans" color="text.secondary" dataValue={0} />
-                    <RowItem label="All inventory items" color="text.secondary" dataValue={0} />
+                    <RowItem label="All categories" color="text.secondary" dataValue={totalCategories.length || 0} />
+                    <RowItem
+                      label="All maintenance plans"
+                      color="text.secondary"
+                      dataValue={totalMaintenancePlans.length || 0}
+                    />
+                    <RowItem label="All assets" color="text.secondary" dataValue={totalAssets.length || 0} />
                   </Stack>
                   <Stack direction="row" spacing="2rem">
                     <Divider orientation="vertical" />

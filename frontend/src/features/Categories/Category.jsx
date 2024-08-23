@@ -7,11 +7,13 @@ import { categoryActions } from './categoriesSlice';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { STATUS_OPTIONS } from '../Notes/constants';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(relativeTime);
 
 const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [openDialog, setOpenDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState(-1);
@@ -68,7 +70,12 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
                 <CardContent>
                   <Stack direction="row">
                     <Stack flexGrow={1} sx={{ minWidth: '12rem', minHeight: '6rem' }}>
-                      <Typography variant="h6" component="h3">
+                      <Typography
+                        variant="h6"
+                        component="h3"
+                        onClick={() => navigate(encodeURI(`/category/${item.id}`))}
+                        sx={{ cursor: 'pointer' }}
+                      >
                         {item.name}
                       </Typography>
                       <Typography variant="caption" flexWrap={1} color="text.secondary">

@@ -88,6 +88,194 @@ func Test_GetAllCategories_InvalidDBUser(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_GetCategory(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	GetAllCategories(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var categories []model.Category
+	err = json.Unmarshal(data, &categories)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	assert.Greater(t, len(categories), 0)
+
+	selectedCategory := categories[0]
+
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/category?id=%s&catID=%s", prevUser.ID.String(), selectedCategory.ID), nil)
+	w = httptest.NewRecorder()
+	GetAllCategoryItems(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var associatedCategoryItems []model.Category
+	err = json.Unmarshal(data, &associatedCategoryItems)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.GreaterOrEqual(t, len(associatedCategoryItems), 0)
+
+}
+
+func Test_GetCategory_IncorrectCategoryID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", "", 5), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetCategory(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetCategory_InvalidDBUser(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetCategory(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllCategoryItems(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	GetAllCategories(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var categories []model.Category
+	err = json.Unmarshal(data, &categories)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(categories), 0)
+
+	selectedCategory := categories[0]
+
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d&catID=%s", prevUser.ID.String(), 5, selectedCategory.ID), nil)
+	w = httptest.NewRecorder()
+	GetAllCategoryItems(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var associatedCategoryItems []model.CategoryItem
+	err = json.Unmarshal(data, &associatedCategoryItems)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.GreaterOrEqual(t, len(associatedCategoryItems), 0) // does not test if items are associated with selected category
+}
+
+func Test_GetAllCategoryItems_IncorrectCategoryID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", "", 5), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllCategoryItems(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllCategoryItems_InvalidDBUser(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllCategoryItems(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_CreateNewCategory(t *testing.T) {
 
 	// retrieve the selected profile

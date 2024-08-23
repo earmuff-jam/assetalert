@@ -74,6 +74,116 @@ func RetrieveAllCategories(user string, userID string, limit int) ([]model.Categ
 	return data, nil
 }
 
+// RetrieveAllCategoryItems ...
+func RetrieveAllCategoryItems(user string, userID string, categoryID string, limit int) ([]model.CategoryItem, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+		ci.id,
+		ci.category_id,
+		ci.created_by,
+		COALESCE(cp.username, cp.full_name, 'Anonymous') as creator,
+		ci.created_at,
+		ci.updated_by,
+		COALESCE(up.username, up.full_name, 'Anonymous') as updator,
+		ci.updated_at,
+		ci.sharable_groups
+	FROM community.category_item ci
+	LEFT JOIN community.profiles cp ON ci.created_by = cp.id
+	LEFT JOIN community.profiles up ON ci.updated_by = up.id
+	WHERE $1::UUID = ANY(ci.sharable_groups) AND ci.category_id = $2
+	ORDER BY ci.updated_at DESC
+	LIMIT $3;`
+
+	rows, err := db.Query(sqlStr, userID, categoryID, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.CategoryItem
+	var sharableGroups pq.StringArray
+
+	for rows.Next() {
+		var ec model.CategoryItem
+		if err := rows.Scan(&ec.ID, &ec.CategoryID, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
+			return nil, err
+		}
+		ec.SharableGroups = sharableGroups
+		data = append(data, ec)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+// RetrieveCategory ...
+func RetrieveCategory(user string, userID string, categoryID string) (model.Category, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return model.Category{}, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+	c.id,
+	c.name,
+	c.description,
+	s.id,
+	s.name AS status_name,
+	s.description AS status_description,
+	c.color, 
+	c.min_items_limit, 
+	c.max_items_limit, 
+	c.created_at,
+	c.created_by,
+	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator, 
+	c.updated_at,
+	c.updated_by,
+	COALESCE(up.full_name, up.username, up.email_address) AS updator,
+	c.sharable_groups
+	FROM community.category c
+	LEFT JOIN community.statuses s on s.id = c.status
+	LEFT JOIN community.profiles cp on cp.id = c.created_by
+	LEFT JOIN community.profiles up on up.id = c.updated_by
+	WHERE c.id = $2 AND $1::UUID = ANY(c.sharable_groups)
+	ORDER BY c.updated_at DESC`
+
+	row := db.QueryRow(sqlStr, userID, categoryID)
+	selectedCategory := model.Category{}
+
+	err = row.Scan(
+		&selectedCategory.ID,
+		&selectedCategory.Name,
+		&selectedCategory.Description,
+		&selectedCategory.Status,
+		&selectedCategory.StatusName,
+		&selectedCategory.StatusDescription,
+		&selectedCategory.Color,
+		&selectedCategory.MinItemsLimit,
+		&selectedCategory.MaxItemsLimit,
+		&selectedCategory.CreatedAt,
+		&selectedCategory.CreatedBy,
+		&selectedCategory.Creator,
+		&selectedCategory.UpdatedAt,
+		&selectedCategory.UpdatedBy,
+		&selectedCategory.Updator,
+		pq.Array(&selectedCategory.SharableGroups),
+	)
+	if err != nil {
+		return model.Category{}, err
+	}
+
+	return selectedCategory, nil
+}
+
 // CreateCategory ...
 func CreateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
 	db, err := SetupDB(user)

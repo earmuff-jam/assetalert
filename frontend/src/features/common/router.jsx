@@ -6,11 +6,11 @@ const HomePage = lazy(() => import('../Home/HomePage'));
 const Notes = lazy(() => import('../Notes/Notes'));
 const Plan = lazy(() => import('../Maintenance/Plan'));
 const ProfilePage = lazy(() => import('../Profile/ProfilePage'));
-const EventPage = lazy(() => import('../../Containers/Event/EventPage'));
 const AppearanceSettings = lazy(() => import('../Profile/Appearance/Appearance'));
 const InventoryList = lazy(() => import('../InventoryList/InventoryList'));
 const EditInventory = lazy(() => import('../InventoryList/EditInventory'));
 const CategoryList = lazy(() => import('../Categories/CategoryList'));
+const CategoryItem = lazy(() => import('../Categories/CategoryItem/CategoryItem'));
 const RecentList = lazy(() => import('../RecentList/RecentList'));
 
 export const router = createBrowserRouter([
@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
         element: <CategoryList />,
       },
       {
+        path: '/category/:id',
+        element: <CategoryItem />,
+      },
+      {
         path: '/plans/list',
         element: <Plan />,
       },
@@ -57,10 +61,6 @@ export const router = createBrowserRouter([
       {
         path: 'recent/activities',
         element: <RecentList />,
-      },
-      {
-        path: ':eventID',
-        element: <EventPage />,
       },
     ],
   },

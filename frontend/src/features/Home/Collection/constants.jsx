@@ -11,14 +11,14 @@ export const DEFAULT_INVENTORIES_LANDING_PAGE_TEXT = [
     href: 'plans/list',
   },
   {
-    name: 'Track record of inventories',
+    name: 'Create or view reports',
     description: 'Visualize items which are due for maintenance or need attention',
     imageSrc: 'images/items.jpg',
     imageAlt: 'default-track-record-inventory-items-img',
-    href: 'forecast/list',
+    href: 'reports',
   },
   {
-    name: 'Categories inventories and stay in sync',
+    name: 'Categorize inventories and stay in sync',
     description: 'Understand your inventories better. Keep tabs on more important inventories',
     imageSrc: 'images/kitchen-items.jpg',
     imageAlt: 'default-bookmarked-inventory-items-img',
