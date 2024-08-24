@@ -75,7 +75,7 @@ func RetrieveAllCategories(user string, userID string, limit int) ([]model.Categ
 }
 
 // RetrieveAllCategoryItems ...
-func RetrieveAllCategoryItems(user string, userID string, categoryID string, limit int) ([]model.CategoryItem, error) {
+func RetrieveAllCategoryItems(user string, userID string, categoryID string, limit int) ([]model.CategoryItemResponse, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -85,19 +85,25 @@ func RetrieveAllCategoryItems(user string, userID string, categoryID string, lim
 	sqlStr := `SELECT 
 		ci.id,
 		ci.category_id,
+		ci.item_id,
+		i.name,
+		i.description,
+		i.price,
+		i.quantity,
+		i.location,
 		ci.created_by,
-		COALESCE(cp.username, cp.full_name, 'Anonymous') as creator,
+		COALESCE(cp.username, cp.full_name, cp.email_address, 'Anonymous') as creator,
 		ci.created_at,
 		ci.updated_by,
-		COALESCE(up.username, up.full_name, 'Anonymous') as updator,
+		COALESCE(up.username, up.full_name, cp.email_address, 'Anonymous') as updator,
 		ci.updated_at,
 		ci.sharable_groups
 	FROM community.category_item ci
+	LEFT JOIN community.inventory i ON ci.item_id = i.id
 	LEFT JOIN community.profiles cp ON ci.created_by = cp.id
 	LEFT JOIN community.profiles up ON ci.updated_by = up.id
 	WHERE $1::UUID = ANY(ci.sharable_groups) AND ci.category_id = $2
-	ORDER BY ci.updated_at DESC
-	LIMIT $3;`
+	ORDER BY ci.updated_at DESC FETCH FIRST $3 ROWS ONLY;`
 
 	rows, err := db.Query(sqlStr, userID, categoryID, limit)
 	if err != nil {
@@ -105,12 +111,12 @@ func RetrieveAllCategoryItems(user string, userID string, categoryID string, lim
 	}
 	defer rows.Close()
 
-	var data []model.CategoryItem
+	var data []model.CategoryItemResponse
 	var sharableGroups pq.StringArray
 
 	for rows.Next() {
-		var ec model.CategoryItem
-		if err := rows.Scan(&ec.ID, &ec.CategoryID, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
+		var ec model.CategoryItemResponse
+		if err := rows.Scan(&ec.ID, &ec.CategoryID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
 			return nil, err
 		}
 		ec.SharableGroups = sharableGroups
@@ -154,7 +160,7 @@ func RetrieveCategory(user string, userID string, categoryID string) (model.Cate
 	LEFT JOIN community.profiles cp on cp.id = c.created_by
 	LEFT JOIN community.profiles up on up.id = c.updated_by
 	WHERE c.id = $2 AND $1::UUID = ANY(c.sharable_groups)
-	ORDER BY c.updated_at DESC`
+	ORDER BY c.updated_at DESC;`
 
 	row := db.QueryRow(sqlStr, userID, categoryID)
 	selectedCategory := model.Category{}
@@ -188,7 +194,7 @@ func RetrieveCategory(user string, userID string, categoryID string) (model.Cate
 func CreateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
 	db, err := SetupDB(user)
 	if err != nil {
-		log.Printf("Failed to connect to the database: %v", err)
+		log.Printf("Failed to connect to the database: %+v", err)
 		return nil, err
 	}
 	defer db.Close()
@@ -197,7 +203,7 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
 	selectedStatusDetails, err := retrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status, selectedStatusIDSqlStr)
 	if err != nil {
-		log.Printf("error retrieving status details: %v", err)
+		log.Printf("error retrieving status details: %+v", err)
 		return nil, err
 	}
 	if selectedStatusDetails == nil {
@@ -206,7 +212,7 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 
 	tx, err := db.Begin()
 	if err != nil {
-		log.Printf("Error starting transaction: %v", err)
+		log.Printf("Error starting transaction: %+v", err)
 		return nil, err
 	}
 
@@ -250,12 +256,12 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 	)
 	if err != nil {
 		tx.Rollback()
-		log.Printf("Error scanning result: %v", err)
+		log.Printf("Error scanning result: %+v", err)
 		return nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
-		log.Printf("Error committing transaction: %v", err)
+		log.Printf("Error committing transaction: %+v", err)
 		return nil, err
 	}
 
@@ -353,18 +359,107 @@ func UpdateCategory(user string, userID string, draftCategory *model.Category) (
 }
 
 // RemoveCategory ...
-func RemoveCategory(user string, catID string) error {
+func RemoveCategory(user string, categoryID string) error {
 	db, err := SetupDB(user)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM community.category WHERE id=$1`
-	_, err = db.Exec(sqlStr, catID)
+	sqlStr := `DELETE FROM community.category WHERE id=$1;`
+	_, err = db.Exec(sqlStr, categoryID)
 	if err != nil {
 		log.Printf("unable to delete selected category. error: %+v", err)
 		return err
 	}
 	return nil
+}
+
+// AddAssetToCategory ...
+func AddAssetToCategory(user string, userID string, categoryID string, assetIDs []string) ([]model.CategoryItemResponse, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `INSERT INTO community.category_item(category_id, item_id, created_by, created_at, updated_by, updated_at, sharable_groups)
+		VALUES ($1, $2, $3, $4, $5, $6, $7);`
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("error starting transaction: %+v", err)
+		return nil, err
+	}
+
+	currentTime := time.Now()
+	for _, v := range assetIDs {
+		_, err := tx.Exec(
+			sqlStr,
+			categoryID,
+			v,
+			userID,
+			currentTime,
+			userID,
+			currentTime,
+			pq.Array([]string{userID}),
+		)
+		if err != nil {
+			tx.Rollback()
+			log.Printf("Error executing query: %+v", err)
+			return nil, err
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("error committing transaction: %+v", err)
+		return nil, err
+	}
+
+	sqlStr = `SELECT 
+		ci.id,
+		ci.category_id,
+		ci.item_id,
+		i.name,
+		i.description,
+		i.price,
+		i.quantity,
+		i.location,
+		ci.created_by,
+		COALESCE(cp.username, cp.full_name, cp.email_address, 'Anonymous') as creator,
+		ci.created_at,
+		ci.updated_by,
+		COALESCE(up.username, up.full_name, cp.email_address, 'Anonymous') as updator,
+		ci.updated_at,
+		ci.sharable_groups
+	FROM community.category_item ci
+	LEFT JOIN community.inventory i ON ci.item_id = i.id
+	LEFT JOIN community.profiles cp ON ci.created_by = cp.id
+	LEFT JOIN community.profiles up ON ci.updated_by = up.id
+	WHERE $1::UUID = ANY(ci.sharable_groups) AND ci.category_id = $2
+	ORDER BY ci.updated_at DESC;`
+
+	rows, err := db.Query(sqlStr, userID, categoryID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.CategoryItemResponse
+	var sharableGroups pq.StringArray
+
+	for rows.Next() {
+		var ec model.CategoryItemResponse
+		if err := rows.Scan(&ec.ID, &ec.CategoryID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
+			return nil, err
+		}
+		ec.SharableGroups = sharableGroups
+		data = append(data, ec)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

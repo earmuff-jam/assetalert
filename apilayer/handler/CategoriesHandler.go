@@ -93,7 +93,7 @@ func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetAllCategoryItems ...
-// swagger:route GET /api/v1/categories GetAllCategoryItems getAllCategoryItems
+// swagger:route GET /api/v1/category/items GetAllCategoryItems getAllCategoryItems
 //
 // # Retrieves the list of assets for a specific category.
 //
@@ -181,6 +181,51 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	resp, err := db.CreateCategory(user, draftCategory)
 	if err != nil {
 		log.Printf("Unable to create new category. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// AddItemsInCategory ...
+// swagger:route POST /api/v1/category/items AddItemsInCategory addItemsInCategory
+//
+// # Add selected items in a specific category
+//
+// Parameters:
+//   - +name: id
+//     in: query
+//     description: The id of the selected category to add the items into
+//     type: string
+//     required: true
+//   - +name: selectedIDs
+//     in: query
+//     description: The array of IDs of the selected assets
+//     type: string
+//     required: false
+//
+// Responses:
+// 200: []CategoryItem
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
+
+	draftCategory := &model.CategoryItemRequest{}
+	err := json.NewDecoder(r.Body).Decode(draftCategory)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	resp, err := db.AddAssetToCategory(user, draftCategory.UserID, draftCategory.ID, draftCategory.AssetIDs)
+	if err != nil {
+		log.Printf("Unable to add assets to existing category. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
