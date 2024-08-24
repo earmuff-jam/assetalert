@@ -1,5 +1,5 @@
 
--- File: 0017_create_maintenance_item_table.up.sql
+-- File: 0018_create_maintenance_item_table.up.sql
 -- Description: Create the maintenance items table. Relationship between maintenance plans and asset is built here.
 
 SET search_path TO community, public;

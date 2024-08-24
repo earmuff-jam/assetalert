@@ -77,7 +77,6 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                 <Stack
                   key={index}
                   sx={{
-                    bgcolor: 'secondary.light',
                     justifyContent: 'space-between',
                     flexGrow: 1,
                     p: 1,

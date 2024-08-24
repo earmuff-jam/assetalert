@@ -3,6 +3,7 @@ import { REACT_APP_LOCALHOST_URL } from '../../util/Common';
 import { profileActions } from './profileSlice';
 import instance from '../../util/Instances';
 
+const DEFAULT_LIMIT = 10;
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
 
 export function* fetchProfileList() {
@@ -21,6 +22,32 @@ export function* fetchExistingUserDetails() {
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileDetailsFailure(e));
+  }
+}
+
+export function* fetchRecentActivities() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('limit', DEFAULT_LIMIT);
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent-activities?${params.toString()}`);
+    yield put(profileActions.getRecentActivitiesSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getRecentActivitiesFailure(e));
+  }
+}
+
+export function* downloadRecentActivities(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    const { last30Days } = action.payload;
+    params.append('until', last30Days);
+    params.append('limit', 1000);
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent-activities?${params.toString()}`);
+    yield put(profileActions.downloadRecentActivitiesSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.downloadRecentActivitiesFailure(e));
   }
 }
 
@@ -63,6 +90,14 @@ export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
 
+export function* watchFetchRecentActivities() {
+  yield takeLatest(`profile/getRecentActivities`, fetchRecentActivities);
+}
+
+export function* watchDownloadRecentActivities() {
+  yield takeLatest(`profile/downloadRecentActivities`, downloadRecentActivities);
+}
+
 export function* watchUpdateExistingUserDetails() {
   yield takeLatest(`profile/updateProfileDetails`, updateExistingUserDetails);
 }
@@ -73,6 +108,8 @@ export function* watchFetchUpdateProfileImage() {
 
 export default [
   watchFetchProfileList,
+  watchFetchRecentActivities,
+  watchDownloadRecentActivities,
   watchFetchExistingUserDetails,
   watchUpdateExistingUserDetails,
   watchFetchUpdateProfileImage,

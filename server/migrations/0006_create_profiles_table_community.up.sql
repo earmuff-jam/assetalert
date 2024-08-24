@@ -27,18 +27,19 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON community.profiles TO community_public;
 GRANT SELECT, INSERT, UPDATE, DELETE ON community.profiles TO community_test;
 GRANT ALL PRIVILEGES ON TABLE community.profiles TO community_admin;
 
-drop function if exists community.handle_new_user() cascade;
-create function community.handle_new_user()
-    returns trigger as
+DROP FUNCTION IF EXISTS community.handle_new_user() CASCADE;
+CREATE FUNCTION community.handle_new_user()
+    RETURNS trigger AS
 $$
-begin
-    insert into community.profiles (id, email_address, phone_number)
-    values (new.id, new.email, new.phone);
-    return new;
-end;
-$$ language plpgsql security definer;
-create trigger on_auth_user_created
-    after insert
-    on auth.users
-    for each row
-execute procedure community.handle_new_user();
+BEGIN
+    INSERT INTO community.profiles (id, email_address, phone_number)
+    VALUES (new.id, new.email, new.phone);
+    RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT
+    ON auth.users
+    FOR EACH ROW
+EXECUTE PROCEDURE community.handle_new_user();

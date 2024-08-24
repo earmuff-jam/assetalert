@@ -96,20 +96,6 @@ const ProfileDetailPage = () => {
     dispatch(profileActions.getProfileNotifications());
   }, []);
 
-  // useEffect(() => {
-  //   if (profileDetails.id) {
-  //     dispatch(profileActions.getVolunteeringDetails({ userID: profileDetails.id }));
-  //     dispatch(profileActions.getRecentActivitiesTrophyList({ userID: profileDetails.id }));
-  //   }
-  //   const updatedFormFields = { ...formFields };
-  //   updatedFormFields.name.value = profileDetails?.full_name || '';
-  //   updatedFormFields.phone.value = profileDetails?.phone_number || '';
-  //   updatedFormFields.username.value = profileDetails?.username || '';
-  //   updatedFormFields.objective.value = profileDetails?.goal || '';
-  //   updatedFormFields.aboutMe.value = profileDetails?.about_me || '';
-  //   setFormFields(updatedFormFields);
-  // }, [profileDetails]);
-
   return (
     <Box className={classes.root}>
       <Grid container>

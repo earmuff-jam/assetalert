@@ -131,3 +131,12 @@ export const categorizeNotes = (notes) => {
 
   return Object.values(categorizedNotes);
 };
+
+/**
+ *
+ * @param {word} string - the word to capitalize
+ * @returns string - with captial first letter
+ */
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
