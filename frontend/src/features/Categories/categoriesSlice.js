@@ -102,6 +102,20 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    addItemsInCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    addItemsInCategorySuccess: (state, action) => {
+      state.itemsInCategory = [...action.payload];
+      state.loading = false;
+      state.error = '';
+    },
+    addItemsInCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.itemsInCategory = [];
+    },
   },
 });
 

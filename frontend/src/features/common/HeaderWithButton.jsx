@@ -7,6 +7,7 @@ const HeaderWithButton = ({
   showRedirectLink,
   redirectTo,
   primaryButtonTextLabel,
+  primaryButtonDisabled,
   primaryStartIcon,
   secondaryButtonTextLabel,
   secondaryStartIcon,
@@ -32,7 +33,7 @@ const HeaderWithButton = ({
       </Stack>
       <Stack direction="row" spacing={2} useFlexGap>
         {primaryButtonTextLabel ? (
-          <Button color="primary" variant="outlined" onClick={handleClickPrimaryButton} startIcon={primaryStartIcon}>
+          <Button color="primary" variant="outlined" disabled={primaryButtonDisabled} onClick={handleClickPrimaryButton} startIcon={primaryStartIcon}>
             {primaryButtonTextLabel}
           </Button>
         ) : null}

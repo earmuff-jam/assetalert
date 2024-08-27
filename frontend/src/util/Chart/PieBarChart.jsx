@@ -1,13 +1,22 @@
 import 'chart.js/auto';
 import { Bar, Pie } from 'react-chartjs-2';
 
-const PieBarChart = ({ chartType = 'bar', data, legendLabel, backgroundColor, borderColor, height = '25rem' }) => {
+const PieBarChart = ({
+  chartType = 'bar',
+  data,
+  legendLabel,
+  prefix = ' ',
+  itemLabel = 'items',
+  backgroundColor,
+  borderColor,
+  height = '25rem',
+}) => {
   let chartData = {
-    labels: data.map((d) => d.name),
+    labels: data.map((d) => d.label),
     datasets: [
       {
         label: `${legendLabel}`,
-        data: data.map((d) => d.value),
+        data: data.map((d) => d.count),
         backgroundColor: backgroundColor,
         borderColor: borderColor,
         borderWidth: 1,
@@ -41,12 +50,13 @@ const PieBarChart = ({ chartType = 'bar', data, legendLabel, backgroundColor, bo
 
     options = {
       cutout: '70%',
+      maintainAspectRatio: false,
       borderColor: data.map((v) => v.color),
       plugins: {
         tooltip: {
           callbacks: {
             label: function (tooltipItem) {
-              return `${tooltipItem.formattedValue} items` || 0;
+              return ` ${prefix}${tooltipItem.formattedValue} ${itemLabel}` || 0;
             },
           },
         },

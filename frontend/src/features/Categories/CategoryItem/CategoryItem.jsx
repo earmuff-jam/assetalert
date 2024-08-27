@@ -1,57 +1,74 @@
 import { useParams } from 'react-router-dom';
 import CategoryItemCard from './CategoryItemCard';
 import DataTable from './DataTable';
-import { Skeleton, Stack } from '@mui/material';
+import { Box, Button, Skeleton, Stack } from '@mui/material';
 import HeaderWithButton from '../../common/HeaderWithButton';
 import { AddRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { categoryActions } from '../categoriesSlice';
 import PieBarChart from '../../../util/Chart/PieBarChart';
-import EmptyComponent from '../../../util/EmptyComponent';
+import SimpleModal from '../../common/SimpleModal';
+import TableComponent from '../../InventoryList/TableComponent';
+import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
+import { generateTitleColor } from '../../common/utils';
+import { inventoryActions } from '../../InventoryList/inventorySlice';
+import dayjs from 'dayjs';
+import { ITEMS_IN_CATEGORY_HEADER } from '../constants';
 
 export default function CategoryItem() {
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
   const { selectedCategory, itemsInCategory = [], loading = false } = useSelector((state) => state.categories);
 
-  const itemColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'description', headerName: 'Description', width: 130 },
-    {
-      field: 'min_items',
-      headerName: 'Min Items',
-      type: 'number',
-      width: 90,
-    },
-    {
-      field: 'max_items',
-      headerName: 'Max Items',
-      type: 'number',
-      width: 90,
-    },
-    {
-      field: 'sharable_groups',
-      headerName: 'Sharing with',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (value, row) => `${row.name || ''} ${row.description || ''}`,
-    },
-  ];
+  const [rowSelected, setRowSelected] = useState([]);
+  const [displayModal, setDisplayModal] = useState(false);
 
-  const itemRows = [
-    { id: 1, description: 'Snow', name: 'Jon', max_items: 35, min_items: 3 },
-    { id: 2, description: 'Lannister', name: 'Cersei', max_items: 42, min_items: 4 },
-    { id: 3, description: 'Lannister', name: 'Jaime', max_items: 45, min_items: 5 },
-    { id: 4, description: 'Stark', name: 'Arya', max_items: 16, min_items: 1 },
-    { id: 5, description: 'Targaryen', name: 'Daenerys', max_items: null, min_items: null },
-    { id: 6, description: 'Melisandre', name: null, max_items: 150, min_items: 1 },
-    { id: 7, description: 'Clifford', name: 'Ferrara', max_items: 44, min_items: 4 },
-    { id: 8, description: 'Frances', name: 'Rossini', max_items: 36, min_items: 3 },
-    { id: 9, description: 'Roxie', name: 'Harvey', max_items: 65, min_items: 5 },
-  ];
+  const handleOpenModal = () => {
+    setDisplayModal(true);
+    dispatch(inventoryActions.getAllInventoriesForUser());
+  };
+
+  const handleRowSelection = (_, id) => {
+    if (id === 'all') {
+      setRowSelected(inventories.map((v) => v.id));
+    } else {
+      const selectedIndex = rowSelected.indexOf(id);
+      let draftSelected = [];
+      if (selectedIndex === -1) {
+        draftSelected = draftSelected.concat(rowSelected, id);
+      } else if (selectedIndex === 0) {
+        draftSelected = draftSelected.concat(rowSelected.slice(1));
+      } else if (selectedIndex === rowSelected.length - 1) {
+        draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+      }
+      setRowSelected(draftSelected);
+    }
+  };
+
+  const rowFormatter = (row, column) => {
+    if (['created_at', 'updated_at'].includes(column)) {
+      return dayjs(row[column]).fromNow();
+    }
+    if (['updater_name', 'creator_name'].includes(column)) {
+      return row[column] ?? '-';
+    }
+    return row[column] ?? '-';
+  };
+
+  const resetSelection = () => {
+    setDisplayModal(false);
+    setRowSelected([]);
+  };
+
+  const addItems = () => {
+    dispatch(categoryActions.addItemsInCategory({ rowSelected, id }));
+    resetSelection();
+  };
 
   useEffect(() => {
     if (id) {
@@ -70,44 +87,50 @@ export default function CategoryItem() {
       <CategoryItemCard selectedCategory={selectedCategory} />
       <HeaderWithButton
         title="Items"
-        secondaryTitle={`Total ${itemRows.length || 0} item(s)`}
+        secondaryTitle={`Total ${itemsInCategory?.length || 0} item(s)`}
         primaryButtonTextLabel="Add Items"
         primaryStartIcon={<AddRounded />}
+        handleClickPrimaryButton={handleOpenModal}
       />
-      <DataTable rows={itemRows} columns={itemColumns} isEmpty={itemsInCategory === null} />
-      <HeaderWithButton title="History" />
-
-      <Stack
-        direction="row"
-        spacing="1rem"
-        justifyContent={itemsInCategory === null ? 'center' : 'space-between'}
-        sx={{ flexGrow: 1 }}
-      >
-        {itemsInCategory ? (
-          <>
-            <Stack>
-              <DataTable rows={itemRows} columns={itemColumns} />
-            </Stack>
-            <Stack>
-              <PieBarChart
-                chartType="pie"
-                legendLabel="Need attention"
-                data={[0, 1, 1 - (0 + 2)].map((v, index) => ({
-                  label: ['under categories', 'under maintenance', 'unassigned'][index],
-                  count: v,
-                  color: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
-                }))}
-                backgroundColor="rgba(75, 192, 192, 0.4)"
-                borderColor="rgba(75, 192, 192, 1)"
-              />
-            </Stack>
-          </>
-        ) : (
-          <Stack display="flex" justifyContent="center">
-            <EmptyComponent subtitle={'Associate items into category to begin.'} />
-          </Stack>
-        )}
-      </Stack>
+      <DataTable rows={itemsInCategory} columns={ITEMS_IN_CATEGORY_HEADER} isEmpty={itemsInCategory === null} />
+      <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
+      <Box sx={{ position: 'relative', height: '40vh', width: 'calc(100% - 1rem)' }}>
+        <PieBarChart
+          legendLabel="Name Vs Cost"
+          data={
+            itemsInCategory
+              ?.filter((_, index) => index < 10)
+              ?.map((v, index) => ({
+                label: v.name,
+                count: v.price,
+                color: ['rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index % 2],
+              })) || []
+          }
+          backgroundColor="rgba(75, 192, 192, 0.4)"
+          borderColor="rgba(75, 192, 192, 1)"
+        />
+      </Box>
+      {displayModal && (
+        <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
+          <TableComponent
+            isLoading={inventoriesLoading}
+            hideCheckBox={false}
+            hideIconButton={true}
+            hideMoreDetailsButton={true}
+            data={inventories.filter((inventory) => !itemsInCategory?.some((item) => item.item_id === inventory.id))}
+            columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
+            rowFormatter={rowFormatter}
+            generateTitleColor={generateTitleColor}
+            rowSelected={rowSelected}
+            onRowSelect={() => {}}
+            handleRowSelection={handleRowSelection}
+            emptyComponentSubtext="Create inventory items to associate them."
+          />
+          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
+            Add Selected items
+          </Button>
+        </SimpleModal>
+      )}
     </Stack>
   );
 }

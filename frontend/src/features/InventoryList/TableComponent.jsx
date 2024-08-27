@@ -6,7 +6,7 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  Box,
   TableHead,
   TableRow,
   Tooltip,
@@ -18,6 +18,9 @@ import { EmptyComponent } from '../common/utils';
 /**
  * TableComponent React Function - Displays the inventory table
  * @param {boolean} hideActionMenu - determines if extra functionality should be present, like selection of rows, defaults: false
+ * @param {boolean} hideCheckBox - determines if associated icons should be present, defaults: false
+ * @param {boolean} hideIconButton - determines if associated icons should be present, defaults: false
+ * @param {boolean} hideMoreDetailsButton - determines if associated icons should be present, defaults: false
  * @param {boolean} isLoading - determines if the selected data is still in loading state
  * @param {Array<Object>} columns - the columns to display for the table
  * @param {Function} rowFormatter - the row formatter to format each row
@@ -26,9 +29,13 @@ import { EmptyComponent } from '../common/utils';
  * @param {Array<Object>} onRowSelect - the array of inventory items that is selected
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
+ * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
  */
 const TableComponent = ({
   hideActionMenu = false,
+  hideCheckBox = false,
+  hideIconButton = false,
+  hideMoreDetailsButton = false,
   isLoading,
   columns,
   data,
@@ -37,77 +44,86 @@ const TableComponent = ({
   onRowSelect,
   handleRowSelection,
   handleEdit,
+  emptyComponentSubtext = '',
 }) => {
   if (isLoading) return <Skeleton variant="rounded" animation="wave" height="10vh" width="100%" />;
   if (!data || data.length === 0) {
-    return <EmptyComponent />;
+    return <EmptyComponent subtitle={emptyComponentSubtext} />;
   }
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {!hideActionMenu ? (
-              <TableCell padding="checkbox">
-                <Stack direction="row" alignItems="center">
-                  <Checkbox size="small" onClick={(ev) => handleRowSelection(ev, 'all')} />
-                  <Typography fontWeight="bold">Action</Typography>
-                </Stack>
-              </TableCell>
-            ) : null}
-            {Object.keys(columns).map((colKey) => {
-              const column = columns[colKey];
-              return (
-                <TableCell key={column.id}>
-                  <Typography fontWeight="bold">{column.label}</Typography>
+    <Box sx={{ overflow: 'auto' }}>
+      <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {!hideActionMenu ? (
+                <TableCell padding="checkbox">
+                  <Stack direction="row" alignItems="center">
+                    <Checkbox size="small" onClick={(ev) => handleRowSelection(ev, 'all')} />
+                    <Typography fontWeight="bold">Action</Typography>
+                  </Stack>
                 </TableCell>
+              ) : null}
+              {Object.keys(columns).map((colKey) => {
+                const column = columns[colKey];
+                return (
+                  <TableCell key={column.id}>
+                    <Typography fontWeight="bold">{column.label}</Typography>
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row, rowIndex) => {
+              const isSelected = (id) => rowSelected.indexOf(id) !== -1;
+              const selectedID = row.id;
+              const isItemSelected = isSelected(selectedID);
+              // fix titleColor issues
+              const title = '';
+              const color = '';
+              // const { title, color } = generateTitleColor(row, isCategory, override);
+              return (
+                <Tooltip key={rowIndex} title={title}>
+                  <TableRow hover>
+                    {!hideActionMenu ? (
+                      <TableCell padding="checkbox">
+                        <Stack direction="row">
+                          {!hideCheckBox && (
+                            <Checkbox
+                              checked={isItemSelected}
+                              color="primary"
+                              size="small"
+                              onClick={(event) => handleRowSelection(event, selectedID)}
+                              inputProps={{ 'aria-labelledby': 'labelId' }}
+                            />
+                          )}
+                          {!hideIconButton && (
+                            <IconButton onClick={() => handleEdit(selectedID)} size="small">
+                              <EditRounded color="primary" fontSize="small" />
+                            </IconButton>
+                          )}
+                          {!hideMoreDetailsButton && (
+                            <IconButton size="small" onClick={() => onRowSelect(row)}>
+                              <FileOpenRounded color="primary" fontSize="small" />
+                            </IconButton>
+                          )}
+                        </Stack>
+                      </TableCell>
+                    ) : null}
+                    {Object.keys(columns).map((colKey) => {
+                      const column = columns[colKey];
+                      return <TableCell key={column.id}>{rowFormatter(row, column.colName, color)}</TableCell>;
+                    })}
+                  </TableRow>
+                </Tooltip>
               );
             })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row, rowIndex) => {
-            const isSelected = (id) => rowSelected.indexOf(id) !== -1;
-            const selectedID = row.id;
-            const isItemSelected = isSelected(selectedID);
-            // fix titleColor issues
-            const title = '';
-            const color = '';
-            // const { title, color } = generateTitleColor(row, isCategory, override);
-            return (
-              <Tooltip key={rowIndex} title={title}>
-                <TableRow hover>
-                  {!hideActionMenu ? (
-                    <TableCell padding="checkbox">
-                      <Stack direction="row">
-                        <Checkbox
-                          checked={isItemSelected}
-                          color="primary"
-                          size="small"
-                          onClick={(event) => handleRowSelection(event, selectedID)}
-                          inputProps={{ 'aria-labelledby': 'labelId' }}
-                        />
-                        <IconButton onClick={() => handleEdit(selectedID)} size="small">
-                          <EditRounded color="primary" fontSize="small" />
-                        </IconButton>
-                        <IconButton size="small" onClick={() => onRowSelect(row)}>
-                          <FileOpenRounded color="primary" fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  ) : null}
-                  {Object.keys(columns).map((colKey) => {
-                    const column = columns[colKey];
-                    return <TableCell key={column.id}>{rowFormatter(row, column.colName, color)}</TableCell>;
-                  })}
-                </TableRow>
-              </Tooltip>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </Box>
+    </Box>
   );
 };
 

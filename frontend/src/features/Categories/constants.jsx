@@ -1,3 +1,14 @@
+/**
+ * ITEMS_IN_CATEGORY_HEADER
+ */
+export const ITEMS_IN_CATEGORY_HEADER = [
+  { field: 'name', headerName: 'Name', flex: 1 },
+  { field: 'description', headerName: 'Description', flex: 2 },
+  { field: 'price', headerName: 'Price', flex: 1 },
+  { field: 'quantity', headerName: 'Quantity', flex: 1 },
+  { field: 'location', headerName: 'Storage Location', flex: 1 },
+  { field: 'updator', headerName: 'Last updated by', flex: 1 },
+];
 const GENERIC_FORM_FIELDS = {
   type: 'text',
   variant: 'outlined',

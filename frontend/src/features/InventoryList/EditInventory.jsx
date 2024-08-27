@@ -19,7 +19,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { BLANK_INVENTORY_FORM } from './constants';
 import HeaderWithButton from '../common/HeaderWithButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { eventActions } from '../../Containers/Event/eventSlice';
 import { inventoryActions } from './inventorySlice';
 import { enqueueSnackbar } from 'notistack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
@@ -35,7 +34,7 @@ const EditInventory = () => {
   const navigate = useNavigate();
 
   const { inventory, loading } = useSelector((state) => state.inventory);
-  const { loading: storageLocationsLoading, storageLocations: options } = useSelector((state) => state.event);
+  const { loading: storageLocationsLoading, storageLocations: options } = useSelector((state) => state.inventory);
 
   const [returnDateTime, setReturnDateTime] = useState(null);
   const [storageLocation, setStorageLocation] = useState({});
@@ -107,7 +106,6 @@ const EditInventory = () => {
   useEffect(() => {
     if (id.length > 0) {
       dispatch(inventoryActions.getInvByID(id));
-      dispatch(eventActions.getStorageLocations());
     }
   }, [id]);
 
@@ -143,7 +141,7 @@ const EditInventory = () => {
       setStorageLocation({ location: inventory.location });
       setFormData(draftInventoryForm);
     }
-  }, [loading, storageLocationsLoading]);
+  }, [loading, inventory]);
 
   return (
     <Container sx={{ marginTop: '1rem' }}>
@@ -209,6 +207,7 @@ const EditInventory = () => {
           freeSolo
           forcePopupIcon
           value={storageLocation || ''}
+          onOpen={() => dispatch(inventoryActions.getStorageLocations())}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
               setStorageLocation({
@@ -330,7 +329,7 @@ const EditInventory = () => {
                 slotProps={{
                   textField: {
                     helperText: 'Estimated return date time',
-                    size: "small",
+                    size: 'small',
                   },
                 }}
               />

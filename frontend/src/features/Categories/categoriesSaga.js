@@ -77,6 +77,17 @@ export function* removeCategory(action) {
   }
 }
 
+export function* fetchAddItemsInCategory(action) {
+  try {
+    const { rowSelected, id } = action.payload;
+    const userID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/category/items`, { id, userID, assetIDs: rowSelected });
+    yield put(categoryActions.addItemsInCategorySuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.addItemsInCategoryFailure(e));
+  }
+}
+
 export function* watchGetCategoryList() {
   yield takeLatest(`category/getCategories`, getCategories);
 }
@@ -101,6 +112,10 @@ export function* watchRemoveCategory() {
   yield takeLatest(`category/removeCategory`, removeCategory);
 }
 
+export function* watchFetchAddItemsInCategory() {
+  yield takeLatest(`category/addItemsInCategory`, fetchAddItemsInCategory);
+}
+
 export default [
   watchGetCategoryList,
   watchGetCategory,
@@ -108,4 +123,5 @@ export default [
   watchCreateCategory,
   watchUpdateCategory,
   watchRemoveCategory,
+  watchFetchAddItemsInCategory,
 ];

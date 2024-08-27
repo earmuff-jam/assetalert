@@ -1,6 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid';
 import EmptyComponent from '../../../util/EmptyComponent';
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 
 export default function DataTable({ rows, columns, isEmpty }) {
   if (isEmpty) {
@@ -8,7 +8,14 @@ export default function DataTable({ rows, columns, isEmpty }) {
   }
 
   return (
-    <Stack style={{ height: 400, width: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        display: 'table',
+        tableLayout: 'fixed',
+        height: "10rem"
+      }}
+    >
       <DataGrid
         rows={rows}
         columns={columns}
@@ -20,6 +27,6 @@ export default function DataTable({ rows, columns, isEmpty }) {
         pageSizeOptions={[5, 10]}
         checkboxSelection
       />
-    </Stack>
+    </Box>
   );
 }
