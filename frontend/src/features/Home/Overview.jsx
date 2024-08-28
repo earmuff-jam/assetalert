@@ -69,11 +69,7 @@ const Overview = () => {
               <Stack spacing="2rem">
                 <Typography variant="h5">Cost Summary</Typography>
                 <RowItem label="Estimated valuation of items" color="text.secondary" dataValue={totalAssetCosts} />
-                <RowItem
-                  label="Unestimated items"
-                  color="text.secondary"
-                  dataValue={zeroCostItems.length || 0}
-                />
+                <RowItem label="Unestimated items" color="text.secondary" dataValue={zeroCostItems.length || 0} />
               </Stack>
               <Stack>
                 <Typography variant="h5" gutterBottom>
@@ -95,9 +91,9 @@ const Overview = () => {
                       chartType="pie"
                       height="10rem"
                       legendLabel="Need attention"
-                      data={[0, 1, 1 - (0 + 2)].map((v, index) => ({
-                        label: ['under categories', 'under maintenance', 'unassigned'][index],
-                        count: v,
+                      data={[totalCategories, totalMaintenancePlans, totalAssets].map((v, index) => ({
+                        label: ['under categories', 'under maintenance', 'assets'][index],
+                        count: v.length,
                         color: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
                       }))}
                       backgroundColor="rgba(75, 192, 192, 0.4)"
