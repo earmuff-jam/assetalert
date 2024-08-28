@@ -29,7 +29,10 @@ export function* fetchInvByID({ payload }) {
 export function* fetchAddNewInventory(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories`, { ...action.payload });
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories`, {
+      ...action.payload,
+      created_by: USER_ID,
+    });
     yield put(inventoryActions.addInventorySuccess(response.data));
   } catch (e) {
     yield put(inventoryActions.addInventoryFailure(e));
@@ -109,7 +112,9 @@ export function* watchFetchAllStorageLocations() {
 
 export default [
   watchFetchInvByID,
+  watchFetchAddNewInventory,
   watchFetchAddBulkInventory,
+  watchFetchRemoveInventoryRows,
   watchFetchAllStorageLocations,
   watchFetchAllInventoriesForUser,
   watchUpdateExistingInventoryDetails,

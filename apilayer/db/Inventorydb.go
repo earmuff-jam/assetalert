@@ -455,8 +455,9 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		created_by,
 		created_at,
 		updated_by,
-		updated_at)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+		updated_at,
+		sharable_groups)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
 RETURNING id;`
 
 	err = tx.QueryRow(
@@ -482,6 +483,7 @@ RETURNING id;`
 		draftInventory.CreatedAt,
 		parsedCreatedByUUID,
 		draftInventory.UpdatedAt,
+		pq.Array([]uuid.UUID{parsedCreatedByUUID}),
 	).Scan(&draftInventory.ID)
 
 	if err != nil {

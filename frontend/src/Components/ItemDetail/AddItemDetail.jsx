@@ -89,7 +89,8 @@ const AddItemDetail = ({ eventID, setDisplayMode }) => {
       created_by: userID,
       eventID: eventID,
     };
-    dispatch(eventActions.addItem(draftRequest));
+    console.log(draftRequest);
+    // dispatch(eventActions.addItem(draftRequest));
     setDisplayMode(0);
     setFormFields(ADD_ITEM_FORM_FIELDS);
     enqueueSnackbar('Successfully added new item.', {
