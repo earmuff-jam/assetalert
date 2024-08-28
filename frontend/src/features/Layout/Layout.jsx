@@ -45,7 +45,7 @@ const Layout = () => {
   }, []);
 
   if (loading) {
-    return <Skeleton width="100%" height="100vh" />;
+    return <Skeleton height="100vh" />;
   }
 
   return (

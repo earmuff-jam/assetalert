@@ -30,7 +30,7 @@ const AppearanceSettings = () => {
   }, [loading]);
 
   if (loading) {
-    return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
+    return <Skeleton height="10rem" />;
   }
   return (
     <>

@@ -46,7 +46,7 @@ const TableComponent = ({
   handleEdit,
   emptyComponentSubtext = '',
 }) => {
-  if (isLoading) return <Skeleton variant="rounded" animation="wave" height="10vh" width="100%" />;
+  if (isLoading) return <Skeleton height="10vh" />;
 
   if (!data || data.length === 0) {
     return <EmptyComponent subtitle={emptyComponentSubtext} />;

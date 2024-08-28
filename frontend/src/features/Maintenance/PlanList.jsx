@@ -43,7 +43,7 @@ const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMainte
   }, []);
 
   if (loading) {
-    return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
+    return <Skeleton height="10rem" />;
   }
   if (maintenancePlan.length <= 0) return <EmptyComponent />;
 

@@ -23,7 +23,7 @@ const Overview = () => {
   }, []);
 
   if (loading) {
-    return <Skeleton height="50vh" width="100%" />;
+    return <Skeleton height="50vh" />;
   }
 
   return (
@@ -130,7 +130,7 @@ const RowItem = ({ label, color, dataValue }) => {
 };
 
 const ColumnItem = ({ label, dataLabel, icon, color, loading }) => {
-  if (loading) return <Skeleton width="100%" height="1rem" />;
+  if (loading) return <Skeleton height="1rem" />;
   return (
     <Stack>
       <Typography textAlign="center" variant="h4" color={color}>

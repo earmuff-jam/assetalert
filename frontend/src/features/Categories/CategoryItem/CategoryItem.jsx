@@ -78,7 +78,7 @@ export default function CategoryItem() {
   }, [id]);
 
   if (loading) {
-    return <Skeleton width="80rem" height="20rem" />;
+    return <Skeleton height="20rem" />;
   }
 
   return (

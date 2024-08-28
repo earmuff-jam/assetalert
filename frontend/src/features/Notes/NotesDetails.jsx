@@ -54,7 +54,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   }, [loading, notes]);
 
   if (loading) {
-    return <Skeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
+    return <Skeleton height="2rem" />;
   }
 
   if (!notes || notes.length === 0) {
