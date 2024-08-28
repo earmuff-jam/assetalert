@@ -47,6 +47,7 @@ const TableComponent = ({
   emptyComponentSubtext = '',
 }) => {
   if (isLoading) return <Skeleton variant="rounded" animation="wave" height="10vh" width="100%" />;
+
   if (!data || data.length === 0) {
     return <EmptyComponent subtitle={emptyComponentSubtext} />;
   }

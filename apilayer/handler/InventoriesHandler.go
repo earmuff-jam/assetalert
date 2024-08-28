@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -134,23 +133,14 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 	var inventoryList []model.Inventory
 	for _, v := range inventoryMap {
 
-		formattedQuantity, err := strconv.Atoi(v.Quantity)
-		if err != nil {
-			formattedQuantity = 0
-		}
-
-		formattedPrice, err := strconv.ParseFloat(v.Price, 64)
-		if err != nil {
-			formattedPrice = 0.00
-		}
 		draftInventory := model.Inventory{
 			Name:        v.Name,
 			Description: v.Description,
-			Price:       formattedPrice,
+			Price:       v.Price,
 			Status:      defaultHiddenStatus,
 			Barcode:     v.Barcode,
 			SKU:         v.SKU,
-			Quantity:    formattedQuantity,
+			Quantity:    int(v.Quantity),
 			Location:    v.Location,
 			CreatedAt:   time.Now(),
 			CreatedBy:   userID,

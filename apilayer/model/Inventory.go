@@ -40,14 +40,14 @@ type Inventory struct {
 //
 // RawInventory is used to derieve the single row from bulk uploaded excel file
 type RawInventory struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Price       string `json:"price"`
-	Barcode     string `json:"barcode"`
-	SKU         string `json:"sku"`
-	Quantity    string `json:"quantity"`
-	Location    string `json:"location"`
-	BoughtAt    string `json:"bought_at"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Barcode     string  `json:"barcode"`
+	SKU         string  `json:"sku"`
+	Quantity    int64   `json:"quantity"`
+	Location    string  `json:"location"`
+	BoughtAt    string  `json:"bought_at"`
 }
 
 // InventoryListRequest ...

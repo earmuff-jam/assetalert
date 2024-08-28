@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import AddInventoryDetail from './AddInventory/AddInventoryDetail';
 import VerticalMenu from './AddInventory/VerticalMenu';
 import { inventoryActions } from './inventorySlice';
+import AddBulkUploadInventory from './AddInventory/AddBulkUploadInventory';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
@@ -228,7 +229,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
         <GridComponent isLoading={loading} data={options} rowSelected={rowSelected} />
       ) : (
         <TableComponent
-          isLoading={false}
+          isLoading={loading}
           hideActionMenu={hideActionMenu}
           data={options}
           columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
@@ -247,7 +248,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
       )}
       {modalState === MODAL_STATE.BULK_ITEM && (
         <SimpleModal title="Add Bulk Item" handleClose={handleCloseModal} maxSize="md">
-          {/* <AddBulkUploadInventory handleClose={handleCloseModal} /> */}
+          <AddBulkUploadInventory handleClose={handleCloseModal} />
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.MORE_DETAILS && (
