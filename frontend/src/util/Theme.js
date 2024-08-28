@@ -12,7 +12,8 @@ export const lightTheme = createTheme({
     },
     background: {
       paper: '#F8FAFD',
-    }
+      default: '#FFFBFB',
+    },
   },
   typography: {
     fontFamily: 'Nunito, sans-serif',
@@ -67,10 +68,31 @@ export const lightTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "capitalize",
+          textTransform: 'capitalize',
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#FFFBFB',
+        },
+      }
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#F8FAFD'
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#F8FAFD'
+        }
+      }
+    }
   },
 });
 

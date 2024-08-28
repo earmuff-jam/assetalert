@@ -1,8 +1,9 @@
 // store.js
 import createSagaMiddleware from 'redux-saga';
 import { configureStore } from '@reduxjs/toolkit';
+import { all } from 'redux-saga/effects';
 
-import auth from './Containers/Auth/authSlice';
+import auth from './features/LandingPage/authSlice';
 import profile from './features/Profile/profileSlice';
 import notes from './features/Notes/notesSlice';
 import categories from './features/Categories/categoriesSlice';
@@ -10,9 +11,7 @@ import maintenance from './features/Maintenance/maintenanceSlice';
 import inventory from './features/InventoryList/inventorySlice';
 import summary from './features/Home/SummarySlice';
 
-import { all } from 'redux-saga/effects'; // Import 'all' from redux-saga
-
-import authSaga from './Containers/Auth/authSaga';
+import authSaga from './features/LandingPage/authSaga';
 import profileSaga from './features/Profile/profileSaga';
 import notesSaga from './features/Notes/notesSaga';
 import categoriesSaga from './features/Categories/categoriesSaga';

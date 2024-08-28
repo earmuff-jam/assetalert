@@ -4,9 +4,9 @@ import { Suspense, useEffect, useState } from 'react';
 import { SnackbarProvider } from 'notistack';
 import { TourProvider } from '@reactour/tour';
 import { RouterProvider } from 'react-router-dom';
-import AuthHome from './Containers/Auth/AuthHome';
 import { Container, Dialog } from '@mui/material';
 import { router } from './features/common/router';
+import AuthHome from './features/LandingPage/AuthHome';
 
 const ApplicationValidator = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -39,7 +39,7 @@ const ApplicationValidator = () => {
       </SnackbarProvider>
     </TourProvider>
   ) : (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl" sx={{backgroundColor: 'background.default'}}>
       <AuthHome />
     </Container>
   );

@@ -31,10 +31,7 @@ const StyledTimelineItem = ({ color = '', icon, label = '', secondaryLabel = '' 
 const RecentActivity = ({ activity }) => {
   dayjs.extend(relativeTime);
   return (
-    <Stack
-      key={activity.id}
-      sx={{ backgroundColor: 'background.default', borderRadius: '0.2rem', p: 1, alignItems: 'flex-start' }}
-    >
+    <Stack key={activity.id} sx={{ borderRadius: '0.2rem', p: 1, alignItems: 'flex-start' }}>
       <Timeline sx={{ m: 0, p: 0 }}>
         <StyledTimelineItem
           color="primary"

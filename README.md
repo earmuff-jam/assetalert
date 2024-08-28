@@ -1,21 +1,36 @@
-# Mashed
+# ASSET ALERT
+<!-- ![Create new account](setup/demo/gifs/v2/sign-up.gif) -->
+![Asset alert logo](frontend/public/assetalert.png)
 
-## Volunteer and Community Engagement Platform
+## Overview
 
-**Mashed** is a dynamic web-based platform designed to foster connections between passionate volunteers and local community projects and initiatives. It serves as a central hub where individuals and organizations can unite, collaborate, and create a meaningful impact within their neighborhoods. Whether it's environmental conservation, education, social welfare, or arts and culture, we empower users to contribute their time, skills, and hearts to the causes they care deeply about.
+In today’s dynamic and fast-paced business environment, effective asset management is crucial for optimizing resources, reducing costs, and ensuring operational efficiency. AssetAlert is designed to address these needs by providing a robust solution to track your assets, manage them, and analyze them effectively.
 
-## Key Features
+### Purpose
 
-| Feature             | Description                                                                                                                                                                                                                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| User Profiles       | Create profiles that show your name and contact information. You can also add small interesting topics about yourself as well. These profiles facilitate better matching between volunteers and organizations.                                                                              |
-| Event Listings      | Organizations can seamlessly post event details, upcoming events, and volunteer opportunities. Share crucial information such as the cause, location, date, time, and required skills needed for each project. Booster more confidence with the ability to log expenses and visualize them. |
-| Search and Match    | Learn about various other different events and connect volunteers with projects that align with their location, chosen cause, or unique skills.                                                                                                                                             |
-| Communication Tools | Efficient real-time messaging and notifications make it easy for volunteers and organizations to communicate and collaborate effectively.                                                                                                                                                   |
-| Impact Tracking     | Log your volunteer hours and activities, and see the positive impact your contributions have made. Be proud of the change you're creating.                                                                                                                                                  |
-| Mobile-Friendly     | Stay engaged on the go! Our mobile-optimized platform ensures you can access and contribute wherever you are.                                                                                                                                                                               |
+The primary purpose of AssetAlert is to streamline the management of physical assets across various locations and departments within an organization. By leveraging cutting-edge technology, this application aims to enhance asset visibility, improve accountability, and support strategic decision-making.
 
-## Application Brief Demonstration
+1. Enhanced Visibility: To provide a comprehensive view of asset distribution and utilization, allowing for better management and optimization of resources.
+
+2. Automated Reporting: To generate automated reports and analytics on asset performance, maintenance schedules, and lifecycle status.
+
+3. Improved Accountability: To facilitate asset check-in/check-out processes, reducing losses and ensuring assets are accounted for at all times.
+
+4. Integration Capabilities: To integrate seamlessly with existing enterprise systems (such as ERP or CMMS), providing a unified approach to asset management.
+
+### Benefits
+
+Increased Efficiency: By automating tracking and management processes, the application reduces manual efforts and minimizes errors, leading to greater operational efficiency.
+
+Cost Savings: Improved visibility and control over assets help in reducing unnecessary purchases, preventing asset loss, and optimizing maintenance costs.
+
+Enhanced Decision-Making: Data-driven insights from the application support informed decision-making, helping organizations align their asset management strategies with business goals.
+
+Scalability: The application is designed to scale with organizational growth, accommodating a growing number of assets and users without compromising performance.
+
+User-Friendly Interface: With an intuitive and user-friendly interface, the application ensures ease of use for all stakeholders, from asset managers to field staff.
+
+<!-- ## Application Brief Demonstration
 
 **Version 1.2**
 
@@ -63,7 +78,7 @@ Audience members who are registered in the system are provided with the oppertun
 ![Add update rough notes](setup/demo/gifs/v2/add-update-rough-notes.gif)
 ![View notifications and edit profile](setup/demo/gifs/v2/view-notifications-edit-profile.gif)
 ![View notifications and edit profile](setup/demo/gifs/v2/view-notifications-edit-profile.gif)
-![associate-personal-item-with-admin-events](setup/demo/gifs/v2/view-notifications-edit-profile.gif)
+![associate-personal-item-with-admin-events](setup/demo/gifs/v2/view-notifications-edit-profile.gif) -->
 
 ## Contact
 

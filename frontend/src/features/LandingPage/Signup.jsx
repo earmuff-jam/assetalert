@@ -2,8 +2,8 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../Containers/Auth/authSlice';
-import { SIGN_UP_FORM_FIELDS } from '../../Containers/Auth/constants';
+import { authActions } from './authSlice';
+import { SIGN_UP_FORM_FIELDS } from './constants';
 import {
   Box,
   Button,
