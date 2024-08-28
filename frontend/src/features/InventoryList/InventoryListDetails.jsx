@@ -15,11 +15,13 @@ import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
 import TableComponent from './TableComponent';
 import GridComponent from './GridComponent';
 import { VIEW_INVENTORY_LIST_HEADERS } from './constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SelectedRowItem from './SelectedRowItemComponent';
 import { useNavigate } from 'react-router-dom';
 import AddInventoryDetail from './AddInventory/AddInventoryDetail';
 import VerticalMenu from './AddInventory/VerticalMenu';
+import { inventoryActions } from './inventorySlice';
+import AddBulkUploadInventory from './AddInventory/AddBulkUploadInventory';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
@@ -36,6 +38,7 @@ const MODAL_STATE = {
 
 const InventoryListDetails = ({ hideActionMenu = false }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { loading, inventories } = useSelector((state) => state.inventory);
 
   const [options, setOptions] = useState([]);
@@ -76,17 +79,6 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
       setRowSelected(draftSelected);
     }
   };
-
-  // const updateSelectedColumn = (rowID, column, inputColumn, price, quantity) => {
-  // const draftRequest = {
-  //   id: rowID,
-  //   price: column === 'price' ? inputColumn : price,
-  //   quantity: column === 'quantity' ? inputColumn : quantity,
-  //   updated_by: user.id,
-  //   updated_on: dayjs(),
-  // };
-  // updateInventory.mutate({ ...draftRequest });
-  // };
 
   const populateIcon = (editLineItem, row, column, inputColumn, setInputColumn) => {
     if (editLineItem.editItem && editLineItem.rowID === row.id && editLineItem.column === column && inputColumn) {
@@ -183,7 +175,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     if (id === -1) {
       return;
     }
-    // deleteInventories.mutate(rowSelected);
+    dispatch(inventoryActions.removeInventoryRows(rowSelected));
     reset();
   };
 
@@ -237,7 +229,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
         <GridComponent isLoading={loading} data={options} rowSelected={rowSelected} />
       ) : (
         <TableComponent
-          isLoading={false}
+          isLoading={loading}
           hideActionMenu={hideActionMenu}
           data={options}
           columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
@@ -256,7 +248,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
       )}
       {modalState === MODAL_STATE.BULK_ITEM && (
         <SimpleModal title="Add Bulk Item" handleClose={handleCloseModal} maxSize="md">
-          {/* <AddBulkUploadInventory handleClose={handleCloseModal} /> */}
+          <AddBulkUploadInventory handleClose={handleCloseModal} />
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.MORE_DETAILS && (

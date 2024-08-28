@@ -244,7 +244,6 @@ const Inventories = () => {
     }
 
     // remove unwanted items from cluttering the display
-     
     const { associated_event_title, ...rest } = row;
     return <span>{rest[column]}</span>;
   };
