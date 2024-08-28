@@ -105,7 +105,6 @@ const EditInventory = () => {
 
   useEffect(() => {
     if (id.length > 0) {
-      console.log(id);
       dispatch(inventoryActions.getInvByID(id));
     }
   }, [id]);
