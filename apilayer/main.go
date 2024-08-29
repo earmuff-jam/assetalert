@@ -1,6 +1,6 @@
-// Package Mashed Api Layer
+// Package Asset alert Api Layer
 //
-// # Documentation for the mashed api layer.
+// # Documentation for the Asset alert api layer.
 //
 // Scehmes: http
 // BasePath: /
@@ -56,7 +56,6 @@ func main() {
 	router.HandleFunc("/api/v1/event/{id}/ws", handler.HandleWebsocket)
 
 	// routes below here are treated as they are secure routes
-
 	router.Handle("/api/v1/locations/health", CustomRequestHandler(handler.GetStorageLocationHealthCheck)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
 	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
@@ -75,7 +74,10 @@ func main() {
 
 	// maintenance plans
 	router.Handle("/api/v1/maintenance-plans", CustomRequestHandler(handler.GetAllMaintenancePlans)).Methods(http.MethodGet)
+	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.GetAllMaintenancePlanItems)).Methods(http.MethodGet)
+	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInCategory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.CreateMaintenancePlan)).Methods(http.MethodPost)
+	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenacePlan)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.UpdateMaintenancePlan)).Methods(http.MethodPut)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.RemoveMaintenancePlan)).Methods(http.MethodDelete)
 

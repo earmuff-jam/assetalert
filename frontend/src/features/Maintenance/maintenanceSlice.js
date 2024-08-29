@@ -5,6 +5,8 @@ const initialState = {
   loading: false,
   maintenancePlan: [],
   statusOptions: [],
+  selectedMaintenancePlan: {},
+  itemsInMaintenancePlan: [],
 };
 
 const maintenancePlanSlice = createSlice({
@@ -25,6 +27,34 @@ const maintenancePlanSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.maintenancePlan = [];
+    },
+    getSelectedMaintenancePlan: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedMaintenancePlanSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.selectedMaintenancePlan = action.payload;
+    },
+    getSelectedMaintenancePlanFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.selectedMaintenancePlan = {};
+    },
+    getItemsInMaintenancePlan: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    getItemsInMaintenancePlanSuccess: (state, action) => {
+      state.itemsInMaintenancePlan = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getItemsInMaintenancePlanFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.itemsInMaintenancePlan = [];
     },
     getStatusOptions: (state) => {
       state.loading = true;

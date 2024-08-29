@@ -63,9 +63,39 @@ export function* removePlan(action) {
   }
 }
 
+export function* getSelectedMaintenancePlan(action) {
+  try {
+    const mID = action.payload;
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    params.append('mID', mID);
+    const response = yield call(instance.get, `${BASEURL}/plan?${params.toString()}`);
+    yield put(maintenancePlanActions.getSelectedMaintenancePlanSuccess(response.data));
+  } catch (e) {
+    yield put(maintenancePlanActions.getSelectedMaintenancePlanFailure(e));
+  }
+}
+
+export function* getItemsInMaintenancePlan(action) {
+  try {
+    const mID = action.payload;
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    params.append('mID', mID);
+    params.append('limit', DEFAULT_LIMIT);
+    const response = yield call(instance.get, `${BASEURL}/plans/items?${params.toString()}`);
+    yield put(maintenancePlanActions.getItemsInMaintenancePlanSuccess(response.data));
+  } catch (e) {
+    yield put(maintenancePlanActions.getItemsInMaintenancePlanFailure(e));
+  }
+}
+
 export function* watchGetPlanList() {
   yield takeLatest(`maintenancePlan/getPlans`, getPlans);
 }
+
 export function* watchGetStatusOptions() {
   yield takeLatest(`maintenancePlan/getStatusOptions`, getStatusOptions);
 }
@@ -82,4 +112,20 @@ export function* watchRemovePlan() {
   yield takeLatest(`maintenancePlan/removePlan`, removePlan);
 }
 
-export default [watchGetPlanList, watchGetStatusOptions, watchCreatePlan, watchUpdatePlan, watchRemovePlan];
+export function* watchGetSelectedMaintenancePlan() {
+  yield takeLatest(`maintenancePlan/getSelectedMaintenancePlan`, getSelectedMaintenancePlan);
+}
+
+export function* watchGetItemsInMaintenancePlan() {
+  yield takeLatest(`maintenancePlan/getItemsInMaintenancePlan`, getItemsInMaintenancePlan);
+}
+
+export default [
+  watchGetPlanList,
+  watchGetStatusOptions,
+  watchCreatePlan,
+  watchUpdatePlan,
+  watchRemovePlan,
+  watchGetItemsInMaintenancePlan,
+  watchGetSelectedMaintenancePlan,
+];

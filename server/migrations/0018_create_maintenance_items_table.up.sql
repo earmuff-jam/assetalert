@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS community.maintenance_item
 (
     id                  UUID PRIMARY KEY                                                                                        NOT NULL DEFAULT gen_random_uuid(),
     maintenance_plan_id UUID                         REFERENCES maintenance_plan (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    item_id             UUID                         REFERENCES inventory (id) ON UPDATE CASCADE ON DELETE CASCADE,
     created_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
     created_at          TIMESTAMP WITH TIME ZONE                                                                                NOT NULL DEFAULT NOW(),
     updated_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,

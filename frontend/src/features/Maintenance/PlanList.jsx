@@ -6,11 +6,13 @@ import { useDispatch } from 'react-redux';
 import { ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { maintenancePlanActions } from './maintenanceSlice';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(relativeTime);
 
 const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMaintenancePlanID }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [openDialog, setOpenDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState(-1);
@@ -31,7 +33,6 @@ const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMainte
 
   const confirmDelete = (id) => {
     if (id === -1) {
-      // unknown id to delete. protect from confirmation box
       return;
     }
     dispatch(maintenancePlanActions.removePlan(id));
@@ -65,7 +66,12 @@ const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMainte
                 <CardContent>
                   <Stack direction="row">
                     <Stack flexGrow={1} sx={{ minWidth: '12rem', minHeight: '6rem' }}>
-                      <Typography variant="h6" component="h3">
+                      <Typography
+                        variant="h6"
+                        component="h3"
+                        onClick={() => navigate(encodeURI(`/plan/${item.id}`))}
+                        sx={{ cursor: 'pointer' }}
+                      >
                         {item.name}
                       </Typography>
                       <Typography variant="caption" flexWrap={1} color="text.secondary">

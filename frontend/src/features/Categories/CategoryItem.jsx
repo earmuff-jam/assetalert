@@ -1,20 +1,20 @@
 import { useParams } from 'react-router-dom';
-import CategoryItemCard from './CategoryItemCard';
-import DataTable from './DataTable';
+import DataTable from '../common/DataTable/DataTable';
 import { Box, Button, Skeleton, Stack } from '@mui/material';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import HeaderWithButton from '../common/HeaderWithButton';
 import { AddRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { categoryActions } from '../categoriesSlice';
-import SimpleModal from '../../common/SimpleModal';
-import TableComponent from '../../InventoryList/TableComponent';
-import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
-import { generateTitleColor } from '../../common/utils';
-import { inventoryActions } from '../../InventoryList/inventorySlice';
+import { categoryActions } from './categoriesSlice';
+import SimpleModal from '../common/SimpleModal';
+import TableComponent from '../InventoryList/TableComponent';
+import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
+import { generateTitleColor } from '../common/utils';
+import { inventoryActions } from '../InventoryList/inventorySlice';
 import dayjs from 'dayjs';
-import { ITEMS_IN_CATEGORY_HEADER } from '../constants';
-import BarChart from '../../../util/Chart/BarChart';
+import { ITEMS_IN_CATEGORY_HEADER } from './constants';
+import BarChart from '../../util/Chart/BarChart';
+import ItemCard from '../common/ItemCard/ItemCard';
 
 export default function CategoryItem() {
   const { id } = useParams();
@@ -83,8 +83,11 @@ export default function CategoryItem() {
 
   return (
     <Stack direction="column" spacing="1rem">
-      <HeaderWithButton title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'} />
-      <CategoryItemCard selectedCategory={selectedCategory} />
+      <HeaderWithButton
+        title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
+        secondaryTitle="View details of selected category"
+      />
+      <ItemCard selectedItem={selectedCategory} />
       <HeaderWithButton
         title="Items"
         secondaryTitle={`Total ${itemsInCategory?.length || 0} item(s)`}
