@@ -1,9 +1,10 @@
-import { Card, CardContent, Divider, IconButton, Skeleton, Stack, Typography } from '@mui/material';
+import { Card, CardContent, IconButton, Skeleton, Stack, Typography } from '@mui/material';
 import { CategoryRounded, EngineeringRounded, WarningRounded } from '@mui/icons-material';
-import PieBarChart from '../../util/Chart/PieBarChart';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { assetSummaryActions } from './SummarySlice';
+import PieChart from '../../util/Chart/PieChart';
+import { prefix } from '../common/utils';
 
 const Overview = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const Overview = () => {
   }, []);
 
   if (loading) {
-    return <Skeleton height="50vh" width="100%" />;
+    return <Skeleton height="50vh" />;
   }
 
   return (
@@ -68,40 +69,32 @@ const Overview = () => {
             <Stack direction="row" justifyContent="space-between" spacing="2rem" useFlexGap flexWrap="wrap">
               <Stack spacing="2rem">
                 <Typography variant="h5">Cost Summary</Typography>
-                <RowItem label="Estimated valuation of items" color="text.secondary" dataValue={totalAssetCosts} />
+                <RowItem label="Total estimated cost" color="text.secondary" dataValue={prefix('$', totalAssetCosts)} />
                 <RowItem
-                  label="Unestimated items"
+                  label="Unestimated assets"
                   color="text.secondary"
-                  dataValue={zeroCostItems.length || 0}
+                  dataValue={prefix('$', zeroCostItems.length || 0)}
                 />
               </Stack>
               <Stack>
                 <Typography variant="h5" gutterBottom>
-                  Product Details
+                  Asset Breakdown
                 </Typography>
-                <Stack direction="row" spacing="2rem">
-                  <Stack spacing="2rem">
-                    <RowItem label="All categories" color="text.secondary" dataValue={totalCategories.length || 0} />
-                    <RowItem
-                      label="All maintenance plans"
-                      color="text.secondary"
-                      dataValue={totalMaintenancePlans.length || 0}
-                    />
-                    <RowItem label="All assets" color="text.secondary" dataValue={totalAssets.length || 0} />
+                <Stack direction="row" spacing="2rem" sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
+                  <Stack spacing="2rem" justifyContent="space-evenly">
+                    <RowItem label="Categories" color="text.secondary" dataValue={totalCategories.length || 0} />
+                    <RowItem label="Plans" color="text.secondary" dataValue={totalMaintenancePlans.length || 0} />
+                    <RowItem label="Assets" color="text.secondary" dataValue={totalAssets.length || 0} />
                   </Stack>
                   <Stack direction="row" spacing="2rem">
-                    <Divider orientation="vertical" />
-                    <PieBarChart
-                      chartType="pie"
-                      height="10rem"
-                      legendLabel="Need attention"
-                      data={[0, 1, 1 - (0 + 2)].map((v, index) => ({
-                        label: ['under categories', 'under maintenance', 'unassigned'][index],
-                        count: v,
+                    <PieChart
+                      height="15rem"
+                      legendLabel="assets summary"
+                      data={[totalCategories, totalMaintenancePlans, totalAssets].map((v, index) => ({
+                        label: ['Categories', 'Plans', 'Assets'][index],
+                        count: v.length,
                         color: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
                       }))}
-                      backgroundColor="rgba(75, 192, 192, 0.4)"
-                      borderColor="rgba(75, 192, 192, 1)"
                     />
                   </Stack>
                 </Stack>
@@ -130,7 +123,7 @@ const RowItem = ({ label, color, dataValue }) => {
 };
 
 const ColumnItem = ({ label, dataLabel, icon, color, loading }) => {
-  if (loading) return <Skeleton width="100%" height="1rem" />;
+  if (loading) return <Skeleton height="1rem" />;
   return (
     <Stack>
       <Typography textAlign="center" variant="h4" color={color}>

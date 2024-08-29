@@ -7,7 +7,6 @@ import { AddRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { categoryActions } from '../categoriesSlice';
-import PieBarChart from '../../../util/Chart/PieBarChart';
 import SimpleModal from '../../common/SimpleModal';
 import TableComponent from '../../InventoryList/TableComponent';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
@@ -15,6 +14,7 @@ import { generateTitleColor } from '../../common/utils';
 import { inventoryActions } from '../../InventoryList/inventorySlice';
 import dayjs from 'dayjs';
 import { ITEMS_IN_CATEGORY_HEADER } from '../constants';
+import BarChart from '../../../util/Chart/BarChart';
 
 export default function CategoryItem() {
   const { id } = useParams();
@@ -78,7 +78,7 @@ export default function CategoryItem() {
   }, [id]);
 
   if (loading) {
-    return <Skeleton width="80rem" height="20rem" />;
+    return <Skeleton height="20rem" />;
   }
 
   return (
@@ -95,7 +95,7 @@ export default function CategoryItem() {
       <DataTable rows={itemsInCategory} columns={ITEMS_IN_CATEGORY_HEADER} isEmpty={itemsInCategory === null} />
       <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', height: '40vh', width: 'calc(100% - 1rem)' }}>
-        <PieBarChart
+        <BarChart
           legendLabel="Name Vs Cost"
           data={
             itemsInCategory

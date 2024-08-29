@@ -54,7 +54,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   }, [loading, notes]);
 
   if (loading) {
-    return <Skeleton width={`calc(100% - 1rem)`} height={'2rem'} />;
+    return <Skeleton height="2rem" />;
   }
 
   if (!notes || notes.length === 0) {
@@ -82,7 +82,6 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                     p: 1,
                     borderRadius: '0.2rem',
                     borderLeft: '0.175rem solid',
-                    backgroundColor: 'background.default',
                     borderColor: note.color ? `${note.color}` : 'primary.main',
                   }}
                 >

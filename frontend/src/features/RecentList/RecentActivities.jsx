@@ -18,7 +18,7 @@ const RecentActivities = () => {
   }, [loading, recentActivities.length]);
 
   if (loading) {
-    return <Skeleton width={`calc(100% - 1rem)`} height={'20rem'} />;
+    return <Skeleton height="20rem" />;
   }
   if (recentActivities.length <= 0) {
     return <EmptyComponent subtitle="Add assets to view details about them" />;

@@ -12,11 +12,11 @@ const Authenticator = () => {
   const hasServerError = !loading && error;
 
   return (
-    <Stack sx={{ width: { sm: '80%' } }}>
+    <Stack sx={{ width: { xs: '100%', sm: '80%' } }}>
       <Typography variant="h5" color="error.main">
         Track all your assets in one place
       </Typography>
-      <Stack spacing="1rem" sx={{ my: 2 }}>
+      <Stack spacing="1rem" marginBottom="1rem">
         <Typography>{signUpView ? 'Sign Up' : 'Sign In'}</Typography>
         {signUpView ? <Signup setSignUpView={setSignUpView} /> : <Login />}
       </Stack>

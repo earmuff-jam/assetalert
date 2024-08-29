@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { EmptyComponent } from '../common/utils';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
-  if (isLoading) return <Skeleton height="10vh" width="100%" />;
+  if (isLoading) return <Skeleton height="10vh" />;
   if (data.length <= 0) return <EmptyComponent />;
 
   return (

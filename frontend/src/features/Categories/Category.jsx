@@ -46,7 +46,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
   }, []);
 
   if (loading) {
-    return <Skeleton variant="rounded" animation="wave" height="100%" width="100%" />;
+    return <Skeleton height="10rem" />;
   }
   if (categories.length <= 0) {
     return <EmptyComponent />;

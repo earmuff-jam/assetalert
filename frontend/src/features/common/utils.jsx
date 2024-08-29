@@ -133,10 +133,23 @@ export const categorizeNotes = (notes) => {
 };
 
 /**
- *
+ * Function used to capitalize the first letter of passed in string
  * @param {word} string - the word to capitalize
  * @returns string - with captial first letter
  */
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+/**
+ * Function returns a string with prefix if prefix exists.
+ * @param {string} prefixVal - the prefix value to append
+ * @param {string} text - the text to append the prefix string onto
+ * @returns string - result of combination of prefixValue and text
+ */
+export const prefix = (prefixVal, text) => {
+  if (prefixVal != null) {
+    return `${prefixVal} ${text}`;
+  }
+  return text;
 };

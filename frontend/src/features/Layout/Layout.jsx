@@ -17,7 +17,7 @@ import MenuActionBar from './MenuActionBar';
 import { darkTheme, lightTheme } from '../../util/Theme';
 import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from '../../Containers/Auth/authSlice';
+import { authActions } from '../LandingPage/authSlice';
 import { profileActions } from '../Profile/profileSlice';
 
 const Layout = () => {
@@ -45,7 +45,7 @@ const Layout = () => {
   }, []);
 
   if (loading) {
-    return <Skeleton width="100%" height="100vh" />;
+    return <Skeleton height="100vh" />;
   }
 
   return (

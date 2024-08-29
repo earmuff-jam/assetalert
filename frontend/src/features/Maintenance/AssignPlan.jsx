@@ -10,7 +10,7 @@ const AssignPlan = ({ rowSelected, handleCloseAssignFn }) => {
   const { data, isLoading } = useFetchPlans();
   const assignItemsToPlan = useAssignItemsToPlan();
 
-  if (isLoading) return <Skeleton height="1" width="1" variant="rounded" />;
+  if (isLoading) return <Skeleton height="10rem" />;
   if (data.length <= 0) return <EmptyComponent subtitle="Add maintenance plan to begin" />;
 
   const handleAssignMaintenancePlan = (planID, planName, rowSelected) => {
