@@ -92,6 +92,17 @@ export function* getItemsInMaintenancePlan(action) {
   }
 }
 
+export function* fetchAddItemsInPlan(action) {
+  try {
+    const { rowSelected, id } = action.payload;
+    const userID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `${BASEURL}/plans/items`, { id, userID, assetIDs: rowSelected });
+    yield put(maintenancePlanActions.addItemsInPlanSuccess(response.data));
+  } catch (e) {
+    yield put(maintenancePlanActions.addItemsInPlanFailure(e));
+  }
+}
+
 export function* watchGetPlanList() {
   yield takeLatest(`maintenancePlan/getPlans`, getPlans);
 }
@@ -120,12 +131,17 @@ export function* watchGetItemsInMaintenancePlan() {
   yield takeLatest(`maintenancePlan/getItemsInMaintenancePlan`, getItemsInMaintenancePlan);
 }
 
+export function* watchFetchAddItemsInPlan() {
+  yield takeLatest(`maintenancePlan/addItemsInPlan`, fetchAddItemsInPlan);
+}
+
 export default [
   watchGetPlanList,
   watchGetStatusOptions,
   watchCreatePlan,
   watchUpdatePlan,
   watchRemovePlan,
+  watchFetchAddItemsInPlan,
   watchGetItemsInMaintenancePlan,
   watchGetSelectedMaintenancePlan,
 ];

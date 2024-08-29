@@ -116,6 +116,19 @@ const maintenancePlanSlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    addItemsInPlan: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    addItemsInPlanSuccess: (state, action) => {
+      state.itemsInCategory = [...action.payload];
+      state.loading = false;
+      state.error = '';
+    },
+    addItemsInPlanFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
   },
 });
 

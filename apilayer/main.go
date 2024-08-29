@@ -75,7 +75,7 @@ func main() {
 	// maintenance plans
 	router.Handle("/api/v1/maintenance-plans", CustomRequestHandler(handler.GetAllMaintenancePlans)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.GetAllMaintenancePlanItems)).Methods(http.MethodGet)
-	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInCategory)).Methods(http.MethodPost)
+	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInMaintenancePlan)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.CreateMaintenancePlan)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenacePlan)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.UpdateMaintenancePlan)).Methods(http.MethodPut)

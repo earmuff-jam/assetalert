@@ -11,10 +11,14 @@ import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from './constants';
 import { maintenancePlanActions } from './maintenanceSlice';
 import { useParams } from 'react-router-dom';
+import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
+import { generateTitleColor } from '../common/utils';
+import dayjs from 'dayjs';
+import { inventoryActions } from '../InventoryList/inventorySlice';
 
 export default function MaintenanceItem() {
-  const dispatch = useDispatch();
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
   const {
@@ -24,7 +28,50 @@ export default function MaintenanceItem() {
   } = useSelector((state) => state.maintenance);
 
   const [displayModal, setDisplayModal] = useState(false);
-  const handleOpenModal = () => setDisplayModal(true);
+  const [rowSelected, setRowSelected] = useState([]);
+
+  const handleOpenModal = () => {
+    setDisplayModal(true);
+    dispatch(inventoryActions.getAllInventoriesForUser());
+  };
+  const handleRowSelection = (_, id) => {
+    if (id === 'all') {
+      setRowSelected(inventories.map((v) => v.id));
+    } else {
+      const selectedIndex = rowSelected.indexOf(id);
+      let draftSelected = [];
+      if (selectedIndex === -1) {
+        draftSelected = draftSelected.concat(rowSelected, id);
+      } else if (selectedIndex === 0) {
+        draftSelected = draftSelected.concat(rowSelected.slice(1));
+      } else if (selectedIndex === rowSelected.length - 1) {
+        draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+      }
+      setRowSelected(draftSelected);
+    }
+  };
+
+  const rowFormatter = (row, column) => {
+    if (['created_at', 'updated_at'].includes(column)) {
+      return dayjs(row[column]).fromNow();
+    }
+    if (['updater_name', 'creator_name'].includes(column)) {
+      return row[column] ?? '-';
+    }
+    return row[column] ?? '-';
+  };
+
+  const resetSelection = () => {
+    setDisplayModal(false);
+    setRowSelected([]);
+  };
+
+  const addItems = () => {
+    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id }));
+    resetSelection();
+  };
 
   useEffect(() => {
     if (id) {
