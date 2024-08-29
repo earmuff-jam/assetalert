@@ -33,7 +33,7 @@ export default function MaintenanceItem() {
     }
   }, [id]);
 
-  if (loading) {
+  if (inventoriesLoading || loading) {
     return <Skeleton height="20rem" />;
   }
 
@@ -55,6 +55,7 @@ export default function MaintenanceItem() {
         rows={itemsInMaintenancePlan}
         columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}
         isEmpty={itemsInMaintenancePlan === null}
+        subtitle={'Associate items into maintenance plan to begin.'}
       />
       <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', height: '40vh', width: 'calc(100% - 1rem)' }}>

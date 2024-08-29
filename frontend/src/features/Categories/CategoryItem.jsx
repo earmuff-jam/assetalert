@@ -95,7 +95,12 @@ export default function CategoryItem() {
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={handleOpenModal}
       />
-      <DataTable rows={itemsInCategory} columns={ITEMS_IN_CATEGORY_HEADER} isEmpty={itemsInCategory === null} />
+      <DataTable
+        rows={itemsInCategory}
+        columns={ITEMS_IN_CATEGORY_HEADER}
+        isEmpty={itemsInCategory === null}
+        subtitle={'Associate items into category to begin.'}
+      />
       <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', height: '40vh', width: 'calc(100% - 1rem)' }}>
         <BarChart
