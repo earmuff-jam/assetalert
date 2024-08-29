@@ -2,9 +2,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import EmptyComponent from '../../../util/EmptyComponent';
 import { Box } from '@mui/material';
 
-export default function DataTable({ rows, columns, isEmpty }) {
+export default function DataTable({ rows, columns, isEmpty, subtitle }) {
   if (isEmpty) {
-    return <EmptyComponent subtitle={'Associate items into category to begin.'} />;
+    return <EmptyComponent subtitle={subtitle} />;
   }
 
   return (

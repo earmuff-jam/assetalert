@@ -85,6 +85,121 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) ([]model
 	return data, nil
 }
 
+// RetrieveMaintenancePlan ...
+func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (model.MaintenancePlan, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return model.MaintenancePlan{}, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+	mp.id,
+	mp.name,
+	mp.description,
+	ms.name AS status_name,
+	ms.description AS status_description,
+	mp.color, 
+	mp.min_items_limit, 
+	mp.max_items_limit,
+	mp.plan_type,
+	mp.created_at,
+	mp.created_by,
+	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator_name, 
+	mp.updated_at,
+	mp.updated_by,
+	COALESCE(up.full_name, up.username, up.email_address) AS updater_name,
+	mp.sharable_groups
+	FROM community.maintenance_plan mp
+	LEFT JOIN community.maintenance_status ms on ms.id = mp.maintenance_status
+	LEFT JOIN community.profiles cp on cp.id = mp.created_by
+	LEFT JOIN community.profiles up on up.id = mp.updated_by
+	WHERE $1::UUID = ANY(mp.sharable_groups) AND mp.id = $2;`
+
+	row := db.QueryRow(sqlStr, userID, maintenanceID)
+	selectedMaintenancePlan := model.MaintenancePlan{}
+
+	err = row.Scan(
+		&selectedMaintenancePlan.ID,
+		&selectedMaintenancePlan.Name,
+		&selectedMaintenancePlan.Description,
+		&selectedMaintenancePlan.StatusName,
+		&selectedMaintenancePlan.StatusDescription,
+		&selectedMaintenancePlan.Color,
+		&selectedMaintenancePlan.MinItemsLimit,
+		&selectedMaintenancePlan.MaxItemsLimit,
+		&selectedMaintenancePlan.PlanType,
+		&selectedMaintenancePlan.CreatedAt,
+		&selectedMaintenancePlan.CreatedBy,
+		&selectedMaintenancePlan.Creator,
+		&selectedMaintenancePlan.UpdatedAt,
+		&selectedMaintenancePlan.UpdatedBy,
+		&selectedMaintenancePlan.Updator,
+		pq.Array(&selectedMaintenancePlan.SharableGroups),
+	)
+	if err != nil {
+		return model.MaintenancePlan{}, err
+	}
+
+	return selectedMaintenancePlan, nil
+}
+
+// RetrieveAllMaintenancePlanItems ...
+func RetrieveAllMaintenancePlanItems(user string, userID string, maintenancePlanID string, limit int) ([]model.MaintenanceItemResponse, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+		mi.id,
+		mi.maintenance_plan_id,
+		mi.item_id,
+		i.name,
+		i.description,
+		i.price,
+		i.quantity,
+		i.location,
+		mi.created_by,
+		COALESCE(cp.username, cp.full_name, cp.email_address, 'Anonymous') as creator,
+		mi.created_at,
+		mi.updated_by,
+		COALESCE(up.username, up.full_name, cp.email_address, 'Anonymous') as updator,
+		mi.updated_at,
+		mi.sharable_groups
+	FROM community.maintenance_item mi
+	LEFT JOIN community.inventory i ON mi.item_id = i.id
+	LEFT JOIN community.profiles cp ON mi.created_by = cp.id
+	LEFT JOIN community.profiles up ON mi.updated_by = up.id
+	WHERE $1::UUID = ANY(mi.sharable_groups) AND mi.maintenance_plan_id = $2
+	ORDER BY mi.updated_at DESC FETCH FIRST $3 ROWS ONLY;`
+
+	rows, err := db.Query(sqlStr, userID, maintenancePlanID, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.MaintenanceItemResponse
+	var sharableGroups pq.StringArray
+
+	for rows.Next() {
+		var ec model.MaintenanceItemResponse
+		if err := rows.Scan(&ec.ID, &ec.MaintenancePlanID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
+			return nil, err
+		}
+		ec.SharableGroups = sharableGroups
+		data = append(data, ec)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
 // CreateMaintenancePlan ...
 func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenancePlan) (*model.MaintenancePlan, error) {
 	db, err := SetupDB(user)
@@ -288,4 +403,93 @@ func RemoveMaintenancePlan(user string, planID string) error {
 		return err
 	}
 	return nil
+}
+
+// AddAssetToMaintenancePlan ...
+func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID string, assetIDs []string) ([]model.MaintenanceItemResponse, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := `INSERT INTO community.maintenance_item(maintenance_plan_id, item_id, created_by, created_at, updated_by, updated_at, sharable_groups)
+		VALUES ($1, $2, $3, $4, $5, $6, $7);`
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("error starting transaction: %+v", err)
+		return nil, err
+	}
+
+	currentTime := time.Now()
+	for _, v := range assetIDs {
+		_, err := tx.Exec(
+			sqlStr,
+			maintenancePlanID,
+			v,
+			userID,
+			currentTime,
+			userID,
+			currentTime,
+			pq.Array([]string{userID}),
+		)
+		if err != nil {
+			tx.Rollback()
+			log.Printf("Error executing query: %+v", err)
+			return nil, err
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("error committing transaction: %+v", err)
+		return nil, err
+	}
+
+	sqlStr = `SELECT 
+		mi.id,
+		mi.category_id,
+		mi.item_id,
+		i.name,
+		i.description,
+		i.price,
+		i.quantity,
+		i.location,
+		mi.created_by,
+		COALESCE(cp.username, cp.full_name, cp.email_address, 'Anonymous') as creator,
+		mi.created_at,
+		mi.updated_by,
+		COALESCE(up.username, up.full_name, cp.email_address, 'Anonymous') as updator,
+		mi.updated_at,
+		mi.sharable_groups
+	FROM community.category_item mi
+	LEFT JOIN community.inventory i ON mi.item_id = i.id
+	LEFT JOIN community.profiles cp ON mi.created_by = cp.id
+	LEFT JOIN community.profiles up ON mi.updated_by = up.id
+	WHERE $1::UUID = ANY(mi.sharable_groups) AND mi.category_id = $2
+	ORDER BY mi.updated_at DESC;`
+
+	rows, err := db.Query(sqlStr, userID, maintenancePlanID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var data []model.MaintenanceItemResponse
+	var sharableGroups pq.StringArray
+
+	for rows.Next() {
+		var ec model.MaintenanceItemResponse
+		if err := rows.Scan(&ec.ID, &ec.MaintenancePlanID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
+			return nil, err
+		}
+		ec.SharableGroups = sharableGroups
+		data = append(data, ec)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
