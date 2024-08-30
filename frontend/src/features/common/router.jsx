@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../Layout/Layout';
+import Reports from '../Reports/Reports';
 
 const HomePage = lazy(() => import('../Home/HomePage'));
 const Notes = lazy(() => import('../Notes/Notes'));
@@ -49,7 +50,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/reports',
-        element: <InventoryList />,
+        element: <Reports />,
       },
       {
         path: 'profile',
