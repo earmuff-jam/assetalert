@@ -48,14 +48,14 @@ func main() {
 	}
 	router := mux.NewRouter()
 
-	// these routes are treated as they are public routes
+	// public routes
 	router.HandleFunc("/api/v1/signup", handler.Signup).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/v1/signin", handler.Signin).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/v1/logout", handler.Logout).Methods("GET", "OPTIONS")
 
 	router.HandleFunc("/api/v1/event/{id}/ws", handler.HandleWebsocket)
 
-	// routes below here are treated as they are secure routes
+	// secure routes
 	router.Handle("/api/v1/locations/health", CustomRequestHandler(handler.GetStorageLocationHealthCheck)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
 	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
@@ -77,7 +77,7 @@ func main() {
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.GetAllMaintenancePlanItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInMaintenancePlan)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.CreateMaintenancePlan)).Methods(http.MethodPost)
-	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenacePlan)).Methods(http.MethodGet)
+	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenancePlan)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.UpdateMaintenancePlan)).Methods(http.MethodPut)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.RemoveMaintenancePlan)).Methods(http.MethodDelete)
 
@@ -166,5 +166,4 @@ func validateJwtTokenWithUser(currentUser string, cookie string) (bool, error) {
 		return false, err
 	}
 	return true, nil
-
 }

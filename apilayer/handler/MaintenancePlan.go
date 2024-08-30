@@ -52,8 +52,8 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 	json.NewEncoder(rw).Encode(resp)
 }
 
-// GetMaintenacePlan ...
-// swagger:route GET /api/v1/plan/ GetMaintenacePlan GetMaintenacePlan
+// GetMaintenancePlan ...
+// swagger:route GET /api/v1/plan/ GetMaintenancePlan GetMaintenancePlan
 //
 // # Retrieve a selected maintenance plan
 //
@@ -62,20 +62,20 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func GetMaintenacePlan(rw http.ResponseWriter, r *http.Request, user string) {
+func GetMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 
 	userID := r.URL.Query().Get("id")
 	maintenanceID := r.URL.Query().Get("mID")
 
 	if userID == "" {
-		log.Printf("Unable to retrieve associated maintenance plan with empty user id")
+		log.Printf("Unable to retrieve selected maintenance plan with empty user id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
 	}
 
 	if maintenanceID == "" {
-		log.Printf("Unable to retrieve associated maintenance plan with empty id")
+		log.Printf("Unable to retrieve selected maintenance plan with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
