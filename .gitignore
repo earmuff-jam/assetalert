@@ -1,4 +1,5 @@
 .env
+*.out
 
 docs
 node_modules

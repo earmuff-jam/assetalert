@@ -88,6 +88,97 @@ func Test_GetAllMaintenancePlans_InvalidDBUser(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_GetMaintenancePlan(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/maintenance-plans?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	GetAllMaintenancePlans(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var maintenancePlan []model.MaintenancePlan
+	err = json.Unmarshal(data, &maintenancePlan)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	assert.Greater(t, len(maintenancePlan), 0)
+
+	selectedMaintenancePlan := maintenancePlan[0]
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/plan?id=%s&mID=%s", prevUser.ID.String(), selectedMaintenancePlan.ID), nil)
+	w = httptest.NewRecorder()
+	GetMaintenancePlan(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var selected model.MaintenancePlan
+	err = json.Unmarshal(data, &selected)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, selectedMaintenancePlan.ID, selected.ID)
+}
+
+func Test_GetMaintenancePlan_IncorrectPlanID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/plan?id=%s&mID=%s", "", ""), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetMaintenancePlan(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetMaintenancePlan_InvalidDBUser(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/plan?id=%s&mID=%s", prevUser.ID.String(), ""), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetMaintenancePlan(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_CreateMaintenancePlan(t *testing.T) {
 
 	// retrieve the selected profile
@@ -310,6 +401,83 @@ func Test_RemoveMaintenancePlan_InvalidDBUser(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/plan", bytes.NewBuffer(requestBody))
 	w := httptest.NewRecorder()
 	RemoveMaintenancePlan(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllMaintenancePlanItems(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/maintenance-plans?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
+	w := httptest.NewRecorder()
+	GetAllMaintenancePlans(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var maintenancePlan []model.MaintenancePlan
+	err = json.Unmarshal(data, &maintenancePlan)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+	assert.Greater(t, len(maintenancePlan), 0)
+
+	selectedMaintenancePlan := maintenancePlan[0]
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/plans/items?id=%s&limit=%d&mID=%s", prevUser.ID.String(), 5, selectedMaintenancePlan.ID), nil)
+	w = httptest.NewRecorder()
+	GetAllMaintenancePlanItems(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var selected model.MaintenanceItemResponse
+	err = json.Unmarshal(data, &selected)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+
+}
+
+func Test_GetAllMaintenancePlanItems_IncorrectUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/plans/items?id=%s&limit=%d&mID=%s", "", 5, ""), nil)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	GetAllMaintenancePlanItems(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetAllMaintenancePlanItems_InvalidDBUser(t *testing.T) {
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/plans/items?id=%s&limit=%d&mID=%s", "", 5, ""), nil)
+	w := httptest.NewRecorder()
+	GetAllMaintenancePlanItems(w, req, config.CEO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
