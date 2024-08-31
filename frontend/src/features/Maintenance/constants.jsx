@@ -4,7 +4,7 @@ export const ITEMS_IN_MAINTENANCE_PLAN_HEADER = [
   { field: 'price', headerName: 'Price', flex: 1 },
   { field: 'quantity', headerName: 'Quantity', flex: 1 },
   { field: 'location', headerName: 'Storage Location', flex: 1 },
-  { field: 'updator', headerName: 'Last updated by', flex: 1 },
+  { field: 'updater_name', headerName: 'Last updated by', flex: 1 },
 ];
 
 export const ITEM_TYPE_MAPPER = {
