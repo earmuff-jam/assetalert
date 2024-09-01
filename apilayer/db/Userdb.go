@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -129,6 +130,101 @@ func RemoveUser(user string, id uuid.UUID) error {
 	return nil
 }
 
+// IsUserValid ...
+func IsUserValid(user string, email string, birthdate string) (*model.VerifyUserResponse, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return &model.VerifyUserResponse{IsUserValid: false, RetryAttempts: 0}, err
+	}
+	defer db.Close()
+
+	draftUserValidationResponse := &model.VerifyUserResponse{}
+
+	sqlStr := `SELECT retries FROM auth.users au WHERE au.email = $1;`
+	result := db.QueryRow(sqlStr, email)
+
+	err = result.Scan(&draftUserValidationResponse.RetryAttempts)
+	if err != nil {
+		log.Printf("unable to retrieve user retry attempts. error: +%v", err)
+		return &model.VerifyUserResponse{IsUserValid: false, RetryAttempts: 3}, err
+	}
+
+	if draftUserValidationResponse.RetryAttempts >= 3 {
+		log.Printf("retries exceeded for selected user")
+		return &model.VerifyUserResponse{IsUserValid: false, RetryAttempts: 3}, errors.New("retry attempts exceeded")
+	}
+
+	sqlStr = `SELECT
+					CASE 
+						WHEN EXISTS (
+							SELECT 1 
+							FROM auth.users au 
+							WHERE au.email = $1 AND au.birthdate = $2 AND au.retries <= 3
+						) THEN TRUE
+						ELSE FALSE
+					END AS isValid,
+					COALESCE((
+						SELECT retries
+						FROM auth.users au
+						WHERE au.email = $1
+					), 0) AS retries,
+					aqa.q1 AS question_01,
+					aqa.a1 AS answer_01,
+					aqa.q2 AS question_02,
+					aqa.a2 AS answer_02
+						FROM auth.users au
+					LEFT JOIN auth.question_answer aqa ON au.email = aqa.email;`
+	result = db.QueryRow(sqlStr, email, birthdate)
+
+	var question01, answer01, question02, answer02 string
+	err = result.Scan(
+		&draftUserValidationResponse.IsUserValid,
+		&draftUserValidationResponse.RetryAttempts,
+		&question01,
+		&answer01,
+		&question02,
+		&answer02)
+
+	if err != nil {
+		log.Printf("unable to match user validity. error: +%v", err)
+		return &model.VerifyUserResponse{IsUserValid: false, RetryAttempts: 0}, err
+	}
+
+	if !draftUserValidationResponse.IsUserValid {
+		log.Printf("unable to validate user details. updating count.")
+		newRetryCounts, _ := updateRetryCount(user, email)
+		return &model.VerifyUserResponse{IsUserValid: false, RetryAttempts: newRetryCounts}, err
+	}
+
+	draftUserValidationResponse.SecurityQuestionList = []string{question01, answer01, question02, answer02}
+
+	return draftUserValidationResponse, err
+}
+
+// updateRetryCount ...
+//
+// used to update retry count every time user is unable to log in. this is done to protect client data. if a user
+// fails to login after 3 times the account will no longer be accesible and the user needs to create new account.
+// if the user has other collaborators they can provide user access for the new account. this is required as it
+// prevents anonymous members attempt to brute force login into the client's data.
+func updateRetryCount(user string, email string) (int, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+
+	sqlStr := `UPDATE auth.users SET retries = retries + 1 WHERE email = $1 RETURNING retries;`
+	var retries int
+	err = db.QueryRow(sqlStr, email).Scan(&retries)
+	if err != nil {
+		log.Printf("unable to update retry attempts. error: +%v", err)
+		return 0, err
+	}
+
+	return retries, nil
+}
+
 // ValidateCredentials ...
 func ValidateCredentials(user string, ID string) error {
 	db, err := SetupDB(user)
@@ -182,13 +278,13 @@ func ValidateCredentials(user string, ID string) error {
 		})
 		tokenStr, err := token.SignedString(licenseKey)
 		if err != nil {
-			log.Printf("unable to extend token. error :- %+v", err)
+			log.Printf("unable to extend token. error: +%v", err)
 			return err
 		}
 
 		parsedUserID, err := uuid.Parse(ID)
 		if err != nil {
-			log.Printf("unable to determine user id. error :%+v", err)
+			log.Printf("unable to determine user id. error: %+v", err)
 			return err
 		}
 
@@ -199,7 +295,7 @@ func ValidateCredentials(user string, ID string) error {
 		}
 		err = revalidateOauthToken(&ghostUser, tx)
 		if err != nil {
-			log.Printf("unable to revalidate the user. error %+v", err)
+			log.Printf("unable to revalidate the user. error: +%v", err)
 			return err
 		}
 	}
@@ -244,7 +340,7 @@ func applyJwtTokenToUser(user string, draftUser *model.UserCredentials) error {
 	}
 	err = upsertOauthToken(draftUser, tx)
 	if err != nil {
-		log.Printf("unable to add auth token. error: %+v", err)
+		log.Printf("unable to add auth token. error: +%v", err)
 		tx.Rollback()
 		return err
 	}

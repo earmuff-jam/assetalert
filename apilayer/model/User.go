@@ -109,3 +109,22 @@ type WebsocketMsg struct {
 	User             string `json:"user"`
 	UserID           string `json:"userID"`
 }
+
+// VerifyUserRequest ...
+// swagger:model VerifyUserRequest
+//
+// VerifyUserRequest object. Used only for reset password purposes
+type VerifyUserRequest struct {
+	Email    string `json:"email"`
+	Birthday string `json:"birthday"`
+}
+
+// VerifyUserResponse ...
+// swagger:model VerifyUserResponse
+//
+// VerifyUserResponse object. Used only for reset password purposes
+type VerifyUserResponse struct {
+	IsUserValid          bool     `json:"valid"`
+	RetryAttempts        int      `json:"retry_attempt"`
+	SecurityQuestionList []string `json:"security_questions"`
+}
