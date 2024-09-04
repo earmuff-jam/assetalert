@@ -1,6 +1,6 @@
-import { Stack } from '@mui/material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { useState } from 'react';
-import { AddRounded } from '@mui/icons-material';
+import { AddRounded, FileDownload, FilterAltRounded, SortRounded } from '@mui/icons-material';
 import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
 import HeaderWithButton from '../common/HeaderWithButton';
@@ -21,17 +21,36 @@ const CategoryList = ({ displayConcise = false }) => {
 
   return (
     <Stack sx={{ py: 2 }}>
-      <HeaderWithButton
-        title="Categories"
-        primaryButtonTextLabel="Add Category"
-        primaryStartIcon={<AddRounded />}
-        handleClickPrimaryButton={toggleModal}
-        secondaryTitle={
-          displayConcise
-            ? `Viewing recent 4 out of ${categories.length} categories`
-            : 'Organize items into categories for easy access.'
-        }
-      />
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <HeaderWithButton
+          title="Categories"
+          secondaryTitle={
+            displayConcise
+              ? `Viewing recent 4 out of ${categories.length} categories`
+              : 'Organize items into categories for easy access.'
+          }
+        />
+        <Stack direction="row" spacing="1rem">
+          <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
+            Add Category
+          </Button>
+          {!displayConcise && (
+            <IconButton size="small">
+              <FileDownload fontSize="small" />
+            </IconButton>
+          )}
+        </Stack>
+      </Stack>
+      {!displayConcise && (
+        <Stack sx={{ flexDirection: 'row', gap: '1rem', mb: '1rem' }}>
+          <IconButton size="small">
+            <FilterAltRounded fontSize="small" />
+          </IconButton>
+          <IconButton size="small">
+            <SortRounded fontSize="small" />
+          </IconButton>
+        </Stack>
+      )}
       <Category
         categories={displayConcise ? categories.slice(0, 4) : categories}
         loading={loading}

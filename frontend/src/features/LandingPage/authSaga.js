@@ -83,7 +83,6 @@ export function* fetchUserVerification(action) {
     });
     yield put(authActions.getUserVerificationSuccess(response.data));
   } catch (e) {
-    console.log(e);
     yield put(authActions.getUserVerificationFailure(e));
   }
 }

@@ -3,7 +3,6 @@ import { enqueueSnackbar } from 'notistack';
 import { FORGOT_PASSWORD_FORM_FIELDS } from '../constants';
 import { Button, List, ListItem, ListItemText, Skeleton, Stack, TextField, Typography } from '@mui/material';
 import HeaderWithButton from '../../common/HeaderWithButton';
-import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
 export const SECURITY_QUESTIONS = [
@@ -65,17 +64,17 @@ export default function SecurityQuestionAnswerForm({ handleCloseModal }) {
       return;
     }
 
-    const formattedData = Object.values(formFields).reduce((acc, el) => {
-      if (el.value) {
-        acc[el.name] = el.value;
-      }
-      return acc;
-    }, {});
+    // const formattedData = Object.values(formFields).reduce((acc, el) => {
+    //   if (el.value) {
+    //     acc[el.name] = el.value;
+    //   }
+    //   return acc;
+    // }, {});
 
-    const draftRequest = {
-      ...formattedData,
-      created_on: dayjs().toISOString(),
-    };
+    // const draftRequest = {
+    //   ...formattedData,
+    //   created_on: dayjs().toISOString(),
+    // };
     //   dispatch(maintenancePlanActions.createPlan(draftRequest));
     resetData();
   };

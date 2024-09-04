@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { ArrowRightRounded } from '@mui/icons-material';
 import { authActions } from './authSlice';
-import { Button, InputAdornment, Stack, TextField } from '@mui/material';
+import { Box, Button, InputAdornment, Stack, TextField } from '@mui/material';
 import { LOGIN_FORM_FIELDS } from './constants';
 
 const Login = () => {
@@ -84,17 +84,19 @@ const Login = () => {
             }}
           />
         ))}
+        <Box>
+          <Button
+            variant="outlined"
+            endIcon={<ArrowRightRounded />}
+            disabled={validate(formFields)}
+            disableRipple={true}
+            disableFocusRipple={true}
+            onClick={submit}
+          >
+            Submit
+          </Button>
+        </Box>
       </Stack>
-      <Button
-        variant="outlined"
-        endIcon={<ArrowRightRounded />}
-        disabled={validate(formFields)}
-        disableRipple={true}
-        disableFocusRipple={true}
-        onClick={submit}
-      >
-        Submit
-      </Button>
     </>
   );
 };

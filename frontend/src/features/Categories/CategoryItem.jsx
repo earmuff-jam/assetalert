@@ -15,13 +15,19 @@ import dayjs from 'dayjs';
 import { ITEMS_IN_CATEGORY_HEADER } from './constants';
 import BarChart from '../../util/Chart/BarChart';
 import ItemCard from '../common/ItemCard/ItemCard';
+import Collection from '../Home/Collection/Collection';
 
 export default function CategoryItem() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
-  const { selectedCategory, itemsInCategory = [], loading = false } = useSelector((state) => state.categories);
+  const {
+    categories,
+    selectedCategory,
+    itemsInCategory = [],
+    loading = false,
+  } = useSelector((state) => state.categories);
 
   const [rowSelected, setRowSelected] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
@@ -74,6 +80,7 @@ export default function CategoryItem() {
     if (id) {
       dispatch(categoryActions.getItemsForCategory(id));
       dispatch(categoryActions.getCategory(id));
+      dispatch(categoryActions.getCategories());
     }
   }, [id]);
 
@@ -118,6 +125,10 @@ export default function CategoryItem() {
           borderColor="rgba(75, 192, 192, 1)"
         />
       </Box>
+      <Collection
+        title="Recently Created Categories"
+        items={categories.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id }))}
+      />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
           <TableComponent
