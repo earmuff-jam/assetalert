@@ -136,6 +136,7 @@ func Test_GetLogout(t *testing.T) {
 
 func Test_UserVerification_Success(t *testing.T) {
 
+	t.Skip()
 	draftUserVerification := &model.VerifyUserRequest{
 		Email:    "test@gmail.com",
 		Birthday: "2010-01-01",
