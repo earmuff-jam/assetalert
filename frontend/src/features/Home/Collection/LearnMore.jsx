@@ -1,11 +1,10 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { DEFAULT_INVENTORIES_LANDING_PAGE_TEXT } from './constants';
 
-const LearnMore = () => {
+const LearnMore = ({ items = [] }) => {
   return (
     <Grid container spacing={4}>
-      {DEFAULT_INVENTORIES_LANDING_PAGE_TEXT.map((item) => (
-        <Grid item key={item.name} xs={12} sm={6} md={4} >
+      {items.map((item) => (
+        <Grid item key={item.name} xs={12} sm={6} md={4}>
           <Card
             sx={{
               height: '100%',

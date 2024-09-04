@@ -1,6 +1,5 @@
 import { produce } from 'immer';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { authActions } from './authSlice';
 import { SIGN_UP_FORM_FIELDS } from './constants';
@@ -17,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 
-const Signup = ({ setSignUpView }) => {
+const Signup = ({ handleClose }) => {
   const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = useState(false);
@@ -68,7 +67,7 @@ const Signup = ({ setSignUpView }) => {
         return acc;
       }, {});
       fetchSignupFn(formattedData);
-      setSignUpView(false);
+      handleClose(false);
     }
   };
 
@@ -130,14 +129,6 @@ const Signup = ({ setSignUpView }) => {
       </Box>
     </Stack>
   );
-};
-
-Signup.defaultProps = {
-  setSignUpView: () => {},
-};
-
-Signup.propTypes = {
-  setSignUpView: PropTypes.func,
 };
 
 export default Signup;

@@ -77,22 +77,22 @@ export const lightTheme = createTheme({
         root: {
           backgroundColor: '#FFFBFB',
         },
-      }
+      },
     },
     MuiAccordion: {
       styleOverrides: {
         root: {
-          backgroundColor: '#F8FAFD'
-        }
-      }
+          backgroundColor: '#F9F7F7',
+        },
+      },
     },
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          backgroundColor: '#F8FAFD'
-        }
-      }
-    }
+          backgroundColor: '#F9F7F7',
+        },
+      },
+    },
   },
 });
 
@@ -176,6 +176,22 @@ export const darkTheme = createTheme({
     },
     caption: {
       color: '#B0B0B0',
+    },
+  },
+  components: {
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#3F72AF',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize',
+        },
+      },
     },
   },
 });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { AddRounded } from '@mui/icons-material';
-import { Box, Container } from '@mui/material';
+import { AddRounded, FileDownload, FilterAltRounded, SortRounded } from '@mui/icons-material';
+import { Box, Button, IconButton, Stack } from '@mui/material';
 import AddPlan from './AddPlan';
 import PlanList from './PlanList';
 import HeaderWithButton from '../common/HeaderWithButton';
@@ -21,21 +21,34 @@ const Plan = () => {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Container maxWidth="xl">
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
         <HeaderWithButton
           title="Maintenance Plans"
-          primaryButtonTextLabel="Add Plan"
-          primaryStartIcon={<AddRounded />}
-          handleClickPrimaryButton={handleAddNewPlan}
           secondaryTitle="Assign items to maintenance plan(s) to keep them up to date."
         />
-        <PlanList
-          maintenancePlan={maintenancePlan}
-          loading={loading}
-          setDisplayModal={setDisplayModal}
-          setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
-        />
-      </Container>
+        <Stack direction="row" spacing="1rem">
+          <Button onClick={handleAddNewPlan} startIcon={<AddRounded />} variant="outlined">
+            Add Plan
+          </Button>
+          <IconButton size="small">
+            <FileDownload fontSize="small" />
+          </IconButton>
+        </Stack>
+      </Stack>
+      <Stack sx={{ flexDirection: 'row', gap: '1rem', mb: '1rem' }}>
+        <IconButton size="small">
+          <FilterAltRounded fontSize="small" />
+        </IconButton>
+        <IconButton size="small">
+          <SortRounded fontSize="small" />
+        </IconButton>
+      </Stack>
+      <PlanList
+        maintenancePlan={maintenancePlan}
+        loading={loading}
+        setDisplayModal={setDisplayModal}
+        setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
+      />
       {displayModal && (
         <SimpleModal title="Add new maintenance plan" handleClose={handleCloseAddNewPlan} maxSize="md">
           <AddPlan

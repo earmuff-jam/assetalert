@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { assetSummaryActions } from './SummarySlice';
 import PieChart from '../../util/Chart/PieChart';
 import { prefix } from '../common/utils';
+import HeaderWithButton from '../common/HeaderWithButton';
 
 const Overview = () => {
   const dispatch = useDispatch();
@@ -29,12 +30,9 @@ const Overview = () => {
 
   return (
     <>
-      <Typography variant="h4">Overview</Typography>
-      <Typography variant="caption">View summary details about your assets.</Typography>
+      <HeaderWithButton title="Overview" secondaryTitle="View summary details about your assets" />
       <Stack spacing={{ xs: 1 }}>
-        <Typography variant="h5" gutterBottom>
-          Asset Summary
-        </Typography>
+        <HeaderWithButton title="Asset Summary" />
         <Stack direction="row" spacing={{ xs: 1 }} useFlexGap flexWrap="wrap">
           <CardItem>
             <ColumnItem
