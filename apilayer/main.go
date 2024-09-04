@@ -52,7 +52,6 @@ func main() {
 	router.HandleFunc("/api/v1/signup", handler.Signup).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/v1/signin", handler.Signin).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/v1/logout", handler.Logout).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/v1/user/verification", handler.UserVerification).Methods("POST", "OPTIONS")
 
 	router.HandleFunc("/api/v1/event/{id}/ws", handler.HandleWebsocket)
 

@@ -70,28 +70,8 @@ export function* fetchUserLogout() {
   }
 }
 
-export function* fetchUserVerification(action) {
-  try {
-    const response = yield call(axios.post, `${BASEURL}/user/verification`, {
-      email: action.payload.email,
-      birthday: action.payload.birthday,
-    }, {
-      headers: {
-        Accept: 'application/json',
-      },
-      withCredentials: true, // Equivalent to credentials: 'include'
-    });
-    yield put(authActions.getUserVerificationSuccess(response.data));
-  } catch (e) {
-    yield put(authActions.getUserVerificationFailure(e));
-  }
-}
-
 export function* watchFetchUserLogin() {
   yield takeLatest('auth/getUserID', fetchUserLogin);
-}
-export function* watchFetchUserVerification() {
-  yield takeLatest('auth/getUserVerification', fetchUserVerification);
 }
 export function* watchFetchUserSignup() {
   yield takeLatest('auth/getSignup', fetchUserSignup);
@@ -100,4 +80,5 @@ export function* watchFetchUserLogout() {
   yield takeLatest(`auth/getLogout`, fetchUserLogout);
 }
 
-export default [watchFetchUserLogin, watchFetchUserSignup, watchFetchUserLogout, watchFetchUserVerification];
+ 
+export default [watchFetchUserLogin, watchFetchUserSignup, watchFetchUserLogout];

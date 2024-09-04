@@ -10,7 +10,6 @@ CREATE TABLE auth.users
     aud                         VARCHAR(255), -- authenticated or not TEXT script --
     role                        VARCHAR(255), -- role of the user that relates to the psql system. --
     email                       VARCHAR(255) NOT NULL UNIQUE,
-    retries                     INT NOT NULL DEFAULT 0, -- how many times the user has attempted to retry and login -- 
     encrypted_password          TEXT,
     email_confirmed_at          TIMESTAMP WITH TIME ZONE,
     invited_at                  TIMESTAMP WITH TIME ZONE,
