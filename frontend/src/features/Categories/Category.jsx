@@ -55,7 +55,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
   return (
     <>
       <Stack>
-        <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
+        <Stack spacing={{ xs: 1 }}>
           {categories.map((item, index) => (
             <Stack key={index} flexGrow={1}>
               <Card
@@ -69,7 +69,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
               >
                 <CardContent>
                   <Stack direction="row">
-                    <Stack flexGrow={1} sx={{ minWidth: '12rem', minHeight: '6rem' }}>
+                    <Stack flexGrow={1}>
                       <Typography
                         variant="h6"
                         component="h3"

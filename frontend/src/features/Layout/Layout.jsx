@@ -58,7 +58,7 @@ const Layout = () => {
           </Box>
         }
       >
-        <AppBar color="secondary">
+        <AppBar elevation={0}>
           <Toolbar>
             <IconButton onClick={handleDrawerOpen}>
               <MenuOutlined />

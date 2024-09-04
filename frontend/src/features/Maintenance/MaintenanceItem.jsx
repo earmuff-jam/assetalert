@@ -15,6 +15,7 @@ import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
 import { generateTitleColor } from '../common/utils';
 import dayjs from 'dayjs';
 import { inventoryActions } from '../InventoryList/inventorySlice';
+import Collection from '../Home/Collection/Collection';
 
 export default function MaintenanceItem() {
   const { id } = useParams();
@@ -22,6 +23,7 @@ export default function MaintenanceItem() {
 
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
   const {
+    maintenancePlan,
     selectedMaintenancePlan,
     itemsInMaintenancePlan = [],
     loading = false,
@@ -77,6 +79,7 @@ export default function MaintenanceItem() {
     if (id) {
       dispatch(maintenancePlanActions.getItemsInMaintenancePlan(id));
       dispatch(maintenancePlanActions.getSelectedMaintenancePlan(id));
+      dispatch(maintenancePlanActions.getPlans());
     }
   }, [id]);
 
@@ -121,6 +124,10 @@ export default function MaintenanceItem() {
           borderColor="rgba(75, 192, 192, 1)"
         />
       </Box>
+      <Collection
+        title="Recently Created Maintenance plans"
+        items={maintenancePlan.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id }))}
+      />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedMaintenancePlan?.name}`} handleClose={resetSelection} maxSize="md">
           <TableComponent

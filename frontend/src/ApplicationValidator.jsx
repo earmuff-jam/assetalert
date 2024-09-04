@@ -6,7 +6,7 @@ import { TourProvider } from '@reactour/tour';
 import { RouterProvider } from 'react-router-dom';
 import { Container, Dialog } from '@mui/material';
 import { router } from './features/common/router';
-import AuthHome from './features/LandingPage/AuthHome';
+import LandingPage from './features/LandingPage/LandingPage';
 
 const ApplicationValidator = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -39,8 +39,8 @@ const ApplicationValidator = () => {
       </SnackbarProvider>
     </TourProvider>
   ) : (
-    <Container maxWidth="xl" sx={{backgroundColor: 'background.default'}}>
-      <AuthHome />
+    <Container maxWidth="xl">
+      <LandingPage />
     </Container>
   );
 };
