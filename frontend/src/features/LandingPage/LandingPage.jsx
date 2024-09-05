@@ -76,8 +76,8 @@ export default function LandingPage() {
           borderColor={formattedData.map((d) => d.color)}
         />
         <Review />
-        <Divider />
         <Pricing />
+        <Divider />
         <Footer />
       </Stack>
       {displayModal && (
