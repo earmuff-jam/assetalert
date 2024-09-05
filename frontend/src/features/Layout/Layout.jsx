@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import {
   AppBar,
   Box,
+  Button,
   CircularProgress,
   CssBaseline,
   IconButton,
@@ -11,6 +12,7 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { Suspense, useEffect, useState } from 'react';
 import MenuActionBar from './MenuActionBar';
@@ -19,9 +21,12 @@ import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from 
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../LandingPage/authSlice';
 import { profileActions } from '../Profile/profileSlice';
+import { useTheme } from '@emotion/react';
 
 const Layout = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
+  const onlySmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const { loading, profileDetails } = useSelector((state) => state.profile);
 
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -66,14 +71,33 @@ const Layout = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               AssetAlert
             </Typography>
-            <IconButton onClick={() => handleAppearance()}>
-              {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
-            </IconButton>
-            <Tooltip title="log out">
-              <IconButton onClick={handleLogout}>
-                <LogoutRounded fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <Stack direction="row" spacing="0.1rem">
+              {!onlySmallScreen ? (
+                <>
+                  <Button
+                    onClick={handleAppearance}
+                    startIcon={profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+                    variant="outlined"
+                  >
+                    {profileDetails?.appearance ? 'Light mode' : 'Dark mode'}
+                  </Button>
+                  <Button onClick={handleLogout} startIcon={<LogoutRounded />}>
+                    Log off
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <IconButton onClick={() => handleAppearance()}>
+                    {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+                  </IconButton>
+                  <Tooltip title="log out">
+                    <IconButton onClick={handleLogout}>
+                      <LogoutRounded fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
+            </Stack>
           </Toolbar>
         </AppBar>
         <Box>

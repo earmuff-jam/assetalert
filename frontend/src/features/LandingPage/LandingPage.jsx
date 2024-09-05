@@ -8,6 +8,8 @@ import { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import Signup from './Signup';
 import Login from './Login';
+import Pricing from './Pricing/Pricing';
+import Contact from './Contact/Contact';
 
 const SAMPLE_DATA = [
   { name: 'Entertainment', price: 320.0 },
@@ -59,7 +61,6 @@ export default function LandingPage() {
   return (
     <>
       <StyledAppBar elevation={0}>
-        <Typography>Resouces</Typography>
         <Typography>Pricing</Typography>
         <Typography>Contact</Typography>
         <Button onClick={openLoginModal}>Sign in</Button>
@@ -75,6 +76,8 @@ export default function LandingPage() {
           borderColor={formattedData.map((d) => d.color)}
         />
         <Review />
+        <Pricing />
+        <Contact />
         <Divider />
         <Footer />
       </Stack>
@@ -87,7 +90,7 @@ export default function LandingPage() {
               : 'Keep an account to keep track of all your inventories.'
           }
           handleClose={closeDisplayModal}
-          maxSize="md"
+          maxSize="sm"
         >
           {currentForm === 'signup' ? <Signup handleClose={closeDisplayModal} /> : <Login />}
         </SimpleModal>

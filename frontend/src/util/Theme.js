@@ -65,6 +65,14 @@ export const lightTheme = createTheme({
     },
   },
   components: {
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#F9F7F7',
+          color: '#B0B0B0',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -179,10 +187,17 @@ export const darkTheme = createTheme({
     },
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#2E2E2E',
+        },
+      },
+    },
     MuiToolbar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#3F72AF',
+          backgroundColor: '#2E2E2E',
         },
       },
     },
