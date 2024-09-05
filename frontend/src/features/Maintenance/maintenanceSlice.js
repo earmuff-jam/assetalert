@@ -121,7 +121,7 @@ const maintenancePlanSlice = createSlice({
       state.error = '';
     },
     addItemsInPlanSuccess: (state, action) => {
-      state.itemsInCategory = [...action.payload];
+      state.itemsInMaintenancePlan = [...action.payload];
       state.loading = false;
       state.error = '';
     },

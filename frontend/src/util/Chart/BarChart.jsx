@@ -1,13 +1,7 @@
 import 'chart.js/auto';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
-const DoughnutChart = ({
-  data,
-  legendLabel,
-  backgroundColor,
-  borderColor,
-  height = '25rem',
-}) => {
+const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '25rem' }) => {
   let chartData = {
     labels: data.map((d) => d.label),
     datasets: [
@@ -30,13 +24,16 @@ const DoughnutChart = ({
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             let label = context.label || '';
             if (label) {
               label += ': ';
             }
             if (context.parsed !== null) {
-              label += `${context.parsed} (${((context.parsed / data.reduce((sum, item) => sum + item.count, 0)) * 100).toFixed(2)}%)`;
+              label += `${context.parsed} (${(
+                (context.parsed / data.reduce((sum, item) => sum + item.count, 0)) *
+                100
+              ).toFixed(2)}%)`;
             }
             return label;
           },
@@ -47,9 +44,9 @@ const DoughnutChart = ({
 
   return (
     <div style={{ width: '100%', height: height }}>
-      <Doughnut data={chartData} options={options} />
+      <Bar data={chartData} options={options} />
     </div>
   );
 };
 
-export default DoughnutChart;
+export default BarChart;
