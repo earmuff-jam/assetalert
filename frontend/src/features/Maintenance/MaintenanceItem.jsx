@@ -83,7 +83,7 @@ export default function MaintenanceItem() {
     }
   }, [id]);
 
-  if (inventoriesLoading || loading) {
+  if (loading) {
     return <Skeleton height="20rem" />;
   }
 

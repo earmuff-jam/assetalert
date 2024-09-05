@@ -177,6 +177,7 @@ func RetrieveAllMaintenancePlanItems(user string, userID string, maintenancePlan
 
 	rows, err := db.Query(sqlStr, userID, maintenancePlanID, limit)
 	if err != nil {
+		log.Printf("unable to retrieve maintenance items. error: %+v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -187,6 +188,7 @@ func RetrieveAllMaintenancePlanItems(user string, userID string, maintenancePlan
 	for rows.Next() {
 		var ec model.MaintenanceItemResponse
 		if err := rows.Scan(&ec.ID, &ec.MaintenancePlanID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
+			log.Printf("unable to retrieve maintenance items. error: %+v", err)
 			return nil, err
 		}
 		ec.SharableGroups = sharableGroups
@@ -194,6 +196,7 @@ func RetrieveAllMaintenancePlanItems(user string, userID string, maintenancePlan
 	}
 
 	if err := rows.Err(); err != nil {
+		log.Printf("unable to retrieve maintenance items. error: %+v", err)
 		return nil, err
 	}
 
@@ -448,7 +451,7 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 
 	sqlStr = `SELECT 
 		mi.id,
-		mi.category_id,
+		mi.maintenance_plan_id,
 		mi.item_id,
 		i.name,
 		i.description,
@@ -462,15 +465,16 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 		COALESCE(up.username, up.full_name, cp.email_address, 'Anonymous') as updator,
 		mi.updated_at,
 		mi.sharable_groups
-	FROM community.category_item mi
+	FROM community.maintenance_item mi
 	LEFT JOIN community.inventory i ON mi.item_id = i.id
 	LEFT JOIN community.profiles cp ON mi.created_by = cp.id
 	LEFT JOIN community.profiles up ON mi.updated_by = up.id
-	WHERE $1::UUID = ANY(mi.sharable_groups) AND mi.category_id = $2
+	WHERE $1::UUID = ANY(mi.sharable_groups) AND mi.maintenance_plan_id = $2
 	ORDER BY mi.updated_at DESC;`
 
 	rows, err := db.Query(sqlStr, userID, maintenancePlanID)
 	if err != nil {
+		log.Printf("unable to retrieve maintenance items. error: %+v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -481,6 +485,7 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 	for rows.Next() {
 		var ec model.MaintenanceItemResponse
 		if err := rows.Scan(&ec.ID, &ec.MaintenancePlanID, &ec.ItemID, &ec.Name, &ec.Description, &ec.Price, &ec.Quantity, &ec.Location, &ec.CreatedBy, &ec.Creator, &ec.CreatedAt, &ec.UpdatedBy, &ec.Updator, &ec.UpdatedAt, &sharableGroups); err != nil {
+			log.Printf("unable to retrieve maintenance items. error: %+v", err)
 			return nil, err
 		}
 		ec.SharableGroups = sharableGroups
@@ -488,6 +493,7 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 	}
 
 	if err := rows.Err(); err != nil {
+		log.Printf("unable to retrieve maintenance items. error: %+v", err)
 		return nil, err
 	}
 
