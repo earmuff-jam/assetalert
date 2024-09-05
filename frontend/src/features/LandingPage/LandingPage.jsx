@@ -8,6 +8,7 @@ import { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import Signup from './Signup';
 import Login from './Login';
+import Pricing from './Pricing/Pricing';
 
 const SAMPLE_DATA = [
   { name: 'Entertainment', price: 320.0 },
@@ -76,6 +77,7 @@ export default function LandingPage() {
         />
         <Review />
         <Divider />
+        <Pricing />
         <Footer />
       </Stack>
       {displayModal && (
@@ -87,7 +89,7 @@ export default function LandingPage() {
               : 'Keep an account to keep track of all your inventories.'
           }
           handleClose={closeDisplayModal}
-          maxSize="md"
+          maxSize="sm"
         >
           {currentForm === 'signup' ? <Signup handleClose={closeDisplayModal} /> : <Login />}
         </SimpleModal>
