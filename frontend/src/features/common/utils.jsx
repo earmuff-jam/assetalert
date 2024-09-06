@@ -144,12 +144,17 @@ export const capitalizeFirstLetter = (string) => {
 /**
  * Function returns a string with prefix if prefix exists.
  * @param {string} prefixVal - the prefix value to append
- * @param {string} text - the text to append the prefix string onto
- * @returns string - result of combination of prefixValue and text
+ * @param {any} value - the value to append the prefix string onto
+ * @param {roundUpTo} int - rounds to certain number if the selected value is a number
+ * @returns any - result of combination of prefixValue and value
  */
-export const prefix = (prefixVal, text) => {
+export const prefix = (prefixVal, value, roundUpTo = 2) => {
   if (prefixVal != null) {
-    return `${prefixVal} ${text}`;
+    if (Number(value)) {
+      return `${prefixVal} ${Number(value).toFixed(roundUpTo)}`;
+    } else {
+      return `${prefixVal} ${value}`;
+    }
   }
-  return text;
+  return value;
 };

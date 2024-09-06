@@ -61,7 +61,7 @@ func main() {
 	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
 
 	// summary
-	router.Handle("/api/v1/summary", CustomRequestHandler(handler.GetAssetSummary)).Methods(http.MethodGet)
+	router.Handle("/api/v1/summary", CustomRequestHandler(handler.GetAssetsAndSummary)).Methods(http.MethodGet)
 
 	// categories
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)

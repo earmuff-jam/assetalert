@@ -26,12 +26,16 @@ import {
   Drawer,
   IconButton,
   Divider,
+  useMediaQuery,
+  Typography,
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 
 export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
   const navigate = useNavigate();
   const theme = useTheme();
+  const smallerAndHigher = useMediaQuery(theme.breakpoints.up('sm'));
+
   const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
 
@@ -112,10 +116,31 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
 
   return (
     <Stack display="flex">
-      <Drawer variant="temporary" open={openDrawer} onClose={handleDrawerClose} aria-modal="true">
-        <IconButton onClick={handleDrawerClose} sx={{ alignSelf: 'flex-end' }}>
+      <Drawer
+        variant="temporary"
+        open={openDrawer}
+        onClose={handleDrawerClose}
+        aria-modal="true"
+        PaperProps={
+          smallerAndHigher
+            ? {
+                sx: {
+                  width: 300,
+                },
+              }
+            : {
+                sx: {
+                  width: '100%',
+                },
+              }
+        }
+      >
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '1rem'}}>
+          <Typography variant='h5'>AssetAlert</Typography>
+        <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'rtl' ? <ChevronRightRounded /> : <ChevronLeftRounded />}
         </IconButton>
+        </Stack>
         <Divider />
         <List sx={{ width: '100%' }} component="nav" aria-labelledby="nested-list-subheader">
           {parentMenuList.map((v) => (

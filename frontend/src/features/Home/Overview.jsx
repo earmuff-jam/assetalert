@@ -6,17 +6,33 @@ import { assetSummaryActions } from './SummarySlice';
 import PieChart from '../../util/Chart/PieChart';
 import { prefix } from '../common/utils';
 import HeaderWithButton from '../common/HeaderWithButton';
+import dayjs from 'dayjs';
 
 const Overview = () => {
   const dispatch = useDispatch();
   const { assetSummary = [], loading } = useSelector((state) => state.summary);
 
-  const totalCategories = assetSummary.filter((v) => v.type.toUpperCase() === 'C');
-  const totalMaintenancePlans = assetSummary.filter((v) => v.type.toUpperCase() === 'M');
-  const totalAssets = assetSummary.filter((v) => v.type.toUpperCase() === 'A');
-  const zeroCostItems = totalAssets.filter((v) => v.price === 0);
-  const totalAssetCosts = totalAssets.reduce((acc, el) => {
+  const categories = assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'C') || [];
+  const maintenancePlans = assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'M') || [];
+  const assets = assetSummary?.AssetList || [];
+  const zeroCostItems = assets.filter((v) => v.price === 0);
+  const totalPastDueItems = assets.filter((v) => dayjs(v.returntime).isBefore(dayjs())).length || 0;
+  const totalAssetCosts = assets.reduce((acc, el) => {
     acc += el?.price || 0;
+    return acc;
+  }, 0);
+
+  const totalItemsUnderCategory = categories.reduce((acc, el) => {
+    if (el.items && el.items[0] != '') {
+      acc += el.items.length;
+    }
+    return acc;
+  }, 0);
+
+  const totalItemsUnderMaintenancePlans = maintenancePlans.reduce((acc, el) => {
+    if (el.items && el.items[0] != '') {
+      acc += el.items.length;
+    }
     return acc;
   }, 0);
 
@@ -36,19 +52,19 @@ const Overview = () => {
         <Stack direction="row" spacing={{ xs: 1 }} useFlexGap flexWrap="wrap">
           <CardItem>
             <ColumnItem
-              label="under assigned maintenance plan"
-              icon={<EngineeringRounded />}
+              label="under assigned categories"
+              icon={<CategoryRounded />}
               color="primary"
-              dataLabel={0}
+              dataLabel={totalItemsUnderCategory}
               loading={false}
             />
           </CardItem>
           <CardItem>
             <ColumnItem
-              label="under assigned categories"
-              icon={<CategoryRounded />}
+              label="under assigned maintenance plan"
+              icon={<EngineeringRounded />}
               color="primary"
-              dataLabel={0}
+              dataLabel={totalItemsUnderMaintenancePlans}
               loading={false}
             />
           </CardItem>
@@ -57,7 +73,7 @@ const Overview = () => {
               label="require attention"
               icon={<WarningRounded />}
               color="error"
-              dataLabel={0}
+              dataLabel={totalPastDueItems}
               loading={false}
             />
           </CardItem>
@@ -69,9 +85,9 @@ const Overview = () => {
                 <Typography variant="h5">Cost Summary</Typography>
                 <RowItem label="Total estimated cost" color="text.secondary" dataValue={prefix('$', totalAssetCosts)} />
                 <RowItem
-                  label="Unestimated assets"
+                  label="Unestimated"
                   color="text.secondary"
-                  dataValue={prefix('$', zeroCostItems.length || 0)}
+                  dataValue={`${zeroCostItems.length || 0} items`}
                 />
               </Stack>
               <Stack>
@@ -80,15 +96,15 @@ const Overview = () => {
                 </Typography>
                 <Stack direction="row" spacing="2rem" sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
                   <Stack spacing="2rem" justifyContent="space-evenly">
-                    <RowItem label="Categories" color="text.secondary" dataValue={totalCategories.length || 0} />
-                    <RowItem label="Plans" color="text.secondary" dataValue={totalMaintenancePlans.length || 0} />
-                    <RowItem label="Assets" color="text.secondary" dataValue={totalAssets.length || 0} />
+                    <RowItem label="Categories" color="text.secondary" dataValue={categories.length || 0} />
+                    <RowItem label="Plans" color="text.secondary" dataValue={maintenancePlans.length || 0} />
+                    <RowItem label="Assets" color="text.secondary" dataValue={assets.length || 0} />
                   </Stack>
                   <Stack direction="row" spacing="2rem">
                     <PieChart
                       height="15rem"
                       legendLabel="assets summary"
-                      data={[totalCategories, totalMaintenancePlans, totalAssets].map((v, index) => ({
+                      data={[categories, maintenancePlans, assets].map((v, index) => ({
                         label: ['Categories', 'Plans', 'Assets'][index],
                         count: v.length,
                         color: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],

@@ -8,17 +8,20 @@ import (
 	"github.com/mohit2530/communityCare/db"
 )
 
-// GetAssetSummary ...
-// swagger:route GET /api/v1/locations GetAssetSummary getAssetSummary
+// GetAssetsAndSummary ...
+// swagger:route GET /api/v1/locations GetAssetsAndSummary GetAssetsAndSummary
 //
-// # Retrieves the list of all assets and associated maintenance plans created by the select user
+// # Retrieves list of categories and its associated asset names, list of maintenance plans and its associated assets and
+// list of assets that are past due. For the asset list that is past due, if there is no returnable flag set, then it does not
+// return that values. Also returns an array of existing assets.
+// All results are created by the selected user and in order of type and date last updated at.
 //
 // Responses:
 // 200: []AssetSummary
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
-func GetAssetSummary(rw http.ResponseWriter, r *http.Request, user string) {
+func GetAssetsAndSummary(rw http.ResponseWriter, r *http.Request, user string) {
 
 	userID := r.URL.Query().Get("id")
 
@@ -28,7 +31,7 @@ func GetAssetSummary(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(nil)
 		return
 	}
-	resp, err := db.RetrieveAllAssetSummary(user, userID)
+	resp, err := db.RetrieveAssetsAndSummary(user, userID)
 	if err != nil {
 		log.Printf("Unable to retrieve asset summary. error: %v", err)
 		rw.WriteHeader(http.StatusBadRequest)
