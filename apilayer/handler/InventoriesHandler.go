@@ -14,9 +14,9 @@ import (
 const defaultHiddenStatus = "HIDDEN"
 
 // GetAllInventories ...
-// swagger:route GET /api/v1/profile/{id}/inventories
+// swagger:route GET /api/v1/profile/{id}/inventories GetAllInventories getAllInventories
 //
-// # Retrieves the list of inventories that the user has.
+// # Retrieves the list of assets that belong to the selected user
 //
 // Responses:
 // 200: []Inventory
@@ -48,9 +48,9 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetInventoryByID ...
-// swagger:route GET /api/v1/profile/{id}/inventories/{invID}
+// swagger:route GET /api/v1/profile/{id}/inventories/{invID} GetInventoryByID getInventoryByID
 //
-// # Retrieves the selected inventory that matches the id. must be created by the user
+// # Retrieves the selected inventory that matches the passed in ID created by the user.
 //
 // Responses:
 // 200: Inventory
@@ -79,6 +79,68 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 	resp, err := db.RetrieveSelectedInv(user, userID, invID)
 	if err != nil {
 		log.Printf("Unable to retrieve inventory with selected id. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// UpdateAssetColumn ...
+// swagger:route GET /api/v1/profile/{id}/inventories/{assetID} UpdateAssetColumn updateAssetColumn
+//
+// # Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.
+//
+// Responses:
+// 200: Inventory
+// 400: Message
+// 404: Message
+// 500: Message
+func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+	assetID := vars["asssetID"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve assets with empty profile id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+	if len(assetID) <= 0 {
+		log.Printf("Unable to retrieve assets with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var updateAssetCol model.UpdateAssetColumn
+	if err := json.NewDecoder(r.Body).Decode(&updateAssetCol); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	isValidColumnName := false
+	for _, v := range []string{"quantity", "price"} {
+		if updateAssetCol.ColumnName == v {
+			isValidColumnName = true
+		}
+	}
+
+	if !isValidColumnName {
+		log.Printf("unable to update column name.")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.UpdateAsset(user, userID, updateAssetCol)
+	if err != nil {
+		log.Printf("Unable to update asset. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return

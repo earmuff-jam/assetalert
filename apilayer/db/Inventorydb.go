@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 
@@ -174,6 +175,64 @@ func RetrieveSelectedInv(user string, userID string, invID string) (*model.Inven
 	return data, nil
 }
 
+// UpdateAsset ...
+func UpdateAsset(user string, userID string, draftUpdateAssetCols model.UpdateAssetColumn) (*model.Inventory, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return nil, err
+	}
+
+	columnName := draftUpdateAssetCols.ColumnName
+	if !isValidColumnName(columnName) {
+		tx.Rollback()
+		return nil, fmt.Errorf("invalid column name: %s", columnName)
+	}
+
+	sqlStr := fmt.Sprintf(`UPDATE 
+	community.inventory inv
+		SET %s = $1,
+			updated_at = $4,
+			updated_by = $2
+			WHERE $2::UUID = ANY(inv.sharable_groups) 
+			AND inv.id = $3
+		RETURNING inv.id;`, columnName)
+
+	var updatedInvID string
+	err = tx.QueryRow(sqlStr, draftUpdateAssetCols.InputColumn, userID, draftUpdateAssetCols.AssetID, time.Now()).Scan(&updatedInvID)
+	if err != nil {
+		log.Printf("unable to update asset id. error: %+v", err)
+		return nil, err
+	}
+
+	data, err := retrieveSelectedInv(tx, userID, updatedInvID)
+	if err != nil {
+		log.Printf("unable to retrieve asset details. error: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func isValidColumnName(columnName string) bool {
+	validColumns := map[string]bool{
+		"price":    true,
+		"quantity": true,
+	}
+	return validColumns[columnName]
+}
+
 // retrieveSelectedInv...
 func retrieveSelectedInv(tx *sql.Tx, userID string, invID string) (*model.Inventory, error) {
 	sqlStr := `SELECT
@@ -191,6 +250,7 @@ func retrieveSelectedInv(tx *sql.Tx, userID string, invID string) (*model.Invent
 	inv.is_returnable,
 	inv.return_location,
 	inv.return_datetime,
+	inv.return_notes,
 	inv.max_weight,
 	inv.min_weight,
 	inv.max_height,
@@ -211,6 +271,7 @@ ORDER BY inv.updated_at DESC;
 
 	var inventory model.Inventory
 	var returnLocation sql.NullString
+	var returnNotes sql.NullString
 	var maxWeight sql.NullString
 	var minWeight sql.NullString
 	var maxHeight sql.NullString
@@ -231,6 +292,7 @@ ORDER BY inv.updated_at DESC;
 		&inventory.IsReturnable,
 		&returnLocation,
 		&inventory.ReturnDateTime,
+		&returnNotes,
 		&maxWeight,
 		&minWeight,
 		&maxHeight,
@@ -252,6 +314,9 @@ ORDER BY inv.updated_at DESC;
 
 	if returnLocation.Valid {
 		inventory.ReturnLocation = returnLocation.String
+	}
+	if returnNotes.Valid {
+		inventory.ReturnNotes = returnNotes.String
 	}
 	if maxWeight.Valid {
 		inventory.MaxWeight = maxWeight.String
@@ -448,6 +513,7 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		is_returnable,
 		return_location,
 		return_datetime,
+		return_notes,
 		max_weight,
 		min_weight,
 		max_height,
@@ -457,7 +523,7 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 		updated_by,
 		updated_at,
 		sharable_groups)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
 RETURNING id;`
 
 	err = tx.QueryRow(
@@ -475,6 +541,7 @@ RETURNING id;`
 		draftInventory.IsReturnable,
 		draftInventory.ReturnLocation,
 		draftInventory.ReturnDateTime,
+		draftInventory.ReturnNotes,
 		draftInventory.MaxWeight,
 		draftInventory.MinWeight,
 		draftInventory.MaxHeight,
@@ -512,6 +579,7 @@ RETURNING id;`
 		inv.is_returnable,
 		inv.return_location,
 		inv.return_datetime,
+		inv.return_notes,
 		inv.max_weight,
 		inv.min_weight,
 		inv.max_height,
@@ -527,12 +595,13 @@ RETURNING id;`
 	LEFT JOIN community.storage_locations sl on sl.id = inv.storage_location_id 
 	LEFT JOIN community.profiles cp on cp.id  = inv.created_by
 	LEFT JOIN community.profiles up on up.id  = inv.updated_by
-	WHERE inv.id = $1
+	WHERE inv.id = $1;
 `
 
 	row := db.QueryRow(sqlGetUpdatedInventory, draftInventory.ID)
 
 	updatedInventory := model.Inventory{}
+	var returnNotes sql.NullString
 
 	err = row.Scan(
 		&updatedInventory.ID,
@@ -549,6 +618,7 @@ RETURNING id;`
 		&updatedInventory.IsReturnable,
 		&updatedInventory.ReturnLocation,
 		&updatedInventory.ReturnDateTime,
+		&returnNotes,
 		&updatedInventory.MaxWeight,
 		&updatedInventory.MinWeight,
 		&updatedInventory.MaxHeight,
@@ -562,6 +632,10 @@ RETURNING id;`
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	if returnNotes.Valid {
+		updatedInventory.ReturnNotes = returnNotes.String
 	}
 
 	return &updatedInventory, nil
@@ -635,14 +709,15 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 		is_returnable = $12,
 		return_location = $13,
 		return_datetime = $14,
-		max_weight = $15,
-		min_weight = $16,
-		max_height = $17,
-		min_height = $18,
-		created_by = $19,
-		created_at = $20,
-		updated_by = $21,
-		updated_at = $22
+		return_notes = $15,
+		max_weight = $16,
+		min_weight = $17,
+		max_height = $18,
+		min_height = $19,
+		created_by = $20,
+		created_at = $21,
+		updated_by = $22,
+		updated_at = $23
 	WHERE inv.id = $1
 	RETURNING id;`
 
@@ -662,6 +737,7 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 		draftInventory.IsReturnable,
 		draftInventory.ReturnLocation,
 		draftInventory.ReturnDateTime,
+		draftInventory.ReturnNotes,
 		draftInventory.MaxWeight,
 		draftInventory.MinWeight,
 		draftInventory.MaxHeight,
@@ -705,6 +781,7 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 		inv.is_returnable,
 		inv.return_location,
 		inv.return_datetime,
+		inv.return_notes,
 		inv.max_weight,
 		inv.min_weight,
 		inv.max_height,
@@ -726,6 +803,7 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 	row := tx.QueryRow(sqlGetUpdatedInventory, draftInventory.ID)
 
 	updatedInventory := model.Inventory{}
+	var returnNotes sql.NullString
 
 	err = row.Scan(
 		&updatedInventory.ID,
@@ -742,6 +820,7 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 		&updatedInventory.IsReturnable,
 		&updatedInventory.ReturnLocation,
 		&updatedInventory.ReturnDateTime,
+		&returnNotes,
 		&updatedInventory.MaxWeight,
 		&updatedInventory.MinWeight,
 		&updatedInventory.MaxHeight,
@@ -762,6 +841,10 @@ func UpdateInventory(user string, userID string, draftInventory model.Inventory)
 	// Commit the transaction
 	if err := tx.Commit(); err != nil {
 		return nil, err
+	}
+
+	if returnNotes.Valid {
+		updatedInventory.ReturnNotes = returnNotes.String
 	}
 
 	// Return the updated inventory object

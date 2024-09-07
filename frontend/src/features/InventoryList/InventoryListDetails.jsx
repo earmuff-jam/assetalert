@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Dialog, DialogTitle, IconButton, Slide, Stack, TextField, Typography } from '@mui/material';
+import { Autocomplete, Dialog, DialogTitle, IconButton, Slide, Stack, TextField } from '@mui/material';
 import {
   CheckRounded,
-  CircleRounded,
   CloseRounded,
   EditRounded,
   GridViewRounded,
   ViewListRounded,
 } from '@mui/icons-material';
-import dayjs from 'dayjs';
 import HeaderWithButton from '../common/HeaderWithButton';
 import SimpleModal from '../common/SimpleModal';
 import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
@@ -80,6 +78,10 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     }
   };
 
+  const updateSelectedCol = (rowID, columnName, inputColumn) => {
+    dispatch(inventoryActions.updateAssetCol({ assetID: rowID, columnName, inputColumn }));
+  };
+
   const populateIcon = (editLineItem, row, column, inputColumn, setInputColumn) => {
     if (editLineItem.editItem && editLineItem.rowID === row.id && editLineItem.column === column && inputColumn) {
       return (
@@ -87,7 +89,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
           sx={{ height: '1rem', width: '1rem', marginLeft: '0.5rem', cursor: 'pointer' }}
           color="primary"
           onClick={() => {
-            // updateSelectedColumn(row.id, editLineItem.column, inputColumn, row.price, row.quantity);
+            updateSelectedCol(row.id, editLineItem.column, inputColumn);
             setInputColumn('');
             setEditLineItem({ editItem: false, rowID: -1, column: '' });
           }}
@@ -110,45 +112,31 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
     }
   };
 
-  const rowFormatter = (row, column, color) => {
-    if (['created_at', 'updated_at'].includes(column)) {
-      return dayjs(row[column]).fromNow();
-    }
-    if (['price', 'quantity'].includes(column)) {
+  const rowFormatter = (row, columnName, columnData) => {
+    if (['price', 'quantity'].includes(columnName)) {
       return (
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          {editLineItem.editItem && editLineItem.rowID === row.id && editLineItem.column === column ? (
+          {editLineItem.editItem && editLineItem.rowID === row.id && editLineItem.column === columnName ? (
             <TextField
               fullWidth
               variant="standard"
-              label={`Editing ${column}`}
+              label={`Editing ${columnName}`}
               value={inputColumn}
               onChange={(ev) => setInputColumn(ev.target.value)}
             />
-          ) : row[column] <= 0 ? (
+          ) : row[columnName] <= 0 ? (
             '-'
           ) : (
-            row[column]
+            row[columnName]
           )}
-          {populateIcon(editLineItem, row, column, inputColumn, setInputColumn)}
+          {populateIcon(editLineItem, row, columnName, inputColumn, setInputColumn)}
         </Stack>
       );
+    } else if (columnData.modifier) {
+      return columnData.modifier(row[columnName] || '-');
+    } else {
+      return row[columnName] || '-';
     }
-    if (['updater_name', 'creator_name'].includes(column)) {
-      return row[column] ?? '-';
-    }
-    if (['is_returnable'].includes(column)) {
-      return row[column] ? <CheckRounded color="primary" /> : <CloseRounded color="error" />;
-    }
-    if (['name'].includes(column)) {
-      return (
-        <Stack direction="row" alignItems="center" justifyContent="flex-start">
-          {color ? <CircleRounded sx={{ height: '0.75rem', width: '0.75rem', color: { color } }} /> : null}
-          <Typography variant="subtitle2">{row[column] || '-'}</Typography>
-        </Stack>
-      );
-    }
-    return row[column] ?? '-';
   };
 
   const onRowSelect = (row) => {

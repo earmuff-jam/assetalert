@@ -284,7 +284,6 @@ func Test_AddInventoryInBulk_NoUserID(t *testing.T) {
 
 func Test_AddNewInventory(t *testing.T) {
 
-	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
 		Email:             "test@gmail.com",
 		Role:              "TESTER",
@@ -395,6 +394,73 @@ func Test_AddNewInventory_InvalidDBUser(t *testing.T) {
 
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_AddNewInventory_Return_Notes(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftInventoryWithReturnNotes := model.Inventory{
+		Name:           "Alexandro Kitteyy Litter",
+		Description:    "Kitty litter for a pro name game",
+		Price:          23.99,
+		Status:         "HIDDEN",
+		Barcode:        "1231231231",
+		SKU:            "1231231231",
+		Quantity:       12,
+		IsReturnable:   true,
+		ReturnLocation: "Target",
+		ReturnNotes:    "print out the return label",
+		MaxWeight:      "12",
+		MinWeight:      "120",
+		MaxHeight:      "24",
+		MinHeight:      "12",
+		Location:       "Broom Closet",
+		CreatedAt:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		BoughtAt:       "Walmart",
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftInventoryWithReturnNotes)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	AddNewInventory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedInventoryWithReturnNotes model.Inventory
+	err = json.Unmarshal(data, &selectedInventoryWithReturnNotes)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", selectedInventoryWithReturnNotes.Name)
+	assert.Equal(t, "Broom Closet", selectedInventoryWithReturnNotes.Location)
+
+	// cleanup
+	removeInventory := []string{selectedInventoryWithReturnNotes.ID}
+	db.DeleteInventory(config.CTO_USER, selectedInventoryWithReturnNotes.ID, removeInventory)
 }
 
 func Test_UpdateSelectedInventory(t *testing.T) {
