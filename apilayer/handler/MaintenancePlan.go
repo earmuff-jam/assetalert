@@ -21,12 +21,12 @@ import (
 //
 // // Parameters:
 //   - +name: id
-//     in: path
-//     description: The userID of the selected user
+//     in: query
+//     description: The userID of the logged in user
 //     required: true
 //     type: string
 //   - +name: limit
-//     in: path
+//     in: query
 //     description: The limit of maintenance plans
 //     required: true
 //     type: integer
@@ -66,18 +66,18 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 }
 
 // GetMaintenancePlan ...
-// swagger:route GET /api/v1/plan/ GetMaintenancePlan GetMaintenancePlan
+// swagger:route GET /api/v1/plan GetMaintenancePlan GetMaintenancePlan
 //
 // # Retrieve a selected maintenance plan
 //
 // // Parameters:
 //   - +name: id
-//     in: path
+//     in: query
 //     description: The userID of the selected user
 //     required: true
 //     type: string
 //   - +name: mID
-//     in: path
+//     in: query
 //     description: The maintenance id of the selected plan
 //     required: true
 //     type: string
@@ -136,7 +136,7 @@ func GetMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: integer
 //     format: int32
 //   - +name: mID
-//     in: path
+//     in: query
 //     description: The maintenance id of the selected plan
 //     required: true
 //     type: string
@@ -190,7 +190,7 @@ func GetAllMaintenancePlanItems(rw http.ResponseWriter, r *http.Request, user st
 // # Add selected items in a specific maintenance plan
 //
 // Parameters:
-//   - ++name: MaintenanceItemRequest
+//   - +name: MaintenanceItemRequest
 //     in: body
 //     description: The object containing the array of assets to update with the userID
 //     type: MaintenanceItemRequest
@@ -225,12 +225,12 @@ func AddItemsInMaintenancePlan(rw http.ResponseWriter, r *http.Request, user str
 }
 
 // CreateMaintenancePlan ...
-// swagger:route POST /api/v1/plan/{id} CreateMaintenancePlan createMaintenancePlan
+// swagger:route POST /api/v1/plan CreateMaintenancePlan createMaintenancePlan
 //
 // # Create maintenance plan
 //
 // Parameters:
-//   - ++name: MaintenancePlan
+//   - +name: MaintenancePlan
 //     in: body
 //     description: The object containing details of the maintenance plan
 //     type: MaintenancePlan
@@ -270,7 +270,12 @@ func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 // # Update maintenance plan function updates the selected maintenance plan with new values
 //
 // Parameters:
-//   - ++name: MaintenancePlan
+//   - +name: id
+//     in: path
+//     description: The id of the selected maintenance plan to update
+//     type: string
+//     required: true
+//   - +name: MaintenancePlan
 //     in: body
 //     description: The object containing details of the maintenance plan
 //     type: MaintenancePlan
@@ -282,6 +287,16 @@ func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 // 404: MessageResponse
 // 500: MessageResponse
 func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	maintenancePlanID := vars["id"]
+
+	if len(maintenancePlanID) <= 0 {
+		log.Printf("Unable to update maintenance plan with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
 
 	draftMaintenancePlan := &model.MaintenancePlan{}
 	err := json.NewDecoder(r.Body).Decode(draftMaintenancePlan)
@@ -310,7 +325,7 @@ func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 // # Removes a selected maintenance plan based on the id
 //
 // Parameters:
-//   - ++name: id
+//   - +name: id
 //     in: path
 //     description: The id of the maintenance plan to delete
 //     type: string

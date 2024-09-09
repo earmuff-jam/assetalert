@@ -50,7 +50,7 @@ type Location struct {
 }
 
 // Notes ...
-// swagger:model Notes
+// swagger:model Note
 //
 // Notes object. Used to store the note details
 type Note struct {

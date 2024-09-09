@@ -27,9 +27,9 @@ const defaultHiddenStatus = "HIDDEN"
 //
 // Responses:
 // 200: []Inventory
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -73,9 +73,9 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 //
 // Responses:
 // 200: Inventory
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -119,7 +119,7 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 //     description: The userID of the selected user
 //     required: true
 //     type: string
-//   - +name: invID
+//   - +name: assetID
 //     in: path
 //     description: The asssetID of the asset details.
 //     required: true
@@ -132,9 +132,9 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 //
 // Responses:
 // 200: Inventory
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -201,12 +201,12 @@ func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
 //   - +name: InventoryListRequest
 //     in: body
 //     description: The list of inventories to add into the db to support bulk upload
-//     type: object
+//     type: InventoryListRequest
 //     required: true
 //
 // Responses:
 //
-// 200: []model.Inventory
+// 200: []Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -334,7 +334,7 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 //   - +name: Inventory
 //     in: body
 //     description: The inventory object to add into the db
-//     type: object
+//     type: Inventory
 //     required: true
 //
 // Responses:
@@ -375,7 +375,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 // RemoveSelectedInventory ...
 // swagger:route POST /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
 //
-// # Update selected inventory with details.
+// # Remove selected inventories.
 //
 // Parameters:
 //   - +name: id
@@ -383,14 +383,14 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 //     description: The id of the selected user
 //     type: string
 //     required: true
-//   - +name: Inventory
+//   - +name: pruneInventoryIDMap
 //     in: body
-//     description: The inventory object to remove from the db
-//     type: object
+//     description: The inventory object to add into the db
+//     type: Inventory
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse

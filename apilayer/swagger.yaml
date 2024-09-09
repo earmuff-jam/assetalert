@@ -689,6 +689,70 @@ definitions:
         title: MaintenanceItemResponse ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
+    MaintenancePlan:
+        properties:
+            color:
+                type: string
+                x-go-name: Color
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator:
+                type: string
+                x-go-name: Creator
+            description:
+                type: string
+                x-go-name: Description
+            id:
+                type: string
+                x-go-name: ID
+            location:
+                $ref: '#/definitions/Location'
+            maintenance_status:
+                type: string
+                x-go-name: Status
+            maintenance_status_description:
+                type: string
+                x-go-name: StatusDescription
+            maintenance_status_name:
+                type: string
+                x-go-name: StatusName
+            max_items_limit:
+                format: int64
+                type: integer
+                x-go-name: MaxItemsLimit
+            min_items_limit:
+                format: int64
+                type: integer
+                x-go-name: MinItemsLimit
+            name:
+                type: string
+                x-go-name: Name
+            plan_type:
+                type: string
+                x-go-name: PlanType
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator:
+                type: string
+                x-go-name: Updator
+        title: MaintenancePlan ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
     MessageResponse:
         properties:
             Message:
@@ -696,7 +760,7 @@ definitions:
         title: MessageResponse ...
         type: object
         x-go-package: github.com/mohit2530/communityCare
-    Notes:
+    Note:
         properties:
             color:
                 type: string
@@ -753,7 +817,6 @@ definitions:
                 x-go-name: Updator
         title: Notes ...
         type: object
-        x-go-name: Note
         x-go-package: github.com/mohit2530/communityCare/model
     Notification:
         properties:
@@ -797,9 +860,15 @@ definitions:
         x-go-package: github.com/mohit2530/communityCare/model
     Profile:
         properties:
-            activity_id:
+            about_me:
                 type: string
-                x-go-name: ActivityID
+                x-go-name: AboutMe
+            appearance:
+                type: boolean
+                x-go-name: Appearance
+            avatar_url:
+                type: string
+                x-go-name: AvatarUrl
             created_at:
                 format: date-time
                 type: string
@@ -810,24 +879,25 @@ definitions:
             creator:
                 type: string
                 x-go-name: Creator
-            custom_action:
+            email_address:
                 type: string
-                x-go-name: CustomAction
+                x-go-name: EmailAddress
+            full_name:
+                type: string
+                x-go-name: FullName
+            grid_view:
+                type: boolean
+                x-go-name: GridView
             id:
                 format: uuid
                 type: string
                 x-go-name: ID
-            sharable_groups:
-                items:
-                    type: string
-                type: array
-                x-go-name: SharableGroups
-            title:
+            online_status:
+                type: boolean
+                x-go-name: OnlineStatus
+            phone_number:
                 type: string
-                x-go-name: Title
-            type:
-                type: string
-                x-go-name: Type
+                x-go-name: PhoneNumber
             updated_at:
                 format: date-time
                 type: string
@@ -838,9 +908,11 @@ definitions:
             updator:
                 type: string
                 x-go-name: Updator
+            username:
+                type: string
+                x-go-name: Username
         title: Profile ...
         type: object
-        x-go-name: RecentActivity
         x-go-package: github.com/mohit2530/communityCare/model
     ProjectType:
         properties:
@@ -882,6 +954,52 @@ definitions:
                 type: string
                 x-go-name: SKU
         title: RawInventory ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    RecentActivity:
+        properties:
+            activity_id:
+                type: string
+                x-go-name: ActivityID
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator:
+                type: string
+                x-go-name: Creator
+            custom_action:
+                type: string
+                x-go-name: CustomAction
+            id:
+                format: uuid
+                type: string
+                x-go-name: ID
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            title:
+                type: string
+                x-go-name: Title
+            type:
+                type: string
+                x-go-name: Type
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator:
+                type: string
+                x-go-name: Updator
+        title: RecentActivity ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
     ReportEvent:
@@ -1049,6 +1167,42 @@ definitions:
                 type: string
                 x-go-name: UpdatedBy
         title: StorageLocation ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    TransferInventory:
+        description: TransferInventory
+        properties:
+            column:
+                type: string
+                x-go-name: Column
+            eventID:
+                type: string
+                x-go-name: EventID
+            itemIDs:
+                items:
+                    type: string
+                type: array
+                x-go-name: ItemIDs
+            userID:
+                type: string
+                x-go-name: UserID
+            value:
+                type: string
+                x-go-name: Value
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    UpdateAssetColumn:
+        description: UpdateAssetColumn
+        properties:
+            assetID:
+                type: string
+                x-go-name: AssetID
+            columnName:
+                type: string
+                x-go-name: ColumnName
+            inputColumn:
+                type: string
+                x-go-name: InputColumn
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
     User:
@@ -1316,19 +1470,19 @@ paths:
                   name: id
                   required: true
                   type: string
-                - description: The inventory object to remove from the db
+                - description: The inventory object to add into the db
                   in: body
-                  name: Inventory
+                  name: pruneInventoryIDMap
                   required: true
                   schema:
-                    $ref: '#/definitions/object'
-                    description: The inventory object to remove from the db
+                    $ref: '#/definitions/Inventory'
+                    description: The inventory object to add into the db
                     type: object
             responses:
                 "200":
-                    description: MessageResponse
+                    description: Inventory
                     schema:
-                        $ref: '#/definitions/MessageResponse'
+                        $ref: '#/definitions/Inventory'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1341,7 +1495,7 @@ paths:
                     description: MessageResponse
                     schema:
                         $ref: '#/definitions/MessageResponse'
-            summary: '# Update selected inventory with details.'
+            summary: '# Remove selected inventories.'
             tags:
                 - RemoveSelectedInventory
         put:
@@ -1357,7 +1511,7 @@ paths:
                   name: Inventory
                   required: true
                   schema:
-                    $ref: '#/definitions/object'
+                    $ref: '#/definitions/Inventory'
                     description: The inventory object to add into the db
                     type: object
             responses:
@@ -1394,12 +1548,16 @@ paths:
                   name: InventoryListRequest
                   required: true
                   schema:
-                    $ref: '#/definitions/object'
+                    $ref: '#/definitions/InventoryListRequest'
                     description: The list of inventories to add into the db to support bulk upload
                     type: object
             responses:
                 "200":
-                    $ref: '#/responses/model.Inventory'
+                    description: Inventory
+                    schema:
+                        items:
+                            $ref: '#/definitions/Inventory'
+                        type: array
                 "400":
                     description: MessageResponse
                     schema:
@@ -1454,10 +1612,10 @@ paths:
                   type: string
             responses:
                 "200":
-                    description: Notes
+                    description: Note
                     schema:
                         items:
-                            $ref: '#/definitions/Notes'
+                            $ref: '#/definitions/Note'
                         type: array
                 "400":
                     description: MessageResponse
@@ -1487,14 +1645,14 @@ paths:
                   name: Note
                   required: true
                   schema:
-                    $ref: '#/definitions/object'
+                    $ref: '#/definitions/Note'
                     description: The note object to add into the db
                     type: object
             responses:
                 "200":
-                    description: MessageResponse
+                    description: Note
                     schema:
-                        $ref: '#/definitions/MessageResponse'
+                        $ref: '#/definitions/Note'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1523,14 +1681,14 @@ paths:
                   name: Note
                   required: true
                   schema:
-                    $ref: '#/definitions/object'
+                    $ref: '#/definitions/Note'
                     description: The note object to update into the db
                     type: object
             responses:
                 "200":
-                    description: MessageResponse
+                    description: Note
                     schema:
-                        $ref: '#/definitions/MessageResponse'
+                        $ref: '#/definitions/Note'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1563,7 +1721,11 @@ paths:
                   type: integer
             responses:
                 "200":
-                    $ref: '#/responses/CategoryList'
+                    description: Category
+                    schema:
+                        items:
+                            $ref: '#/definitions/Category'
+                        type: array
                 "400":
                     description: MessageResponse
                     schema:
@@ -1581,24 +1743,23 @@ paths:
                 - GetAllCategories
     /api/v1/category:
         get:
-            operationId: getCategory
-            summary: Retrieves the selected category
-            tags:
-                - GetCategory
-    /api/v1/category/{id}:
-        delete:
-            operationId: removeCategory
+            operationId: GetCategory
             parameters:
-                - description: The id of the category to delete
-                  in: path
+                - description: The userID of the selected user
+                  in: query
                   name: id
+                  required: true
+                  type: string
+                - description: The category id
+                  in: query
+                  name: catID
                   required: true
                   type: string
             responses:
                 "200":
-                    description: MessageResponse
+                    description: Category
                     schema:
-                        $ref: '#/definitions/MessageResponse'
+                        $ref: '#/definitions/Category'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1611,9 +1772,9 @@ paths:
                     description: MessageResponse
                     schema:
                         $ref: '#/definitions/MessageResponse'
-            summary: Removes a selected category based on the id
+            summary: Retrieves the selected category
             tags:
-                - RemoveCategory
+                - GetCategory
         post:
             operationId: createCategory
             parameters:
@@ -1645,14 +1806,51 @@ paths:
             summary: Create category
             tags:
                 - CreateCategory
+    /api/v1/category/{id}:
+        delete:
+            operationId: removeCategory
+            parameters:
+                - description: The id of the category to delete
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Removes a selected category based on the id
+            tags:
+                - RemoveCategory
         put:
             operationId: updateCategory
             parameters:
+                - description: The id of the selected category to update for
+                  in: path
+                  name: id
+                  required: true
+                  type: string
                 - description: The category object to update details for
-                  in: query
+                  in: body
                   name: Category
                   required: true
-                  type: object
+                  schema:
+                    $ref: '#/definitions/Category'
+                    description: The category object to update details for
+                    type: object
             responses:
                 "200":
                     description: Category
@@ -1689,13 +1887,17 @@ paths:
                   required: true
                   type: integer
                 - description: The category id of the selected plan
-                  in: path
+                  in: query
                   name: catID
                   required: true
                   type: string
             responses:
                 "200":
-                    $ref: '#/responses/CategoryItems'
+                    description: CategoryItemResponse
+                    schema:
+                        items:
+                            $ref: '#/definitions/CategoryItemResponse'
+                        type: array
                 "400":
                     description: MessageResponse
                     schema:
@@ -1716,6 +1918,7 @@ paths:
             parameters:
                 - description: The object containing the array of assets to update with the userID
                   in: body
+                  name: MaintenanceItemRequest
                   required: true
                   schema:
                     $ref: '#/definitions/MaintenanceItemRequest'
@@ -1796,20 +1999,24 @@ paths:
             description: Users can assign asset to multiple plans.
             operationId: getAllMaintenancePlans
             parameters:
-                - description: The userID of the selected user
-                  in: path
+                - description: The userID of the logged in user
+                  in: query
                   name: id
                   required: true
                   type: string
                 - description: The limit of maintenance plans
                   format: int32
-                  in: path
+                  in: query
                   name: limit
                   required: true
                   type: integer
             responses:
                 "200":
-                    $ref: '#/responses/MaintenancePlan'
+                    description: MaintenancePlan
+                    schema:
+                        items:
+                            $ref: '#/definitions/MaintenancePlan'
+                        type: array
                 "400":
                     description: MessageResponse
                     schema:
@@ -1827,23 +2034,25 @@ paths:
                 Each user can have thier own set of maintenance plans. All plans are specific to the selected user
             tags:
                 - GetAllMaintenancePlans
-    /api/v1/plan/:
+    /api/v1/plan:
         get:
             operationId: GetMaintenancePlan
             parameters:
                 - description: The userID of the selected user
-                  in: path
+                  in: query
                   name: id
                   required: true
                   type: string
                 - description: The maintenance id of the selected plan
-                  in: path
+                  in: query
                   name: mID
                   required: true
                   type: string
             responses:
                 "200":
-                    $ref: '#/responses/MaintenancePlan'
+                    description: MaintenancePlan
+                    schema:
+                        $ref: '#/definitions/MaintenancePlan'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1859,12 +2068,44 @@ paths:
             summary: Retrieve a selected maintenance plan
             tags:
                 - GetMaintenancePlan
+        post:
+            operationId: createMaintenancePlan
+            parameters:
+                - description: The object containing details of the maintenance plan
+                  in: body
+                  name: MaintenancePlan
+                  required: true
+                  schema:
+                    $ref: '#/definitions/MaintenancePlan'
+                    description: The object containing details of the maintenance plan
+                    type: object
+            responses:
+                "200":
+                    description: MaintenancePlan
+                    schema:
+                        $ref: '#/definitions/MaintenancePlan'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Create maintenance plan
+            tags:
+                - CreateMaintenancePlan
     /api/v1/plan/{id}:
         delete:
             operationId: removeMaintenancePlan
             parameters:
                 - description: The id of the maintenance plan to delete
                   in: path
+                  name: id
                   required: true
                   type: string
             responses:
@@ -1887,39 +2128,17 @@ paths:
             summary: Removes a selected maintenance plan based on the id
             tags:
                 - RemoveMaintenancePlan
-        post:
-            operationId: createMaintenancePlan
-            parameters:
-                - description: The object containing details of the maintenance plan
-                  in: body
-                  required: true
-                  schema:
-                    $ref: '#/definitions/MaintenancePlan'
-                    description: The object containing details of the maintenance plan
-                    type: object
-            responses:
-                "200":
-                    $ref: '#/responses/MaintenancePlan'
-                "400":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "404":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "500":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-            summary: Create maintenance plan
-            tags:
-                - CreateMaintenancePlan
         put:
             operationId: UpdateMaintenancePlan
             parameters:
+                - description: The id of the selected maintenance plan to update
+                  in: path
+                  name: id
+                  required: true
+                  type: string
                 - description: The object containing details of the maintenance plan
                   in: body
+                  name: MaintenancePlan
                   required: true
                   schema:
                     $ref: '#/definitions/MaintenancePlan'
@@ -1927,7 +2146,9 @@ paths:
                     type: object
             responses:
                 "200":
-                    $ref: '#/responses/MaintenancePlan'
+                    description: MaintenancePlan
+                    schema:
+                        $ref: '#/definitions/MaintenancePlan'
                 "400":
                     description: MessageResponse
                     schema:
@@ -1959,7 +2180,7 @@ paths:
                   required: true
                   type: integer
                 - description: The maintenance id of the selected plan
-                  in: path
+                  in: query
                   name: mID
                   required: true
                   type: string
@@ -1990,12 +2211,13 @@ paths:
             operationId: updateProfile
             parameters:
                 - description: The userID of the selected user
-                  in: path
+                  in: query
                   name: id
                   required: true
                   type: string
                 - description: The full profile object of the user
                   in: body
+                  name: Profile
                   required: true
                   schema:
                     $ref: '#/definitions/Profile'
@@ -2067,11 +2289,17 @@ paths:
                             $ref: '#/definitions/Inventory'
                         type: array
                 "400":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "404":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "500":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
             summary: Retrieves the list of assets that belong to the selected user
             tags:
                 - GetAllInventories
@@ -2086,7 +2314,7 @@ paths:
                   type: string
                 - description: The asssetID of the asset details.
                   in: path
-                  name: invID
+                  name: assetID
                   required: true
                   type: string
                 - description: The object containing the details to update the selected asset with.
@@ -2103,11 +2331,17 @@ paths:
                     schema:
                         $ref: '#/definitions/Inventory'
                 "400":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "404":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "500":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
             summary: '# Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.'
             tags:
                 - UpdateAssetColumn
@@ -2131,11 +2365,17 @@ paths:
                     schema:
                         $ref: '#/definitions/Inventory'
                 "400":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "404":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
                 "500":
-                    $ref: '#/responses/Message'
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the selected inventory that matches the passed in ID created by the user.'
             tags:
                 - GetInventoryByID
@@ -2145,15 +2385,17 @@ paths:
             parameters:
                 - description: The userID of the selected user
                   in: path
+                  name: id
                   required: true
                   type: string
                 - description: The full file details of the avatar
                   in: body
+                  name: FileHeader
                   required: true
                   schema:
-                    $ref: '#/definitions/FileHeader'
                     description: The full file details of the avatar
-                    type: object
+                    format: byte
+                    type: string
             responses:
                 "200":
                     description: Profile
@@ -2221,7 +2463,11 @@ paths:
                   type: string
             responses:
                 "200":
-                    $ref: '#/responses/RecentActivitiesResponse'
+                    description: RecentActivity
+                    schema:
+                        items:
+                            $ref: '#/definitions/RecentActivity'
+                        type: array
                 "400":
                     description: MessageResponse
                     schema:
@@ -2253,9 +2499,9 @@ paths:
                   type: string
             responses:
                 "200":
-                    description: User
+                    description: UserCredentials
                     schema:
-                        $ref: '#/definitions/User'
+                        $ref: '#/definitions/UserCredentials'
                 "400":
                     description: MessageResponse
                     schema:
@@ -2297,9 +2543,9 @@ paths:
                   type: string
             responses:
                 "200":
-                    description: User
+                    description: UserCredentials
                     schema:
-                        $ref: '#/definitions/User'
+                        $ref: '#/definitions/UserCredentials'
                 "400":
                     description: MessageResponse
                     schema:

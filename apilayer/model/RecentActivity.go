@@ -6,10 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
-// Profile ...
-// swagger:model Profile
+// RecentActivity ...
+// swagger:model RecentActivity
 //
-// Profile object of the user.
+// RecentActivity object that contains the recent activity of the user
 type RecentActivity struct {
 	ID             uuid.UUID `json:"id"`
 	ActivityID     string    `json:"activity_id"`

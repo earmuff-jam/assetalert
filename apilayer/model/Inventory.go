@@ -72,6 +72,9 @@ type InventoryItemToUpdate struct {
 	UserID string `json:"userID"`
 }
 
+// TransferInventory
+// swagger:model TransferInventory
+//
 // TransferInventory is the object used when a item from the personal well is transfered into the event item well.
 type TransferInventory struct {
 	Column  string   `json:"column"`
@@ -81,6 +84,9 @@ type TransferInventory struct {
 	UserID  string   `json:"userID"`
 }
 
+// UpdateAssetColumn
+// swagger:model UpdateAssetColumn
+//
 // UpdateAssetColumn struct is used to update a specific inventory item.
 type UpdateAssetColumn struct {
 	AssetID     string `json:"assetID"`

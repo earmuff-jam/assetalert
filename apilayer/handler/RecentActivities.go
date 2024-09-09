@@ -36,7 +36,7 @@ import (
 //
 // Responses:
 //
-//	200: RecentActivitiesResponse
+//	200: []RecentActivity
 //	400: MessageResponse
 //	404: MessageResponse
 //	500: MessageResponse

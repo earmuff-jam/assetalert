@@ -31,7 +31,7 @@ import (
 //
 // Responses:
 //
-//	200: []CategoryList
+//	200: []Category
 //	400: MessageResponse
 //	404: MessageResponse
 //	500: MessageResponse
@@ -63,19 +63,19 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetCategory ...
-// swagger:route GET /api/v1/category GetCategory getCategory
+// swagger:route GET /api/v1/category GetCategory GetCategory
 //
 // # Retrieves the selected category
-
+//
 // // Parameters:
-//   - name: id
-//     in: path
+//   - +name: id
+//     in: query
 //     description: The userID of the selected user
 //     required: true
 //     type: string
-//   - name: catID
-//     in: path
-//     description: The category id of the selected plan
+//   - +name: catID
+//     in: query
+//     description: The category id
 //     required: true
 //     type: string
 //
@@ -134,14 +134,14 @@ func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: integer
 //     format: int32
 //   - +name: catID
-//     in: path
+//     in: query
 //     description: The category id of the selected plan
 //     required: true
 //     type: string
 //
 // Responses:
 //
-// 200: []CategoryItems
+// 200: []CategoryItemResponse
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -183,7 +183,7 @@ func GetAllCategoryItems(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // CreateCategory ...
-// swagger:route POST /api/v1/category/{id} CreateCategory createCategory
+// swagger:route POST /api/v1/category CreateCategory createCategory
 //
 // # Create category
 //
@@ -268,8 +268,13 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // # Update category function updates the selected category with new values
 //
 // Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected category to update for
+//     type: string
+//     required: true
 //   - +name: Category
-//     in: query
+//     in: body
 //     description: The category object to update details for
 //     type: Category
 //     required: true
@@ -280,6 +285,16 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // 404: MessageResponse
 // 500: MessageResponse
 func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	categoryID := vars["id"]
+
+	if len(categoryID) <= 0 {
+		log.Printf("Unable to update category with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
 
 	draftCategory := &model.Category{}
 	err := json.NewDecoder(r.Body).Decode(draftCategory)

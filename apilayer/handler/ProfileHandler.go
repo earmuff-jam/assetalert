@@ -131,11 +131,11 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 //
 // Parameters:
 //   - +name: id
-//     in: path
+//     in: query
 //     description: The userID of the selected user
 //     required: true
 //     type: string
-//   - ++name: Profile
+//   - +name: Profile
 //     in: body
 //     description: The full profile object of the user
 //     type: Profile
@@ -182,15 +182,16 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 // # Updates the current user avatar for the selected user. Does not meddle with authentication
 //
 // Parameters:
-//   - ++name: id
+//   - +name: id
 //     in: path
 //     description: The userID of the selected user
 //     type: string
 //     required: true
-//   - ++name: FileHeader
+//   - +name: FileHeader
 //     in: body
 //     description: The full file details of the avatar
-//     type: FileHeader
+//     type: string
+//     format: byte
 //     required: true
 //
 // Responses:

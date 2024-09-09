@@ -41,7 +41,7 @@ import (
 //     required: false
 //
 // Responses:
-// 200: User
+// 200: UserCredentials
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -116,7 +116,7 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 //     required: true
 //
 // Responses:
-// 200: User
+// 200: UserCredentials
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse

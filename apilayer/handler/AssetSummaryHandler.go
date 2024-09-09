@@ -15,7 +15,7 @@ import (
 //
 // Parameters:
 //   - +name: id
-//     in: path
+//     in: query
 //     description: The id of the selected user
 //     type: string
 //     required: true

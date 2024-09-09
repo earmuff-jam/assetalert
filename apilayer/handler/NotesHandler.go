@@ -24,7 +24,7 @@ import (
 //     required: true
 //
 // Responses:
-// 200: []Notes
+// 200: []Note
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -72,11 +72,11 @@ func GetNotes(rw http.ResponseWriter, r *http.Request, user string) {
 //   - +name: Note
 //     in: body
 //     description: The note object to add into the db
-//     type: object
+//     type: Note
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Note
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -124,11 +124,11 @@ func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
 //   - +name: Note
 //     in: body
 //     description: The note object to update into the db
-//     type: object
+//     type: Note
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Note
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
