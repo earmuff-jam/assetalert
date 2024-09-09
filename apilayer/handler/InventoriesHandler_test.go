@@ -604,6 +604,320 @@ func Test_UpdateSelectedInventory_InvalidDBUser(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_UpdateAssetColumn_Quantity(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftInventory := model.Inventory{
+		Name:           "Alexandro Kitteyy Litter",
+		Description:    "Kitty litter for a pro name game",
+		Price:          23.99,
+		Status:         "HIDDEN",
+		Barcode:        "1231231231",
+		SKU:            "1231231231",
+		Quantity:       12,
+		IsReturnable:   true,
+		ReturnLocation: "Target",
+		MaxWeight:      "12",
+		MinWeight:      "120",
+		MaxHeight:      "24",
+		MinHeight:      "12",
+		Location:       "Broom Closet",
+		CreatedAt:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		BoughtAt:       "Walmart",
+	}
+
+	requestBody, err := json.Marshal(draftInventory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	AddNewInventory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedInventory model.Inventory
+	err = json.Unmarshal(data, &selectedInventory)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", selectedInventory.Name)
+	assert.Equal(t, "Broom Closet", selectedInventory.Location)
+	assert.Equal(t, 12, selectedInventory.Quantity)
+
+	draftUpdateInv := model.UpdateAssetColumn{
+		AssetID:     selectedInventory.ID,
+		ColumnName:  "quantity",
+		InputColumn: "1",
+	}
+
+	requestBody, err = json.Marshal(draftUpdateInv)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/profile/%s/inventories/%s", draftUserCredentials.ID.String(), selectedInventory.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String(), "asssetID": selectedInventory.ID})
+	w = httptest.NewRecorder()
+	UpdateAssetColumn(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var updatedSelectedInv model.Inventory
+	err = json.Unmarshal(data, &updatedSelectedInv)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", updatedSelectedInv.Name)
+	assert.Equal(t, "Broom Closet", updatedSelectedInv.Location)
+	assert.Equal(t, 1, updatedSelectedInv.Quantity)
+
+	// cleanup
+	removeInventory := []string{selectedInventory.ID}
+	db.DeleteInventory(config.CTO_USER, selectedInventory.ID, removeInventory)
+}
+
+func Test_UpdateAssetColumn_Cost(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftInventory := model.Inventory{
+		Name:           "Alexandro Kitteyy Litter",
+		Description:    "Kitty litter for a pro name game",
+		Price:          23.99,
+		Status:         "HIDDEN",
+		Barcode:        "1231231231",
+		SKU:            "1231231231",
+		Quantity:       12,
+		IsReturnable:   true,
+		ReturnLocation: "Target",
+		MaxWeight:      "12",
+		MinWeight:      "120",
+		MaxHeight:      "24",
+		MinHeight:      "12",
+		Location:       "Broom Closet",
+		CreatedAt:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		BoughtAt:       "Walmart",
+	}
+
+	requestBody, err := json.Marshal(draftInventory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	AddNewInventory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedInventory model.Inventory
+	err = json.Unmarshal(data, &selectedInventory)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", selectedInventory.Name)
+	assert.Equal(t, "Broom Closet", selectedInventory.Location)
+	assert.Equal(t, 12, selectedInventory.Quantity)
+
+	draftUpdateInv := model.UpdateAssetColumn{
+		AssetID:     selectedInventory.ID,
+		ColumnName:  "price",
+		InputColumn: "99.81",
+	}
+
+	requestBody, err = json.Marshal(draftUpdateInv)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/profile/%s/inventories/%s", draftUserCredentials.ID.String(), selectedInventory.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String(), "asssetID": selectedInventory.ID})
+	w = httptest.NewRecorder()
+	UpdateAssetColumn(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var updatedSelectedInv model.Inventory
+	err = json.Unmarshal(data, &updatedSelectedInv)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", updatedSelectedInv.Name)
+	assert.Equal(t, "Broom Closet", updatedSelectedInv.Location)
+	assert.Equal(t, 99.81, updatedSelectedInv.Price)
+
+	// cleanup
+	removeInventory := []string{selectedInventory.ID}
+	db.DeleteInventory(config.CTO_USER, selectedInventory.ID, removeInventory)
+}
+
+func Test_UpdateAssetColumn_InvalidColumn(t *testing.T) {
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftInventory := model.Inventory{
+		Name:           "Alexandro Kitteyy Litter",
+		Description:    "Kitty litter for a pro name game",
+		Price:          23.99,
+		Status:         "HIDDEN",
+		Barcode:        "1231231231",
+		SKU:            "1231231231",
+		Quantity:       12,
+		IsReturnable:   true,
+		ReturnLocation: "Target",
+		MaxWeight:      "12",
+		MinWeight:      "120",
+		MaxHeight:      "24",
+		MinHeight:      "12",
+		Location:       "Broom Closet",
+		CreatedAt:      time.Now(),
+		CreatedBy:      prevUser.ID.String(),
+		BoughtAt:       "Walmart",
+	}
+
+	requestBody, err := json.Marshal(draftInventory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/inventories", draftUserCredentials.ID.String()), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String()})
+	w := httptest.NewRecorder()
+	AddNewInventory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedInventory model.Inventory
+	err = json.Unmarshal(data, &selectedInventory)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, "Alexandro Kitteyy Litter", selectedInventory.Name)
+	assert.Equal(t, "Broom Closet", selectedInventory.Location)
+	assert.Equal(t, 12, selectedInventory.Quantity)
+
+	draftUpdateInv := model.UpdateAssetColumn{
+		AssetID:     selectedInventory.ID,
+		ColumnName:  "name",
+		InputColumn: "new name;",
+	}
+
+	requestBody, err = json.Marshal(draftUpdateInv)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/profile/%s/inventories/%s", draftUserCredentials.ID.String(), selectedInventory.ID), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": draftUserCredentials.ID.String(), "asssetID": selectedInventory.ID})
+	w = httptest.NewRecorder()
+	UpdateAssetColumn(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, 400, res.StatusCode)
+
+	// cleanup
+	removeInventory := []string{selectedInventory.ID}
+	db.DeleteInventory(config.CTO_USER, selectedInventory.ID, removeInventory)
+}
+
+func Test_UpdateAssetColumn_WrongUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{
+		"id":      "0802c692-b8e2-4824-a870-e52f4a0cccf8",
+		"assetID": "0802c692-b8e2-4824-a870-e52f4a0cccf8"},
+	)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	UpdateAssetColumn(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_UpdateAssetColumn_NoUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/profile/0802c692-b8e2-4824-a870-e52f4a0cccf8/inventories/0802c692-b8e2-4824-a870-e52f4a0cccf8", nil)
+	req = mux.SetURLVars(req, map[string]string{
+		"id":      "",
+		"assetID": ""},
+	)
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	UpdateAssetColumn(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_RemoveSelectedInventory(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
