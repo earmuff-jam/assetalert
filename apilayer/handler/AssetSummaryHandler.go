@@ -13,6 +13,13 @@ import (
 //
 // # Retrieves the list of all assets and associated maintenance plans created by the select user
 //
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The id of the selected user
+//     type: string
+//     required: true
+//
 // Responses:
 // 200: []AssetSummary
 // 400: MessageResponse

@@ -18,6 +18,13 @@ const defaultHiddenStatus = "HIDDEN"
 //
 // # Retrieves the list of assets that belong to the selected user
 //
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//
 // Responses:
 // 200: []Inventory
 // 400: Message
@@ -51,6 +58,18 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 // swagger:route GET /api/v1/profile/{id}/inventories/{invID} GetInventoryByID getInventoryByID
 //
 // # Retrieves the selected inventory that matches the passed in ID created by the user.
+//
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: invID
+//     in: path
+//     description: The inventoryID of the inventory details.
+//     required: true
+//     type: string
 //
 // Responses:
 // 200: Inventory
@@ -93,6 +112,23 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 // swagger:route GET /api/v1/profile/{id}/inventories/{assetID} UpdateAssetColumn updateAssetColumn
 //
 // # Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.
+//
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: invID
+//     in: path
+//     description: The asssetID of the asset details.
+//     required: true
+//     type: string
+//   - +name: UpdateAssetColumn
+//     in: body
+//     description: The object containing the details to update the selected asset with.
+//     required: true
+//     type: UpdateAssetColumn
 //
 // Responses:
 // 200: Inventory
@@ -163,7 +199,7 @@ func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: InventoryListRequest
-//     in: query
+//     in: body
 //     description: The list of inventories to add into the db to support bulk upload
 //     type: object
 //     required: true
@@ -244,7 +280,7 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Inventory
-//     in: query
+//     in: body
 //     description: The inventory object to add into the db
 //     type: object
 //     required: true
@@ -296,7 +332,7 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Inventory
-//     in: query
+//     in: body
 //     description: The inventory object to add into the db
 //     type: object
 //     required: true
@@ -348,7 +384,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 //     type: string
 //     required: true
 //   - +name: Inventory
-//     in: query
+//     in: body
 //     description: The inventory object to remove from the db
 //     type: object
 //     required: true

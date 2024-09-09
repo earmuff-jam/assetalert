@@ -14,15 +14,27 @@ import (
 // GetAllCategories ...
 // swagger:route GET /api/v1/categories GetAllCategories getAllCategories
 //
-// # Retrieves the list of categories that each assets can be associated with.
-// Each user can have their own set of categories. All categories are specific to the selected user
+// Retrieves the list of categories that each asset can be associated with. Each user can have their own set of categories. All categories are specific to the selected user.
+//
+// Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of categories
+//     required: true
+//     type: integer
+//     format: int32
 //
 // Responses:
 //
-// 200: []CategoryList
-// 400: MessageResponse
-// 404: MessageResponse
-// 500: MessageResponse
+//	200: []CategoryList
+//	400: MessageResponse
+//	404: MessageResponse
+//	500: MessageResponse
 func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 
 	userID := r.URL.Query().Get("id")
@@ -54,6 +66,18 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 // swagger:route GET /api/v1/category GetCategory getCategory
 //
 // # Retrieves the selected category
+
+// // Parameters:
+//   - name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - name: catID
+//     in: path
+//     description: The category id of the selected plan
+//     required: true
+//     type: string
 //
 // Responses:
 //
@@ -96,6 +120,24 @@ func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // swagger:route GET /api/v1/category/items GetAllCategoryItems getAllCategoryItems
 //
 // # Retrieves the list of assets for a specific category.
+//
+// // Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of categories
+//     required: true
+//     type: integer
+//     format: int32
+//   - +name: catID
+//     in: path
+//     description: The category id of the selected plan
+//     required: true
+//     type: string
 //
 // Responses:
 //
@@ -146,21 +188,11 @@ func GetAllCategoryItems(rw http.ResponseWriter, r *http.Request, user string) {
 // # Create category
 //
 // Parameters:
-//   - +name: name
-//     in: query
-//     description: The category name
-//     type: string
+//   - +name: Category
+//     in: body
+//     description: The category object to save
+//     type: Category
 //     required: true
-//   - +name: description
-//     in: query
-//     description: The category description of the item
-//     type: string
-//     required: false
-//   - +name: color
-//     in: query
-//     description: The user assigned color of the selected category
-//     type: int
-//     required: false
 //
 // Responses:
 // 200: Category
@@ -196,16 +228,11 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // # Add selected items in a specific category
 //
 // Parameters:
-//   - +name: id
-//     in: query
-//     description: The id of the selected category to add the items into
-//     type: string
+//   - +name: CategoryItemRequest
+//     in: body
+//     description: The object containing the array of assets to update with the userID
+//     type: CategoryItemRequest
 //     required: true
-//   - +name: selectedIDs
-//     in: query
-//     description: The array of IDs of the selected assets
-//     type: string
-//     required: false
 //
 // Responses:
 // 200: []CategoryItem
@@ -241,21 +268,11 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // # Update category function updates the selected category with new values
 //
 // Parameters:
-//   - +name: name
+//   - +name: Category
 //     in: query
-//     description: The category name
-//     type: string
+//     description: The category object to update details for
+//     type: Category
 //     required: true
-//   - +name: description
-//     in: query
-//     description: The category description of the item
-//     type: string
-//     required: false
-//   - +name: color
-//     in: query
-//     description: The user assigned color of the selected category
-//     type: int
-//     required: false
 //
 // Responses:
 // 200: Category

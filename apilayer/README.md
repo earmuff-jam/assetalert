@@ -11,5 +11,5 @@
 ### Swagger Spec
 
 - Before we proceed, your bashrc must have `GO` export paths. `export PATH=$PATH:$HOME/go/bin`
-- To run swagger for the first time on any application, you need to install required dependencies. `go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.3 `.
+- To run swagger for the first time on any application, you need to install required dependencies. `go install github.com/go-swagger/go-swagger/cmd/swagger@latest`.
 - Test before you proceed with cmd `swagger`.

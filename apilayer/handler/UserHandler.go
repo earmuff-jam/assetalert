@@ -28,6 +28,17 @@ import (
 //     description: The password of the current user
 //     type: string
 //     required: true
+//   - +name: birthday
+//     in: query
+//     description: The birthdate of the current user. Must be 13 years of age.
+//     type: string
+//     required: true
+//   - +name: role
+//     in: query
+//     description: The user role for the application.
+//     type: string
+//     default: false
+//     required: false
 //
 // Responses:
 // 200: User
@@ -62,9 +73,8 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Calculate the age
-	age := time.Now().Year() - +t.Year()
 	// Check if the user is at least 13 years old
+	age := time.Now().Year() - +t.Year()
 	if age <= 13 {
 		fmt.Println("unable to sign up user. verification failed. ")
 		return
@@ -74,7 +84,9 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 	if len(backendClientUsr) == 0 {
 		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
 	}
-	resp, err := db.SaveUser(backendClientUsr, draftUser) // the authority to log into backend as a certain user
+
+	// the authority to log into backend as a certain user
+	resp, err := db.SaveUser(backendClientUsr, draftUser)
 	if err != nil {
 		log.Printf("Unable to create new user. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

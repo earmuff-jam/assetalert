@@ -37,6 +37,9 @@ type MessageResponse struct {
 	Message string
 }
 
+// CustomRequestHandler function
+//
+// wrapper function for all request, response pair
 type CustomRequestHandler func(http.ResponseWriter, *http.Request, string)
 
 func main() {
@@ -56,7 +59,6 @@ func main() {
 	router.HandleFunc("/api/v1/event/{id}/ws", handler.HandleWebsocket)
 
 	// secure routes
-	router.Handle("/api/v1/locations/health", CustomRequestHandler(handler.GetStorageLocationHealthCheck)).Methods(http.MethodGet)
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
 	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
 

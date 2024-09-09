@@ -11,25 +11,6 @@ import (
 	"github.com/mohit2530/communityCare/model"
 )
 
-// GetProfileHealthCheck ...
-// swagger:route GET /api/v1/health GetProfileHealthCheck getProfileHealthCheck
-//
-// # Health Check
-//
-// Health Check to test if the application api layer is operational or not. This api functionality
-// does not attempt to connect with the backend service. It is designed to support heartbeat support system.
-//
-// Responses:
-// 200: MessageResponse
-// 400: MessageResponse
-// 404: MessageResponse
-// 500: MessageResponse
-func GetProfileHealthCheck(rw http.ResponseWriter, r *http.Request, user string) {
-	rw.Header().Add("Content-Type", "application/json")
-	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode("Health check concluded. Status shows all services are operational.")
-}
-
 // GetAllUserProfiles ...
 // swagger:route GET /api/v1/profile/list GetAllUserProfiles getAllUserProfiles
 //
@@ -61,11 +42,11 @@ func GetAllUserProfiles(rw http.ResponseWriter, r *http.Request, user string) {
 // # Retrieves the user details from the profiles table. Does not meddle with authentication
 //
 // Parameters:
-//   - ++name: id
+//   - +name: id
 //     in: path
-//     description: The id of the user
-//     type: string
+//     description: The userID of the selected user
 //     required: true
+//     type: string
 //
 // Responses:
 // 200: Profile
@@ -105,9 +86,9 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 // Parameters:
 //   - +name: id
 //     in: path
-//     description: The id of the user
-//     type: string
+//     description: The userID of the selected user
 //     required: true
+//     type: string
 //
 // Responses:
 // 200: MessageResponse
@@ -149,7 +130,12 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 // # Updates the current user profile for the selected user. Does not meddle with authentication
 //
 // Parameters:
-//   - +name: Profile
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - ++name: Profile
 //     in: body
 //     description: The full profile object of the user
 //     type: Profile
@@ -196,12 +182,12 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 // # Updates the current user avatar for the selected user. Does not meddle with authentication
 //
 // Parameters:
-//   - +name: id
+//   - ++name: id
 //     in: path
 //     description: The userID of the selected user
 //     type: string
 //     required: true
-//   - +name: FileHeader
+//   - ++name: FileHeader
 //     in: body
 //     description: The full file details of the avatar
 //     type: FileHeader

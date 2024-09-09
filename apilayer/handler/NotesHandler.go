@@ -70,7 +70,7 @@ func GetNotes(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Note
-//     in: query
+//     in: body
 //     description: The note object to add into the db
 //     type: object
 //     required: true
@@ -122,7 +122,7 @@ func AddNewNote(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Note
-//     in: query
+//     in: body
 //     description: The note object to update into the db
 //     type: object
 //     required: true
