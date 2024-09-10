@@ -33,6 +33,7 @@ type Inventory struct {
 	UpdatedBy         string     `json:"updated_by"`
 	UpdaterName       string     `json:"updater_name"`
 	BoughtAt          string     `json:"bought_at"`
+	SharableGroups    []string   `json:"sharable_groups"`
 }
 
 // RawInventory ...

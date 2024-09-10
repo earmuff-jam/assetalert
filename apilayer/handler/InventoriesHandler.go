@@ -134,19 +134,20 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 	for _, v := range inventoryMap {
 
 		draftInventory := model.Inventory{
-			Name:        v.Name,
-			Description: v.Description,
-			Price:       v.Price,
-			Status:      defaultHiddenStatus,
-			Barcode:     v.Barcode,
-			SKU:         v.SKU,
-			Quantity:    int(v.Quantity),
-			Location:    v.Location,
-			CreatedAt:   time.Now(),
-			CreatedBy:   userID,
-			UpdatedAt:   time.Now(),
-			UpdatedBy:   userID,
-			BoughtAt:    v.BoughtAt,
+			Name:           v.Name,
+			Description:    v.Description,
+			Price:          v.Price,
+			Status:         defaultHiddenStatus,
+			Barcode:        v.Barcode,
+			SKU:            v.SKU,
+			Quantity:       int(v.Quantity),
+			Location:       v.Location,
+			CreatedAt:      time.Now(),
+			CreatedBy:      userID,
+			UpdatedAt:      time.Now(),
+			UpdatedBy:      userID,
+			BoughtAt:       v.BoughtAt,
+			SharableGroups: []string{userID},
 		}
 		inventoryList = append(inventoryList, draftInventory)
 	}

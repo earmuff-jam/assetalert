@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_GetAssetSummary(t *testing.T) {
+func Test_GetAssetsAndSummary(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
@@ -31,7 +31,7 @@ func Test_GetAssetSummary(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/summary?id=%s", prevUser.ID.String()), nil)
 	w := httptest.NewRecorder()
-	GetAssetSummary(w, req, config.CTO_USER)
+	GetAssetsAndSummary(w, req, config.CTO_USER)
 	res := w.Result()
 	defer res.Body.Close()
 	data, err := io.ReadAll(res.Body)
@@ -39,29 +39,30 @@ func Test_GetAssetSummary(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	var assetSummary []model.AssetSummary
-	err = json.Unmarshal(data, &assetSummary)
+	var asResponse model.AssetsAndSummaryResponse
+	err = json.Unmarshal(data, &asResponse)
 	if err != nil {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	assert.Greater(t, len(assetSummary), 0)
+	assert.Greater(t, len(asResponse.AssetList), 0)
+	assert.Greater(t, len(asResponse.AssetSummaryList), 0)
 }
 
-func Test_GetAssetSummary_IncorrectCategoryID(t *testing.T) {
+func Test_GetAssetsAndSummary_IncorrectCategoryID(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", "", 5), nil)
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAssetSummary(w, req, config.CTO_USER)
+	GetAssetsAndSummary(w, req, config.CTO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
-func Test_GetAssetSummary_InvalidDBUser(t *testing.T) {
+func Test_GetAssetsAndSummary_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
@@ -79,7 +80,7 @@ func Test_GetAssetSummary_InvalidDBUser(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", prevUser.ID.String(), 5), nil)
 	w := httptest.NewRecorder()
 	db.PreloadAllTestVariables()
-	GetAssetSummary(w, req, config.CEO_USER)
+	GetAssetsAndSummary(w, req, config.CEO_USER)
 	res := w.Result()
 
 	assert.Equal(t, 400, res.StatusCode)

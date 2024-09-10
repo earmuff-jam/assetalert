@@ -12,9 +12,13 @@ type AssetSummary struct {
 	Type           string    `json:"type"`
 	ReturnTime     time.Time `json:"returntime"`
 	Price          float64   `json:"price"`
-	CategoryID     string    `json:"category_id"`
-	PlanID         string    `json:"plan_id"`
+	Items          []string  `json:"items"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 	SharableGroups []string  `json:"sharable_groups"`
+}
+
+type AssetsAndSummaryResponse struct {
+	AssetSummaryList []AssetSummary
+	AssetList        []Inventory
 }

@@ -329,8 +329,9 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			created_by, 
 			created_at, 
 			updated_by, 
-			updated_at
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);`
+			updated_at,
+			sharable_groups
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`
 
 		_, err = tx.Exec(
 			sqlStr,
@@ -348,6 +349,7 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 			time.Now(),
 			parsedCreatedByUUID,
 			time.Now(),
+			pq.Array(v.SharableGroups),
 		)
 
 		if err != nil {
