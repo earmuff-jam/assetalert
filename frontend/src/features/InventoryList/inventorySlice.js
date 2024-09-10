@@ -89,6 +89,21 @@ const inventorySlice = createSlice({
       state.error = '';
       state.inventories = [];
     },
+    updateAssetCol: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateAssetColSuccess: (state, action) => {
+      const updatedItem = action.payload;
+      const filteredInventoriesList = state.inventories.filter((v) => v.id !== updatedItem.id);
+      state.loading = false;
+      state.error = '';
+      state.inventories = [updatedItem, ...filteredInventoriesList];
+    },
+    updateAssetColFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     removeInventoryRows: (state) => {
       state.loading = true;
       state.error = '';

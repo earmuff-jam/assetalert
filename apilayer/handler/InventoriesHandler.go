@@ -14,15 +14,22 @@ import (
 const defaultHiddenStatus = "HIDDEN"
 
 // GetAllInventories ...
-// swagger:route GET /api/v1/profile/{id}/inventories
+// swagger:route GET /api/v1/profile/{id}/inventories GetAllInventories getAllInventories
 //
-// # Retrieves the list of inventories that the user has.
+// # Retrieves the list of assets that belong to the selected user
+//
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
 //
 // Responses:
 // 200: []Inventory
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -48,15 +55,27 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetInventoryByID ...
-// swagger:route GET /api/v1/profile/{id}/inventories/{invID}
+// swagger:route GET /api/v1/profile/{id}/inventories/{invID} GetInventoryByID getInventoryByID
 //
-// # Retrieves the selected inventory that matches the id. must be created by the user
+// # Retrieves the selected inventory that matches the passed in ID created by the user.
+//
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: invID
+//     in: path
+//     description: The inventoryID of the inventory details.
+//     required: true
+//     type: string
 //
 // Responses:
 // 200: Inventory
-// 400: Message
-// 404: Message
-// 500: Message
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
 func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
@@ -89,6 +108,85 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// UpdateAssetColumn ...
+// swagger:route GET /api/v1/profile/{id}/inventories/{assetID} UpdateAssetColumn updateAssetColumn
+//
+// # Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.
+//
+// // Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: assetID
+//     in: path
+//     description: The asssetID of the asset details.
+//     required: true
+//     type: string
+//   - +name: UpdateAssetColumn
+//     in: body
+//     description: The object containing the details to update the selected asset with.
+//     required: true
+//     type: UpdateAssetColumn
+//
+// Responses:
+// 200: Inventory
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+	assetID := vars["asssetID"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve assets with empty profile id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+	if len(assetID) <= 0 {
+		log.Printf("Unable to retrieve assets with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var updateAssetCol model.UpdateAssetColumn
+	if err := json.NewDecoder(r.Body).Decode(&updateAssetCol); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	isValidColumnName := false
+	for _, v := range []string{"quantity", "price"} {
+		if updateAssetCol.ColumnName == v {
+			isValidColumnName = true
+		}
+	}
+
+	if !isValidColumnName {
+		log.Printf("unable to update column name.")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.UpdateAsset(user, userID, updateAssetCol)
+	if err != nil {
+		log.Printf("Unable to update asset. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // AddInventoryInBulk ...
 // swagger:route POST /api/profile/{id}/inventories/bulk AddInventoryInBulk addInventoryInBulk
 //
@@ -101,14 +199,14 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: InventoryListRequest
-//     in: query
+//     in: body
 //     description: The list of inventories to add into the db to support bulk upload
-//     type: object
+//     type: InventoryListRequest
 //     required: true
 //
 // Responses:
 //
-// 200: []model.Inventory
+// 200: []Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -183,7 +281,7 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Inventory
-//     in: query
+//     in: body
 //     description: The inventory object to add into the db
 //     type: object
 //     required: true
@@ -235,9 +333,9 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: Inventory
-//     in: query
+//     in: body
 //     description: The inventory object to add into the db
-//     type: object
+//     type: Inventory
 //     required: true
 //
 // Responses:
@@ -278,7 +376,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 // RemoveSelectedInventory ...
 // swagger:route POST /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
 //
-// # Update selected inventory with details.
+// # Remove selected inventories.
 //
 // Parameters:
 //   - +name: id
@@ -286,14 +384,14 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 //     description: The id of the selected user
 //     type: string
 //     required: true
-//   - +name: Inventory
-//     in: query
-//     description: The inventory object to remove from the db
-//     type: object
+//   - +name: pruneInventoryIDMap
+//     in: body
+//     description: The inventory object to add into the db
+//     type: Inventory
 //     required: true
 //
 // Responses:
-// 200: MessageResponse
+// 200: Inventory
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse

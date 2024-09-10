@@ -13,20 +13,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_GetStatusesListHealthCheck(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/api/v1/health", nil)
-	w := httptest.NewRecorder()
-	GetStatusesListHealthCheck(w, req, config.CTO_USER)
-	res := w.Result()
-	defer res.Body.Close()
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		t.Errorf("expected error to be nil got %v", err)
-	}
-	assert.True(t, len(string(data)) <= 69)
-	assert.Equal(t, 200, res.StatusCode)
-}
-
 func Test_GetStatusList(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{

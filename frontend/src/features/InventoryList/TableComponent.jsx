@@ -81,14 +81,10 @@ const TableComponent = ({
               const isSelected = (id) => rowSelected.indexOf(id) !== -1;
               const selectedID = row.id;
               const isItemSelected = isSelected(selectedID);
-              // fix titleColor issues
-              const title = '';
-              const color = '';
-              // const { title, color } = generateTitleColor(row, isCategory, override);
               return (
-                <Tooltip key={rowIndex} title={title}>
+                <Tooltip key={rowIndex} title={''}>
                   <TableRow hover>
-                    {!hideActionMenu ? (
+                    {!hideActionMenu && (
                       <TableCell padding="checkbox">
                         <Stack direction="row">
                           {!hideCheckBox && (
@@ -112,10 +108,10 @@ const TableComponent = ({
                           )}
                         </Stack>
                       </TableCell>
-                    ) : null}
+                    )}
                     {Object.keys(columns).map((colKey) => {
                       const column = columns[colKey];
-                      return <TableCell key={column.id}>{rowFormatter(row, column.colName, color)}</TableCell>;
+                      return <TableCell key={column.id}>{rowFormatter(row, column.colName, column)}</TableCell>;
                     })}
                   </TableRow>
                 </Tooltip>

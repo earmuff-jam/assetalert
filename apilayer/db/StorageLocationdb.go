@@ -18,7 +18,10 @@ func RetrieveAllStorageLocation(user string) ([]model.StorageLocation, error) {
 	}
 	defer db.Close()
 
-	sqlStr := "SELECT id, location, created_at, created_by, updated_at, updated_by, sharable_groups FROM community.storage_locations"
+	sqlStr := `SELECT sl.id, sl.location, sl.created_at, sl.created_by, sl.updated_at, sl.updated_by, sl.sharable_groups 
+		FROM community.storage_locations sl 
+		ORDER BY sl.updated_at;`
+
 	rows, err := db.Query(sqlStr)
 	if err != nil {
 		return nil, err

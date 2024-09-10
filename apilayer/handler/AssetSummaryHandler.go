@@ -16,6 +16,13 @@ import (
 // return that values. Also returns an array of existing assets.
 // All results are created by the selected user and in order of type and date last updated at.
 //
+// Parameters:
+//   - +name: id
+//     in: query
+//     description: The id of the selected user
+//     type: string
+//     required: true
+//
 // Responses:
 // 200: []AssetSummary
 // 400: MessageResponse

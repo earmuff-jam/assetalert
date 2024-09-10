@@ -59,6 +59,16 @@ export function* fetchUpdateExistingInventoryDetails(action) {
   }
 }
 
+export function* fetchUpdateAssetCol(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories/${action.payload.assetID}`, { ...action.payload });
+    yield put(inventoryActions.updateAssetColSuccess(response.data || []));
+  } catch (e) {
+    yield put(inventoryActions.updateAssetColFailure(e));
+  }
+}
+
 export function* fetchRemoveInventoryRows(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -110,8 +120,13 @@ export function* watchFetchAllStorageLocations() {
   yield takeLatest(`inventory/getStorageLocations`, fetchStorageLocations);
 }
 
+export function* watchUpdateAssetCol() {
+  yield takeLatest(`inventory/updateAssetCol`, fetchUpdateAssetCol);
+}
+
 export default [
   watchFetchInvByID,
+  watchUpdateAssetCol,
   watchFetchAddNewInventory,
   watchFetchAddBulkInventory,
   watchFetchRemoveInventoryRows,

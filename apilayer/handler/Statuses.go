@@ -8,29 +8,22 @@ import (
 	"github.com/mohit2530/communityCare/db"
 )
 
-// GetStatusesListHealthCheck ...
-// swagger:route GET /api/v1/health GetStatusesListHealthCheck getStatusesListHealthCheck
-//
-// # Health Check
-//
-// Health Check to test if the application api layer is operational or not. This api functionality
-// does not attempt to connect with the backend service. It is designed to support heartbeat support system.
-//
-// Responses:
-// 200: MessageResponse
-// 400: MessageResponse
-// 404: MessageResponse
-// 500: MessageResponse
-func GetStatusesListHealthCheck(rw http.ResponseWriter, r *http.Request, user string) {
-	rw.Header().Add("Content-Type", "application/json")
-	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode("Health check concluded. Status shows all services are operational.")
-}
-
 // GetStatusList ...
 // swagger:route GET /api/v1/status/list GetStatusList getStatusList
 //
 // # Retrieves the list of statuses that the user can associate with any event
+//
+// // Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     type: string
+//     required: true
+//   - +name: type
+//     in: query
+//     description: The type of status option. Current options include "category", "notes", "maintenance"
+//     type: string
+//     required: true
 //
 // Responses:
 // 200: []StatusList

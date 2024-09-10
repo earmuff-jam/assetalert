@@ -13,13 +13,33 @@ import (
 // GetRecentActivities ...
 // swagger:route GET /api/v1/profile/recent-activities GetRecentActivities getRecentActivities
 //
-// # Retrieves user actions for categories, maintenance plans and assets. List all created, updated or deleted.
+// # Retrieves user actions for categories, maintenance plans, and assets. List all created, updated, or deleted.
+//
+// Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of recent activities.
+//     required: true
+//     type: integer
+//     format: int32
+//   - +name: until
+//     in: query
+//     description: The timestamp with time zone until the data should be retrieved for
+//     required: false
+//     type: string
+//     format: date-time
 //
 // Responses:
-// 200: []Activity
-// 400: MessageResponse
-// 404: MessageResponse
-// 500: MessageResponse
+//
+//	200: []RecentActivity
+//	400: MessageResponse
+//	404: MessageResponse
+//	500: MessageResponse
 func GetRecentActivities(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)

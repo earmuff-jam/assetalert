@@ -22,6 +22,7 @@ type Inventory struct {
 	IsReturnable      bool       `json:"is_returnable"`
 	ReturnLocation    string     `json:"return_location"`
 	ReturnDateTime    *time.Time `json:"return_datetime,omitempty"`
+	ReturnNotes       string     `json:"return_notes,omitempty"`
 	MaxWeight         string     `json:"max_weight"`
 	MinWeight         string     `json:"min_weight"`
 	MaxHeight         string     `json:"max_height"`
@@ -72,6 +73,9 @@ type InventoryItemToUpdate struct {
 	UserID string `json:"userID"`
 }
 
+// TransferInventory
+// swagger:model TransferInventory
+//
 // TransferInventory is the object used when a item from the personal well is transfered into the event item well.
 type TransferInventory struct {
 	Column  string   `json:"column"`
@@ -79,4 +83,14 @@ type TransferInventory struct {
 	EventID string   `json:"eventID"`
 	ItemIDs []string `json:"itemIDs"`
 	UserID  string   `json:"userID"`
+}
+
+// UpdateAssetColumn
+// swagger:model UpdateAssetColumn
+//
+// UpdateAssetColumn struct is used to update a specific inventory item.
+type UpdateAssetColumn struct {
+	AssetID     string `json:"assetID"`
+	ColumnName  string `json:"columnName"`
+	InputColumn string `json:"inputColumn"`
 }

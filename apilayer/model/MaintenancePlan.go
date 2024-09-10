@@ -2,8 +2,8 @@ package model
 
 import "time"
 
-// Maintenance Plan ...
-// swagger:model Maintenance plan
+// MaintenancePlan ...
+// swagger:model MaintenancePlan
 //
 // Maintenance plan instance to resemble a single maintenance plan
 type MaintenancePlan struct {

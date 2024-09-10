@@ -58,7 +58,7 @@ func (us *UserCredentials) ProduceAuthToken(draftUser *UserCredentials) {
 // User ...
 // swagger:model User
 //
-// User object.
+// User object. Used for authentication purposes only.
 type User struct {
 	InstanceID               uuid.UUID
 	ID                       uuid.UUID       `json:"id,omitempty"`

@@ -19,6 +19,19 @@ import (
 //
 // Users can assign asset to multiple plans.
 //
+// // Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the logged in user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of maintenance plans
+//     required: true
+//     type: integer
+//     format: int32
+//
 // Responses:
 //
 // 200: []MaintenancePlan
@@ -53,9 +66,21 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 }
 
 // GetMaintenancePlan ...
-// swagger:route GET /api/v1/plan/ GetMaintenancePlan GetMaintenancePlan
+// swagger:route GET /api/v1/plan GetMaintenancePlan GetMaintenancePlan
 //
 // # Retrieve a selected maintenance plan
+//
+// // Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: mID
+//     in: query
+//     description: The maintenance id of the selected plan
+//     required: true
+//     type: string
 //
 // Responses:
 // 200: MaintenancePlan
@@ -97,6 +122,24 @@ func GetMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 // swagger:route GET /api/v1/plans/items GetAllMaintenancePlanItems getAllMaintenancePlanItems
 //
 // # Retrieves the list of assets for a specific maintenance plans.
+//
+// // Parameters:
+//   - +name: id
+//     in: query
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of maintenance plans
+//     required: true
+//     type: integer
+//     format: int32
+//   - +name: mID
+//     in: query
+//     description: The maintenance id of the selected plan
+//     required: true
+//     type: string
 //
 // Responses:
 //
@@ -147,16 +190,11 @@ func GetAllMaintenancePlanItems(rw http.ResponseWriter, r *http.Request, user st
 // # Add selected items in a specific maintenance plan
 //
 // Parameters:
-//   - +name: id
-//     in: query
-//     description: The id of the selected maintenance plan to add the items into
-//     type: string
+//   - +name: MaintenanceItemRequest
+//     in: body
+//     description: The object containing the array of assets to update with the userID
+//     type: MaintenanceItemRequest
 //     required: true
-//   - +name: selectedIDs
-//     in: query
-//     description: The array of IDs of the selected assets
-//     type: string
-//     required: false
 //
 // Responses:
 // 200: []MaintenanceItemResponse
@@ -187,26 +225,16 @@ func AddItemsInMaintenancePlan(rw http.ResponseWriter, r *http.Request, user str
 }
 
 // CreateMaintenancePlan ...
-// swagger:route POST /api/v1/plan/{id} CreateMaintenancePlan createMaintenancePlan
+// swagger:route POST /api/v1/plan CreateMaintenancePlan createMaintenancePlan
 //
 // # Create maintenance plan
 //
 // Parameters:
-//   - +name: name
-//     in: query
-//     description: The maintenance plan name
-//     type: string
+//   - +name: MaintenancePlan
+//     in: body
+//     description: The object containing details of the maintenance plan
+//     type: MaintenancePlan
 //     required: true
-//   - +name: description
-//     in: query
-//     description: The maintenance plan description of the item
-//     type: string
-//     required: false
-//   - +name: color
-//     in: query
-//     description: The user assigned color of the selected maintenance plan
-//     type: int
-//     required: false
 //
 // Responses:
 // 200: MaintenancePlan
@@ -242,21 +270,16 @@ func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 // # Update maintenance plan function updates the selected maintenance plan with new values
 //
 // Parameters:
-//   - +name: name
-//     in: query
-//     description: The maintenance plan name
+//   - +name: id
+//     in: path
+//     description: The id of the selected maintenance plan to update
 //     type: string
 //     required: true
-//   - +name: description
-//     in: query
-//     description: The maintenance plan description of the item
-//     type: string
-//     required: false
-//   - +name: color
-//     in: query
-//     description: The user assigned color of the selected maintenance plan
-//     type: int
-//     required: false
+//   - +name: MaintenancePlan
+//     in: body
+//     description: The object containing details of the maintenance plan
+//     type: MaintenancePlan
+//     required: true
 //
 // Responses:
 // 200: MaintenancePlan
@@ -264,6 +287,16 @@ func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 // 404: MessageResponse
 // 500: MessageResponse
 func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	maintenancePlanID := vars["id"]
+
+	if len(maintenancePlanID) <= 0 {
+		log.Printf("Unable to update maintenance plan with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
 
 	draftMaintenancePlan := &model.MaintenancePlan{}
 	err := json.NewDecoder(r.Body).Decode(draftMaintenancePlan)

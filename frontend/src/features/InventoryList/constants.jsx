@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import QrCodeGen from './QrCodeGen';
+import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
 dayjs.extend(relativeTime);
 
@@ -123,7 +124,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
     id: 9,
     colName: 'is_returnable',
     label: 'Returnable',
-    modifier: (value) => `${value || '-'}`,
+    modifier: (value) => (value ? <CheckRounded color="primary" /> : <CloseRounded color="warning" />),
   },
   return_location: {
     id: 10,
@@ -183,13 +184,13 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
   },
 };
 
-
 // blank form to add inventory details
 export const BLANK_INVENTORY_FORM = {
   name: {
     id: 'name',
     label: 'Item name',
     value: '',
+    type: 'text',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -207,6 +208,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'description',
     label: 'Item description',
     value: '',
+    type: 'text',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -224,6 +226,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'price',
     label: 'Item price (per unit)',
     value: '',
+    type: 'number',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -241,6 +244,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'barcode',
     label: 'Barcode of item',
     value: '',
+    type: 'text',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -254,6 +258,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'sku',
     label: 'Sku of item',
     value: '',
+    type: 'text',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -267,6 +272,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'quantity',
     label: 'Item quantity',
     value: '',
+    type: 'number',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -284,6 +290,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'bought_at',
     label: 'Where did you buy the item',
     value: '',
+    type: 'text',
     isRequired: false,
     errorMsg: '',
     validators: [],
@@ -291,6 +298,7 @@ export const BLANK_INVENTORY_FORM = {
   location: {
     id: 'location',
     label: 'Where do you want to store the item',
+    type: 'text',
     isRequired: false,
     errorMsg: '',
     validators: [],
@@ -298,6 +306,7 @@ export const BLANK_INVENTORY_FORM = {
   is_bookmarked: {
     id: 'is_bookmarked',
     value: false,
+    type: 'boolean',
     isRequired: false,
     errorMsg: '',
     validators: [],
@@ -305,6 +314,7 @@ export const BLANK_INVENTORY_FORM = {
   is_returnable: {
     id: 'is_returnable',
     value: false,
+    type: 'boolean',
     isRequired: false,
     errorMsg: '',
     validators: [],
@@ -313,6 +323,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'return_location',
     label: 'Where to return the item',
     value: '',
+    type: 'text',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -326,6 +337,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'max_weight',
     label: 'Max weight in kg',
     value: '',
+    type: 'number',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -339,6 +351,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'min_weight',
     label: 'Min weight in kg',
     value: '',
+    type: 'number',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -352,6 +365,7 @@ export const BLANK_INVENTORY_FORM = {
     id: 'max_height',
     label: 'Max height in kg',
     value: '',
+    type: 'number',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -365,12 +379,27 @@ export const BLANK_INVENTORY_FORM = {
     id: 'min_height',
     label: 'Min height in kg',
     value: '',
+    type: 'number',
     isRequired: false,
     errorMsg: '',
     validators: [
       {
         validate: (value) => isNaN(value) || parseInt(value) <= 0,
         message: 'A positive number is required',
+      },
+    ],
+  },
+  return_notes: {
+    id: 'return_notes',
+    label: 'Return notes',
+    value: '',
+    type: 'text',
+    isRequired: false,
+    errorMsg: '',
+    validators: [
+      {
+        validate: (value) => value.trim().length >= 50,
+        message: 'Return notes should be less than 50 characters',
       },
     ],
   },
