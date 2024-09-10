@@ -2,8 +2,11 @@
 include .env
 
 # load swagger for api contract
+# for some weird reason swagger is not working via makefile
+# navigate to apilayer and run cmd - swagger generate spec -o swagger.yaml --scan-models
 swagger:
-	cd apilayer && swagger generate spec -o swagger.yaml --scan-models
+	cd apilayer && \
+	swagger generate spec -o swagger.yaml --scan-models
 
 # load api in development instance
 startserver:

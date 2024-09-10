@@ -71,3 +71,24 @@ type Note struct {
 	Updator           string      `json:"updator"`
 	SharableGroups    []uuid.UUID `json:"sharable_groups"`
 }
+
+// FavouriteItem ...
+// swagger:model FavouriteItem
+//
+// FavouriteItem object. Used to store the list of categories or maintenance plans marked as favourite by the selected user. This does not contain the audit columns because they are not used directly. Created user should be the only reference to populate this model.
+type FavouriteItem struct {
+	ID                    string      `json:"id"`
+	CategoryID            string      `json:"category_id,omitempty"`
+	CategoryName          string      `json:"category_name,omitempty"`
+	CategoryStatus        string      `json:"category_status,omitempty"`
+	MaintenancePlanID     string      `json:"maintenance_plan_id,omitempty"`
+	MaintenancePlanName   string      `json:"maintenance_plan_name,omitempty"`
+	MaintenancePlanStatus string      `json:"maintenance_plan_status,omitempty"`
+	CreatedAt             time.Time   `json:"created_at"`
+	CreatedBy             string      `json:"created_by"`
+	Creator               string      `json:"creator"`
+	UpdatedAt             time.Time   `json:"updated_at"`
+	UpdatedBy             string      `json:"updated_by"`
+	Updator               string      `json:"updator"`
+	SharableGroups        []uuid.UUID `json:"sharable_groups"`
+}

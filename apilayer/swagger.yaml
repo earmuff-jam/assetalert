@@ -4,9 +4,6 @@ consumes:
 definitions:
     AssetSummary:
         properties:
-            category_id:
-                type: string
-                x-go-name: CategoryID
             created_at:
                 format: date-time
                 type: string
@@ -14,12 +11,14 @@ definitions:
             id:
                 type: string
                 x-go-name: ID
+            items:
+                items:
+                    type: string
+                type: array
+                x-go-name: Items
             name:
                 type: string
                 x-go-name: Name
-            plan_id:
-                type: string
-                x-go-name: PlanID
             price:
                 format: double
                 type: number
@@ -414,6 +413,32 @@ definitions:
         title: Expense ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
+    FavouriteItem:
+        properties:
+            category_id:
+                type: string
+                x-go-name: CategoryID
+            category_name:
+                type: string
+                x-go-name: CategoryName
+            category_status:
+                type: string
+                x-go-name: CategoryStatus
+            id:
+                type: string
+                x-go-name: ID
+            maintenance_plan_id:
+                type: string
+                x-go-name: MaintenancePlanID
+            maintenance_plan_name:
+                type: string
+                x-go-name: MaintenancePlanName
+            maintenance_plan_status:
+                type: string
+                x-go-name: MaintenancePlanStatus
+        title: FavouriteItem ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
     Inventory:
         properties:
             barcode:
@@ -477,6 +502,11 @@ definitions:
             return_notes:
                 type: string
                 x-go-name: ReturnNotes
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
             sku:
                 type: string
                 x-go-name: SKU
@@ -2272,6 +2302,37 @@ paths:
             summary: Retrieves the user name from the profiles table. Does not meddle with authentication
             tags:
                 - GetUsername
+    /api/v1/profile/{id}/fav:
+        get:
+            operationId: getFavouriteItems
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: FavouriteItem
+                    schema:
+                        items:
+                            $ref: '#/definitions/FavouriteItem'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Retrieves the items marked as favourite by the selected user.'
+            tags:
+                - GetFavouriteItems
     /api/v1/profile/{id}/inventories:
         get:
             operationId: getAllInventories

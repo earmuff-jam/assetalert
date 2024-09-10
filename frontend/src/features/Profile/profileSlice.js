@@ -8,6 +8,7 @@ const initialState = {
   profiles: [],
   profileDetails: {},
   recentActivities: [],
+  favItems: [],
 };
 
 const profileSlice = createSlice({
@@ -42,6 +43,53 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.recentActivities = [];
+    },
+    getFavItems: (state) => {
+      // does not meddle with profile loading
+      state.loading = false;
+      state.error = '';
+    },
+    getFavItemsSuccess: (state, action) => {
+      state.favItems = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getFavItemsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.favItems = [];
+    },
+    saveFavItem: (state) => {
+      // does not meddle with profile loading
+      state.loading = false;
+      state.error = '';
+    },
+    saveFavItemSuccess: (state, action) => {
+      state.favItems = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    saveFavItemFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.favItems = [];
+    },
+    removeFavItem: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    removeFavItemSuccess: (state, action) => {
+      const filtered = [...state.favItems].filter((v) => {
+        return v.id !== action.payload;
+      });
+      state.favItems = [...filtered];
+      state.loading = false;
+      state.error = '';
+    },
+    removeFavItemFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.favItems = [];
     },
     downloadRecentActivities: (state) => {
       state.loading = true;

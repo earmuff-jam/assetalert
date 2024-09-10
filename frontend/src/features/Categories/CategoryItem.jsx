@@ -94,7 +94,7 @@ export default function CategoryItem() {
         title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
         secondaryTitle="View details of selected category"
       />
-      <ItemCard selectedItem={selectedCategory} />
+      <ItemCard selectedItem={selectedCategory} isViewingCategory />
       <HeaderWithButton
         title="Items"
         secondaryTitle={`Total ${itemsInCategory?.length || 0} item(s)`}

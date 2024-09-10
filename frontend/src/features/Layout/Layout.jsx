@@ -31,7 +31,10 @@ const Layout = () => {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const handleDrawerOpen = () => setOpenDrawer(true);
+  const handleDrawerOpen = () => {
+    setOpenDrawer(true);
+    dispatch(profileActions.getFavItems({ limit: 10 }));
+  };
   const handleDrawerClose = () => setOpenDrawer(false);
 
   const handleLogout = () => {
@@ -100,14 +103,12 @@ const Layout = () => {
             </Stack>
           </Toolbar>
         </AppBar>
-        <Box>
-          <Stack direction="row" spacing="1rem" sx={{ mt: '5rem' }}>
-            <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
-            <Stack sx={{ py: '1rem', flexGrow: 1 }}>
-              <Outlet />
-            </Stack>
+        <Stack direction="row" spacing="1rem" sx={{ mt: '5rem' }}>
+          <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
+          <Stack sx={{ py: '1rem', flexGrow: 1 }}>
+            <Outlet />
           </Stack>
-        </Box>
+        </Stack>
       </Suspense>
     </ThemeProvider>
   );

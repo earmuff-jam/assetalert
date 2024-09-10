@@ -274,7 +274,7 @@ func RemoveNote(user string, draftNoteID string) error {
 	}
 	defer db.Close()
 
-	sqlStr := `DELETE FROM community.notes WHERE id=$1`
+	sqlStr := `DELETE FROM community.notes WHERE id=$1;`
 	_, err = db.Exec(sqlStr, draftNoteID)
 	if err != nil {
 		log.Printf("unable to delete note ID %+v", draftNoteID)
