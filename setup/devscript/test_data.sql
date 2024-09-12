@@ -3,6 +3,23 @@ SET SEARCH_PATH TO community, auth;
 
 -- AUTHENTICATION --
 INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');
+INSERT INTO auth.question_answer (q1, a1, q2, a2, retries, email, created_by, updated_by) 
+VALUES (
+    'Which year did you graduate high school?',
+    '1990',
+    'Where did your parents first meet?',
+    'Italy',
+    1,
+    'test@gmail.com',
+    (SELECT id FROM community.profiles LIMIT 1),
+    (SELECT id FROM community.profiles LIMIT 1)
+);
+INSERT INTO auth.question_pool (question) VALUES
+    ('What was the name of your first pet?'),
+    ('What is your mother’s maiden name?'),
+    ('What is the name of the street you grew up on?'),
+    ('What was your high school mascot?'),
+    ('What was the name of your first school teacher?');
 
 -- UPDATE PROFILE TABLE WITH USER DETAILS --
 UPDATE community.profiles SET 
@@ -88,7 +105,7 @@ VALUES ('4 pounds of kitty litter',
         (SELECT id FROM community.profiles p LIMIT 1),
         ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
 
--- insert a null datetime --
+-- ADD INVENTORIES SQL TEST DATA FOR NULL DATETIME --
 INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
                                  storage_location_id, is_returnable, return_location, max_weight, min_weight,
                                  max_height, min_height, created_by, updated_by, sharable_groups)

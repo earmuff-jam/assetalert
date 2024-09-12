@@ -4,6 +4,8 @@ const initialState = {
   userID: '',
   appConfig: {},
   loading: false,
+  isUserVerified: false, // only used for pwd reset
+  retryCounts: 0,
   error: '',
 };
 
@@ -52,6 +54,23 @@ const authSlice = createSlice({
     getLogoutFailure: (state) => {
       state.loading = false;
       state.error = '';
+    },
+    getUserVerification: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    getUserVerificationSuccess: (state, action) => {
+      const { valid, retry_attempt } = action.payload;
+      state.loading = false;
+      state.error = '';
+      state.isUserVerified = valid;
+      state.retryCounts = retry_attempt;
+    },
+    getUserVerificationFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.isUserVerified = false;
+      state.retryCounts = 0;
     },
   },
 });

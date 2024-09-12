@@ -69,7 +69,7 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 
 	t, err := time.Parse("2006-01-02", draftUser.Birthday)
 	if err != nil {
-		fmt.Printf("Error parsing birthdate. Error: %+v", err)
+		log.Printf("Error parsing birthdate. Error: %+v", err)
 		return
 	}
 
@@ -182,4 +182,61 @@ func Logout(rw http.ResponseWriter, r *http.Request) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode(nil)
+}
+
+// UserVerification ...
+// swagger:route POST /api/v1/user/verification UserVerification userVerification
+//
+// # Verifies if the selected user exists in the db
+//
+// Parameters:
+//   - +name: email
+//     in: query
+//     description: The email address of the current user
+//     type: string
+//     required: true
+//   - +name: date_of_birth
+//     in: query
+//     description: The dob of the current user
+//     type: date
+//     required: true
+//
+// Responses:
+// 200: Boolean
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func UserVerification(rw http.ResponseWriter, r *http.Request) {
+
+	draftUserValidationRequest := &model.VerifyUserRequest{}
+	err := json.NewDecoder(r.Body).Decode(draftUserValidationRequest)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	if len(draftUserValidationRequest.Email) <= 0 {
+		log.Printf("Unable to decode user validation. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	backendClientUsr := os.Getenv("CLIENT_USER")
+	if len(backendClientUsr) == 0 {
+		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
+		return
+	}
+	resp, err := db.IsUserValid(backendClientUsr, draftUserValidationRequest.Email, draftUserValidationRequest.Birthday) // the authority to log into backend as a certain user
+	if err != nil {
+		log.Printf("Unable to create new user. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
 }
