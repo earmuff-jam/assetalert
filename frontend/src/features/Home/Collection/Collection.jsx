@@ -1,14 +1,12 @@
-import { Box, Typography } from '@mui/material';
 import LearnMore from './LearnMore';
+import HeaderWithButton from '../../common/HeaderWithButton';
 
 const Collection = ({ title, items }) => {
   return (
-    <Box>
-        <Typography variant="h4" component="h2" gutterBottom>
-          {title}
-        </Typography>
-        <LearnMore items={items}/>
-    </Box>
+    <>
+      <HeaderWithButton title={title} />
+      <LearnMore items={items} />
+    </>
   );
 };
 
