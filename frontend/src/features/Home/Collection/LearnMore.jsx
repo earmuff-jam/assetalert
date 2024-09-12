@@ -2,7 +2,7 @@ import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 
 const LearnMore = ({ items = [] }) => {
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={1}>
       {items.map((item) => (
         <Grid item key={item.name} xs={12} sm={6} md={4}>
           <Card

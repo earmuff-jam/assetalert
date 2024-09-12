@@ -111,3 +111,21 @@ VALUES ('Dog food',
         (SELECT id FROM community.profiles p LIMIT 1),
         (SELECT id FROM community.profiles p LIMIT 1),
         ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+
+
+-- ADD FAVOURITE ITEMS --
+INSERT INTO community.favourite_items (category_id, created_by, updated_by, sharable_groups)
+VALUES (
+    (SELECT id FROM community.category c LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    ARRAY[(SELECT id FROM community.profiles p LIMIT 1)]
+);
+
+INSERT INTO community.favourite_items (maintenance_plan_id, created_by, updated_by, sharable_groups)
+VALUES (
+    (SELECT id FROM community.maintenance_plan mp LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    (SELECT id FROM community.profiles p LIMIT 1),
+    ARRAY[(SELECT id FROM community.profiles p LIMIT 1)]
+);

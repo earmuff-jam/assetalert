@@ -78,6 +78,42 @@ export function* fetchUpdateProfileImage(action) {
   }
 }
 
+export function* fetchFavItems(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const { limit } = action.payload;
+    const params = new URLSearchParams();
+    params.append('limit', limit);
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/fav?${params.toString()}`);
+    yield put(profileActions.getFavItemsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getFavItemsFailure(e));
+  }
+}
+
+export function* saveFavItem(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const draftPayload = { ...action.payload, created_by: USER_ID };
+    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/fav`, { ...draftPayload });
+    yield put(profileActions.saveFavItemSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.saveFavItemFailure(e));
+  }
+}
+
+export function* removeFavItem(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('itemID', action.payload);
+    const response = yield call(instance.delete, `${BASEURL}/${USER_ID}/fav?${params.toString()}`);
+    yield put(profileActions.removeFavItemSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.removeFavItemFailure(e));
+  }
+}
+
 /********************************
  * WATCHER FUNCTIONS BELOW HERE
  ********************************/
@@ -106,8 +142,23 @@ export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
 
+export function* watchFetchFavItems() {
+  yield takeEvery(`profile/getFavItems`, fetchFavItems);
+}
+
+export function* watchSaveFavItem() {
+  yield takeEvery(`profile/saveFavItem`, saveFavItem);
+}
+
+export function* watchRemoveFavItem() {
+  yield takeEvery(`profile/removeFavItem`, removeFavItem);
+}
+
 export default [
   watchFetchProfileList,
+  watchFetchFavItems,
+  watchSaveFavItem,
+  watchRemoveFavItem,
   watchFetchRecentActivities,
   watchDownloadRecentActivities,
   watchFetchExistingUserDetails,

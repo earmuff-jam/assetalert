@@ -210,7 +210,6 @@ func Test_UpdateProfileApi(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 
-	// verify cleanup occured
 	assert.Equal(t, "john", prevProfile.Username)
 
 	w = httptest.NewRecorder()
@@ -218,4 +217,130 @@ func Test_UpdateProfileApi(t *testing.T) {
 	res = w.Result()
 	assert.Equal(t, 400, res.StatusCode)
 	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_GetFavouriteItems(t *testing.T) {
+	db.PreloadAllTestVariables()
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/fav", prevUser.ID.String()), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
+	w := httptest.NewRecorder()
+	GetFavouriteItems(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var favItems []model.FavouriteItem
+	err = json.Unmarshal(data, &favItems)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.GreaterOrEqual(t, len(favItems), 1)
+}
+
+func Test_SaveFovouriteItems_Category(t *testing.T) {
+	db.PreloadAllTestVariables()
+
+	draftUserCredentials := model.UserCredentials{
+		Email:             "test@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftCategory := model.Category{
+		Name:           "Kitty litter box",
+		Description:    "Palette storage of kitty litter",
+		Color:          "#f7f7f7",
+		Status:         "general",
+		MaxItemsLimit:  120,
+		MinItemsLimit:  1,
+		CreatedBy:      prevUser.ID.String(),
+		UpdatedBy:      prevUser.ID.String(),
+		SharableGroups: []string{prevUser.ID.String()},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftCategory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/category", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	CreateCategory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedCategory model.Category
+	err = json.Unmarshal(data, &selectedCategory)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
+	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
+	assert.Equal(t, selectedCategory.StatusName, "general")
+	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
+	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
+
+	draftFavouriteItems := model.FavouriteItem{
+		CategoryID: selectedCategory.ID,
+		CreatedBy:  prevUser.ID.String(),
+		UpdatedBy:  prevUser.ID.String(),
+	}
+
+	requestBody, err = json.Marshal(draftFavouriteItems)
+	if err != nil {
+		t.Errorf("failed to marshall request body. error: %+v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/v1/profile/%s/fav", prevUser.ID.String()), bytes.NewBuffer(requestBody))
+	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
+	w = httptest.NewRecorder()
+	SaveFavItem(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	var favItems []model.FavouriteItem
+	err = json.Unmarshal(data, &favItems)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.GreaterOrEqual(t, len(favItems), 1)
+
+	// cleanup
+	db.RemoveCategory(config.CTO_USER, selectedCategory.ID)
+
 }

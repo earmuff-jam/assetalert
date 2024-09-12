@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/db"
@@ -78,6 +79,169 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetFavouriteItems ...
+// swagger:route GET /api/v1/profile/{id}/fav GetFavouriteItems getFavouriteItems
+//
+// # Retrieves the items marked as favourite by the selected user.
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: limit
+//     in: query
+//     description: The limit of items to return. If not passed in defaults to 1000
+//     required: false
+//     type: integer
+//     format: int32
+//
+// Responses:
+// 200: []FavouriteItem
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetFavouriteItems(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+	limit := r.URL.Query().Get("limit")
+
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil {
+		limitInt = 1000
+	}
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve favourite items with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.FetchFavouriteItems(user, userID, limitInt)
+	if err != nil {
+		log.Printf("Unable to retrieve favourite items. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// SaveFavItem ...
+// swagger:route POST /api/v1/profile/{id}/fav SaveFavItem saveFavItem
+//
+// # Creates a new favourite item for the selected user
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: FavouriteItem
+//     in: body
+//     description: The object that is marked favourite by the user
+//     type: FavouriteItem
+//     required: true
+//
+// Responses:
+// 200: []FavouriteItem
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func SaveFavItem(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to save favourite item with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	var favItem model.FavouriteItem
+	if err := json.NewDecoder(r.Body).Decode(&favItem); err != nil {
+		log.Printf("Error decoding data. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := db.SaveFavouriteItem(user, userID, favItem)
+	if err != nil {
+		log.Printf("Unable to save favourite item. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
+// RemoveFavItem ...
+// swagger:route DELETE /api/v1/profile/{id}/fav RemoveFavItem removeFavItem
+//
+// # Deletes the item that is marked as favourite by the user
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//   - +name: itemID
+//     in: query
+//     description: The itemID to remove from the db
+//     required: true
+//     type: string
+//
+// Responses:
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func RemoveFavItem(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+	itemID := r.URL.Query().Get("itemID")
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to delete favourite item with empty user id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	if len(itemID) <= 0 {
+		log.Printf("Unable to delete favourite item with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.RemoveFavItem(user, userID, itemID)
+	if err != nil {
+		log.Printf("Unable to remove favourite item. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // GetUsername ...
 // swagger:route GET /api/v1/profile/{id} GetUsername getUsername
 //
@@ -109,7 +273,7 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 
 	resp, err := db.FetchUserProfile(user, userID)
 	if err != nil {
-		log.Printf("Unable to retrieve profile details. error: +%v", err)
+		log.Printf("Unable to retrieve user profile. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(err)
 		return
@@ -151,7 +315,7 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	userID := vars["id"]
 
 	if len(userID) <= 0 {
-		log.Printf("Unable to retrieve profile with empty id")
+		log.Printf("Unable to update profile with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
@@ -203,7 +367,7 @@ func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
 	if len(userID) <= 0 {
-		log.Printf("Unable to retrieve profile with empty id")
+		log.Printf("Unable to update profile avatar with empty id")
 		rw.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(rw).Encode(nil)
 		return
