@@ -14,7 +14,8 @@ export function* getPlans() {
     params.append('id', userID);
     params.append('limit', DEFAULT_LIMIT);
     const response = yield call(instance.get, `${BASEURL}/maintenance-plans?${params.toString()}`);
-    yield put(maintenancePlanActions.getPlansSuccess(response.data));
+    const data = Array.isArray(response.data) ? response.data : [];
+    yield put(maintenancePlanActions.getPlansSuccess(data));
   } catch (e) {
     yield put(maintenancePlanActions.getPlansFailure(e));
   }

@@ -2,7 +2,10 @@
 SET SEARCH_PATH TO community, auth;
 
 -- AUTHENTICATION --
-INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('test@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');
+-- due to the ability to share categories or plan between collaborators, we have test cases for different users as well. --
+-- new test users are automatically added at the end of the script so that they can test sharable groups and containers --
+-- two users are admin@gmail.com or user@gmail.com --
+INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('admin@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');
 
 -- UPDATE PROFILE TABLE WITH USER DETAILS --
 UPDATE community.profiles SET 
@@ -10,7 +13,7 @@ username = 'john',
 full_name = 'John Doe',
 phone_number = '1234567890',
 about_me = 'I like to climb trees and hike with my friends'
-WHERE email_address = 'test@gmail.com';
+WHERE email_address = 'admin@gmail.com';
 
 -- ADD STATUS SQL TEST DATA --
 INSERT INTO community.statuses(name, description, color, created_by, updated_by, sharable_groups) 
@@ -129,3 +132,7 @@ VALUES (
     (SELECT id FROM community.profiles p LIMIT 1),
     ARRAY[(SELECT id FROM community.profiles p LIMIT 1)]
 );
+
+
+-- AUTHENTICATION FOR REGULAR USER --
+INSERT INTO auth.users(email, role, encrypted_password, birthdate) values ('user@gmail.com', 'TESTER', '$2a$08$DtBpJRoDduzqR/ERz/JvFe2toYO9UhifP/.kmxdeamz0VmWr7kQuW', '2010-01-01');

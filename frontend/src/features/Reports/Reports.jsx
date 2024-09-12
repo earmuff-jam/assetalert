@@ -6,7 +6,7 @@ import { TrendingUpRounded } from '@mui/icons-material';
 import { capitalizeFirstLetter } from '../common/utils';
 import ItemDetails from './ItemDetails';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { inventoryActions } from '../InventoryList/inventorySlice';
 import { maintenancePlanActions } from '../Maintenance/maintenanceSlice';
 import DataTable from '../common/DataTable/DataTable';
@@ -14,25 +14,30 @@ import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
 
 export default function Reports() {
   const dispatch = useDispatch();
-  const { inventories, loading } = useSelector((state) => state.inventory);
-  const { maintenancePlan: maintenancePlanList, loading: maintenancePlanListLoading } = useSelector(
+  const { inventories = [], loading } = useSelector((state) => state.inventory);
+  const { maintenancePlan: maintenancePlanList = [], loading: maintenancePlanListLoading } = useSelector(
     (state) => state.maintenance
   );
 
-  const selectedAsset = inventories[0];
-  const selectedMaintenancePlan = maintenancePlanList[0];
+  const [selectedAsset, setSelectedAsset] = useState([]);
+  const [selectedMaintenancePlan, setSelectedMaintenancePlan] = useState([]);
 
   useEffect(() => {
-    if (!loading && inventories.length === 0) {
-      dispatch(inventoryActions.getAllInventoriesForUser());
+    if (!loading && inventories.length > 0) {
+      setSelectedAsset(inventories[0] || {});
     }
   }, [loading, inventories.length]);
 
   useEffect(() => {
-    if (!maintenancePlanListLoading && maintenancePlanList.length === 0) {
-      dispatch(maintenancePlanActions.getPlans());
+    if (!maintenancePlanListLoading && maintenancePlanList.length > 0) {
+      setSelectedMaintenancePlan(maintenancePlanList[0]);
     }
   }, [maintenancePlanListLoading, maintenancePlanList.length]);
+
+  useEffect(() => {
+    dispatch(inventoryActions.getAllInventoriesForUser());
+    dispatch(maintenancePlanActions.getPlans());
+  }, []);
 
   return (
     <>
@@ -57,7 +62,10 @@ export default function Reports() {
           <ReportCardWrapper title="Recently Added Asset">
             <ItemDetails
               loading={loading}
-              avatarValue={selectedAsset && capitalizeFirstLetter(selectedAsset?.updater_name?.charAt(0))}
+              avatarValue={
+                Object.keys(selectedMaintenancePlan) > 0 &&
+                capitalizeFirstLetter(selectedAsset?.updater_name?.charAt(0))
+              }
               label={selectedAsset?.name || ''}
               caption={selectedAsset?.description || ''}
             />
@@ -66,7 +74,8 @@ export default function Reports() {
             <ItemDetails
               loading={loading}
               avatarValue={
-                selectedMaintenancePlan && capitalizeFirstLetter(selectedMaintenancePlan?.updator?.charAt(0))
+                Object.keys(selectedMaintenancePlan) > 0 &&
+                capitalizeFirstLetter(selectedMaintenancePlan?.updator?.charAt(0))
               }
               label={selectedMaintenancePlan?.name || ''}
               caption={selectedMaintenancePlan?.description || ''}

@@ -20,7 +20,7 @@ func Test_GetAllMaintenancePlans(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -67,7 +67,7 @@ func Test_GetAllMaintenancePlans_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -91,7 +91,7 @@ func Test_GetAllMaintenancePlans_InvalidDBUser(t *testing.T) {
 func Test_GetMaintenancePlan(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -158,7 +158,7 @@ func Test_GetMaintenancePlan_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -183,7 +183,7 @@ func Test_CreateMaintenancePlan(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -273,7 +273,7 @@ func Test_UpdateMaintenancePlan(t *testing.T) {
 
 	// profile are automatically derieved from the auth table
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -410,7 +410,7 @@ func Test_RemoveMaintenancePlan_InvalidDBUser(t *testing.T) {
 func Test_GetAllMaintenancePlanItems(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

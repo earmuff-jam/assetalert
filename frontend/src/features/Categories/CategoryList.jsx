@@ -8,7 +8,7 @@ import Category from './Category';
 import { useSelector } from 'react-redux';
 
 const CategoryList = ({ displayConcise = false }) => {
-  const { categories, loading } = useSelector((state) => state.categories);
+  const { categories = [], loading } = useSelector((state) => state.categories);
 
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedCategoryID, setSelectedCategoryID] = useState('');
@@ -26,7 +26,7 @@ const CategoryList = ({ displayConcise = false }) => {
           title="Categories"
           secondaryTitle={
             displayConcise
-              ? `Viewing recent 4 out of ${categories.length} categories`
+              ? `Viewing recent 4 out of ${categories?.length} categories`
               : 'Organize items into categories for easy access.'
           }
         />
@@ -52,7 +52,7 @@ const CategoryList = ({ displayConcise = false }) => {
         </Stack>
       )}
       <Category
-        categories={displayConcise ? categories.slice(0, 4) : categories}
+        categories={displayConcise ? categories?.slice(0, 4) : categories}
         loading={loading}
         setSelectedCategoryID={setSelectedCategoryID}
         setDisplayModal={setDisplayModal}

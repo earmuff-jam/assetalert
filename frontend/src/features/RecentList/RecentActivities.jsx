@@ -12,15 +12,15 @@ const RecentActivities = () => {
   const { recentActivities = [], loading } = useSelector((state) => state.profile);
 
   useEffect(() => {
-    if (!loading && recentActivities.length === 0) {
+    if (!loading && recentActivities?.length === 0) {
       dispatch(profileActions.getRecentActivities());
     }
-  }, [loading, recentActivities.length]);
+  }, [loading, recentActivities?.length]);
 
   if (loading) {
     return <Skeleton height="20rem" />;
   }
-  if (recentActivities.length <= 0) {
+  if (recentActivities == null || recentActivities?.length <= 0) {
     return <EmptyComponent subtitle="Add assets to view details about them" />;
   }
 

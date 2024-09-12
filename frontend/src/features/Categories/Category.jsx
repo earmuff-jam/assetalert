@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(relativeTime);
 
-const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal }) => {
+const Category = ({ categories = [], loading, setSelectedCategoryID, setDisplayModal }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
   if (loading) {
     return <Skeleton height="10rem" />;
   }
-  if (categories.length <= 0) {
+  if (categories?.length <= 0 || categories == null) {
     return <EmptyComponent />;
   }
 
@@ -56,7 +56,7 @@ const Category = ({ categories, loading, setSelectedCategoryID, setDisplayModal 
     <>
       <Stack>
         <Stack spacing={{ xs: 1 }}>
-          {categories.map((item, index) => (
+          {categories?.map((item, index) => (
             <Stack key={index} flexGrow={1}>
               <Card
                 sx={{

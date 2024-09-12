@@ -46,7 +46,7 @@ const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMainte
   if (loading) {
     return <Skeleton height="10rem" />;
   }
-  if (maintenancePlan.length <= 0) return <EmptyComponent />;
+  if (maintenancePlan?.length <= 0 || maintenancePlan == null) return <EmptyComponent />;
 
   return (
     <>

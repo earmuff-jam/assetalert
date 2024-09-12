@@ -36,7 +36,7 @@ func IngestSvc() {
 	}
 	defer db.Close()
 
-	emailAddress := "test@gmail.com"
+	emailAddress := "admin@gmail.com"
 	// using the same user as test instance
 	creatorID, err := GenerateFakeUser(currentUser, emailAddress)
 	if err != nil {

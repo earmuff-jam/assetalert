@@ -37,7 +37,7 @@ func Test_GetAllUserProfiles(t *testing.T) {
 	}
 
 	assert.Equal(t, 200, res.StatusCode)
-	assert.GreaterOrEqual(t, 1, len(currentUsers))
+	assert.GreaterOrEqual(t, len(currentUsers), 1)
 	assert.Equal(t, "john", currentUsers[0].Username)
 }
 
@@ -57,7 +57,7 @@ func Test_GetProfileApi(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -93,7 +93,7 @@ func Test_GetUsernameApi(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -137,7 +137,7 @@ func Test_UpdateProfileApi(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -181,10 +181,11 @@ func Test_UpdateProfileApi(t *testing.T) {
 
 	// cleanup
 	cleanUpProfile := model.Profile{
-		Username:    "john",
-		FullName:    "John Doe",
-		PhoneNumber: "1234567890",
-		AboutMe:     "I like to climb trees and hike with my friends",
+		Username:     "john",
+		FullName:     "John Doe",
+		PhoneNumber:  "1234567890",
+		AboutMe:      "I like to climb trees and hike with my friends",
+		EmailAddress: "admin@gmail.com",
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -223,7 +224,7 @@ func Test_GetFavouriteItems(t *testing.T) {
 	db.PreloadAllTestVariables()
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -258,7 +259,7 @@ func Test_SaveFovouriteItems_Category(t *testing.T) {
 	db.PreloadAllTestVariables()
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

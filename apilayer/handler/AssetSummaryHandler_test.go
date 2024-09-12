@@ -18,7 +18,7 @@ func Test_GetAssetsAndSummary(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -66,7 +66,7 @@ func Test_GetAssetsAndSummary_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
