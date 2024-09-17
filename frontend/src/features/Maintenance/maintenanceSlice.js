@@ -95,6 +95,8 @@ const maintenancePlanSlice = createSlice({
         return v.id !== draftMaintenancePlan.id;
       });
       state.maintenancePlan = [draftMaintenancePlan, ...filteredMaintenancePlan];
+      // TODO: remove this after removing selected maintenance workflow - https://github.com/earmuff-jam/mashed/issues/215
+      state.selectedMaintenancePlan = draftMaintenancePlan;
       state.loading = false;
       state.error = '';
     },

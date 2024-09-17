@@ -16,7 +16,7 @@ import (
 func Test_GetStatusList(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

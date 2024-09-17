@@ -19,7 +19,7 @@ import (
 func Test_GetRecentActivities(t *testing.T) {
 	db.PreloadAllTestVariables()
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -52,7 +52,7 @@ func Test_GetRecentActivities(t *testing.T) {
 func Test_GetRecentActivities_NoLimit(t *testing.T) {
 	db.PreloadAllTestVariables()
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -74,7 +74,7 @@ func Test_GetRecentActivities_NoLimit(t *testing.T) {
 func Test_GetRecentActivities_UntilDate(t *testing.T) {
 	db.PreloadAllTestVariables()
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

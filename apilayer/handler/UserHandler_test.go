@@ -20,7 +20,7 @@ func Test_GetSignInApi_Success(t *testing.T) {
 
 	// profiles are derieved from sign in
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

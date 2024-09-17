@@ -20,7 +20,7 @@ func Test_GetAllCategories(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -67,7 +67,7 @@ func Test_GetAllCategories_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -92,7 +92,7 @@ func Test_GetCategory(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -161,7 +161,7 @@ func Test_GetCategory_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -186,7 +186,7 @@ func Test_GetAllCategoryItems(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -254,7 +254,7 @@ func Test_GetAllCategoryItems_InvalidDBUser(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -279,7 +279,7 @@ func Test_CreateCategory(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -367,7 +367,7 @@ func Test_AddItemsInCategory(t *testing.T) {
 
 	// retrieve the selected profile
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -513,7 +513,7 @@ func Test_UpdateCategory(t *testing.T) {
 
 	// profile are automatically derieved from the auth table
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

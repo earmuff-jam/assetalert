@@ -298,7 +298,8 @@ func UpdateCategory(user string, userID string, draftCategory *model.Category) (
 	min_items_limit = $6,
 	max_items_limit = $7,
     updated_by = $8,
-    updated_at = $9
+    updated_at = $9,
+	sharable_groups = $10
     WHERE id = $1
     RETURNING id, name, description, color, status, min_items_limit, max_items_limit, created_at, created_by, updated_at, updated_by, sharable_groups;
 `
@@ -326,6 +327,7 @@ func UpdateCategory(user string, userID string, draftCategory *model.Category) (
 		draftCategory.MaxItemsLimit,
 		parsedUpdatorID,
 		time.Now(),
+		pq.Array(draftCategory.SharableGroups),
 	)
 
 	err = row.Scan(

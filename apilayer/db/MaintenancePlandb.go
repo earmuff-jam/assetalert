@@ -12,7 +12,7 @@ import (
 )
 
 // RetrieveAllMaintenancePlans ...
-func RetrieveAllMaintenancePlans(user string, userID string, limit int) ([]model.MaintenancePlan, error) {
+func RetrieveAllMaintenancePlans(user string, userID string, limit int) (*[]model.MaintenancePlan, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) ([]model
 		return nil, err
 	}
 
-	return data, nil
+	return &data, nil
 }
 
 // RetrieveMaintenancePlan ...
@@ -325,7 +325,8 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 	plan_type = $8,
 	location = POINT($9, $10),
     updated_by = $11,
-    updated_at = $12
+    updated_at = $12,
+	sharable_groups = $13
     WHERE id = $1
     RETURNING id, name, description, color, maintenance_status, min_items_limit, max_items_limit, plan_type, created_at, created_by, updated_at, updated_by, sharable_groups;
 `
@@ -356,6 +357,7 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 		draftMaintenancePlan.Location.Lat,
 		parsedUpdatorID,
 		time.Now(),
+		pq.Array(draftMaintenancePlan.SharableGroups),
 	)
 
 	err = row.Scan(

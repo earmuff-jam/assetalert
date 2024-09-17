@@ -81,6 +81,8 @@ const categorySlice = createSlice({
         return v.id !== draftCategory.id;
       });
       state.categories = [draftCategory, ...filteredCategories];
+      // TODO: remove this after removing selected category workflow - https://github.com/earmuff-jam/mashed/issues/215
+      state.selectedCategory = draftCategory;
       state.loading = false;
       state.error = '';
     },

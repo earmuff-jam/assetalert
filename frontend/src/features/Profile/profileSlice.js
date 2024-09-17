@@ -16,7 +16,6 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     getProfileList: (state) => {
-      state.loading = true;
       state.error = '';
       state.profiles = [];
     },

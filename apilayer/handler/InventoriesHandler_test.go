@@ -21,7 +21,7 @@ func Test_GetAllInventories(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -109,7 +109,7 @@ func Test_GetInventoryByID(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -205,7 +205,7 @@ func Test_AddInventoryInBulk(t *testing.T) {
 
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -285,7 +285,7 @@ func Test_AddInventoryInBulk_NoUserID(t *testing.T) {
 func Test_AddNewInventory(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -399,7 +399,7 @@ func Test_AddNewInventory_InvalidDBUser(t *testing.T) {
 func Test_AddNewInventory_Return_Notes(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -466,7 +466,7 @@ func Test_AddNewInventory_Return_Notes(t *testing.T) {
 func Test_UpdateSelectedInventory(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -607,7 +607,7 @@ func Test_UpdateSelectedInventory_InvalidDBUser(t *testing.T) {
 func Test_UpdateAssetColumn_Quantity(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -706,7 +706,7 @@ func Test_UpdateAssetColumn_Quantity(t *testing.T) {
 func Test_UpdateAssetColumn_Cost(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -805,7 +805,7 @@ func Test_UpdateAssetColumn_Cost(t *testing.T) {
 func Test_UpdateAssetColumn_InvalidColumn(t *testing.T) {
 
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}
@@ -921,7 +921,7 @@ func Test_UpdateAssetColumn_NoUserID(t *testing.T) {
 func Test_RemoveSelectedInventory(t *testing.T) {
 	// profile are automatically derieved from the auth table. due to this, we attempt to create a new user
 	draftUserCredentials := model.UserCredentials{
-		Email:             "test@gmail.com",
+		Email:             "admin@gmail.com",
 		Role:              "TESTER",
 		EncryptedPassword: "1231231",
 	}

@@ -40,7 +40,7 @@
 3. Since data cannot be modified here, no test data is inserted. A fresh container will have no users. Running flag `-u` will `REMOVE ALL DATA`. `NEVER RUN THIS IN PRODUCTION ENV`
 
 - Use `mainDeploy.sh` to run production instance.
-  - This is production isntance. Please be careful. Data is not scrubbed here.
+  - This is production instance. Please be careful. Data is not scrubbed here.
   - ./mainDeploy.sh -e
   - ./mainDeploy.sh -p
   - ./mainDeploy.sh -m
