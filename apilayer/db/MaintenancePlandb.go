@@ -501,3 +501,40 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 
 	return data, nil
 }
+
+// UpdateMaintenancePlanImage ...
+func UpdateMaintenancePlanImage(user string, userID string, maintenanceID string, imageURL string) (bool, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return false, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return false, err
+	}
+	sqlStr := `UPDATE community.maintenance_plan mp
+		SET associated_image_url = $1,
+			updated_at = $4,
+			updated_by = $2
+			WHERE $2::UUID = ANY(mp.sharable_groups) 
+			AND mp.id = $3
+		RETURNING mp.id;`
+
+	var updatedMaintenancePlanID string
+	err = tx.QueryRow(sqlStr, imageURL, userID, maintenanceID, time.Now()).Scan(&updatedMaintenancePlanID)
+	if err != nil {
+		log.Printf("unable to update maintenance plan id. error: %+v", err)
+		return false, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to commit. error: %+v", err)
+		return false, err
+	}
+
+	return true, nil
+}

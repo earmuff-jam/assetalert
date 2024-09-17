@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Dialog, DialogTitle, IconButton, Slide, Stack, TextField } from '@mui/material';
-import {
-  CheckRounded,
-  CloseRounded,
-  EditRounded,
-  GridViewRounded,
-  ViewListRounded,
-} from '@mui/icons-material';
+import { CheckRounded, CloseRounded, EditRounded, GridViewRounded, ViewListRounded } from '@mui/icons-material';
 import HeaderWithButton from '../common/HeaderWithButton';
 import SimpleModal from '../common/SimpleModal';
 import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
@@ -214,7 +208,12 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
         renderInput={(params) => <TextField variant="standard" {...params} label="Search ..." />}
       />
       {gridMode ? (
-        <GridComponent isLoading={loading} data={options} rowSelected={rowSelected} />
+        <GridComponent
+          isLoading={loading}
+          data={options}
+          rowSelected={rowSelected}
+          handleRowSelection={handleRowSelection}
+        />
       ) : (
         <TableComponent
           isLoading={loading}

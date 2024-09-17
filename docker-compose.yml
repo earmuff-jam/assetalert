@@ -13,6 +13,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./local_uploads:/app/uploads
   apilayer:
     build:
       context: ./apilayer
@@ -27,6 +28,7 @@ services:
       DATABASE_DOCKER_CONTAINER_IP_ADDRESS: backend
     volumes:
       - api_layer:/usr/src/
+      - ./local_uploads:/app/uploads
     depends_on:
       - backend
   frontend:

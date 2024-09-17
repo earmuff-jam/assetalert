@@ -1,8 +1,6 @@
-// Package Asset alert Api Layer
-//
 // # Documentation for the Asset alert api layer.
 //
-// Scehmes: http
+// Scehmes: https
 // BasePath: /
 // Version: 1.0.0
 //
@@ -121,9 +119,27 @@ func main() {
 
 	http.Handle("/", cors(router))
 
-	log.Println("Api is up and running ...")
-	http.ListenAndServe(":8087", nil)
+	// file server workflow
+	directoryPath := filepath.Join("..", "local_uploads")
+	_, err = os.Stat(directoryPath)
+	if os.IsNotExist(err) {
+		log.Printf("selected directory does not exist. error: %+v\n", err)
+		return
+	}
 
+	fileServer := http.FileServer(http.Dir(directoryPath))
+	router.Handle("/api/v1/filestat/", http.StripPrefix("/filestat/", fileServer))
+
+	// router.Handle("/filestat/list", CustomRequestHandler(handler.GetAllFiles)).Methods(http.MethodGet)
+	router.Handle("/api/v1/filestat/view/{id}/{filename}", CustomRequestHandler(handler.ServeFile)).Methods(http.MethodGet)
+	router.Handle("/api/v1/filestat/create/{id}/{type}/{itemID}", CustomRequestHandler(handler.CreateFile)).Methods(http.MethodPost)
+
+	log.Println("Api is up and running ...")
+	err = http.ListenAndServe(":8087", nil)
+	if err != nil {
+		log.Printf("failed to start the server. error: %+v", err)
+		return
+	}
 }
 
 // ServerHTTP is a wrapper function to derieve the user authentication.
