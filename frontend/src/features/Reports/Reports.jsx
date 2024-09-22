@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import HeaderWithButton from '../common/HeaderWithButton';
 import ReportCardWrapper from './ReportCardWrapper';
 import dayjs from 'dayjs';
-import { TrendingUpRounded } from '@mui/icons-material';
+import { FilterAltRounded, TrendingUpRounded } from '@mui/icons-material';
 import { capitalizeFirstLetter } from '../common/utils';
 import ItemDetails from './ItemDetails';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,8 @@ import { inventoryActions } from '../InventoryList/inventorySlice';
 import { maintenancePlanActions } from '../Maintenance/maintenanceSlice';
 import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
+import SimpleModal from '../common/SimpleModal';
+import FilterMenu from './FilterMenu';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -20,7 +22,11 @@ export default function Reports() {
   );
 
   const [selectedAsset, setSelectedAsset] = useState([]);
+  const [displayModal, setDisplayModal] = useState(false);
   const [selectedMaintenancePlan, setSelectedMaintenancePlan] = useState([]);
+
+  const handleFilter = () => setDisplayModal(true);
+  const closeFilter = () => setDisplayModal(false);
 
   useEffect(() => {
     if (!loading && inventories.length > 0) {
@@ -41,7 +47,13 @@ export default function Reports() {
 
   return (
     <>
-      <HeaderWithButton title="Reports Overview" />
+      <HeaderWithButton
+        title="Reports Overview"
+        secondaryTitle="Displaying results for the current selected timeframe."
+        primaryStartIcon={<FilterAltRounded />}
+        primaryButtonTextLabel={'Filter results'}
+        handleClickPrimaryButton={handleFilter}
+      />
       <Stack spacing="1rem">
         <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
           <ReportCardWrapper
@@ -89,6 +101,16 @@ export default function Reports() {
           subtitle={'Associate items into maintenance plan to begin.'}
         />
       </Stack>
+      {displayModal && (
+        <SimpleModal
+          title="Filter results"
+          subtitle="Select time range to filter the selected results for."
+          handleClose={closeFilter}
+          maxSize="sm"
+        >
+          <FilterMenu handleClose={closeFilter}/>
+        </SimpleModal>
+      )}
     </>
   );
 }

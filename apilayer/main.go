@@ -110,6 +110,9 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/notes", CustomRequestHandler(handler.UpdateNote)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/notes/{noteID}", CustomRequestHandler(handler.RemoveNote)).Methods(http.MethodDelete)
 
+	// reports
+	router.Handle("/api/v1/reports/{id}", CustomRequestHandler(handler.GetReports)).Methods(http.MethodGet)
+
 	cors := handlers.CORS(
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "Authorization2"}),
 		handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete}),
