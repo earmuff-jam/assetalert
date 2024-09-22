@@ -465,3 +465,40 @@ func AddAssetToCategory(user string, userID string, categoryID string, assetIDs 
 
 	return data, nil
 }
+
+// UpdateCategoryImage ...
+func UpdateCategoryImage(user string, userID string, categoryID string, imageURL string) (bool, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return false, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return false, err
+	}
+	sqlStr := `UPDATE community.category c
+		SET associated_image_url = $1,
+			updated_at = $4,
+			updated_by = $2
+			WHERE $2::UUID = ANY(c.sharable_groups) 
+			AND c.id = $3
+		RETURNING c.id;`
+
+	var updatedCategoryID string
+	err = tx.QueryRow(sqlStr, imageURL, userID, categoryID, time.Now()).Scan(&updatedCategoryID)
+	if err != nil {
+		log.Printf("unable to update category id. error: %+v", err)
+		return false, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to commit. error: %+v", err)
+		return false, err
+	}
+
+	return true, nil
+}

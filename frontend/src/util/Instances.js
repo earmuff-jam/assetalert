@@ -20,14 +20,14 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-
 // catch any unauthorized request
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (UNAUTHORIZED_INSTANCES.includes(error.response.status)) {
+    if (UNAUTHORIZED_INSTANCES.includes(error?.response?.status)) {
       localStorage.removeItem('userID');
       window.history.replaceState({}, '');
+      window.location = '/';
     }
   }
 );

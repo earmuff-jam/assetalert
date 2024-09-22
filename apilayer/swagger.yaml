@@ -424,6 +424,16 @@ definitions:
             category_status:
                 type: string
                 x-go-name: CategoryStatus
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator:
+                type: string
+                x-go-name: Creator
             id:
                 type: string
                 x-go-name: ID
@@ -436,6 +446,22 @@ definitions:
             maintenance_plan_status:
                 type: string
                 x-go-name: MaintenancePlanStatus
+            sharable_groups:
+                items:
+                    format: uuid
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updator:
+                type: string
+                x-go-name: Updator
         title: FavouriteItem ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
@@ -2303,6 +2329,39 @@ paths:
             tags:
                 - GetUsername
     /api/v1/profile/{id}/fav:
+        delete:
+            operationId: removeFavItem
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The itemID to remove from the db
+                  in: query
+                  name: itemID
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Deletes the item that is marked as favourite by the user
+            tags:
+                - RemoveFavItem
         get:
             operationId: getFavouriteItems
             parameters:
@@ -2311,6 +2370,11 @@ paths:
                   name: id
                   required: true
                   type: string
+                - description: The limit of items to return. If not passed in defaults to 1000
+                  format: int32
+                  in: query
+                  name: limit
+                  type: integer
             responses:
                 "200":
                     description: FavouriteItem
@@ -2333,6 +2397,44 @@ paths:
             summary: '# Retrieves the items marked as favourite by the selected user.'
             tags:
                 - GetFavouriteItems
+        post:
+            operationId: saveFavItem
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The object that is marked favourite by the user
+                  in: body
+                  name: FavouriteItem
+                  required: true
+                  schema:
+                    $ref: '#/definitions/FavouriteItem'
+                    description: The object that is marked favourite by the user
+                    type: object
+            responses:
+                "200":
+                    description: FavouriteItem
+                    schema:
+                        items:
+                            $ref: '#/definitions/FavouriteItem'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Creates a new favourite item for the selected user
+            tags:
+                - SaveFavItem
     /api/v1/profile/{id}/inventories:
         get:
             operationId: getAllInventories

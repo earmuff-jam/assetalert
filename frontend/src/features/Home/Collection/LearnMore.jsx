@@ -15,7 +15,7 @@ const LearnMore = ({ items = [] }) => {
             <CardMedia
               component="img"
               sx={{ height: '20vh' }} // 16:9 aspect ratio
-              image={item.imageSrc}
+              image={item.imageSrc || '/blank_canvas.png'}
               alt={item.imageAlt}
             />
             <CardContent>

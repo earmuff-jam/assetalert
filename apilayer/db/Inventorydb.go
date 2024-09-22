@@ -62,12 +62,14 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inve
 	inv.min_weight,
 	inv.max_height,
 	inv.min_height,
+	inv.associated_image_url,
     inv.created_by,
     COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
     inv.created_at,
     inv.updated_by,
     COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
-    inv.updated_at
+    inv.updated_at,
+	inv.sharable_groups
 FROM
     community.inventory inv
 LEFT JOIN community.profiles cp ON inv.created_by = cp.id
@@ -93,6 +95,7 @@ ORDER BY
 		var minWeight sql.NullString
 		var maxHeight sql.NullString
 		var minHeight sql.NullString
+		var associatedImageURL sql.NullString
 
 		if err := rows.Scan(
 			&inventory.ID,
@@ -112,12 +115,14 @@ ORDER BY
 			&minWeight,
 			&maxHeight,
 			&minHeight,
+			&associatedImageURL,
 			&inventory.CreatedBy,
 			&inventory.CreatorName,
 			&inventory.CreatedAt,
 			&inventory.UpdatedBy,
 			&inventory.UpdaterName,
 			&inventory.UpdatedAt,
+			pq.Array(&inventory.SharableGroups),
 		); err != nil {
 			return nil, err
 		}
@@ -125,17 +130,25 @@ ORDER BY
 		if returnLocation.Valid {
 			inventory.ReturnLocation = returnLocation.String
 		}
+
 		if maxWeight.Valid {
 			inventory.MaxWeight = maxWeight.String
 		}
+
 		if minWeight.Valid {
 			inventory.MinWeight = minWeight.String
 		}
+
 		if maxHeight.Valid {
 			inventory.MaxHeight = maxHeight.String
 		}
+
 		if minHeight.Valid {
 			inventory.MinHeight = minHeight.String
+		}
+
+		if associatedImageURL.Valid {
+			inventory.AssociatedImageURL = associatedImageURL.String
 		}
 
 		data = append(data, inventory)
@@ -223,6 +236,43 @@ func UpdateAsset(user string, userID string, draftUpdateAssetCols model.UpdateAs
 	}
 
 	return data, nil
+}
+
+// UpdateAssetImage ...
+func UpdateAssetImage(user string, userID string, assetID string, assetImageURL string) (bool, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return false, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return false, err
+	}
+
+	sqlStr := `UPDATE community.inventory inv
+		SET associated_image_url = $1,
+			updated_at = $4,
+			updated_by = $2
+			WHERE $2::UUID = ANY(inv.sharable_groups) 
+			AND inv.id = $3
+		RETURNING inv.id;`
+
+	var updatedInvID string
+	err = tx.QueryRow(sqlStr, assetImageURL, userID, assetID, time.Now()).Scan(&updatedInvID)
+	if err != nil {
+		log.Printf("unable to update asset id. error: %+v", err)
+		return false, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to commit. error: %+v", err)
+		return false, err
+	}
+	return true, nil
 }
 
 func isValidColumnName(columnName string) bool {

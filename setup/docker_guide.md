@@ -56,4 +56,5 @@ psql -h docker_container_ip -p 5432 -U postgres -d <db_name>
 
 ## Troubleshooting with docker
 
-1. `enter a selected container` - `docker exec -it <service_name> bash`
+1. Enter a selected container with cmd - `docker exec -it <service_name> bash`
+2. Pry inside a running container with shell - `docker exec -it <container_id_or_name> /bin/bash`

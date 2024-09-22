@@ -126,15 +126,40 @@ const inventorySlice = createSlice({
       state.loading = true;
       state.error = '';
     },
-    getStorageLocationsSuccess: (state, action) => {
+    getStorageLocationsSuccess: (state) => {
       state.loading = false;
       state.error = '';
-      state.storageLocations = action.payload;
     },
     getStorageLocationsFailure: (state) => {
       state.loading = false;
       state.error = '';
-      state.storageLocations = [];
+    },
+    retrieveSelectedImage: (state) => {
+      state.error = '';
+    },
+    retrieveSelectedImageSuccess: (state, action) => {
+      const updatedItem = { ...action.payload };
+      const assetID = updatedItem.assetID;
+      state.inventories = state.inventories.map((item) =>
+        item.id === assetID ? { ...item, selectedImage: updatedItem.imageData } : item
+      );
+      state.loading = false;
+      state.error = '';
+    },
+    retrieveSelectedImageFailure: (state) => {
+      state.error = '';
+    },
+    createInventoryImage: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    createInventoryImageSuccess: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    createInventoryImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
     },
   },
 });

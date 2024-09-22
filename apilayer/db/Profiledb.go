@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"mime/multipart"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
@@ -422,5 +423,40 @@ func RemoveFavItem(user string, userID string, itemID string) (string, error) {
 	}
 
 	return itemID, nil
+}
 
+// UpdateProfileImage ...
+func UpdateProfileImage(user string, userID string, imageURL string) (bool, error) {
+
+	db, err := SetupDB(user)
+	if err != nil {
+		return false, err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		return false, err
+	}
+	sqlStr := `UPDATE community.profiles p
+		SET associated_image_url = $1,
+			updated_at = $4,
+			updated_by = $2
+			WHERE $2::UUID = ANY(p.sharable_groups) 
+		RETURNING p.id;`
+
+	var updatedProfileID string
+	err = tx.QueryRow(sqlStr, imageURL, userID, time.Now()).Scan(&updatedProfileID)
+	if err != nil {
+		log.Printf("unable to update profile id. error: %+v", err)
+		return false, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("unable to commit. error: %+v", err)
+		return false, err
+	}
+
+	return true, nil
 }

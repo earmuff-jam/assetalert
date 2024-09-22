@@ -25,6 +25,12 @@ loadEnv() {
     ./setup/_loadEnvVariables.sh
 }
 
+adjustPermissions() {
+    # set permissions for new folder
+    echo "resetting permissions on local_uploads folder."
+    chmod +x setup/_adjust_perm_local_uploads.sh
+    ./setup/_adjust_perm_local_uploads.sh
+}
 
 loadDb() {
     echo "loadDb flag provided. building psql docker image and running migrations."
@@ -41,6 +47,9 @@ loadDevEnv() {
 
     sleep +2
     loadMigration
+
+    sleep +2
+    adjustPermissions
 
     sleep +2
     loadData
@@ -60,6 +69,9 @@ loadUnitTest() {
 
     sleep +2
     loadMigration
+
+    sleep +2
+    adjustPermissions
 
     sleep +2
     loadData

@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, takeEvery } from 'redux-saga/effects';
 import { REACT_APP_LOCALHOST_URL } from '../../util/Common';
 import { inventoryActions } from './inventorySlice';
 import instance from '../../util/Instances';
@@ -62,7 +62,9 @@ export function* fetchUpdateExistingInventoryDetails(action) {
 export function* fetchUpdateAssetCol(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories/${action.payload.assetID}`, { ...action.payload });
+    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories/${action.payload.assetID}`, {
+      ...action.payload,
+    });
     yield put(inventoryActions.updateAssetColSuccess(response.data || []));
   } catch (e) {
     yield put(inventoryActions.updateAssetColFailure(e));
@@ -85,6 +87,29 @@ export function* fetchStorageLocations() {
     yield put(inventoryActions.getStorageLocationsSuccess(response.data || []));
   } catch (e) {
     yield put(inventoryActions.getStorageLocationsFailure(e));
+  }
+}
+
+export function* retrieveSelectedImage(action) {
+  try {
+    const { assetID, filename } = action.payload;
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `/filestat/view/${USER_ID}/${filename}`, { responseType: 'blob' });
+    const imageUrl = URL.createObjectURL(response.data);
+    yield put(inventoryActions.retrieveSelectedImageSuccess({ assetID: assetID, imageData: imageUrl || [] }));
+  } catch (e) {
+    yield put(inventoryActions.retrieveSelectedImageFailure(e));
+  }
+}
+
+export function* createInventoryImage(action) {
+  try {
+    const { assetID, imageData } = action.payload;
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.post, `/filestat/create/${USER_ID}/A/${assetID}`, imageData);
+    yield put(inventoryActions.createInventoryImageSuccess(response.data || []));
+  } catch (e) {
+    yield put(inventoryActions.createInventoryImageFailure(e));
   }
 }
 
@@ -124,10 +149,20 @@ export function* watchUpdateAssetCol() {
   yield takeLatest(`inventory/updateAssetCol`, fetchUpdateAssetCol);
 }
 
+export function* watchRetrieveSelectedImage() {
+  yield takeEvery(`inventory/retrieveSelectedImage`, retrieveSelectedImage);
+}
+
+export function* watchCreateInventoryImage() {
+  yield takeLatest(`inventory/createInventoryImage`, createInventoryImage);
+}
+
 export default [
   watchFetchInvByID,
   watchUpdateAssetCol,
   watchFetchAddNewInventory,
+  watchRetrieveSelectedImage,
+  watchCreateInventoryImage,
   watchFetchAddBulkInventory,
   watchFetchRemoveInventoryRows,
   watchFetchAllStorageLocations,
