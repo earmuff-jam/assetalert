@@ -119,17 +119,6 @@ func main() {
 
 	http.Handle("/", cors(router))
 
-	// file server workflow
-	directoryPath := filepath.Join("..", "local_uploads")
-	_, err = os.Stat(directoryPath)
-	if os.IsNotExist(err) {
-		log.Printf("selected directory does not exist. error: %+v\n", err)
-		return
-	}
-
-	fileServer := http.FileServer(http.Dir(directoryPath))
-	router.Handle("/api/v1/filestat/", http.StripPrefix("/filestat/", fileServer))
-
 	// router.Handle("/filestat/list", CustomRequestHandler(handler.GetAllFiles)).Methods(http.MethodGet)
 	router.Handle("/api/v1/filestat/view/{id}/{filename}", CustomRequestHandler(handler.ServeFile)).Methods(http.MethodGet)
 	router.Handle("/api/v1/filestat/create/{id}/{type}/{itemID}", CustomRequestHandler(handler.CreateFile)).Methods(http.MethodPost)

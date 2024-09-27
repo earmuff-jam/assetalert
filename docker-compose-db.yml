@@ -13,6 +13,5 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./local_uploads:/app/uploads # doing this, we are sharing the volume between container and local dev instance
 volumes:
   pg_data:

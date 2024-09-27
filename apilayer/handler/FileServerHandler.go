@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
-	"github.com/mohit2530/communityCare/service"
 )
 
 // GetAllFiles ...
@@ -104,18 +103,9 @@ func ServeFile(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	filePath := filepath.Join("..", "local_uploads", userID, filename)
-	log.Printf("Serving file from path: %s", filePath)
-
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		rw.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(rw).Encode(nil)
-		return
-	}
-
 	// Serve the file
 	rw.Header().Set("Content-Type", "image/jpeg")
-	http.ServeFile(rw, r, filePath)
+	http.ServeFile(rw, r, "")
 }
 
 // CreateFile ...
@@ -199,7 +189,7 @@ func CreateFile(rw http.ResponseWriter, r *http.Request, user string) {
 	}
 	defer file.Close()
 
-	fileID, err := service.UploadAndAssociateFile(file, runeElement, userID, itemID, user)
+	// fileID, err := service.UploadAndAssociateFile(file, runeElement, userID, itemID, user)
 	if err != nil {
 		log.Printf("unable to upload and associate file. error: %+v", err)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -208,7 +198,7 @@ func CreateFile(rw http.ResponseWriter, r *http.Request, user string) {
 	}
 
 	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode(fileID)
+	json.NewEncoder(rw).Encode("")
 }
 
 // validItemType ...

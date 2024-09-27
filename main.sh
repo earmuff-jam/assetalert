@@ -49,9 +49,6 @@ loadDevEnv() {
     loadMigration
 
     sleep +2
-    adjustPermissions
-
-    sleep +2
     loadData
     echo "adding generated test data for development purpose only..."
     cd apilayer/dataLake && go run main.go
@@ -69,9 +66,6 @@ loadUnitTest() {
 
     sleep +2
     loadMigration
-
-    sleep +2
-    adjustPermissions
 
     sleep +2
     loadData
