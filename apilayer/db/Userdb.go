@@ -35,8 +35,8 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	}
 
 	sqlStr := `
-	INSERT INTO auth.users(email, birthdate, encrypted_password, role)
-	VALUES ($1, $2, $3, $4)
+	INSERT INTO auth.users(email, username, birthdate, encrypted_password, role)
+	VALUES ($1, $2, $3, $4, $5)
 	RETURNING id
 	`
 
@@ -44,6 +44,7 @@ func SaveUser(user string, draftUser *model.UserCredentials) (*model.UserCredent
 	err = tx.QueryRow(
 		sqlStr,
 		draftUser.Email,
+		draftUser.Username,
 		draftUser.Birthday,
 		string(hashedPassword),
 		draftUser.Role,
@@ -97,6 +98,27 @@ func RetrieveUser(user string, draftUser *model.UserCredentials) (*model.UserCre
 
 	applyJwtTokenToUser(user, draftUser)
 	return draftUser, nil
+}
+
+// IsValidUserEmail ...
+func IsValidUserEmail(user string, draftUserEmail string) (bool, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return false, err
+	}
+	defer db.Close()
+
+	// retrive the encrypted pwd. EMAIL must be UNIQUE field.
+	sqlStr := `SELECT EXISTS(SELECT 1 FROM auth.users u WHERE u.email=$1);`
+
+	result := db.QueryRow(sqlStr, draftUserEmail)
+	exists := false
+	err = result.Scan(&exists)
+	if err != nil {
+		log.Printf("unable to validate user email address. error: +%v", err)
+		return false, err
+	}
+	return !exists, nil // return false if found
 }
 
 // RemoveUser ...

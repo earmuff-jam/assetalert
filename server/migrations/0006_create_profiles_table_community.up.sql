@@ -32,8 +32,8 @@ CREATE FUNCTION community.handle_new_user()
     RETURNS trigger AS
 $$
 BEGIN
-    INSERT INTO community.profiles (id, email_address, phone_number)
-    VALUES (new.id, new.email, new.phone);
+    INSERT INTO community.profiles (id, email_address, username, phone_number)
+    VALUES (new.id, new.email, new.username, new.phone);
     RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

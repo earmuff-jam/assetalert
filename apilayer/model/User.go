@@ -19,6 +19,7 @@ import (
 type UserCredentials struct {
 	ID                uuid.UUID `json:"id,omitempty"`
 	Email             string    `json:"email,omitempty"`
+	Username          string    `json:"username,omitempty"`
 	Birthday          string    `json:"birthday,omitempty"`
 	Role              string    `json:"role"`
 	UserAgent         string    `json:"user_agent,omitempty"`
@@ -96,6 +97,14 @@ type User struct {
 	ReAuthenticationSentAt   time.Time       `json:"re_authentication_sent_at,omitempty"`
 	IsSSOUser                bool            `json:"is_sso_user,omitempty"`
 	DeletedAt                time.Time       `json:"deleted_at,omitempty"`
+}
+
+// UserEmail ...
+// swagger:model UserEmail
+//
+// UserEmail object. Used to validate if the email already exists in the db
+type UserEmail struct {
+	EmailAddress string `json:"email"`
 }
 
 // WebsocketMsg ...
