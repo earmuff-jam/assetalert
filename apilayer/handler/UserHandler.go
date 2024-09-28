@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -57,9 +56,16 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(draftUser.Email) <= 0 || len(draftUser.EncryptedPassword) <= 0 {
-		log.Printf("Unable to decode user. error: +%v", err)
+		log.Printf("unable to decode user")
 		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(err)
+		json.NewEncoder(rw).Encode("error")
+		return
+	}
+
+	if len(draftUser.Username) <= 3 {
+		log.Printf("user name is required and must be at least 4 characters in length")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode("error")
 		return
 	}
 
@@ -69,20 +75,26 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 
 	t, err := time.Parse("2006-01-02", draftUser.Birthday)
 	if err != nil {
-		fmt.Printf("Error parsing birthdate. Error: %+v", err)
+		log.Printf("Error parsing birthdate. Error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
 		return
 	}
 
 	// Check if the user is at least 13 years old
 	age := time.Now().Year() - +t.Year()
 	if age <= 13 {
-		fmt.Println("unable to sign up user. verification failed. ")
+		log.Println("unable to sign up user. verification failed.")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode("error")
 		return
 	}
 
 	backendClientUsr := os.Getenv("CLIENT_USER")
 	if len(backendClientUsr) == 0 {
-		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
+		log.Printf("unable to retrieve user from env.")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode("error")
 	}
 
 	// the authority to log into backend as a certain user
@@ -141,7 +153,10 @@ func Signin(rw http.ResponseWriter, r *http.Request) {
 	draftUser.UserAgent = r.UserAgent()
 	user := os.Getenv("CLIENT_USER")
 	if len(user) == 0 {
-		log.Printf("unable to retrieve user from env. Unable to sign in. Error - +%+v", err)
+		log.Printf("unable to retrieve user from env. Unable to sign in.")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode("unable to retrieve user from env")
+		return
 	}
 	resp, err := db.RetrieveUser(user, draftUser)
 	if err != nil {
@@ -156,6 +171,49 @@ func Signin(rw http.ResponseWriter, r *http.Request) {
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode(resp.ID)
+}
+
+// IsValidUserEmail ...
+// swagger:route POST /api/v1/isValidEmail Signup IsValidUserEmail
+//
+// # Returns true or false is the user is already in the system
+//
+// Responses:
+// 200: Boolean
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func IsValidUserEmail(rw http.ResponseWriter, r *http.Request) {
+
+	draftUserEmail := &model.UserEmail{}
+	err := json.NewDecoder(r.Body).Decode(draftUserEmail)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("unable to validate user email address. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	user := os.Getenv("CLIENT_USER")
+	if len(user) == 0 {
+		log.Printf("unable to retrieve user from env. Unable to sign in.")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode("unable to retrieve user from env")
+		return
+	}
+
+	resp, err := db.IsValidUserEmail(user, draftUserEmail.EmailAddress)
+	if err != nil {
+		log.Printf("unable to verify user email address. error: %+v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
 }
 
 // Logout ...

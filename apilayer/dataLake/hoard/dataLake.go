@@ -178,10 +178,6 @@ func GenerateFakeUser(user string, emailAddress string) (string, error) {
 	RETURNING id;`
 
 	row := tx.QueryRow(sqlStr, emailAddress)
-	if err != nil {
-		tx.Rollback()
-		return "", err
-	}
 	err = row.Scan(
 		&updatedProfile.ID,
 	)

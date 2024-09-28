@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authActions } from './authSlice';
 
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, takeEvery } from 'redux-saga/effects';
 import { REACT_APP_LOCALHOST_URL } from '../../util/Common';
 
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
@@ -61,6 +61,20 @@ export function* fetchUserSignup(action) {
   }
 }
 
+export function* fetchIsValidUserEmail(action) {
+  try {
+    const response = yield call(axios.post, `${BASEURL}/isValidEmail`, action.payload, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    yield put(authActions.isValidUserEmailSuccess(response.data));
+  } catch (e) {
+    yield put(authActions.isValidUserEmailFailure(e));
+  }
+}
+
 export function* fetchUserLogout() {
   try {
     const response = yield call(axios.get, `${BASEURL}/logout`);
@@ -76,9 +90,11 @@ export function* watchFetchUserLogin() {
 export function* watchFetchUserSignup() {
   yield takeLatest('auth/getSignup', fetchUserSignup);
 }
+export function* watchFetchIsValidUserEmail() {
+  yield takeEvery(`auth/isValidUserEmail`, fetchIsValidUserEmail);
+}
 export function* watchFetchUserLogout() {
   yield takeLatest(`auth/getLogout`, fetchUserLogout);
 }
 
- 
-export default [watchFetchUserLogin, watchFetchUserSignup, watchFetchUserLogout];
+export default [watchFetchUserLogin, watchFetchUserSignup, watchFetchIsValidUserEmail, watchFetchUserLogout];

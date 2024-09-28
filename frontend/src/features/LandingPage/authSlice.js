@@ -5,6 +5,7 @@ const initialState = {
   appConfig: {},
   loading: false,
   error: '',
+  isValidUserEmail: false,
 };
 
 const authSlice = createSlice({
@@ -50,6 +51,19 @@ const authSlice = createSlice({
       state.error = '';
     },
     getLogoutFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    isValidUserEmail: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    isValidUserEmailSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.isValidUserEmail = action.payload;
+    },
+    isValidUserEmailFailure: (state) => {
       state.loading = false;
       state.error = '';
     },
