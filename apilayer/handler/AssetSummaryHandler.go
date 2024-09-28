@@ -9,7 +9,7 @@ import (
 )
 
 // GetAssetsAndSummary ...
-// swagger:route GET /api/v1/locations GetAssetsAndSummary GetAssetsAndSummary
+// swagger:route GET /api/v1/locations Summary GetAssetsAndSummary
 //
 // # Retrieves list of categories and its associated asset names, list of maintenance plans and its associated assets and
 // list of assets that are past due. For the asset list that is past due, if there is no returnable flag set, then it does not

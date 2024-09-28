@@ -12,7 +12,7 @@ import (
 )
 
 // GetAllFiles ...
-// swagger:route GET /filestat/list/{id} GetAllFiles getAllFiles
+// swagger:route GET /filestat/list/{id} Files getAllFiles
 //
 // # Retrieves the list of files associated with the selected user
 //
@@ -62,7 +62,7 @@ func GetAllFiles(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // ServeFile ...
-// swagger:route GET /filestat/view/{id}/{filename} ServeFile serveFile
+// swagger:route GET /filestat/view/{id}/{filename} Files serveFile
 //
 // # Retrieves the selected file associated with the user in binary form
 //
@@ -80,7 +80,7 @@ func GetAllFiles(rw http.ResponseWriter, r *http.Request, user string) {
 //     required: true
 //
 // Responses:
-// 200: String
+// 200: MessageResponse
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -109,7 +109,7 @@ func ServeFile(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // CreateFile ...
-// swagger:route POST /filestat/create/{id}/{type}/{itemID} CreateFile createFile
+// swagger:route POST /filestat/create/{id}/{type}/{itemID} Files createFile
 //
 // # Adds the passed in image from the request body to the storage folder. The folder is created if it does not exists. If the folder exists, then the image is added to the file.
 //
@@ -123,7 +123,7 @@ func ServeFile(rw http.ResponseWriter, r *http.Request, user string) {
 //   - +name: type
 //     in: path
 //     description: The type of item the image must be associated with.
-//     type: rune
+//     type: string
 //     enum: [C, A, M, P]
 //     required: true
 //   - +name: itemID
@@ -132,14 +132,14 @@ func ServeFile(rw http.ResponseWriter, r *http.Request, user string) {
 //     type: string
 //     required: true
 //   - +name: File
-//     in: path
+//     in: body
 //     description: The contents of the file limited to 2mb
 //     type: string
 //     format: binary
 //     required: true
 //
 // Responses:
-// 200: String
+// 200: MessageResponse
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse

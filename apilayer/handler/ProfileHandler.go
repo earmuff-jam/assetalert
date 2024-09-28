@@ -13,7 +13,7 @@ import (
 )
 
 // GetAllUserProfiles ...
-// swagger:route GET /api/v1/profile/list GetAllUserProfiles getAllUserProfiles
+// swagger:route GET /api/v1/profile/list Profiles getAllUserProfiles
 //
 // # Retrieves all the user profiles listed in the database
 //
@@ -38,7 +38,7 @@ func GetAllUserProfiles(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetProfile ...
-// swagger:route GET /api/v1/profile/{id} GetProfile getProfile
+// swagger:route GET /api/v1/profile/{id} Profiles getProfile
 //
 // # Retrieves the user details from the profiles table. Does not meddle with authentication
 //
@@ -80,7 +80,7 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetFavouriteItems ...
-// swagger:route GET /api/v1/profile/{id}/fav GetFavouriteItems getFavouriteItems
+// swagger:route GET /api/v1/profile/{id}/fav Profiles getFavouriteItems
 //
 // # Retrieves the items marked as favourite by the selected user.
 //
@@ -134,7 +134,7 @@ func GetFavouriteItems(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // SaveFavItem ...
-// swagger:route POST /api/v1/profile/{id}/fav SaveFavItem saveFavItem
+// swagger:route POST /api/v1/profile/{id}/fav Profiles saveFavItem
 //
 // # Creates a new favourite item for the selected user
 //
@@ -188,7 +188,7 @@ func SaveFavItem(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // RemoveFavItem ...
-// swagger:route DELETE /api/v1/profile/{id}/fav RemoveFavItem removeFavItem
+// swagger:route DELETE /api/v1/profile/{id}/fav Profiles removeFavItem
 //
 // # Deletes the item that is marked as favourite by the user
 //
@@ -243,7 +243,7 @@ func RemoveFavItem(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetUsername ...
-// swagger:route GET /api/v1/profile/{id} GetUsername getUsername
+// swagger:route GET /api/v1/profile/{id} Profiles getUsername
 //
 // # Retrieves the user name from the profiles table. Does not meddle with authentication
 //
@@ -289,7 +289,7 @@ func GetUsername(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateProfile ...
-// swagger:route PUT /api/v1/profile UpdateProfile updateProfile
+// swagger:route PUT /api/v1/profile Profiles updateProfile
 //
 // # Updates the current user profile for the selected user. Does not meddle with authentication
 //
@@ -341,7 +341,7 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateProfileAvatar ...
-// swagger:route POST /api/v1/profile/{id}/updateAvatar UpdateProfileAvatar updateProfileAvatar
+// swagger:route POST /api/v1/profile/{id}/updateAvatar Profiles updateProfileAvatar
 //
 // # Updates the current user avatar for the selected user. Does not meddle with authentication
 //
