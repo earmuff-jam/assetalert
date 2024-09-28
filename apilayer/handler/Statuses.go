@@ -9,7 +9,7 @@ import (
 )
 
 // GetStatusList ...
-// swagger:route GET /api/v1/status/list GetStatusList getStatusList
+// swagger:route GET /api/v1/status/list StatusList getStatusList
 //
 // # Retrieves the list of statuses that the user can associate with any event
 //

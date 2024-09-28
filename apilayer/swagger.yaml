@@ -467,6 +467,9 @@ definitions:
         x-go-package: github.com/mohit2530/communityCare/model
     Inventory:
         properties:
+            associated_image_url:
+                type: string
+                x-go-name: AssociatedImageURL
             barcode:
                 type: string
                 x-go-name: Barcode
@@ -1445,7 +1448,18 @@ definitions:
             user_agent:
                 type: string
                 x-go-name: UserAgent
+            username:
+                type: string
+                x-go-name: Username
         title: UserCredentials ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    UserEmail:
+        properties:
+            email:
+                type: string
+                x-go-name: EmailAddress
+        title: UserEmail ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
     VolunteeringDetails:
@@ -1510,11 +1524,8 @@ definitions:
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
 info:
-    description: |-
-        # Documentation for the Asset alert api layer.
-
-        Scehmes: http
-    title: alert Api Layer
+    description: 'Scehmes: https'
+    title: Documentation for the Asset alert api layer.
     version: 1.0.0
 paths:
     /api/profile/{id}/inventories:
@@ -1553,7 +1564,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Remove selected inventories.'
             tags:
-                - RemoveSelectedInventory
+                - Assets
         put:
             operationId: updateSelectedInventory
             parameters:
@@ -1589,7 +1600,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Update selected inventory with details.'
             tags:
-                - UpdateSelectedInventory
+                - Assets
     /api/profile/{id}/inventories/bulk:
         post:
             operationId: addInventoryInBulk
@@ -1628,7 +1639,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Bulk upload inventory list. returns the list of uploaded items.'
             tags:
-                - AddInventoryInBulk
+                - Assets
     /api/profile/{id}/notes:
         delete:
             operationId: removeNote
@@ -1657,7 +1668,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Removes the note from the db
             tags:
-                - RemoveNote
+                - Notes
         get:
             operationId: getNotes
             parameters:
@@ -1687,7 +1698,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the list of notes for the selected user
             tags:
-                - GetNotes
+                - Notes
         post:
             operationId: addNewNote
             parameters:
@@ -1723,7 +1734,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Add a new note to the database
             tags:
-                - AddNewNote
+                - Notes
         put:
             operationId: updateNote
             parameters:
@@ -1759,7 +1770,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Updates an existing note in the database
             tags:
-                - UpdateNote
+                - Notes
     /api/v1/categories:
         get:
             operationId: getAllCategories
@@ -1796,7 +1807,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the list of categories that each asset can be associated with. Each user can have their own set of categories. All categories are specific to the selected user.
             tags:
-                - GetAllCategories
+                - Categories
     /api/v1/category:
         get:
             operationId: GetCategory
@@ -1830,7 +1841,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the selected category
             tags:
-                - GetCategory
+                - Categories
         post:
             operationId: createCategory
             parameters:
@@ -1861,7 +1872,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Create category
             tags:
-                - CreateCategory
+                - Categories
     /api/v1/category/{id}:
         delete:
             operationId: removeCategory
@@ -1890,7 +1901,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Removes a selected category based on the id
             tags:
-                - RemoveCategory
+                - Categories
         put:
             operationId: updateCategory
             parameters:
@@ -1926,7 +1937,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Update category function updates the selected category with new values
             tags:
-                - UpdateCategory
+                - Categories
     /api/v1/category/items:
         get:
             operationId: getAllCategoryItems
@@ -1968,7 +1979,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the list of assets for a specific category.'
             tags:
-                - GetAllCategoryItems
+                - Categories
         post:
             operationId: addItemsInMaintenancePlan
             parameters:
@@ -2001,7 +2012,30 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Add selected items in a specific maintenance plan
             tags:
-                - AddItemsInMaintenancePlan
+                - MaintenancePlans
+    /api/v1/isValidEmail:
+        post:
+            operationId: IsValidUserEmail
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Returns true or false is the user is already in the system
+            tags:
+                - Authentication
     /api/v1/locations:
         get:
             operationId: getAllStorageLocations
@@ -2026,7 +2060,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the list of locations that users can use to store an asset.'
             tags:
-                - GetAllStorageLocations
+                - StorageLocations
     /api/v1/logout:
         post:
             operationId: logout
@@ -2049,7 +2083,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Logs users out of the database system.'
             tags:
-                - Logout
+                - Authentication
     /api/v1/maintenance-plans:
         get:
             description: Users can assign asset to multiple plans.
@@ -2089,7 +2123,7 @@ paths:
                 Retrieves the list of maintenance plans that each asset can be associated with.
                 Each user can have thier own set of maintenance plans. All plans are specific to the selected user
             tags:
-                - GetAllMaintenancePlans
+                - MaintenancePlans
     /api/v1/plan:
         get:
             operationId: GetMaintenancePlan
@@ -2123,7 +2157,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieve a selected maintenance plan
             tags:
-                - GetMaintenancePlan
+                - MaintenancePlans
         post:
             operationId: createMaintenancePlan
             parameters:
@@ -2154,7 +2188,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Create maintenance plan
             tags:
-                - CreateMaintenancePlan
+                - MaintenancePlans
     /api/v1/plan/{id}:
         delete:
             operationId: removeMaintenancePlan
@@ -2183,7 +2217,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Removes a selected maintenance plan based on the id
             tags:
-                - RemoveMaintenancePlan
+                - MaintenancePlans
         put:
             operationId: UpdateMaintenancePlan
             parameters:
@@ -2219,7 +2253,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Update maintenance plan function updates the selected maintenance plan with new values
             tags:
-                - UpdateMaintenancePlan
+                - MaintenancePlans
     /api/v1/plans/items:
         get:
             operationId: getAllMaintenancePlanItems
@@ -2261,7 +2295,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the list of assets for a specific maintenance plans.'
             tags:
-                - GetAllMaintenancePlanItems
+                - MaintenancePlans
     /api/v1/profile:
         put:
             operationId: updateProfile
@@ -2298,7 +2332,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Updates the current user profile for the selected user. Does not meddle with authentication
             tags:
-                - UpdateProfile
+                - Profiles
     /api/v1/profile/{id}:
         get:
             operationId: getUsername
@@ -2327,7 +2361,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the user name from the profiles table. Does not meddle with authentication
             tags:
-                - GetUsername
+                - Profiles
     /api/v1/profile/{id}/fav:
         delete:
             operationId: removeFavItem
@@ -2361,7 +2395,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Deletes the item that is marked as favourite by the user
             tags:
-                - RemoveFavItem
+                - Profiles
         get:
             operationId: getFavouriteItems
             parameters:
@@ -2396,7 +2430,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the items marked as favourite by the selected user.'
             tags:
-                - GetFavouriteItems
+                - Profiles
         post:
             operationId: saveFavItem
             parameters:
@@ -2434,7 +2468,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Creates a new favourite item for the selected user
             tags:
-                - SaveFavItem
+                - Profiles
     /api/v1/profile/{id}/inventories:
         get:
             operationId: getAllInventories
@@ -2465,7 +2499,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the list of assets that belong to the selected user
             tags:
-                - GetAllInventories
+                - Assets
     /api/v1/profile/{id}/inventories/{assetID}:
         get:
             operationId: updateAssetColumn
@@ -2507,7 +2541,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.'
             tags:
-                - UpdateAssetColumn
+                - Assets
     /api/v1/profile/{id}/inventories/{invID}:
         get:
             operationId: getInventoryByID
@@ -2541,7 +2575,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Retrieves the selected inventory that matches the passed in ID created by the user.'
             tags:
-                - GetInventoryByID
+                - Assets
     /api/v1/profile/{id}/updateAvatar:
         post:
             operationId: updateProfileAvatar
@@ -2578,7 +2612,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Updates the current user avatar for the selected user. Does not meddle with authentication
             tags:
-                - UpdateProfileAvatar
+                - Profiles
     /api/v1/profile/list:
         get:
             operationId: getAllUserProfiles
@@ -2603,7 +2637,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves all the user profiles listed in the database
             tags:
-                - GetAllUserProfiles
+                - Profiles
     /api/v1/profile/recent-activities:
         get:
             operationId: getRecentActivities
@@ -2679,7 +2713,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Sign in users into the database system.'
             tags:
-                - Signin
+                - Authentication
     /api/v1/signup:
         post:
             operationId: signup
@@ -2723,7 +2757,7 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: '# Sign up users into the database system.'
             tags:
-                - Signup
+                - Authentication
     /api/v1/status/list:
         get:
             operationId: getStatusList
@@ -2759,7 +2793,122 @@ paths:
                         $ref: '#/definitions/MessageResponse'
             summary: Retrieves the list of statuses that the user can associate with any event
             tags:
-                - GetStatusList
+                - StatusList
+    /filestat/create/{id}/{type}/{itemID}:
+        post:
+            operationId: createFile
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The type of item the image must be associated with.
+                  enum:
+                    - '[C'
+                    - A
+                    - M
+                    - P]
+                  in: path
+                  name: type
+                  required: true
+                  type: string
+                - description: The itemID of the associated element the image is uploaded against
+                  in: path
+                  name: itemID
+                  required: true
+                  type: string
+                - description: The contents of the file limited to 2mb
+                  in: body
+                  name: File
+                  required: true
+                  schema:
+                    description: The contents of the file limited to 2mb
+                    format: binary
+                    type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Adds the passed in image from the request body to the storage folder. The folder is created if it does not exists. If the folder exists, then the image is added to the file.'
+            tags:
+                - Files
+    /filestat/list/{id}:
+        get:
+            operationId: getAllFiles
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the list of files associated with the selected user
+            tags:
+                - Files
+    /filestat/view/{id}/{filename}:
+        get:
+            operationId: serveFile
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The unique identifier for the selected file
+                  in: path
+                  name: filename
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrieves the selected file associated with the user in binary form
+            tags:
+                - Files
 produces:
     - application/json
 swagger: "2.0"

@@ -12,7 +12,7 @@ import (
 )
 
 // GetAllMaintenancePlans ...
-// swagger:route GET /api/v1/maintenance-plans GetAllMaintenancePlans getAllMaintenancePlans
+// swagger:route GET /api/v1/maintenance-plans MaintenancePlans getAllMaintenancePlans
 //
 // # Retrieves the list of maintenance plans that each asset can be associated with.
 // Each user can have thier own set of maintenance plans. All plans are specific to the selected user
@@ -66,7 +66,7 @@ func GetAllMaintenancePlans(rw http.ResponseWriter, r *http.Request, user string
 }
 
 // GetMaintenancePlan ...
-// swagger:route GET /api/v1/plan GetMaintenancePlan GetMaintenancePlan
+// swagger:route GET /api/v1/plan MaintenancePlans GetMaintenancePlan
 //
 // # Retrieve a selected maintenance plan
 //
@@ -119,7 +119,7 @@ func GetMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetAllMaintenancePlanItems ...
-// swagger:route GET /api/v1/plans/items GetAllMaintenancePlanItems getAllMaintenancePlanItems
+// swagger:route GET /api/v1/plans/items MaintenancePlans getAllMaintenancePlanItems
 //
 // # Retrieves the list of assets for a specific maintenance plans.
 //
@@ -185,7 +185,7 @@ func GetAllMaintenancePlanItems(rw http.ResponseWriter, r *http.Request, user st
 }
 
 // AddItemsInMaintenancePlan ...
-// swagger:route POST /api/v1/category/items AddItemsInMaintenancePlan addItemsInMaintenancePlan
+// swagger:route POST /api/v1/category/items MaintenancePlans addItemsInMaintenancePlan
 //
 // # Add selected items in a specific maintenance plan
 //
@@ -225,7 +225,7 @@ func AddItemsInMaintenancePlan(rw http.ResponseWriter, r *http.Request, user str
 }
 
 // CreateMaintenancePlan ...
-// swagger:route POST /api/v1/plan CreateMaintenancePlan createMaintenancePlan
+// swagger:route POST /api/v1/plan MaintenancePlans createMaintenancePlan
 //
 // # Create maintenance plan
 //
@@ -265,7 +265,7 @@ func CreateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 }
 
 // UpdateMaintenancePlan ...
-// swagger:route PUT /api/v1/plan/{id} UpdateMaintenancePlan UpdateMaintenancePlan
+// swagger:route PUT /api/v1/plan/{id} MaintenancePlans UpdateMaintenancePlan
 //
 // # Update maintenance plan function updates the selected maintenance plan with new values
 //
@@ -320,7 +320,7 @@ func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 }
 
 // RemoveMaintenancePlan ...
-// swagger:route DELETE /api/v1/plan/{id} RemoveMaintenancePlan removeMaintenancePlan
+// swagger:route DELETE /api/v1/plan/{id} MaintenancePlans removeMaintenancePlan
 //
 // # Removes a selected maintenance plan based on the id
 //

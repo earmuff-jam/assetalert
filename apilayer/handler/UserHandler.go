@@ -12,7 +12,7 @@ import (
 )
 
 // Signup ...
-// swagger:route POST /api/v1/signup Signup signup
+// swagger:route POST /api/v1/signup Authentication signup
 //
 // # Sign up users into the database system.
 //
@@ -111,7 +111,7 @@ func Signup(rw http.ResponseWriter, r *http.Request) {
 }
 
 // Signin ...
-// swagger:route POST /api/v1/signin Signin signin
+// swagger:route POST /api/v1/signin Authentication signin
 //
 // # Sign in users into the database system.
 //
@@ -174,12 +174,12 @@ func Signin(rw http.ResponseWriter, r *http.Request) {
 }
 
 // IsValidUserEmail ...
-// swagger:route POST /api/v1/isValidEmail Signup IsValidUserEmail
+// swagger:route POST /api/v1/isValidEmail Authentication IsValidUserEmail
 //
 // # Returns true or false is the user is already in the system
 //
 // Responses:
-// 200: Boolean
+// 200: MessageResponse
 // 400: MessageResponse
 // 404: MessageResponse
 // 500: MessageResponse
@@ -217,7 +217,7 @@ func IsValidUserEmail(rw http.ResponseWriter, r *http.Request) {
 }
 
 // Logout ...
-// swagger:route POST /api/v1/logout Logout logout
+// swagger:route POST /api/v1/logout Authentication logout
 //
 // # Logs users out of the database system.
 //

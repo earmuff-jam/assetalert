@@ -12,7 +12,7 @@ import (
 )
 
 // GetAllCategories ...
-// swagger:route GET /api/v1/categories GetAllCategories getAllCategories
+// swagger:route GET /api/v1/categories Categories getAllCategories
 //
 // Retrieves the list of categories that each asset can be associated with. Each user can have their own set of categories. All categories are specific to the selected user.
 //
@@ -63,7 +63,7 @@ func GetAllCategories(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetCategory ...
-// swagger:route GET /api/v1/category GetCategory GetCategory
+// swagger:route GET /api/v1/category Categories GetCategory
 //
 // # Retrieves the selected category
 //
@@ -117,7 +117,7 @@ func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetAllCategoryItems ...
-// swagger:route GET /api/v1/category/items GetAllCategoryItems getAllCategoryItems
+// swagger:route GET /api/v1/category/items Categories getAllCategoryItems
 //
 // # Retrieves the list of assets for a specific category.
 //
@@ -183,7 +183,7 @@ func GetAllCategoryItems(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // CreateCategory ...
-// swagger:route POST /api/v1/category CreateCategory createCategory
+// swagger:route POST /api/v1/category Categories createCategory
 //
 // # Create category
 //
@@ -223,7 +223,7 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // AddItemsInCategory ...
-// swagger:route POST /api/v1/category/items AddItemsInCategory addItemsInCategory
+// swagger:route POST /api/v1/category/items Categories addItemsInCategory
 //
 // # Add selected items in a specific category
 //
@@ -263,7 +263,7 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateCategory ...
-// swagger:route PUT /api/v1/category/{id} UpdateCategory updateCategory
+// swagger:route PUT /api/v1/category/{id} Categories updateCategory
 //
 // # Update category function updates the selected category with new values
 //
@@ -318,7 +318,7 @@ func UpdateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // RemoveCategory ...
-// swagger:route DELETE /api/v1/category/{id} RemoveCategory removeCategory
+// swagger:route DELETE /api/v1/category/{id} Categories removeCategory
 //
 // # Removes a selected category based on the id
 //

@@ -14,7 +14,7 @@ import (
 const defaultHiddenStatus = "HIDDEN"
 
 // GetAllInventories ...
-// swagger:route GET /api/v1/profile/{id}/inventories GetAllInventories getAllInventories
+// swagger:route GET /api/v1/profile/{id}/inventories Assets getAllInventories
 //
 // # Retrieves the list of assets that belong to the selected user
 //
@@ -55,7 +55,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // GetInventoryByID ...
-// swagger:route GET /api/v1/profile/{id}/inventories/{invID} GetInventoryByID getInventoryByID
+// swagger:route GET /api/v1/profile/{id}/inventories/{invID} Assets getInventoryByID
 //
 // # Retrieves the selected inventory that matches the passed in ID created by the user.
 //
@@ -109,7 +109,7 @@ func GetInventoryByID(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateAssetColumn ...
-// swagger:route GET /api/v1/profile/{id}/inventories/{assetID} UpdateAssetColumn updateAssetColumn
+// swagger:route GET /api/v1/profile/{id}/inventories/{assetID} Assets updateAssetColumn
 //
 // # Updates the selected quantity or price column field with passed in data field. All colaborators can update selected field.
 //
@@ -188,7 +188,7 @@ func UpdateAssetColumn(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // AddInventoryInBulk ...
-// swagger:route POST /api/profile/{id}/inventories/bulk AddInventoryInBulk addInventoryInBulk
+// swagger:route POST /api/profile/{id}/inventories/bulk Assets addInventoryInBulk
 //
 // # Bulk upload inventory list. returns the list of uploaded items.
 //
@@ -270,7 +270,7 @@ func AddInventoryInBulk(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // AddNewInventory ...
-// swagger:route POST /api/profile/{id}/inventories AddNewInventory addNewInventory
+// swagger:route POST /api/profile/{id}/inventories Assets addNewInventory
 //
 // # Add new personal item to the user inventory
 //
@@ -322,7 +322,7 @@ func AddNewInventory(rw http.ResponseWriter, r *http.Request, user string) {
 }
 
 // UpdateSelectedInventory ...
-// swagger:route PUT /api/profile/{id}/inventories UpdateSelectedInventory updateSelectedInventory
+// swagger:route PUT /api/profile/{id}/inventories Assets updateSelectedInventory
 //
 // # Update selected inventory with details.
 //
@@ -374,7 +374,7 @@ func UpdateSelectedInventory(rw http.ResponseWriter, r *http.Request, user strin
 }
 
 // RemoveSelectedInventory ...
-// swagger:route POST /api/profile/{id}/inventories RemoveSelectedInventory removeSelectedInventory
+// swagger:route POST /api/profile/{id}/inventories Assets removeSelectedInventory
 //
 // # Remove selected inventories.
 //

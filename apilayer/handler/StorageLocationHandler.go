@@ -9,7 +9,7 @@ import (
 )
 
 // GetAllStorageLocations ...
-// swagger:route GET /api/v1/locations GetAllStorageLocations getAllStorageLocations
+// swagger:route GET /api/v1/locations StorageLocations getAllStorageLocations
 //
 // # Retrieves the list of locations that users can use to store an asset.
 //
