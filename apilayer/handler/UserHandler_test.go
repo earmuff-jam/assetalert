@@ -43,7 +43,6 @@ func Test_GetSignInApi_Success(t *testing.T) {
 	}
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	t.Logf("response = %+v", string(data))
 }
 
 func Test_GetSignInApi_Failure(t *testing.T) {
@@ -105,7 +104,6 @@ func Test_GetSignUpApi_Success(t *testing.T) {
 
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Greater(t, len(data), 0)
-	t.Logf("response = %+v", string(data))
 
 	db.RemoveUser(config.CTO_USER, user.ID)
 }
