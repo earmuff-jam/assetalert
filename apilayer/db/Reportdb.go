@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/mohit2530/communityCare/model"
@@ -39,6 +40,7 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 
 	var reports []model.Report
 	rows, err := db.Query(parsedSqlStr, userID, sinceDateTime)
+	log.Printf("sqlStr := %+v, %+s, %+v", parsedSqlStr, userID.String(), sinceDateTime)
 	if err != nil {
 		log.Printf("unable to retrieve report details. error: %+v", err)
 		return nil, err
@@ -60,6 +62,9 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 		if totalCategoryItemsCostDraft.Valid {
 			draftReport.TotalCategoryItemsCost = totalCategoryItemsCostDraft.Float64
 		}
+
+		parsedTime, _ := time.Parse(time.RFC3339, sinceDateTime)
+		draftReport.SelectedTimeRange = parsedTime
 		reports = append(reports, draftReport)
 	}
 
