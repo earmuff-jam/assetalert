@@ -10,6 +10,7 @@ import categories from './features/Categories/categoriesSlice';
 import maintenance from './features/Maintenance/maintenanceSlice';
 import inventory from './features/InventoryList/inventorySlice';
 import summary from './features/Home/SummarySlice';
+import reports from './features/Reports/reportSlice';
 
 import authSaga from './features/LandingPage/authSaga';
 import profileSaga from './features/Profile/profileSaga';
@@ -18,6 +19,7 @@ import categoriesSaga from './features/Categories/categoriesSaga';
 import maintenanceSaga from './features/Maintenance/maintenanceSaga';
 import inventorySaga from './features/InventoryList/inventorySaga';
 import summarySaga from './features/Home/SummarySaga';
+import reportsSaga from './features/Reports/reportSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -31,6 +33,7 @@ function* rootSaga() {
     ...inventorySaga.map((saga) => saga()),
     ...maintenanceSaga.map((saga) => saga()),
     ...summarySaga.map((saga) => saga()),
+    ...reportsSaga.map((saga) => saga()),
   ]);
 }
 
@@ -43,6 +46,7 @@ export const store = configureStore({
     notes,
     maintenance,
     summary,
+    reports,
   },
   middleware: [sagaMiddleware],
   // devTools: process.env.NODE_ENV !== 'production',

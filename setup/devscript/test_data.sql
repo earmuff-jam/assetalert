@@ -69,7 +69,7 @@ VALUES ('Daily maintenance plan', 'used to validate daily items', (SELECT id FRO
 
 -- ADD INVENTORIES SQL TEST DATA --
 INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,
-                                 storage_location_id, is_returnable, return_location, max_weight, min_weight,
+                                 storage_location_id, is_returnable, return_location, return_datetime, max_weight, min_weight,
                                  max_height, min_height, created_by, updated_by, sharable_groups)
 VALUES ('4 pounds of kitty litter',
         'Bought from tractor supply in fm969',
@@ -83,6 +83,7 @@ VALUES ('4 pounds of kitty litter',
         (SELECT id from community.storage_locations WHERE location = 'Kitchen Pantry'),
         false,
         'amazon return',
+        'now()',
         '12',
         '4',
         '20',
