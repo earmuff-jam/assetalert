@@ -40,7 +40,7 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) (*[]mode
 	COALESCE(up.full_name, up.username, up.email_address) AS updater_name,
 	mp.sharable_groups
 	FROM community.maintenance_plan mp
-	LEFT JOIN community.maintenance_status ms on ms.id = mp.maintenance_status
+	LEFT JOIN community.statuses ms on ms.id = mp.status
 	LEFT JOIN community.profiles cp on cp.id = mp.created_by
 	LEFT JOIN community.profiles up on up.id = mp.updated_by
 	WHERE $1::UUID = ANY(mp.sharable_groups)
@@ -111,7 +111,7 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 	COALESCE(up.full_name, up.username, up.email_address) AS updater_name,
 	mp.sharable_groups
 	FROM community.maintenance_plan mp
-	LEFT JOIN community.maintenance_status ms on ms.id = mp.maintenance_status
+	LEFT JOIN community.statuses ms on ms.id = mp.status
 	LEFT JOIN community.profiles cp on cp.id = mp.created_by
 	LEFT JOIN community.profiles up on up.id = mp.updated_by
 	WHERE $1::UUID = ANY(mp.sharable_groups) AND mp.id = $2;`
@@ -213,10 +213,9 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 	defer db.Close()
 
 	// Retrieve selected status
-	retrieveStatusSqlStr := `SELECT id, name, description FROM community.maintenance_status s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-	selectedStatusDetails, err := retrieveStatusDetails(user, draftMaintenancePlan.CreatedBy, draftMaintenancePlan.Status, retrieveStatusSqlStr)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.CreatedBy, draftMaintenancePlan.Status)
 	if err != nil {
-		log.Printf("error retrieving status details: %v", err)
+		log.Printf("error retrieving status details: %+v", err)
 		return nil, err
 	}
 	if selectedStatusDetails == nil {
@@ -229,11 +228,9 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		return nil, err
 	}
 
-	sqlStr := `INSERT INTO community.maintenance_plan(name, description, color, maintenance_status, min_items_limit, max_items_limit, 
-	plan_type, location, created_by, created_at, updated_by, updated_at, sharable_groups)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, POINT($8, $9), $10, $11, $12, $13, $14)
-	RETURNING id, name, description, color, maintenance_status, min_items_limit, max_items_limit, plan_type,
-		created_at, created_by, updated_at, updated_by, sharable_groups;`
+	sqlStr := `INSERT INTO community.maintenance_plan(name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, location, created_by, created_at, updated_by, updated_at, sharable_groups)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, POINT($9, $10), $11, $12, $13, $14, $15)
+	RETURNING id, name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;`
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -255,6 +252,7 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		draftMaintenancePlan.MinItemsLimit,
 		draftMaintenancePlan.MaxItemsLimit,
 		draftMaintenancePlan.PlanType,
+		draftMaintenancePlan.PlanDue,
 		draftMaintenancePlan.Location.Lon,
 		draftMaintenancePlan.Location.Lat,
 		parsedCreatorID,
@@ -273,6 +271,7 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		&draftMaintenancePlan.MinItemsLimit,
 		&draftMaintenancePlan.MaxItemsLimit,
 		&draftMaintenancePlan.PlanType,
+		&draftMaintenancePlan.PlanDue,
 		&draftMaintenancePlan.CreatedAt,
 		&draftMaintenancePlan.CreatedBy,
 		&draftMaintenancePlan.UpdatedAt,
@@ -305,8 +304,7 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 	defer db.Close()
 
 	// retrieve selected status
-	retrieveStatusSqlStr := `SELECT id, name, description FROM community.maintenance_status s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftMaintenancePlan.Status, retrieveStatusSqlStr)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftMaintenancePlan.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -319,16 +317,17 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
     name = $2,
     description = $3,
 	color = $4,
-	maintenance_status = $5,
+	status = $5,
 	min_items_limit = $6,
 	max_items_limit = $7,
 	plan_type = $8,
-	location = POINT($9, $10),
-    updated_by = $11,
-    updated_at = $12,
-	sharable_groups = $13
+	plan_due = $9,
+	location = POINT($10, $11),
+    updated_by = $12,
+    updated_at = $13,
+	sharable_groups = $14
     WHERE id = $1
-    RETURNING id, name, description, color, maintenance_status, min_items_limit, max_items_limit, plan_type, created_at, created_by, updated_at, updated_by, sharable_groups;
+    RETURNING id, name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;
 `
 	tx, err := db.Begin()
 	if err != nil {
@@ -353,6 +352,7 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 		draftMaintenancePlan.MinItemsLimit,
 		draftMaintenancePlan.MaxItemsLimit,
 		draftMaintenancePlan.PlanType,
+		draftMaintenancePlan.PlanDue,
 		draftMaintenancePlan.Location.Lon,
 		draftMaintenancePlan.Location.Lat,
 		parsedUpdatorID,
@@ -369,6 +369,7 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 		&updatedMaintenancePlan.MinItemsLimit,
 		&updatedMaintenancePlan.MaxItemsLimit,
 		&updatedMaintenancePlan.PlanType,
+		&updatedMaintenancePlan.PlanDue,
 		&updatedMaintenancePlan.CreatedAt,
 		&updatedMaintenancePlan.CreatedBy,
 		&updatedMaintenancePlan.UpdatedAt,

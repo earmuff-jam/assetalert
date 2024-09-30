@@ -20,6 +20,7 @@ import { maintenancePlanActions } from './maintenanceSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import RetrieveUserLocation from '../common/Location/RetrieveUserLocation';
 import LocationPicker from '../common/Location/LocationPicker';
+import { produce } from 'immer';
 
 const AddPlan = ({
   handleCloseAddNewPlan,
@@ -110,13 +111,16 @@ const AddPlan = ({
 
     // seperated to prevent updating sharable groups
     if (selectedMaintenancePlanID) {
+      const currentMaintenancePlan = maintenancePlan.find(() => true);
       const draftRequest = {
         id: selectedMaintenancePlanID,
+        ...currentMaintenancePlan,
         ...formattedData,
         type: planType,
         color: planColor,
         location: location,
         plan_type: ITEM_TYPE_MAPPER[planType].value,
+        plan_due: ITEM_TYPE_MAPPER[planType].since,
         maintenance_status: selectedStatusOption?.name,
         updated_on: dayjs().toISOString(),
       };
@@ -127,6 +131,7 @@ const AddPlan = ({
         type: planType,
         color: planColor,
         plan_type: planType,
+        plan_due: ITEM_TYPE_MAPPER[planType].since,
         location: location,
         maintenance_status: selectedStatusOption?.name,
         created_on: dayjs().toISOString(),
@@ -157,38 +162,27 @@ const AddPlan = ({
 
   useEffect(() => {
     if (!loading && selectedMaintenancePlanID !== null) {
-      const drafMaintenancePlan = maintenancePlan.filter((v) => v.id === selectedMaintenancePlanID).find(() => true);
-      const updatedFormFields = Object.assign({}, formData, {
-        name: {
-          ...formData.name,
-          value: drafMaintenancePlan?.name || '',
-        },
-        description: {
-          ...formData.description,
-          value: drafMaintenancePlan?.description || '',
-        },
-        min_items_limit: {
-          ...formData.min_items_limit,
-          value: drafMaintenancePlan?.min_items_limit || 0,
-        },
-        max_items_limit: {
-          ...formData.max_items_limit,
-          value: drafMaintenancePlan?.max_items_limit || 10,
-        },
-      });
-      setFormData(updatedFormFields);
+      const draftMaintenancePlan = maintenancePlan.filter((v) => v.id === selectedMaintenancePlanID).find(() => true);
+      setFormData(
+        produce(formData, (draft) => {
+          draft.name.value = draftMaintenancePlan?.name || '';
+          draft.description.value = draftMaintenancePlan?.description || '';
+          draft.max_items_limit.value = draftMaintenancePlan?.max_items_limit || '';
+          draft.min_items_limit.value = draftMaintenancePlan?.min_items_limit || '';
+        })
+      );
       setSelectedStatusOption({
-        id: drafMaintenancePlan?.maintenance_status,
-        name: drafMaintenancePlan?.maintenance_status_name,
-        description: drafMaintenancePlan?.maintenance_status_description,
+        id: draftMaintenancePlan?.maintenance_status,
+        name: draftMaintenancePlan?.maintenance_status_name,
+        description: draftMaintenancePlan?.maintenance_status_description,
       });
 
-      setPlanType(Object.values(ITEM_TYPE_MAPPER).find((v) => v.value === drafMaintenancePlan?.plan_type)?.value || '');
-      setLocation(drafMaintenancePlan?.location);
-      setPlanColor(drafMaintenancePlan?.color);
+      const currentPlanType = Object.values(ITEM_TYPE_MAPPER).find((v) => v.value === draftMaintenancePlan?.plan_type);
+      setPlanType(currentPlanType?.value || '');
+      setLocation(draftMaintenancePlan?.location);
+      setPlanColor(draftMaintenancePlan?.color);
     } else {
-      setFormData(BLANK_MAINTENANCE_PLAN);
-      setPlanColor('#f7f7f7');
+      resetData();
     }
   }, [selectedMaintenancePlanID]);
 
@@ -304,7 +298,7 @@ const AddPlan = ({
             </Box>
           </Stack>
           <Button onClick={handleSubmit} variant="outlined" sx={{ mt: 1 }} disabled={isDisabled()}>
-            Add new plan
+            {selectedMaintenancePlanID ? 'Update' : 'Add' }
           </Button>
         </Box>
       </Stack>

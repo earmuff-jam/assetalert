@@ -43,29 +43,29 @@ VALUES (
 INSERT INTO community.category (name, description, status, color, min_items_limit, max_items_limit, created_by, updated_by, sharable_groups)
 VALUES ('Groceries', 'used for grocery related items', (SELECT id FROM community.statuses s LIMIT 1), '#d20a0a', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
        ('Utilities', 'store boxes and utility related stuffs', (SELECT id FROM community.statuses s LIMIT 1), '#e7d3da', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Entertainment', 'store gaming consoles, tvs, and / or any audio video equipment', (SELECT id FROM community.statuses s LIMIT 1), '#963256', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Transportation', 'used to store bus pass, vehicle keys or any related accesories', (SELECT id FROM community.statuses s LIMIT 1), '#c8aabf', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Clothing', 'used to keep track of all clothings including bags and pants', (SELECT id FROM community.statuses s LIMIT 1), '#d433a7', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Home Maintenance', 'store tools such as belts, screwdrivers, nails etc', (SELECT id FROM community.statuses s LIMIT 1), '#465760', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Education', 'used to store books and study materials', (SELECT id FROM community.statuses s LIMIT 1), '#138ed3', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Miscellaneous', 'used to store stuffs that are totally random', (SELECT id FROM community.statuses s LIMIT 1), '#28b391', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
-
--- ADD MAINTENANCE PLAN STATUS SQL TEST DATA --
-INSERT INTO community.maintenance_status (name, description, created_by, updated_by, sharable_groups)
-VALUES
-    ('Ready for Review', 'The maintenance plan is ready to be reviewed by the appropriate person or team.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('In Review', 'The maintenance plan is currently under review.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('Passed Review', 'The maintenance plan has successfully passed the review process.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('Failed Review', 'The maintenance plan did not pass the review process and requires adjustments.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('Pending Approval', 'The maintenance plan is awaiting final approval before proceeding.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('Approved', 'The maintenance plan has been approved and is ready for execution.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-    ('Rejected', 'The maintenance plan has been rejected and will not proceed.', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+       ('Entertainment', 'store gaming consoles, tvs, and / or any audio video equipment', (SELECT id FROM community.statuses s LIMIT 1), '#963256', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
 
 -- ADD MAINTENANCE PLAN SQL TEST DATA --
-INSERT INTO community.maintenance_plan (name, description, maintenance_status, color, min_items_limit, max_items_limit, plan_type, location, created_by, updated_by, sharable_groups)
-VALUES ('Daily maintenance plan', 'used to validate daily items', (SELECT id FROM community.maintenance_status mps LIMIT 1), '#d20a0a', 1, 100, 'annual',  '(-119.170898,  34.196411)', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Weekly maintenance plan', 'used for weekely maintenance', (SELECT id FROM community.maintenance_status mps LIMIT 1), '#28b391', 1, 100, 'weekly',  '(-117.182541, 34.055569)', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+INSERT INTO community.maintenance_plan 
+(name, description, status, color, min_items_limit, max_items_limit, plan_type, plan_due, location, created_by, updated_by, sharable_groups)
+VALUES 
+('Daily maintenance plan', 'used to validate daily items', 
+ (SELECT id FROM community.statuses mps LIMIT 1), 
+ '#d20a0a', 1, 100, 'annual', 
+ now() + interval '1 year', 
+ '(-119.170898, 34.196411)', 
+ (SELECT id FROM community.profiles p LIMIT 1), 
+ (SELECT id FROM community.profiles p LIMIT 1), 
+ ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
 
+('Weekly maintenance plan', 'used for weekly maintenance', 
+ (SELECT id FROM community.statuses mps LIMIT 1), 
+ '#28b391', 1, 100, 'weekly', 
+ now() + interval '7 days', 
+ '(-117.182541, 34.055569)', 
+ (SELECT id FROM community.profiles p LIMIT 1), 
+ (SELECT id FROM community.profiles p LIMIT 1), 
+ ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
 
 -- ADD INVENTORIES SQL TEST DATA --
 INSERT INTO community.inventory (name, description, price, status, barcode, sku, quantity, bought_at, location,

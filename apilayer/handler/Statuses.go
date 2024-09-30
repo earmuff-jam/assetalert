@@ -42,7 +42,7 @@ func GetStatusList(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	resp, err := db.FetchStatusList(user, userID, statusOptionType)
+	resp, err := db.MaintenanceStatusList(user, userID, statusOptionType)
 	if err != nil {
 		log.Printf("Unable to retrieve status list. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

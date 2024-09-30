@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS community.maintenance_plan
     name                VARCHAR(100)                                                                                            NOT NULL,
     description         VARCHAR(500),
     color               VARCHAR(50),
-    maintenance_status  UUID                         REFERENCES maintenance_status (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    status              UUID                         REFERENCES statuses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     min_items_limit     INT                                                                                                     NOT NULL DEFAULT 1, 
     max_items_limit     INT                                                                                                     NOT NULL DEFAULT 1,
     plan_type           VARCHAR(100)                                                                                            NOT NULL DEFAULT 'annual',

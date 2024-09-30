@@ -44,7 +44,8 @@ func IngestSvc() {
 	}
 	GenerateFakeDataWithLimit(currentUser, 2, "note", creatorID)
 	GenerateFakeDataWithLimit(currentUser, 2, "inventory", creatorID)
-
+	GenerateFakeDataWithLimit(currentUser, 2, "category", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 2, "maintenance_plan", creatorID)
 }
 
 // GenerateFakeDataWithLimit ...
@@ -67,9 +68,77 @@ func GenerateFakeDataWithLimit(user string, minCount int, typeOf string, creator
 	case "inventory":
 		log.Printf("loading %d of inventory rows", rowCounts)
 		populateFakeInventories(user, rowCounts, creatorID)
+	case "category":
+		log.Printf("loading %d of category rows", rowCounts)
+		populateFakeCategories(user, rowCounts, creatorID)
+	case "maintenance_plan":
+		log.Printf("loading %d of maintenance plan rows", rowCounts)
+		populateFakeMaintenancePlans(user, rowCounts, creatorID)
 	default:
 	}
 	return nil
+}
+
+// populateFakeCategories ...
+//
+// generate fake category data to test in the application
+func populateFakeCategories(user string, limit int, creatorID string) {
+
+	for i := 1; i <= limit; i++ {
+		draftCategory := model.Category{}
+		// time is set for created / updated
+		now := time.Now()
+		daysAgo := gofakeit.Number(1, 30)
+		startDate := now.AddDate(0, 0, -daysAgo)
+
+		draftCategory.Name = gofakeit.JobTitle()
+		draftCategory.Description = gofakeit.HipsterSentence(2)
+		draftCategory.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
+		draftCategory.MinItemsLimit = gofakeit.Number(1, 10)
+		draftCategory.MaxItemsLimit = gofakeit.Number(10, 100)
+		draftCategory.Status = "draft"
+		draftCategory.CreatedAt = startDate
+		draftCategory.UpdatedAt = startDate
+		draftCategory.CreatedBy = creatorID
+		draftCategory.Creator = gofakeit.FirstName()
+		draftCategory.UpdatedBy = creatorID
+		draftCategory.Updator = gofakeit.FirstName()
+		draftCategory.SharableGroups = []string{creatorID}
+
+		db.CreateCategory(user, &draftCategory)
+	}
+}
+
+// populateFakeMaintenancePlans ...
+//
+// generate fake maintenance plan data to test in the application
+func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
+
+	for i := 1; i <= limit; i++ {
+		draftMaintenancePlan := model.MaintenancePlan{}
+		// time is set for created / updated
+		now := time.Now()
+		daysAgo := gofakeit.Number(1, 30)
+		startDate := now.AddDate(0, 0, -daysAgo)
+
+		draftMaintenancePlan.Name = gofakeit.JobTitle()
+		draftMaintenancePlan.Description = gofakeit.HipsterSentence(2)
+		draftMaintenancePlan.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
+		draftMaintenancePlan.MinItemsLimit = gofakeit.Number(1, 10)
+		draftMaintenancePlan.MaxItemsLimit = gofakeit.Number(10, 100)
+		draftMaintenancePlan.Status = "draft"
+		draftMaintenancePlan.PlanType = gofakeit.RandString([]string{"annual", "weekly", "daily"})
+		draftMaintenancePlan.PlanDue = startDate
+		draftMaintenancePlan.CreatedAt = startDate
+		draftMaintenancePlan.UpdatedAt = startDate
+		draftMaintenancePlan.CreatedBy = creatorID
+		draftMaintenancePlan.Creator = gofakeit.FirstName()
+		draftMaintenancePlan.UpdatedBy = creatorID
+		draftMaintenancePlan.Updator = gofakeit.FirstName()
+		draftMaintenancePlan.SharableGroups = []string{creatorID}
+
+		db.CreateMaintenancePlan(user, &draftMaintenancePlan)
+	}
 }
 
 // populateFakeNotes ...

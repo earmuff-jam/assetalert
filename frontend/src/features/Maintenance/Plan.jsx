@@ -45,7 +45,7 @@ const Plan = () => {
       </Stack>
       <PlanList
         maintenancePlan={maintenancePlan}
-        loading={loading}
+        loading={displayModal ? false : loading} // do not refresh page if add modal is present
         setDisplayModal={setDisplayModal}
         setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
       />

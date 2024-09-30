@@ -17,6 +17,7 @@ type MaintenancePlan struct {
 	MinItemsLimit     int       `json:"min_items_limit"`
 	MaxItemsLimit     int       `json:"max_items_limit"`
 	PlanType          string    `json:"plan_type"`
+	PlanDue           time.Time `json:"plan_due"`
 	Location          Location  `json:"location,omitempty"`
 	CreatedBy         string    `json:"created_by"`
 	CreatedAt         time.Time `json:"created_at"`
