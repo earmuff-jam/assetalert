@@ -97,7 +97,7 @@ export default function SecurityQuestionAnswerForm({ handleCloseModal }) {
       <>
         <RowHeader
           title="Security questions"
-          secondaryTitle="Please answer your security questions to the best of your knowledge."
+          caption="Please answer your security questions to the best of your knowledge."
         />
         <List>
           <ListItem key={SECURITY_QUESTIONS[0].id}>

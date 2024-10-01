@@ -92,12 +92,12 @@ export default function CategoryItem() {
     <Stack direction="column" spacing="1rem">
       <RowHeader
         title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
-        secondaryTitle="View details of selected category"
+        caption="View details of selected category"
       />
       <ItemCard selectedItem={selectedCategory} isViewingCategory />
       <RowHeader
         title="Items"
-        secondaryTitle={`Total ${itemsInCategory?.length || 0} item(s)`}
+        caption={`Total ${itemsInCategory?.length || 0} item(s)`}
         primaryButtonTextLabel="Add Items"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={handleOpenModal}
@@ -108,7 +108,7 @@ export default function CategoryItem() {
         isEmpty={itemsInCategory === null}
         subtitle={'Associate items into category to begin.'}
       />
-      <RowHeader title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
+      <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
           legendLabel="Name Vs Cost"

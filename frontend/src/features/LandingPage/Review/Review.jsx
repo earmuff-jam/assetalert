@@ -48,7 +48,7 @@ export default function Review() {
 
   return (
     <>
-      <RowHeader title="Learn more" secondaryTitle="Read reviews from clients that use asset alert." />
+      <RowHeader title="Learn more" caption="Read reviews from clients that use asset alert." />
       <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
         {review.map((v) => (
           <ReviewCardWrapper key={v.id} title={v.title} chipLabel={dayjs(v.created_at).format('MMM')}>

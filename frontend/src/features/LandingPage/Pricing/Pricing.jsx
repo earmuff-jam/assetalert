@@ -102,7 +102,7 @@ export default function Pricing() {
 
   return (
     <Stack>
-      <RowHeader title="Pricing" secondaryTitle="Pricing and Information" />
+      <RowHeader title="Pricing" caption="Pricing and Information" />
       <Stack direction="row" spacing="1rem" justifyContent="center">
         <Chip
           label="Monthly"

@@ -49,7 +49,7 @@ export default function Reports() {
     <>
       <RowHeader
         title="Reports Overview"
-        secondaryTitle="Displaying results for the current selected timeframe."
+        caption="Displaying results for the current selected timeframe."
         primaryStartIcon={<FilterAltRounded />}
         primaryButtonTextLabel={'Filter results'}
         handleClickPrimaryButton={handleFilter}
@@ -94,7 +94,7 @@ export default function Reports() {
             />
           </ReportCardWrapper>
         </Stack>
-        <RowHeader title="Asset Details" secondaryTitle="Asset movement for the current time range" />
+        <RowHeader title="Asset Details" caption="Asset movement for the current time range" />
         <DataTable
           rows={inventories}
           columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}

@@ -48,7 +48,7 @@ const Plan = () => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <RowHeader
           title="Maintenance Plans"
-          secondaryTitle={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
+          caption={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
         />
         <Stack direction="row" spacing="1rem">
           <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">

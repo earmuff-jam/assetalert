@@ -59,7 +59,7 @@ const CategoryList = ({ displayConcise = false }) => {
   return (
     <Stack sx={{ py: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <RowHeader title="Categories" secondaryTitle={buildCaption(displayConcise, selectedFilter)} />
+        <RowHeader title="Categories" caption={buildCaption(displayConcise, selectedFilter)} />
         <Stack direction="row" spacing="1rem">
           <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
             Add Category

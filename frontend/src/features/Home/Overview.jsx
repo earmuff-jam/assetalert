@@ -46,7 +46,7 @@ const Overview = () => {
 
   return (
     <>
-      <RowHeader title="Overview" secondaryTitle="View summary details about your assets" />
+      <RowHeader title="Overview" caption="View summary details about your assets" />
       <Stack spacing={{ xs: 1 }}>
         <RowHeader title="Asset Summary" />
         <Stack direction="row" spacing={{ xs: 1 }} useFlexGap flexWrap="wrap">

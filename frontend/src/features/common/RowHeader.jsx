@@ -3,7 +3,7 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material';
 const RowHeader = ({
   title,
   titleVariant = 'h4',
-  secondaryTitle,
+  caption,
   showRedirectLink,
   redirectTo,
   primaryButtonTextLabel,
@@ -21,13 +21,13 @@ const RowHeader = ({
         <Typography variant={titleVariant} component="h2">
           {title}
         </Typography>
-        {secondaryTitle ? (
+        {caption ? (
           showRedirectLink ? (
             <Link href={redirectTo}>
-              <Typography variant="caption">{secondaryTitle}</Typography>
+              <Typography variant="caption">{caption}</Typography>
             </Link>
           ) : (
-            <Typography variant="caption">{secondaryTitle}</Typography>
+            <Typography variant="caption">{caption}</Typography>
           )
         ) : null}
       </Stack>

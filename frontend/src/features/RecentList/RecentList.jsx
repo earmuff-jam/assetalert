@@ -19,7 +19,7 @@ const RecentList = () => {
     <Stack>
       <RowHeader
         title="Recent Activities"
-        secondaryTitle="View all of your recent activities here. You can view all associated activities performed by yourself. Track changes for the last ten assets. Download all recent activities for the past 30 days."
+        caption="View all of your recent activities here. You can view all associated activities performed by yourself. Track changes for the last ten assets. Download all recent activities for the past 30 days."
         primaryButtonTextLabel="Export"
         primaryStartIcon={<DownloadRounded />}
         handleClickPrimaryButton={downloadRecentActivities}
