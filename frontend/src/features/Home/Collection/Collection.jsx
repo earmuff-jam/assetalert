@@ -1,10 +1,10 @@
 import LearnMore from './LearnMore';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import RowHeader from '../../common/RowHeader';
 
 const Collection = ({ title, items }) => {
   return (
     <>
-      <HeaderWithButton title={title} />
+      <RowHeader title={title} />
       <LearnMore items={items} />
     </>
   );

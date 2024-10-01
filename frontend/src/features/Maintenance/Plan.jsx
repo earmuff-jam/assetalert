@@ -3,7 +3,7 @@ import { AddRounded, FileDownload } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack } from '@mui/material';
 import AddPlan from './AddPlan';
 import PlanList from './PlanList';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import SimpleModal from '../common/SimpleModal';
 import { useSelector } from 'react-redux';
 import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
@@ -46,7 +46,7 @@ const Plan = () => {
   return (
     <Box sx={{ py: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <HeaderWithButton
+        <RowHeader
           title="Maintenance Plans"
           secondaryTitle={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
         />

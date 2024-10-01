@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { AddRounded, FileDownload } from '@mui/icons-material';
 import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import Category from './Category';
 import { useSelector } from 'react-redux';
 import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
@@ -59,7 +59,7 @@ const CategoryList = ({ displayConcise = false }) => {
   return (
     <Stack sx={{ py: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <HeaderWithButton title="Categories" secondaryTitle={buildCaption(displayConcise, selectedFilter)} />
+        <RowHeader title="Categories" secondaryTitle={buildCaption(displayConcise, selectedFilter)} />
         <Stack direction="row" spacing="1rem">
           <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
             Add Category

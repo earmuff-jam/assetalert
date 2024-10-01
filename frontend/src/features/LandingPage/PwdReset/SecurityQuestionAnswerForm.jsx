@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { FORGOT_PASSWORD_FORM_FIELDS } from '../constants';
 import { Button, List, ListItem, ListItemText, Skeleton, Stack, TextField, Typography } from '@mui/material';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import RowHeader from '../../common/RowHeader';
 import { useSelector } from 'react-redux';
 
 export const SECURITY_QUESTIONS = [
@@ -95,7 +95,7 @@ export default function SecurityQuestionAnswerForm({ handleCloseModal }) {
   if (verifiedUser) {
     return (
       <>
-        <HeaderWithButton
+        <RowHeader
           title="Security questions"
           secondaryTitle="Please answer your security questions to the best of your knowledge."
         />

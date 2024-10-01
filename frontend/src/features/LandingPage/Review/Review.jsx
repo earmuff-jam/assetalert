@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import RowHeader from '../../common/RowHeader';
 import ItemDetails from '../../Reports/ItemDetails';
 import { capitalizeFirstLetter } from '../../common/utils';
 import { Stack } from '@mui/material';
@@ -48,7 +48,7 @@ export default function Review() {
 
   return (
     <>
-      <HeaderWithButton title="Learn more" secondaryTitle="Read reviews from clients that use asset alert." />
+      <RowHeader title="Learn more" secondaryTitle="Read reviews from clients that use asset alert." />
       <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
         {review.map((v) => (
           <ReviewCardWrapper key={v.id} title={v.title} chipLabel={dayjs(v.created_at).format('MMM')}>

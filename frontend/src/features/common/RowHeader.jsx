@@ -1,6 +1,6 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material';
 
-const HeaderWithButton = ({
+const RowHeader = ({
   title,
   titleVariant = 'h4',
   secondaryTitle,
@@ -53,4 +53,4 @@ const HeaderWithButton = ({
   );
 };
 
-export default HeaderWithButton;
+export default RowHeader;

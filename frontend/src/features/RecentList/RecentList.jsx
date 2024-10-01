@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import RecentActivities from './RecentActivities';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import { DownloadRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
@@ -17,7 +17,7 @@ const RecentList = () => {
 
   return (
     <Stack>
-      <HeaderWithButton
+      <RowHeader
         title="Recent Activities"
         secondaryTitle="View all of your recent activities here. You can view all associated activities performed by yourself. Track changes for the last ten assets. Download all recent activities for the past 30 days."
         primaryButtonTextLabel="Export"
