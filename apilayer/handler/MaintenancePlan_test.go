@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/mohit2530/communityCare/config"
@@ -198,10 +199,11 @@ func Test_CreateMaintenancePlan(t *testing.T) {
 		Name:           "Kitty litter box",
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
-		Status:         "Approved",
+		Status:         "completed",
 		MaxItemsLimit:  120,
 		MinItemsLimit:  1,
 		PlanType:       "annual",
+		PlanDue:        time.Now().AddDate(1, 0, 0),
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
 		SharableGroups: []string{prevUser.ID.String()},
@@ -232,7 +234,7 @@ func Test_CreateMaintenancePlan(t *testing.T) {
 
 	assert.Equal(t, selectedMaintenancePlan.Name, "Kitty litter box")
 	assert.Equal(t, selectedMaintenancePlan.Description, "Palette storage of kitty litter")
-	assert.Equal(t, selectedMaintenancePlan.StatusName, "Approved")
+	assert.Equal(t, selectedMaintenancePlan.StatusName, "completed")
 	assert.Equal(t, selectedMaintenancePlan.MaxItemsLimit, 120)
 	assert.Equal(t, selectedMaintenancePlan.MinItemsLimit, 1)
 	assert.Equal(t, selectedMaintenancePlan.PlanType, "annual")
@@ -305,7 +307,7 @@ func Test_UpdateMaintenancePlan(t *testing.T) {
 
 	selectedMaintenancePlan.Name = "Updated Title"
 	selectedMaintenancePlan.Description = "Update title description"
-	selectedMaintenancePlan.Status = "Rejected" // change status so id is not passed to service
+	selectedMaintenancePlan.Status = "completed" // change status so id is not passed to service
 
 	// Marshal the draftUpdateEvent into JSON bytes
 	updateMaintenancePlanRequest, err := json.Marshal(selectedMaintenancePlan)
@@ -333,7 +335,7 @@ func Test_UpdateMaintenancePlan(t *testing.T) {
 		t.Errorf("expected error to be nil got %v", err)
 	}
 	assert.Equal(t, updatedMaintenancePlan.Name, "Updated Title")
-	assert.Equal(t, updatedMaintenancePlan.StatusName, "Rejected")
+	assert.Equal(t, updatedMaintenancePlan.StatusName, "completed")
 
 	// cleanup
 	db.RemoveMaintenancePlan(config.CTO_USER, updatedMaintenancePlan.ID)

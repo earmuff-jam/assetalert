@@ -106,9 +106,7 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	}
 	defer db.Close()
 
-	// retrieve selected status
-	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status, selectedStatusIDSqlStr)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -197,8 +195,7 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusIDSqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-	selectedStatusDetails, err := retrieveStatusDetails(user, userID, draftNote.Status, selectedStatusIDSqlStr)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -281,40 +278,4 @@ func RemoveNote(user string, draftNoteID string) error {
 		return err
 	}
 	return nil
-}
-
-// retrieveStatusDetails ...
-func retrieveStatusDetails(user string, userID string, statusID string, sqlStr string) (*model.StatusList, error) {
-
-	db, err := SetupDB(user)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	row := db.QueryRow(sqlStr, userID, statusID)
-
-	var selectedStatusID, selectedStatusName, selectedStatusDescription string
-	err = row.Scan(&selectedStatusID, &selectedStatusName, &selectedStatusDescription)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.New("unable to find selected status")
-		}
-		log.Printf("invalid status selected. error: %+v", err)
-		return nil, err
-	}
-
-	parsedSelectedStatusID, err := uuid.Parse(selectedStatusID)
-	if err != nil {
-		log.Printf("error in parsing selected status. error: %+v", err)
-		return nil, err
-	}
-
-	selectedStatus := model.StatusList{
-		ID:          parsedSelectedStatusID,
-		Name:        selectedStatusName,
-		Description: selectedStatusDescription,
-	}
-
-	return &selectedStatus, nil
 }

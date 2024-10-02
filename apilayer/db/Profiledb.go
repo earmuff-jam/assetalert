@@ -303,7 +303,7 @@ func getFavouriteItems(db *sql.DB, userID string, limit int) ([]model.FavouriteI
 		LEFT JOIN community.category c ON c.id = fi.category_id 
 		LEFT JOIN community.statuses s ON s.id = c.status 
 		LEFT JOIN community.maintenance_plan mp ON mp.id = fi.maintenance_plan_id
-		LEFT JOIN community.maintenance_status ms ON ms.id = mp.maintenance_status WHERE fi.created_by = $1 
+		LEFT JOIN community.statuses ms ON ms.id = mp.status WHERE fi.created_by = $1 
 	FETCH FIRST $2 rows only;`
 
 	rows, err := db.Query(sqlStr, userID, limit)

@@ -40,7 +40,6 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 
 	var reports []model.Report
 	rows, err := db.Query(parsedSqlStr, userID, sinceDateTime)
-	log.Printf("sqlStr := %+v, %+s, %+v", parsedSqlStr, userID.String(), sinceDateTime)
 	if err != nil {
 		log.Printf("unable to retrieve report details. error: %+v", err)
 		return nil, err

@@ -2,28 +2,60 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
+	"errors"
+	"log"
 
+	"github.com/google/uuid"
 	"github.com/lib/pq"
 	"github.com/mohit2530/communityCare/model"
 )
 
-// FetchStatusList ...
-func FetchStatusList(user string, userID string, statusOptionType string) ([]model.StatusList, error) {
+// RetrieveStatusDetails ...
+func RetrieveStatusDetails(user string, userID string, statusID string) (*model.StatusList, error) {
+
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	tableName := ""
-	if statusOptionType == "maintenance" {
-		tableName = "community.maintenance_status"
-	} else if statusOptionType == "notes" || statusOptionType == "category" {
-		tableName = "community.statuses"
+	sqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
+	row := db.QueryRow(sqlStr, userID, statusID)
+
+	var selectedStatusID, selectedStatusName, selectedStatusDescription string
+	err = row.Scan(&selectedStatusID, &selectedStatusName, &selectedStatusDescription)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("unable to find selected status")
+		}
+		log.Printf("invalid status selected. error: %+v", err)
+		return nil, err
 	}
 
-	sqlStr := fmt.Sprintf("SELECT id, name, description, color, created_at, created_by, updated_at, updated_by, sharable_groups FROM %s WHERE $1::UUID = ANY(sharable_groups);", tableName)
+	parsedSelectedStatusID, err := uuid.Parse(selectedStatusID)
+	if err != nil {
+		log.Printf("error in parsing selected status. error: %+v", err)
+		return nil, err
+	}
+
+	selectedStatus := model.StatusList{
+		ID:          parsedSelectedStatusID,
+		Name:        selectedStatusName,
+		Description: selectedStatusDescription,
+	}
+
+	return &selectedStatus, nil
+}
+
+// MaintenanceStatusList ...
+func MaintenanceStatusList(user string, userID string, statusOptionType string) ([]model.StatusList, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sqlStr := "SELECT id, name, description, color, created_at, created_by, updated_at, updated_by, sharable_groups FROM community.statuses WHERE $1::UUID = ANY(sharable_groups);"
 
 	var statuses []model.StatusList
 	var color sql.NullString
