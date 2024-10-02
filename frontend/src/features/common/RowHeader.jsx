@@ -1,9 +1,9 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material';
 
-const HeaderWithButton = ({
+const RowHeader = ({
   title,
   titleVariant = 'h4',
-  secondaryTitle,
+  caption,
   showRedirectLink,
   redirectTo,
   primaryButtonTextLabel,
@@ -21,13 +21,13 @@ const HeaderWithButton = ({
         <Typography variant={titleVariant} component="h2">
           {title}
         </Typography>
-        {secondaryTitle ? (
+        {caption ? (
           showRedirectLink ? (
             <Link href={redirectTo}>
-              <Typography variant="caption">{secondaryTitle}</Typography>
+              <Typography variant="caption">{caption}</Typography>
             </Link>
           ) : (
-            <Typography variant="caption">{secondaryTitle}</Typography>
+            <Typography variant="caption">{caption}</Typography>
           )
         ) : null}
       </Stack>
@@ -53,4 +53,4 @@ const HeaderWithButton = ({
   );
 };
 
-export default HeaderWithButton;
+export default RowHeader;

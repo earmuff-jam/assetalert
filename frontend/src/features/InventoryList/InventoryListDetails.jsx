@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Dialog, DialogTitle, IconButton, Slide, Stack, TextField } from '@mui/material';
 import { CheckRounded, CloseRounded, EditRounded, GridViewRounded, ViewListRounded } from '@mui/icons-material';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import SimpleModal from '../common/SimpleModal';
 import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
 import TableComponent from './TableComponent';
@@ -174,7 +174,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
   return (
     <Stack flexGrow="1">
       <Stack direction="row" justifyContent="space-between">
-        <HeaderWithButton title="Assets" />
+        <RowHeader title="Assets" />
         <Stack direction="row" alignItems="center">
           <IconButton size="small" onClick={() => setGridMode(!gridMode)}>
             {gridMode ? (

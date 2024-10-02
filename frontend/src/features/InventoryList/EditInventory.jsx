@@ -19,7 +19,7 @@ import { BookmarkAddedRounded, CheckRounded, CloseRounded, NoteAddRounded, SwapH
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BLANK_INVENTORY_FORM } from './constants';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryActions } from './inventorySlice';
 import { enqueueSnackbar } from 'notistack';
@@ -170,7 +170,7 @@ const EditInventory = () => {
 
   return (
     <Container sx={{ marginTop: '1rem' }}>
-      <HeaderWithButton title="Editing inventory" secondaryTitle={`Editing ${formData.name.value}`}/>
+      <RowHeader title="Editing inventory" caption={`Editing ${formData.name.value}`}/>
       <Stack spacing={2}>
         <Stack direction="row" spacing={2}>
           {Object.values(formData)

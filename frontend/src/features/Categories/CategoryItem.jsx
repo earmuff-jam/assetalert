@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import DataTable from '../common/DataTable/DataTable';
 import { Box, Button, Skeleton, Stack } from '@mui/material';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import { AddRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -90,14 +90,14 @@ export default function CategoryItem() {
 
   return (
     <Stack direction="column" spacing="1rem">
-      <HeaderWithButton
+      <RowHeader
         title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
-        secondaryTitle="View details of selected category"
+        caption="View details of selected category"
       />
       <ItemCard selectedItem={selectedCategory} isViewingCategory />
-      <HeaderWithButton
+      <RowHeader
         title="Items"
-        secondaryTitle={`Total ${itemsInCategory?.length || 0} item(s)`}
+        caption={`Total ${itemsInCategory?.length || 0} item(s)`}
         primaryButtonTextLabel="Add Items"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={handleOpenModal}
@@ -108,7 +108,7 @@ export default function CategoryItem() {
         isEmpty={itemsInCategory === null}
         subtitle={'Associate items into category to begin.'}
       />
-      <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
+      <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
           legendLabel="Name Vs Cost"

@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import ReportCardWrapper from './ReportCardWrapper';
 import dayjs from 'dayjs';
 import { FilterAltRounded, TrendingUpRounded } from '@mui/icons-material';
@@ -47,9 +47,9 @@ export default function Reports() {
 
   return (
     <>
-      <HeaderWithButton
+      <RowHeader
         title="Reports Overview"
-        secondaryTitle="Displaying results for the current selected timeframe."
+        caption="Displaying results for the current selected timeframe."
         primaryStartIcon={<FilterAltRounded />}
         primaryButtonTextLabel={'Filter results'}
         handleClickPrimaryButton={handleFilter}
@@ -94,7 +94,7 @@ export default function Reports() {
             />
           </ReportCardWrapper>
         </Stack>
-        <HeaderWithButton title="Asset Details" secondaryTitle="Asset movement for the current time range" />
+        <RowHeader title="Asset Details" caption="Asset movement for the current time range" />
         <DataTable
           rows={inventories}
           columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}

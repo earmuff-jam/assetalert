@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import ItemCard from '../common/ItemCard/ItemCard';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from './constants';
 import { maintenancePlanActions } from './maintenanceSlice';
@@ -89,14 +89,14 @@ export default function MaintenanceItem() {
 
   return (
     <Stack direction="column" spacing="1rem">
-      <HeaderWithButton
+      <RowHeader
         title={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
-        secondaryTitle="View details of selected maintenance plan"
+        caption="View details of selected maintenance plan"
       />
       <ItemCard selectedItem={selectedMaintenancePlan} />
-      <HeaderWithButton
+      <RowHeader
         title="Items"
-        secondaryTitle={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}
+        caption={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}
         primaryButtonTextLabel="Add Items"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={handleOpenModal}
@@ -107,7 +107,7 @@ export default function MaintenanceItem() {
         isEmpty={itemsInMaintenancePlan === null}
         subtitle={'Associate items into maintenance plan to begin.'}
       />
-      <HeaderWithButton title="Graph" secondaryTitle="Graph details for last 10 recently updated" />
+      <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
           legendLabel="Name Vs Cost"

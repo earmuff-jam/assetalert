@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Chip, Stack } from '@mui/material';
-import HeaderWithButton from '../../common/HeaderWithButton';
+import RowHeader from '../../common/RowHeader';
 import { ItemWrapper } from './ItemWrapper';
 
 const data = [
@@ -102,7 +102,7 @@ export default function Pricing() {
 
   return (
     <Stack>
-      <HeaderWithButton title="Pricing" secondaryTitle="Pricing and Information" />
+      <RowHeader title="Pricing" caption="Pricing and Information" />
       <Stack direction="row" spacing="1rem" justifyContent="center">
         <Chip
           label="Monthly"

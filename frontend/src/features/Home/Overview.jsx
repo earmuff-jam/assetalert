@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { assetSummaryActions } from './SummarySlice';
 import PieChart from '../../util/Chart/PieChart';
 import { prefix } from '../common/utils';
-import HeaderWithButton from '../common/HeaderWithButton';
+import RowHeader from '../common/RowHeader';
 import dayjs from 'dayjs';
 
 const Overview = () => {
@@ -46,9 +46,9 @@ const Overview = () => {
 
   return (
     <>
-      <HeaderWithButton title="Overview" secondaryTitle="View summary details about your assets" />
+      <RowHeader title="Overview" caption="View summary details about your assets" />
       <Stack spacing={{ xs: 1 }}>
-        <HeaderWithButton title="Asset Summary" />
+        <RowHeader title="Asset Summary" />
         <Stack direction="row" spacing={{ xs: 1 }} useFlexGap flexWrap="wrap">
           <CardItem>
             <ColumnItem
