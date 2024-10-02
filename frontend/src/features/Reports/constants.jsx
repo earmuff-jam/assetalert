@@ -11,7 +11,7 @@ export const FILTER_OPTIONS = [
     id: 1,
     label: 'today',
     display: 'Today',
-    value: dayjs().toISOString(),
+    value: dayjs().subtract(1, 'day').toISOString(),
   },
   {
     id: 2,

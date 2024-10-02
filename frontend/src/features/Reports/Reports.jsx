@@ -13,20 +13,31 @@ import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
 import SimpleModal from '../common/SimpleModal';
 import FilterMenu from './FilterMenu';
+import { reportActions } from './reportSlice';
 
 export default function Reports() {
   const dispatch = useDispatch();
   const { inventories = [], loading } = useSelector((state) => state.inventory);
+  const { reports = [], loading: reportLoading } = useSelector((state) => state.reports);
   const { maintenancePlan: maintenancePlanList = [], loading: maintenancePlanListLoading } = useSelector(
     (state) => state.maintenance
   );
 
+  const [sinceValue, setSinceValue] = useState(dayjs().startOf('year'));
   const [selectedAsset, setSelectedAsset] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedMaintenancePlan, setSelectedMaintenancePlan] = useState([]);
 
   const handleFilter = () => setDisplayModal(true);
   const closeFilter = () => setDisplayModal(false);
+
+  const renderCaption = () => {
+    if (sinceValue) {
+      return `Viewing reports since ${dayjs(sinceValue).fromNow()}`;
+    } else {
+      return `Viewing results for the ${dayjs().startOf('year').fromNow()}`;
+    }
+  };
 
   useEffect(() => {
     if (!loading && inventories.length > 0) {
@@ -41,15 +52,26 @@ export default function Reports() {
   }, [maintenancePlanListLoading, maintenancePlanList.length]);
 
   useEffect(() => {
-    dispatch(inventoryActions.getAllInventoriesForUser());
+    dispatch(inventoryActions.getAllInventoriesForUser({ since: sinceValue.format('YYYY-MM-DDTHH:mm:ssZ') }));
     dispatch(maintenancePlanActions.getPlans());
   }, []);
+
+  useEffect(() => {
+    if (!reportLoading && reports.length <= 0) {
+      dispatch(reportActions.getReports({ since: dayjs().startOf('year').toISOString(), includeOverdue: true }));
+    }
+  }, [reportLoading]);
+
+  const formatDate = (date) => {
+    if (!date) return null;
+    return dayjs(date).isValid() && `Since ${dayjs(sinceValue).format('MMM, YYYY')}`;
+  };
 
   return (
     <>
       <RowHeader
         title="Reports Overview"
-        caption="Displaying results for the current selected timeframe."
+        caption={renderCaption()}
         primaryStartIcon={<FilterAltRounded />}
         primaryButtonTextLabel={'Filter results'}
         handleClickPrimaryButton={handleFilter}
@@ -58,15 +80,15 @@ export default function Reports() {
         <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
           <ReportCardWrapper
             title="Valuation"
-            chipLabel={dayjs().format('MMM')}
-            value="$21.02"
+            chipLabel={formatDate(sinceValue)}
+            value={`$${reports[0]?.total_valuation.toFixed(2) || 0.0}`}
             iconType={<TrendingUpRounded color="success" />}
-            footerText="This month xx amount worth of items needs review"
+            footerText="Total cost of items in dollar value."
           />
           <ReportCardWrapper
-            title="Recent Category"
-            chipLabel={dayjs().format('MMM')}
-            value="$12.36"
+            title="Categorized Assets"
+            chipLabel={formatDate(sinceValue)}
+            value={`$${reports[0]?.cost_category_items.toFixed(2) || 0.0}`}
             iconType={<TrendingUpRounded color="success" />}
           />
         </Stack>
@@ -82,7 +104,7 @@ export default function Reports() {
               caption={selectedAsset?.description || ''}
             />
           </ReportCardWrapper>
-          <ReportCardWrapper title="Maintenance due" chipLabel={dayjs().format('MMM')}>
+          <ReportCardWrapper title="Maintenance due">
             <ItemDetails
               loading={loading}
               avatarValue={
@@ -94,7 +116,7 @@ export default function Reports() {
             />
           </ReportCardWrapper>
         </Stack>
-        <RowHeader title="Asset Details" caption="Asset movement for the current time range" />
+        <RowHeader title="Asset Details" caption={`Asset movement since ${dayjs(sinceValue).fromNow()}`} />
         <DataTable
           rows={inventories}
           columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}
@@ -108,7 +130,7 @@ export default function Reports() {
           handleClose={closeFilter}
           maxSize="sm"
         >
-          <FilterMenu handleClose={closeFilter}/>
+          <FilterMenu handleClose={closeFilter} sinceValue={sinceValue} setSinceValue={setSinceValue} />
         </SimpleModal>
       )}
     </>

@@ -5,7 +5,7 @@ import TableComponent from '../InventoryList/TableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import ItemCard from '../common/ItemCard/ItemCard';
+import DetailsCard from '../common/ItemCard/DetailsCard';
 import RowHeader from '../common/RowHeader';
 import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from './constants';
@@ -93,7 +93,7 @@ export default function MaintenanceItem() {
         title={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
         caption="View details of selected maintenance plan"
       />
-      <ItemCard selectedItem={selectedMaintenancePlan} />
+      <DetailsCard selectedItem={selectedMaintenancePlan} />
       <RowHeader
         title="Items"
         caption={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}

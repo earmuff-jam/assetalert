@@ -6,10 +6,17 @@ import instance from '../../util/Instances';
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
 const STORAGE_LOCATIONS_BASE_URL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
-export function* fetchAllInventoriesForUser() {
+export function* fetchAllInventoriesForUser(action) {
   try {
+    const params = new URLSearchParams();
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories`);
+
+    if (action.payload) {
+      const { since } = action.payload;
+      params.append('since', since);
+    }
+
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories?${params.toString()}`);
     yield put(inventoryActions.getAllInventoriesForUserSuccess(response.data || {}));
   } catch (e) {
     yield put(inventoryActions.getAllInventoriesForUserFailure(e));

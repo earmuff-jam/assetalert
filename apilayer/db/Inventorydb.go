@@ -12,7 +12,7 @@ import (
 )
 
 // RetrieveAllInventoriesForUser ...
-func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventory, error) {
+func RetrieveAllInventoriesForUser(user string, userID string, sinceDateTime string) ([]model.Inventory, error) {
 
 	db, err := SetupDB(user)
 	if err != nil {
@@ -22,13 +22,27 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
 
 	tx, err := db.Begin()
 	if err != nil {
-		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
+		log.Printf("unable to start transaction with selected db pool. error: %+v", err)
 		return nil, err
 	}
 
-	data, err := retrieveAllInventoryDetailsForUser(tx, userID)
+	var additionalWhereClause string
+	var params []interface{}
+	params = append(params, userID) // First parameter is always userID
+
+	if sinceDateTime != "" {
+		parsedTime, err := time.Parse(time.RFC3339, sinceDateTime)
+		if err != nil {
+			log.Printf("error parsing sinceDateTime. error: %+v", err)
+			return nil, err
+		}
+		additionalWhereClause += " AND inv.updated_at >= $2"
+		params = append(params, parsedTime) // Add the parsed time as the second parameter
+	}
+
+	data, err := retrieveAllInventoryDetailsForUser(tx, additionalWhereClause, params...)
 	if err != nil {
-		log.Printf("unable to retrieve all inventories details for user. error: %+v", err)
+		log.Printf("unable to retrieve all inventory details for user. error: %+v", err)
 		return nil, err
 	}
 
@@ -43,43 +57,43 @@ func RetrieveAllInventoriesForUser(user string, userID string) ([]model.Inventor
 	return data, nil
 }
 
-func retrieveAllInventoryDetailsForUser(tx *sql.Tx, userID string) ([]model.Inventory, error) {
-	sqlStr := `SELECT
-    inv.id,
-    inv.name,
-    inv.description,
-    inv.price,
-    inv.status,
-    inv.barcode,
-    inv.sku,
-    inv.quantity,
-	inv.bought_at,
-    inv.location,
-    inv.storage_location_id,
-	inv.is_returnable,
-	inv.return_location,
-	inv.max_weight,
-	inv.min_weight,
-	inv.max_height,
-	inv.min_height,
-	inv.associated_image_url,
-    inv.created_by,
-    COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
-    inv.created_at,
-    inv.updated_by,
-    COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
-    inv.updated_at,
-	inv.sharable_groups
-FROM
-    community.inventory inv
-LEFT JOIN community.profiles cp ON inv.created_by = cp.id
-LEFT JOIN community.profiles up ON inv.updated_by = up.id
-WHERE
-   inv.created_by = $1
-ORDER BY
-   inv.updated_at  DESC;
-	`
-	rows, err := tx.Query(sqlStr, userID)
+func retrieveAllInventoryDetailsForUser(tx *sql.Tx, additionalWhereClause string, params ...interface{}) ([]model.Inventory, error) {
+	baseSqlStr := `SELECT
+		inv.id,
+		inv.name,
+		inv.description,
+		inv.price,
+		inv.status,
+		inv.barcode,
+		inv.sku,
+		inv.quantity,
+		inv.bought_at,
+		inv.location,
+		inv.storage_location_id,
+		inv.is_returnable,
+		inv.return_location,
+		inv.max_weight,
+		inv.min_weight,
+		inv.max_height,
+		inv.min_height,
+		inv.associated_image_url,
+		inv.created_by,
+		COALESCE(cp.username, cp.full_name, cp.email_address) AS creator_name,
+		inv.created_at,
+		inv.updated_by,
+		COALESCE(up.username, up.full_name, up.email_address) AS updater_name,
+		inv.updated_at,
+		inv.sharable_groups
+	FROM
+		community.inventory inv
+		LEFT JOIN community.profiles cp ON inv.created_by = cp.id
+		LEFT JOIN community.profiles up ON inv.updated_by = up.id`
+
+	whereSqlStr := "WHERE inv.created_by = $1"
+	orderBySqlStr := "ORDER BY inv.updated_at DESC;"
+
+	sqlStr := baseSqlStr + " " + whereSqlStr + additionalWhereClause + " " + orderBySqlStr
+	rows, err := tx.Query(sqlStr, params...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,12 +104,7 @@ ORDER BY
 	for rows.Next() {
 		var inventory model.Inventory
 
-		var returnLocation sql.NullString
-		var maxWeight sql.NullString
-		var minWeight sql.NullString
-		var maxHeight sql.NullString
-		var minHeight sql.NullString
-		var associatedImageURL sql.NullString
+		var returnLocation, maxWeight, minWeight, maxHeight, minHeight, associatedImageURL sql.NullString
 
 		if err := rows.Scan(
 			&inventory.ID,
@@ -485,7 +494,7 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 		return nil, err
 	}
 
-	resp, err := retrieveAllInventoryDetailsForUser(tx, userID)
+	resp, err := retrieveAllInventoryDetailsForUser(tx, userID, "")
 	if err != nil {
 		log.Printf("unable to retrieve all inventories for selected user. error: %+v", err)
 		return nil, err
@@ -549,8 +558,12 @@ func AddInventory(user string, userID string, draftInventory model.Inventory) (*
 	}
 
 	currentTimestamp := time.Now()
-	draftInventory.CreatedAt = currentTimestamp
-	draftInventory.UpdatedAt = currentTimestamp
+	if draftInventory.CreatedAt.IsZero() {
+		draftInventory.CreatedAt = currentTimestamp
+	}
+	if draftInventory.UpdatedAt.IsZero() {
+		draftInventory.UpdatedAt = currentTimestamp
+	}
 
 	sqlStr = `INSERT INTO community.inventory (name,
 		description,

@@ -4,11 +4,11 @@ import { FILTER_OPTIONS } from './constants';
 import { WarningRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { reportActions } from './reportSlice';
+import { inventoryActions } from '../InventoryList/inventorySlice';
 
-export default function FilterMenu({ handleClose }) {
+export default function FilterMenu({ handleClose, sinceValue, setSinceValue }) {
   const dispatch = useDispatch();
 
-  const [sinceValue, setSinceValue] = useState('');
   const [includeOverdue, setIncludeOverdue] = useState(true);
 
   const handleSinceValue = (e) => {
@@ -17,6 +17,7 @@ export default function FilterMenu({ handleClose }) {
 
   const submit = () => {
     dispatch(reportActions.getReports({ since: sinceValue, includeOverdue: includeOverdue }));
+    dispatch(inventoryActions.getAllInventoriesForUser({ since: sinceValue }));
     handleClose();
   };
 
