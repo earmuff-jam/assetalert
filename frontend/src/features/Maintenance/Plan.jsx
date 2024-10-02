@@ -5,10 +5,12 @@ import AddPlan from './AddPlan';
 import PlanList from './PlanList';
 import RowHeader from '../common/RowHeader';
 import SimpleModal from '../common/SimpleModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
+import { maintenancePlanActions } from './maintenanceSlice';
 
 const Plan = () => {
+  const dispatch = useDispatch();
   const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
 
   const [sortedData, setSortedData] = useState([]);
@@ -22,6 +24,10 @@ const Plan = () => {
   const handleCloseAddNewPlan = () => {
     setDisplayModal(false);
     setSelectedMaintenancePlanID('');
+  };
+
+  const downloadMaintenancePlans = () => {
+    dispatch(maintenancePlanActions.download());
   };
 
   const filterAndBuildMaintenancePlans = (plans, selectedFilter) => {
@@ -54,7 +60,7 @@ const Plan = () => {
           <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
             Add Plan
           </Button>
-          <IconButton size="small">
+          <IconButton size="small" onClick={downloadMaintenancePlans}>
             <FileDownload fontSize="small" />
           </IconButton>
         </Stack>

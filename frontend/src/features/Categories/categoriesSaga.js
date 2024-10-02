@@ -88,6 +88,18 @@ export function* fetchAddItemsInCategory(action) {
   }
 }
 
+export function* download() {
+  try {
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    const response = yield call(instance.get, `${BASEURL}/categories?${params.toString()}`);
+    yield put(categoryActions.downloadSuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.downloadFailure(e));
+  }
+}
+
 export function* watchGetCategoryList() {
   yield takeLatest(`category/getCategories`, getCategories);
 }
@@ -116,9 +128,14 @@ export function* watchFetchAddItemsInCategory() {
   yield takeLatest(`category/addItemsInCategory`, fetchAddItemsInCategory);
 }
 
+export function* watchDownload() {
+  yield takeLatest(`category/download`, download);
+}
+
 export default [
   watchGetCategoryList,
   watchGetCategory,
+  watchDownload,
   watchGetItemsForCategory,
   watchCreateCategory,
   watchUpdateCategory,

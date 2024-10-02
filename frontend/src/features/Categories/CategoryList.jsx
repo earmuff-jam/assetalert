@@ -5,10 +5,12 @@ import SimpleModal from '../common/SimpleModal';
 import AddCategory from './AddCategory';
 import RowHeader from '../common/RowHeader';
 import Category from './Category';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
+import { categoryActions } from './categoriesSlice';
 
 const CategoryList = ({ displayConcise = false }) => {
+  const dispatch = useDispatch();
   const { categories = [], loading } = useSelector((state) => state.categories);
 
   const [sortedData, setSortedData] = useState([]);
@@ -24,6 +26,10 @@ const CategoryList = ({ displayConcise = false }) => {
   };
 
   const toggleModal = () => setDisplayModal(!displayModal);
+
+  const downloadCategories = () => {
+    dispatch(categoryActions.download());
+  };
 
   const filterAndBuildCategories = (displayConcise, categories, selectedFilter) => {
     if (displayConcise) {
@@ -65,7 +71,7 @@ const CategoryList = ({ displayConcise = false }) => {
             Add Category
           </Button>
           {!displayConcise && (
-            <IconButton size="small">
+            <IconButton size="small" disabled={categories.length <= 0} onClick={downloadCategories}>
               <FileDownload fontSize="small" />
             </IconButton>
           )}
