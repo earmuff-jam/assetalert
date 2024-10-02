@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+import dayjs from 'dayjs';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -129,6 +131,28 @@ const maintenancePlanSlice = createSlice({
     },
     addItemsInPlanFailure: (state) => {
       state.loading = false;
+      state.error = '';
+    },
+    download: (state) => {
+      state.error = '';
+    },
+    downloadSuccess: (state, action) => {
+      state.error = '';
+      const rawData = action.payload;
+      const formattedData = rawData.map((v) => {
+        // eslint-disable-next-line no-unused-vars
+        const { id, activity_id, created_by, updated_by, sharable_groups, maintenance_status, location, ...rest } = v;
+        return rest;
+      });
+
+      const ws = XLSX.utils.json_to_sheet(formattedData);
+      const wsColsWidth = Object.values(formattedData[0]).map((v) => ({ wch: v.length > 10 ? v.length : 10 }));
+      ws['!cols'] = wsColsWidth;
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, dayjs().format('YYYY-MM-DD'));
+      XLSX.writeFile(wb, 'assetMaintenancePlans.xlsx');
+    },
+    downloadFailure: (state) => {
       state.error = '';
     },
   },

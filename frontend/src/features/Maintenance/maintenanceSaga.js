@@ -104,6 +104,19 @@ export function* fetchAddItemsInPlan(action) {
   }
 }
 
+export function* download() {
+  try {
+    const userID = localStorage.getItem('userID');
+    const params = new URLSearchParams();
+    params.append('id', userID);
+    const response = yield call(instance.get, `${BASEURL}/maintenance-plans?${params.toString()}`);
+    yield put(maintenancePlanActions.downloadSuccess(response.data));
+  } catch (e) {
+    yield put(maintenancePlanActions.downloadFailure(e));
+  }
+}
+
+
 export function* watchGetPlanList() {
   yield takeLatest(`maintenancePlan/getPlans`, getPlans);
 }
@@ -136,10 +149,15 @@ export function* watchFetchAddItemsInPlan() {
   yield takeLatest(`maintenancePlan/addItemsInPlan`, fetchAddItemsInPlan);
 }
 
+export function* watchDownload() {
+  yield takeLatest(`maintenancePlan/download`, download);
+}
+
 export default [
   watchGetPlanList,
   watchGetStatusOptions,
   watchCreatePlan,
+  watchDownload,
   watchUpdatePlan,
   watchRemovePlan,
   watchFetchAddItemsInPlan,
