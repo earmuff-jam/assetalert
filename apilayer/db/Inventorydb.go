@@ -94,7 +94,6 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, additionalWhereClause string
 
 	sqlStr := baseSqlStr + " " + whereSqlStr + additionalWhereClause + " " + orderBySqlStr
 	rows, err := tx.Query(sqlStr, params...)
-	log.Printf("sql - %+v", sqlStr)
 	if err != nil {
 		return nil, err
 	}

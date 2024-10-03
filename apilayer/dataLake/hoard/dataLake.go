@@ -121,7 +121,7 @@ func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftMaintenancePlan.Name = gofakeit.JobTitle()
+		draftMaintenancePlan.Name = gofakeit.JobTitle() + " plan "
 		draftMaintenancePlan.Description = gofakeit.HipsterSentence(2)
 		draftMaintenancePlan.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
 		draftMaintenancePlan.MinItemsLimit = gofakeit.Number(1, 10)
