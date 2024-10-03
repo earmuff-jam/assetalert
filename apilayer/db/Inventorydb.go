@@ -28,7 +28,7 @@ func RetrieveAllInventoriesForUser(user string, userID string, sinceDateTime str
 
 	var additionalWhereClause string
 	var params []interface{}
-	params = append(params, userID) // First parameter is always userID
+	params = append(params, userID)
 
 	if sinceDateTime != "" {
 		parsedTime, err := time.Parse(time.RFC3339, sinceDateTime)
@@ -37,7 +37,7 @@ func RetrieveAllInventoriesForUser(user string, userID string, sinceDateTime str
 			return nil, err
 		}
 		additionalWhereClause += " AND inv.updated_at >= $2"
-		params = append(params, parsedTime) // Add the parsed time as the second parameter
+		params = append(params, parsedTime)
 	}
 
 	data, err := retrieveAllInventoryDetailsForUser(tx, additionalWhereClause, params...)
@@ -89,11 +89,12 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, additionalWhereClause string
 		LEFT JOIN community.profiles cp ON inv.created_by = cp.id
 		LEFT JOIN community.profiles up ON inv.updated_by = up.id`
 
-	whereSqlStr := "WHERE inv.created_by = $1"
+	whereSqlStr := "WHERE inv.created_by = $1::UUID"
 	orderBySqlStr := "ORDER BY inv.updated_at DESC;"
 
 	sqlStr := baseSqlStr + " " + whereSqlStr + additionalWhereClause + " " + orderBySqlStr
 	rows, err := tx.Query(sqlStr, params...)
+	log.Printf("sql - %+v", sqlStr)
 	if err != nil {
 		return nil, err
 	}
@@ -494,7 +495,9 @@ func AddInventoryInBulk(user string, userID string, draftInventoryList model.Inv
 		return nil, err
 	}
 
-	resp, err := retrieveAllInventoryDetailsForUser(tx, userID, "")
+	var params []interface{}
+	params = append(params, userID)
+	resp, err := retrieveAllInventoryDetailsForUser(tx, "", params...)
 	if err != nil {
 		log.Printf("unable to retrieve all inventories for selected user. error: %+v", err)
 		return nil, err
