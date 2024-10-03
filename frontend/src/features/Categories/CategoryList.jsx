@@ -53,7 +53,7 @@ const CategoryList = ({ displayConcise = false }) => {
 
   useEffect(() => {
     if (sortingOrder) {
-      if (categories.length > 0) {
+      if (categories && categories.length > 0) {
         const draft = [...categories].sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
         setSortedData(draft);
       }
@@ -71,7 +71,7 @@ const CategoryList = ({ displayConcise = false }) => {
             Add Category
           </Button>
           {!displayConcise && (
-            <IconButton size="small" disabled={categories.length <= 0} onClick={downloadCategories}>
+            <IconButton size="small" disabled={Boolean(categories) && categories.length <= 0} onClick={downloadCategories}>
               <FileDownload fontSize="small" />
             </IconButton>
           )}

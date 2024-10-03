@@ -31,8 +31,8 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 		0.00 AS total_category_items_cost 
 			FROM community.inventory inv 
 		WHERE 
-			inv.updated_at >= $2::TIMESTAMP WITH TIME ZONE 
-			%s 
+			( inv.updated_at >= $2::TIMESTAMP WITH TIME ZONE 
+			%s )
 			AND $1::UUID = ANY(inv.sharable_groups)
 		;`
 

@@ -42,24 +42,24 @@ func IngestSvc() {
 	if err != nil {
 		log.Fatalf("error during finding a test user... %+v", err)
 	}
-	GenerateFakeDataWithLimit(currentUser, 2, "note", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "inventory", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "category", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 2, "maintenance_plan", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 13, "note", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 80, "inventory", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 23, "category", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 14, "maintenance_plan", creatorID)
 }
 
 // GenerateFakeDataWithLimit ...
 //
 // GenerateFakeDataWithLimit retrieves fake data for mashed application with a limit of rows.
-func GenerateFakeDataWithLimit(user string, minCount int, typeOf string, creatorID string) error {
+func GenerateFakeDataWithLimit(user string, limit int, typeOf string, creatorID string) error {
 
-	if minCount <= 0 {
+	if limit <= 0 {
 		fmt.Println("unable to add fake data with empty limit")
 		return errors.New("unable to add fake data")
 	}
 
-	// rowCounts are generated from minCount. this is to generate dynamic information
-	rowCounts := gofakeit.Number(minCount, minCount+10)
+	// rowCounts are generated from limit. this is to generate dynamic information
+	rowCounts := gofakeit.Number(1, limit)
 
 	switch typeOf {
 	case "note":
@@ -121,7 +121,7 @@ func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftMaintenancePlan.Name = gofakeit.JobTitle()
+		draftMaintenancePlan.Name = gofakeit.JobTitle() + " plan "
 		draftMaintenancePlan.Description = gofakeit.HipsterSentence(2)
 		draftMaintenancePlan.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
 		draftMaintenancePlan.MinItemsLimit = gofakeit.Number(1, 10)
@@ -177,7 +177,7 @@ func populateFakeInventories(user string, limit int, creatorID string) {
 
 		// time is set for created / updated
 		now := time.Now()
-		daysAgo := gofakeit.Number(1, 30)
+		daysAgo := gofakeit.Number(1, 90)
 		startDate := now.AddDate(0, 0, -daysAgo)
 		isReturnableStatus := gofakeit.Bool()
 

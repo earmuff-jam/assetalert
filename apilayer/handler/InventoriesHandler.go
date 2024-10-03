@@ -24,6 +24,12 @@ const defaultHiddenStatus = "HIDDEN"
 //     description: The userID of the selected user
 //     required: true
 //     type: string
+//   - +name: until
+//     in: query
+//     description: The timestamp with time zone until the data should be retrieved for. Returns all inventories if not passed in.
+//     required: false
+//     type: string
+//     format: date-time
 //
 // Responses:
 // 200: []Inventory
@@ -34,6 +40,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 
 	vars := mux.Vars(r)
 	userID := vars["id"]
+	sinceDateTime := r.URL.Query().Get("since")
 
 	if len(userID) <= 0 {
 		log.Printf("Unable to retrieve inventories with empty id")
@@ -42,7 +49,7 @@ func GetAllInventories(rw http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	resp, err := db.RetrieveAllInventoriesForUser(user, userID)
+	resp, err := db.RetrieveAllInventoriesForUser(user, userID, sinceDateTime)
 	if err != nil {
 		log.Printf("Unable to retrieve all existing inventories. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

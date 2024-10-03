@@ -14,7 +14,7 @@ import { inventoryActions } from '../InventoryList/inventorySlice';
 import dayjs from 'dayjs';
 import { ITEMS_IN_CATEGORY_HEADER } from './constants';
 import BarChart from '../../util/Chart/BarChart';
-import ItemCard from '../common/ItemCard/ItemCard';
+import DetailsCard from '../common/ItemCard/DetailsCard';
 import Collection from '../Home/Collection/Collection';
 
 export default function CategoryItem() {
@@ -94,7 +94,7 @@ export default function CategoryItem() {
         title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
         caption="View details of selected category"
       />
-      <ItemCard selectedItem={selectedCategory} isViewingCategory />
+      <DetailsCard selectedItem={selectedCategory} isViewingCategory />
       <RowHeader
         title="Items"
         caption={`Total ${itemsInCategory?.length || 0} item(s)`}

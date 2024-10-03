@@ -1,120 +1,95 @@
-import { Badge, Button, Card, CardActions, CardContent, IconButton, Stack, Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
+import { Card, CardActions, CardContent, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { STATUS_OPTIONS } from '../../Notes/constants';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ShareRounded } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { profileActions } from '../../Profile/profileSlice';
-import { useEffect, useState } from 'react';
-import SimpleModal from '../SimpleModal';
-import SharableGroups from '../SharableGroups';
-import { categoryActions } from '../../Categories/categoriesSlice';
-import { produce } from 'immer';
-import { maintenancePlanActions } from '../../Maintenance/maintenanceSlice';
 
 dayjs.extend(relativeTime);
 
-export default function ItemCard({ selectedItem, isViewingCategory = false }) {
-  const dispatch = useDispatch();
-  const { favItems = [] } = useSelector((state) => state.profile);
-
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-
-  const isFavourite = favItems.some(
-    (v) => v.category_id === selectedItem.id || v.maintenance_plan_id === selectedItem.id
-  );
-
-  const isShared = selectedItem?.sharable_groups?.length > 1 || false;
-
-  const updateCollaborators = (sharableGroups) => {
-    const newMembers = sharableGroups.map((v) => v.value);
-    const draftSelectionDetails = produce(selectedItem, (draft) => {
-      draft.sharable_groups = newMembers;
-      if (isViewingCategory) {
-        draft.status = draft.status_name;
-      } else {
-        draft.maintenance_status = draft.maintenance_status_name;
-      }
-    });
-    if (isViewingCategory) {
-      dispatch(categoryActions.updateCategory(draftSelectionDetails));
-    } else {
-      dispatch(maintenancePlanActions.updatePlan(draftSelectionDetails));
-    }
-  };
-
-  const handleFavItem = (_, selectedID, isFavourite) => {
-    let draftFavItem = {};
-    if (isViewingCategory) {
-      draftFavItem = { category_id: selectedID };
-    } else {
-      draftFavItem = { maintenance_plan_id: selectedID };
-    }
-
-    if (isFavourite) {
-      // toggle fav off if exists
-      const currentItems = favItems.filter((v) => v.category_id === selectedID || v.maintenance_plan_id === selectedID);
-      const currentItem = currentItems.find(() => true);
-      dispatch(profileActions.removeFavItem(currentItem?.id));
-    } else {
-      dispatch(profileActions.saveFavItem(draftFavItem));
-    }
-  };
-
-  useEffect(() => {
-    dispatch(profileActions.getFavItems({ limit: 1000 }));
-  }, []);
+export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) {
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <Stack direction="row" alignItems="flex-start">
-            <IconButton size="small" onClick={(ev) => handleFavItem(ev, selectedItem.id, isFavourite)}>
-              <FavoriteIcon fontSize="small" sx={{ color: isFavourite ? selectedItem.color : 'secondary.main' }} />
-            </IconButton>
-            <Typography gutterBottom variant="h5" component="div">
-              {selectedItem.name}
-            </Typography>
-          </Stack>
-          <Typography variant="body2" color="text.secondary">
-            {selectedItem.description}
-          </Typography>
-        </CardContent>
-        <CardActions
-          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}
-        >
-          <Typography variant="caption">Last updated {dayjs(selectedItem?.updated_at).fromNow()}</Typography>
-          <Stack direction="row" alignItems="center">
-            <Badge
-              badgeContent={isShared ? selectedItem?.sharable_groups.length - 1 : 0} // account for creator in sharable_groups
-              color="secondary"
-              max={10}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+    <Stack>
+      <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
+        {data?.map((item, index) => (
+          <Stack key={index} flexGrow={1}>
+            <Card
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderRadius: '0.2rem',
+                borderRight: '0.175rem solid',
+                borderColor: item.color ? `${item.color}` : 'primary.main',
               }}
             >
-              <Button size="small" endIcon={<ShareRounded />} onClick={handleOpenModal}>
-                Share
-              </Button>
-            </Badge>
+              <CardContent>
+                <Stack direction="row">
+                  <Stack flexGrow={1} sx={{ minWidth: '20rem', minHeight: '6rem' }}>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      onClick={() => navigate(encodeURI(`/${prefixURI}/${item.id}`))}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      {item.name}
+                    </Typography>
+                    <Typography variant="caption" flexWrap={1} color="text.secondary">
+                      {item.description}
+                    </Typography>
+                    <Stack direction="row" alignItems="center" useFlexGap spacing={1}>
+                      <AlarmAddRounded fontSize="small" sx={{ color: item.color ? `${item.color}` : 'primary.main' }} />
+                      <Typography variant="caption">{item?.max_items_limit} items limit </Typography>
+                    </Stack>
+                  </Stack>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDelete(item.id)}
+                    disableRipple
+                    disableFocusRipple
+                    disableTouchRipple
+                  >
+                    <DeleteRounded fontSize="small" sx={{ color: 'error.main' }} />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleEdit(item.id)}
+                    disableRipple
+                    disableFocusRipple
+                    disableTouchRipple
+                  >
+                    <EditNoteRounded fontSize="small" sx={{ color: 'primary.main' }} />
+                  </IconButton>
+                </Stack>
+              </CardContent>
+
+              <CardActions sx={{ justifyContent: 'space-between' }}>
+                {item.updated_at === null ? (
+                  <Typography variant="caption" color="text.secondary">
+                    Never updated
+                  </Typography>
+                ) : (
+                  <Tooltip title={`Last updated around ${dayjs(item?.updated_at).fromNow()}`}>
+                    <Typography variant="caption" color="text.secondary">
+                      By {item.updator || 'anonymous'} {dayjs(item.updated_at).fromNow()}
+                    </Typography>
+                  </Tooltip>
+                )}
+                <Tooltip title={STATUS_OPTIONS.find((v) => v.label.toLowerCase() === item.status_name)?.display}>
+                  <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
+                    <Typography variant="caption" alignSelf="flex-end">
+                      Status:
+                    </Typography>
+                    {STATUS_OPTIONS.find((v) => v.label.toLowerCase() === item.status_name)?.icon}
+                  </Stack>
+                </Tooltip>
+              </CardActions>
+            </Card>
           </Stack>
-        </CardActions>
-      </Card>
-      {openModal && (
-        <SimpleModal
-          title="Add sharable groups"
-          subtitle="Assign users as collaborators to selected item."
-          handleClose={handleCloseModal}
-          maxSize="sm"
-        >
-          <SharableGroups handleSubmit={updateCollaborators} existingGroups={selectedItem?.sharable_groups || []} />
-        </SimpleModal>
-      )}
-    </>
+        ))}
+      </Stack>
+    </Stack>
   );
 }
