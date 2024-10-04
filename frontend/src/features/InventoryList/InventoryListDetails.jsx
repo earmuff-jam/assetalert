@@ -174,7 +174,7 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
   return (
     <Stack flexGrow="1">
       <Stack direction="row" justifyContent="space-between">
-        <RowHeader title="Assets" />
+        <RowHeader title="Assets" caption={`Showing ${options.length || 0} asset detail(s)`}/>
         <Stack direction="row" alignItems="center">
           <IconButton size="small" onClick={() => setGridMode(!gridMode)}>
             {gridMode ? (

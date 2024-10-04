@@ -9,7 +9,6 @@ import {
   Box,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { EditRounded, FileOpenRounded } from '@mui/icons-material';
@@ -26,7 +25,7 @@ import { EmptyComponent } from '../common/utils';
  * @param {Function} rowFormatter - the row formatter to format each row
  * @param {Array<Object>} data - the data to display for each row in the table
  * @param {Array<String>} rowSelected - the array of IDs that represent each item
- * @param {Array<Object>} onRowSelect - the array of inventory items that is selected
+ * @param {Function} onRowSelect - the function that is used to select a specific row
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
@@ -45,6 +44,7 @@ const TableComponent = ({
   handleRowSelection,
   handleEdit,
   emptyComponentSubtext = '',
+  maxHeight = '65vh', 
 }) => {
   if (isLoading) return <Skeleton height="10vh" />;
 
@@ -53,7 +53,7 @@ const TableComponent = ({
   }
 
   return (
-    <Box sx={{ overflow: 'auto' }}>
+    <Box sx={{ overflow: 'auto', maxHeight: maxHeight }}>
       <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
         <Table>
           <TableHead>
@@ -77,44 +77,42 @@ const TableComponent = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row, rowIndex) => {
+            {data.map((row) => {
               const isSelected = (id) => rowSelected.indexOf(id) !== -1;
               const selectedID = row.id;
               const isItemSelected = isSelected(selectedID);
               return (
-                <Tooltip key={rowIndex} title={''}>
-                  <TableRow hover>
-                    {!hideActionMenu && (
-                      <TableCell padding="checkbox">
-                        <Stack direction="row">
-                          {!hideCheckBox && (
-                            <Checkbox
-                              checked={isItemSelected}
-                              color="primary"
-                              size="small"
-                              onClick={(event) => handleRowSelection(event, selectedID)}
-                              inputProps={{ 'aria-labelledby': 'labelId' }}
-                            />
-                          )}
-                          {!hideIconButton && (
-                            <IconButton onClick={() => handleEdit(selectedID)} size="small">
-                              <EditRounded color="primary" fontSize="small" />
-                            </IconButton>
-                          )}
-                          {!hideMoreDetailsButton && (
-                            <IconButton size="small" onClick={() => onRowSelect(row)}>
-                              <FileOpenRounded color="primary" fontSize="small" />
-                            </IconButton>
-                          )}
-                        </Stack>
-                      </TableCell>
-                    )}
-                    {Object.keys(columns).map((colKey) => {
-                      const column = columns[colKey];
-                      return <TableCell key={column.id}>{rowFormatter(row, column.colName, column)}</TableCell>;
-                    })}
-                  </TableRow>
-                </Tooltip>
+                <TableRow hover>
+                  {!hideActionMenu && (
+                    <TableCell padding="checkbox">
+                      <Stack direction="row">
+                        {!hideCheckBox && (
+                          <Checkbox
+                            checked={isItemSelected}
+                            color="primary"
+                            size="small"
+                            onClick={(event) => handleRowSelection(event, selectedID)}
+                            inputProps={{ 'aria-labelledby': 'labelId' }}
+                          />
+                        )}
+                        {!hideIconButton && (
+                          <IconButton onClick={() => handleEdit(selectedID)} size="small">
+                            <EditRounded color="primary" fontSize="small" />
+                          </IconButton>
+                        )}
+                        {!hideMoreDetailsButton && (
+                          <IconButton size="small" onClick={() => onRowSelect(row)}>
+                            <FileOpenRounded color="primary" fontSize="small" />
+                          </IconButton>
+                        )}
+                      </Stack>
+                    </TableCell>
+                  )}
+                  {Object.keys(columns).map((colKey) => {
+                    const column = columns[colKey];
+                    return <TableCell key={column.id}>{rowFormatter(row, column.colName, column)}</TableCell>;
+                  })}
+                </TableRow>
               );
             })}
           </TableBody>

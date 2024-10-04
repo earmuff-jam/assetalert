@@ -74,6 +74,7 @@ const Plan = () => {
       <PlanList
         maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
         loading={loading}
+        displayModal={displayModal}
         setDisplayModal={setDisplayModal}
         setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
       />

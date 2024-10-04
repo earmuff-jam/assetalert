@@ -111,7 +111,7 @@ const AddPlan = ({
 
     // seperated to prevent updating sharable groups
     if (selectedMaintenancePlanID) {
-      const currentMaintenancePlan = maintenancePlan.find(() => true);
+      const currentMaintenancePlan = maintenancePlan.find((v) => v.id === selectedMaintenancePlanID);
       const draftRequest = {
         id: selectedMaintenancePlanID,
         ...currentMaintenancePlan,
