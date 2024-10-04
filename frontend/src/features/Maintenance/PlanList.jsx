@@ -9,7 +9,7 @@ import ItemCard from '../common/ItemCard/ItemCard';
 
 dayjs.extend(relativeTime);
 
-const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMaintenancePlanID }) => {
+const PlanList = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSelectedMaintenancePlanID }) => {
   const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -41,7 +41,7 @@ const PlanList = ({ maintenancePlan, loading, setDisplayModal, setSelectedMainte
     dispatch(maintenancePlanActions.getPlans());
   }, []);
 
-  if (loading) {
+  if (loading && !displayModal) {
     return <Skeleton height="10rem" />;
   }
   if (maintenancePlan?.length <= 0 || maintenancePlan == null) return <EmptyComponent />;

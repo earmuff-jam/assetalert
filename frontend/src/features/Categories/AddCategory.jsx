@@ -84,8 +84,10 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
 
     // seperated to prevent updating sharable groups
     if (selectedCategoryID) {
+      const selectedCategory = categories.find((v) => v.id === selectedCategoryID);
       const draftCategories = {
         id: selectedCategoryID,
+        ...selectedCategory,
         ...formattedData,
         color: planColor,
         status: status,
@@ -207,7 +209,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
                     multiline={v.multiline || false}
                   />
                 ))}
-              {location ? <LocationPicker subtitle="Assigned Location" location={location} /> : null}
+              {location && <LocationPicker subtitle="Assigned Location" location={location} />}
             </Stack>
             <FormControl fullWidth>
               <InputLabel id="status-selector-label">

@@ -26,15 +26,23 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 		additionalWhereClause = "OR inv.return_datetime >= $2::TIMESTAMP WITH TIME ZONE"
 	}
 
-	draftSqlStr := `SELECT 
-		SUM(inv.price) AS total_cost, 
-		0.00 AS total_category_items_cost 
-			FROM community.inventory inv 
-		WHERE 
-			( inv.updated_at >= $2::TIMESTAMP WITH TIME ZONE 
-			%s )
-			AND $1::UUID = ANY(inv.sharable_groups)
-		;`
+	draftSqlStr := `
+	WITH filtered_inventory AS (
+			SELECT 
+			inv.id,
+			inv.price
+			FROM community.inventory inv
+			WHERE 
+				(inv.updated_at >= $2::TIMESTAMP WITH TIME ZONE %s)
+				AND $1::UUID = ANY(inv.sharable_groups)
+		)
+	SELECT 
+		(SELECT SUM(price) FROM filtered_inventory) AS total_cost,
+		(SELECT SUM(inv.price) 
+			FROM filtered_inventory inv 
+			LEFT JOIN community.category_item ci ON ci.item_id = inv.id 
+			WHERE ci.item_id IS NOT NULL
+		) AS total_category_items_cost;`
 
 	parsedSqlStr := fmt.Sprintf(draftSqlStr, additionalWhereClause)
 

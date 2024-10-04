@@ -131,6 +131,9 @@ export default function CategoryItem() {
       />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
+          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
+            Add Selected items
+          </Button>
           <TableComponent
             isLoading={inventoriesLoading}
             hideCheckBox={false}
@@ -144,10 +147,8 @@ export default function CategoryItem() {
             onRowSelect={() => {}}
             handleRowSelection={handleRowSelection}
             emptyComponentSubtext="Create inventory items to associate them."
+            maxHeight="100%"
           />
-          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
-            Add Selected items
-          </Button>
         </SimpleModal>
       )}
     </Stack>
