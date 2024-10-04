@@ -283,10 +283,10 @@ const InventoryListDetails = ({ hideActionMenu = false }) => {
       <ConfirmationBoxModal
         openDialog={openDialog}
         title="Confirm deletion"
-        text="Confirm deletion of selected item(s) ? Deletion is permanent and cannot be undone."
+        text="Delete this item?"
         textVariant="body2"
         handleClose={reset}
-        maxSize="sm"
+        maxSize="xs"
         deleteID={idToDelete}
         confirmDelete={confirmDelete}
       />

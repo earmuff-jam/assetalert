@@ -52,11 +52,11 @@ const PlanList = ({ maintenancePlan, loading, displayModal, setDisplayModal, set
       <ConfirmationBoxModal
         openDialog={openDialog}
         title="Confirm deletion"
-        text="Confirm deletion of maintenance plan? Deletion is permanent and cannot be undone."
+        text="Delete this item?"
         textVariant="body2"
         handleClose={resetConfirmationBox}
         showSubmit={false}
-        maxSize="sm"
+        maxSize="xs"
         deleteID={idToDelete}
         confirmDelete={confirmDelete}
       />
