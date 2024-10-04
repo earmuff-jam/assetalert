@@ -44,7 +44,7 @@ const TableComponent = ({
   handleRowSelection,
   handleEdit,
   emptyComponentSubtext = '',
-  maxHeight = '65vh', 
+  maxHeight = '65vh',
 }) => {
   if (isLoading) return <Skeleton height="10vh" />;
 
@@ -82,7 +82,7 @@ const TableComponent = ({
               const selectedID = row.id;
               const isItemSelected = isSelected(selectedID);
               return (
-                <TableRow hover>
+                <TableRow hover key={row.id}>
                   {!hideActionMenu && (
                     <TableCell padding="checkbox">
                       <Stack direction="row">
