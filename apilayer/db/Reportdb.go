@@ -40,12 +40,11 @@ func RetrieveReports(user string, userID uuid.UUID, sinceDateTime string, includ
 		(SELECT SUM(price) FROM filtered_inventory) AS total_cost,
 		(SELECT SUM(inv.price) 
 			FROM filtered_inventory inv 
-			LEFT JOIN community.category_item ci ON ci.item_id = inv.id 
+			LEFT JOIN ( SELECT DISTINCT item_id FROM community.category_item ) ci ON ci.item_id = inv.id 
 			WHERE ci.item_id IS NOT NULL
 		) AS total_category_items_cost;`
 
 	parsedSqlStr := fmt.Sprintf(draftSqlStr, additionalWhereClause)
-
 	var reports []model.Report
 	rows, err := db.Query(parsedSqlStr, userID, sinceDateTime)
 	if err != nil {

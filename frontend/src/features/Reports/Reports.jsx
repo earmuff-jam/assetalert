@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import RowHeader from '../common/RowHeader';
 import ReportCardWrapper from './ReportCardWrapper';
 import dayjs from 'dayjs';
-import { FilterAltRounded, TrendingUpRounded } from '@mui/icons-material';
+import { FilterAltRounded } from '@mui/icons-material';
 import { capitalizeFirstLetter } from '../common/utils';
 import ItemDetails from './ItemDetails';
 import { useDispatch, useSelector } from 'react-redux';
@@ -82,14 +82,12 @@ export default function Reports() {
             title="Valuation"
             chipLabel={formatDate(sinceValue)}
             value={`$${reports[0]?.total_valuation.toFixed(2) || 0.0}`}
-            iconType={<TrendingUpRounded color="success" />}
             footerText="Total cost of items in dollar value."
           />
           <ReportCardWrapper
             title="Categorized Assets"
             chipLabel={formatDate(sinceValue)}
             value={`$${reports[0]?.cost_category_items.toFixed(2) || 0.0}`}
-            iconType={<TrendingUpRounded color="success" />}
           />
         </Stack>
         <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
