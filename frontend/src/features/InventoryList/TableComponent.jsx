@@ -44,7 +44,7 @@ const TableComponent = ({
   handleRowSelection,
   handleEdit,
   emptyComponentSubtext = '',
-  maxHeight = '65vh',
+  maxHeight = '65vh', 
 }) => {
   if (isLoading) return <Skeleton height="10vh" />;
 
