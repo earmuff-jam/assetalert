@@ -176,7 +176,14 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
               multiline={v.multiline || false}
             />
           ))}
-        {location ? <LocationPicker subtitle="Select location" location={location} /> : null}
+        {location && (
+          <LocationPicker
+            subtitle="Select location"
+            location={location}
+            onLocationChange={setLocation}
+            editMode={true}
+          />
+        )}
       </Stack>
       <FormControl fullWidth>
         <InputLabel id="status-selector-label">Selected status</InputLabel>

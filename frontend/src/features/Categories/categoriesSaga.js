@@ -6,12 +6,16 @@ import instance from '../../util/Instances';
 const DEFAULT_LIMIT = 10;
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
-export function* getCategories() {
+export function* getCategories(action) {
   try {
     const userID = localStorage.getItem('userID');
     const params = new URLSearchParams();
     params.append('id', userID);
-    params.append('limit', DEFAULT_LIMIT);
+    if (action.payload) {
+      params.append('limit', action.payload);
+    } else {
+      params.append('limit', DEFAULT_LIMIT);
+    }
     const response = yield call(instance.get, `${BASEURL}/categories?${params.toString()}`);
     yield put(categoryActions.getCategoriesSuccess(response.data));
   } catch (e) {

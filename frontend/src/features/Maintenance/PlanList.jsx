@@ -38,7 +38,7 @@ const PlanList = ({ maintenancePlan, loading, displayModal, setDisplayModal, set
   };
 
   useEffect(() => {
-    dispatch(maintenancePlanActions.getPlans());
+    dispatch(maintenancePlanActions.getPlans(100));
   }, []);
 
   if (loading && !displayModal) {
