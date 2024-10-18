@@ -16,6 +16,7 @@ type Category struct {
 	StatusDescription string    `json:"status_description"`
 	MinItemsLimit     int       `json:"min_items_limit"`
 	MaxItemsLimit     int       `json:"max_items_limit"`
+	Location          Location  `json:"location,omitempty"`
 	CreatedBy         string    `json:"created_by"`
 	CreatedAt         time.Time `json:"created_at"`
 	Creator           string    `json:"creator"`

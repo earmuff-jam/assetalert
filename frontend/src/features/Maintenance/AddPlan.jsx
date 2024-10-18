@@ -29,7 +29,6 @@ const AddPlan = ({
   setSelectedMaintenancePlanID,
 }) => {
   const dispatch = useDispatch();
-
   const { statusOptions, loading } = useSelector((state) => state.maintenance);
 
   const [selectedStatusOption, setSelectedStatusOption] = useState('');
@@ -227,7 +226,14 @@ const AddPlan = ({
                 error={Boolean(formData.description['errorMsg'].length)}
                 helperText={formData.description['errorMsg']}
               />
-              {location ? <LocationPicker subtitle="Assigned Location" location={location} /> : null}
+              {location ? (
+                <LocationPicker
+                  subtitle="Assigned Location"
+                  location={location}
+                  onLocationChange={setLocation}
+                  editMode={true}
+                />
+              ) : null}
             </Stack>
             <Stack direction="row" spacing="1rem">
               {Object.values(formData)
@@ -298,7 +304,7 @@ const AddPlan = ({
             </Box>
           </Stack>
           <Button onClick={handleSubmit} variant="outlined" sx={{ mt: 1 }} disabled={isDisabled()}>
-            {selectedMaintenancePlanID ? 'Update' : 'Add' }
+            {selectedMaintenancePlanID ? 'Update' : 'Add'}
           </Button>
         </Box>
       </Stack>

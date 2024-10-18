@@ -209,8 +209,9 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	description = $3,
 	status = $4,
 	color = $5,
-	updated_by = $6,
-	updated_at = $7
+	location = POINT($6, $7),
+	updated_by = $8,
+	updated_at = $9
 	WHERE id = $1
 	RETURNING id, title, description, color, created_at, created_by, updated_at, updated_by;`
 
@@ -234,6 +235,8 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		draftNote.Description,
 		selectedStatusDetails.ID,
 		draftNote.Color,
+		draftNote.Location.Lon,
+		draftNote.Location.Lat,
 		parsedCreatorID,
 		time.Now(),
 	)
@@ -249,10 +252,6 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 		&updatedNote.UpdatedBy,
 	)
 
-	updatedNote.Status = selectedStatusDetails.ID.String()
-	updatedNote.StatusName = selectedStatusDetails.Name
-	updatedNote.StatusDescription = selectedStatusDetails.Description
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -260,6 +259,13 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
+
+	updatedNote.Status = selectedStatusDetails.ID.String()
+	updatedNote.StatusName = selectedStatusDetails.Name
+	updatedNote.StatusDescription = selectedStatusDetails.Description
+	updatedNote.Location.Lat = draftNote.Location.Lat
+	updatedNote.Location.Lon = draftNote.Location.Lon
+
 	return &updatedNote, nil
 }
 

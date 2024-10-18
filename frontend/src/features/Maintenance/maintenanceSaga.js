@@ -7,12 +7,16 @@ const DEFAULT_LIMIT = 10;
 const MAINTENANCE_STATUS_OPTION_TYPE = 'maintenance';
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
-export function* getPlans() {
+export function* getPlans(action) {
   try {
     const userID = localStorage.getItem('userID');
     const params = new URLSearchParams();
     params.append('id', userID);
-    params.append('limit', DEFAULT_LIMIT);
+    if (action.payload) {
+      params.append('limit', action.payload);
+    } else {
+      params.append('limit', DEFAULT_LIMIT);
+    }
     const response = yield call(instance.get, `${BASEURL}/maintenance-plans?${params.toString()}`);
     const data = Array.isArray(response.data) ? response.data : [];
     yield put(maintenancePlanActions.getPlansSuccess(data));
