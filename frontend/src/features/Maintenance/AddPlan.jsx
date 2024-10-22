@@ -226,14 +226,6 @@ const AddPlan = ({
                 error={Boolean(formData.description['errorMsg'].length)}
                 helperText={formData.description['errorMsg']}
               />
-              {location ? (
-                <LocationPicker
-                  subtitle="Assigned Location"
-                  location={location}
-                  onLocationChange={setLocation}
-                  editMode={true}
-                />
-              ) : null}
             </Stack>
             <Stack direction="row" spacing="1rem">
               {Object.values(formData)
@@ -303,6 +295,14 @@ const AddPlan = ({
               </FormControl>
             </Box>
           </Stack>
+          {location?.lat ? (
+            <LocationPicker
+              subtitle="Assigned Location"
+              location={location}
+              onLocationChange={setLocation}
+              editMode={true}
+            />
+          ) : null}
           <Button onClick={handleSubmit} variant="outlined" sx={{ mt: 1 }} disabled={isDisabled()}>
             {selectedMaintenancePlanID ? 'Update' : 'Add'}
           </Button>

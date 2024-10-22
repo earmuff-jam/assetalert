@@ -211,14 +211,6 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
                     multiline={v.multiline || false}
                   />
                 ))}
-              {location && (
-                <LocationPicker
-                  subtitle="Assigned Location"
-                  location={location}
-                  editMode={true}
-                  onLocationChange={setLocation}
-                />
-              )}
             </Stack>
             <FormControl fullWidth>
               <InputLabel id="status-selector-label">
@@ -269,6 +261,14 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
             </Stack>
             <ColorPicker value={planColor} handleChange={handleColorChange} />
           </Stack>
+          {location?.lat ? (
+            <LocationPicker
+              subtitle="Assigned Location"
+              location={location}
+              editMode={true}
+              onLocationChange={setLocation}
+            />
+          ) : null}
           <Button
             onClick={submit}
             startIcon={selectedCategoryID ? <CheckCircleRounded /> : <AddRounded />}

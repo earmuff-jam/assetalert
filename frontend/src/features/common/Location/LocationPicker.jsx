@@ -74,12 +74,12 @@ const LocationPicker = ({ location = { lon: 0, lat: 0 }, onLocationChange, disab
   return (
     <Stack
       sx={{
-        height: { xs: '10vh', sm: '10vh' },
-        width: { xs: '100%', sm: '15vh' },
+        height: { xs: '15vh' },
+        width: { xs: '100%', sm: '100%' },
       }}
     >
       <Typography variant="caption">{subtitle}</Typography>
-      <Box sx={{ height: 'inherit', width: 'inherit', boxShadow: 1, borderRadius: 2 }}>
+      <Box sx={{ height: 'inherit', width: 'inherit', borderRadius: 2 }}>
         <Box sx={{ height: '100%', width: '100%' }} ref={mapRef} />
       </Box>
     </Stack>

@@ -110,7 +110,6 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                   </Stack>
                   <Typography variant="body2">{note.description}</Typography>
                   <Stack sx={{ mt: '1rem' }}>
-                    <LocationPicker location={note.location} /> {/* Location Picker */}
                   </Stack>
                   <Row>
                     <>
