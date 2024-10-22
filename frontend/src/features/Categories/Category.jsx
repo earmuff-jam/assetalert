@@ -39,7 +39,7 @@ const Category = ({ categories = [], loading, setSelectedCategoryID, setDisplayM
   };
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories());
+    dispatch(categoryActions.getCategories(100));
   }, []);
 
   if (loading) {

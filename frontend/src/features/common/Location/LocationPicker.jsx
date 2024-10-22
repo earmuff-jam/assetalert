@@ -1,19 +1,20 @@
+import { useEffect, useRef } from 'react';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, toLonLat } from 'ol/proj';
 import { Style, Icon } from 'ol/style';
 import LayerTile from 'ol/layer/Tile.js';
 import SourceOSM from 'ol/source/OSM.js';
-import { useEffect, useRef } from 'react';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { defaults as defaultControls } from 'ol/control.js';
 import { Box, Stack, Typography } from '@mui/material';
 
-const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled = false, subtitle }) => {
+const LocationPicker = ({ location = { lon: 0, lat: 0 }, onLocationChange, disabled = false, subtitle, editMode = false }) => {
   const mapRef = useRef();
+  const markerRef = useRef();
 
   useEffect(() => {
     const defaultCenter = fromLonLat([95.7129, 37.0902]); // USA Default Center
@@ -48,24 +49,37 @@ const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled = false, subti
     });
 
     map.addLayer(vectorLayer);
-    addMarkers(map, vectorLayer, location);
+    addMarkers(map, vectorLayer, location, markerRef);
+
+    if (editMode) {
+      map.on('click', function (event) {
+        const clickedCoordinate = toLonLat(event.coordinate); 
+        const [lon, lat] = clickedCoordinate;
+        updateMarker(vectorLayer, lon, lat, markerRef);
+        // If onLocationChange callback is provided, call it with new location
+        if (onLocationChange) {
+          onLocationChange({ lon, lat });
+        }
+      });
+    }
     return () => {
       map.setTarget(null);
     };
-  }, [location]);
+  }, [location, onLocationChange]);
 
   if (disabled) {
     return null;
   }
+
   return (
     <Stack
       sx={{
-        height: { xs: '10vh', sm: '10vh' },
-        width: { xs: '100%', sm: '15vh' },
+        height: { xs: '15vh' },
+        width: { xs: '100%', sm: '100%' },
       }}
     >
       <Typography variant="caption">{subtitle}</Typography>
-      <Box sx={{ height: 'inherit', width: 'inherit', boxShadow: 1, borderRadius: 2 }}>
+      <Box sx={{ height: 'inherit', width: 'inherit', borderRadius: 2 }}>
         <Box sx={{ height: '100%', width: '100%' }} ref={mapRef} />
       </Box>
     </Stack>
@@ -79,7 +93,7 @@ const LocationPicker = ({ location = { lon: 0, lat: 0 }, disabled = false, subti
  * @param {Object} vectorLayer The OpenLayers vector layer to add markers to
  * @param {Object} location The location to add a marker for
  */
-const addMarkers = (map, vectorLayer, location) => {
+const addMarkers = (map, vectorLayer, location, markerRef) => {
   const { lon, lat } = location;
   if (lon && lat) {
     const geometry = new Point(fromLonLat([lon, lat]));
@@ -103,6 +117,26 @@ const addMarkers = (map, vectorLayer, location) => {
     vectorLayer.getSource().addFeature(feature);
     map.getView().setCenter(fromLonLat([lon, lat]));
     map.getView().setZoom(10);
+    markerRef.current = feature; // Save the feature to the markerRef for future updates
+  }
+};
+
+/**
+ * Update the position of the marker on the map.
+ *
+ * @param {Object} vectorLayer The vector layer containing the marker
+ * @param {Number} lon The longitude of the new location
+ * @param {Number} lat The latitude of the new location
+ */
+const updateMarker = (vectorLayer, lon, lat, markerRef) => {
+  const geometry = new Point(fromLonLat([lon, lat]));
+  if (markerRef.current) {
+    markerRef.current.setGeometry(geometry);
+  } else {
+    // If no marker exists, add a new one
+    const feature = new Feature({ geometry });
+    vectorLayer.getSource().addFeature(feature);
+    markerRef.current = feature;
   }
 };
 

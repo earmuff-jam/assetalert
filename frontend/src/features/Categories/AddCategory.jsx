@@ -91,6 +91,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
         ...formattedData,
         color: planColor,
         status: status,
+        location: location,
         updated_by: userID,
       };
       dispatch(categoryActions.updateCategory(draftCategories));
@@ -99,6 +100,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
         ...formattedData,
         color: planColor,
         status: status,
+        location: location,
         created_by: userID,
         updated_by: userID,
         sharable_groups: [userID],
@@ -209,7 +211,6 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
                     multiline={v.multiline || false}
                   />
                 ))}
-              {location && <LocationPicker subtitle="Assigned Location" location={location} />}
             </Stack>
             <FormControl fullWidth>
               <InputLabel id="status-selector-label">
@@ -260,6 +261,14 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
             </Stack>
             <ColorPicker value={planColor} handleChange={handleColorChange} />
           </Stack>
+          {location?.lat ? (
+            <LocationPicker
+              subtitle="Assigned Location"
+              location={location}
+              editMode={true}
+              onLocationChange={setLocation}
+            />
+          ) : null}
           <Button
             onClick={submit}
             startIcon={selectedCategoryID ? <CheckCircleRounded /> : <AddRounded />}

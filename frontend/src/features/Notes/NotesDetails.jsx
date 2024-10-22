@@ -19,7 +19,6 @@ import {
 import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { notesActions } from './notesSlice';
 import { STATUS_OPTIONS } from './constants';
-import LocationPicker from '../common/Location/LocationPicker';
 
 const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
@@ -110,7 +109,6 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                   </Stack>
                   <Typography variant="body2">{note.description}</Typography>
                   <Stack sx={{ mt: '1rem' }}>
-                    <LocationPicker location={note.location} /> {/* Location Picker */}
                   </Stack>
                   <Row>
                     <>
