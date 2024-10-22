@@ -19,7 +19,6 @@ import {
 import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { notesActions } from './notesSlice';
 import { STATUS_OPTIONS } from './constants';
-import LocationPicker from '../common/Location/LocationPicker';
 
 const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
