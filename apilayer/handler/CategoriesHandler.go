@@ -250,7 +250,7 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 		json.NewEncoder(rw).Encode(err)
 		return
 	}
-	resp, err := db.AddAssetToCategory(user, draftCategory.UserID, draftCategory.ID, draftCategory.AssetIDs)
+	resp, err := db.AddAssetToCategory(user, draftCategory)
 	if err != nil {
 		log.Printf("Unable to add assets to existing category. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

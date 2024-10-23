@@ -412,7 +412,7 @@ func RemoveMaintenancePlan(user string, planID string) error {
 }
 
 // AddAssetToMaintenancePlan ...
-func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID string, assetIDs []string) ([]model.MaintenanceItemResponse, error) {
+func AddAssetToMaintenancePlan(user string, draftMaintenanceItemRequest *model.MaintenanceItemRequest) ([]model.MaintenanceItemResponse, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -429,16 +429,16 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 	}
 
 	currentTime := time.Now()
-	for _, v := range assetIDs {
+	for _, assetID := range draftMaintenanceItemRequest.AssetIDs {
 		_, err := tx.Exec(
 			sqlStr,
-			maintenancePlanID,
-			v,
-			userID,
+			draftMaintenanceItemRequest.ID,
+			assetID,
+			draftMaintenanceItemRequest.UserID,
 			currentTime,
-			userID,
+			draftMaintenanceItemRequest.UserID,
 			currentTime,
-			pq.Array([]string{userID}),
+			pq.Array(draftMaintenanceItemRequest.Collaborators),
 		)
 		if err != nil {
 			tx.Rollback()
@@ -475,7 +475,7 @@ func AddAssetToMaintenancePlan(user string, userID string, maintenancePlanID str
 	WHERE $1::UUID = ANY(mi.sharable_groups) AND mi.maintenance_plan_id = $2
 	ORDER BY mi.updated_at DESC;`
 
-	rows, err := db.Query(sqlStr, userID, maintenancePlanID)
+	rows, err := db.Query(sqlStr, draftMaintenanceItemRequest.UserID, draftMaintenanceItemRequest.ID)
 	if err != nil {
 		log.Printf("unable to retrieve maintenance items. error: %+v", err)
 		return nil, err

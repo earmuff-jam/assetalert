@@ -108,7 +108,7 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
       {openModal && (
         <SimpleModal
           title="Add sharable groups"
-          subtitle="Assign users as collaborators to selected item."
+          subtitle="Assign collaborators."
           handleClose={handleCloseModal}
           maxSize="sm"
         >

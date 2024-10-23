@@ -71,7 +71,8 @@ export default function MaintenanceItem() {
   };
 
   const addItems = () => {
-    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id }));
+    const collaborators = maintenancePlan.find((v) => v.id === id).sharable_groups;
+    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id, collaborators }));
     resetSelection();
   };
 

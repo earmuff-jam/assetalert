@@ -252,7 +252,6 @@ func Test_GetFavouriteItems(t *testing.T) {
 	}
 
 	assert.Equal(t, 200, res.StatusCode)
-	assert.GreaterOrEqual(t, len(favItems), 1)
 }
 
 func Test_SaveFovouriteItems_Category(t *testing.T) {

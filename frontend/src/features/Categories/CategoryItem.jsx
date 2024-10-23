@@ -72,7 +72,8 @@ export default function CategoryItem() {
   };
 
   const addItems = () => {
-    dispatch(categoryActions.addItemsInCategory({ rowSelected, id }));
+    const collaborators = categories.find((v) => v.id === id).sharable_groups;
+    dispatch(categoryActions.addItemsInCategory({ id, rowSelected, collaborators }));
     resetSelection();
   };
 

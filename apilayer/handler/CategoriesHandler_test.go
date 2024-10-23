@@ -418,6 +418,8 @@ func Test_AddItemsInCategory(t *testing.T) {
 	assert.Equal(t, selectedCategory.StatusName, "general")
 	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
 	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
+	assert.Equal(t, len(selectedCategory.SharableGroups), 1)
+	assert.Equal(t, selectedCategory.SharableGroups[0], prevUser.ID.String())
 
 	// retrieve inventory list
 	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/inventories", prevUser.ID), nil)
@@ -443,9 +445,10 @@ func Test_AddItemsInCategory(t *testing.T) {
 	selectedInventory := inventories[0]
 
 	draftAssets := model.CategoryItemRequest{
-		ID:       selectedCategory.ID,
-		UserID:   prevUser.ID.String(),
-		AssetIDs: []string{selectedInventory.ID},
+		ID:            selectedCategory.ID,
+		UserID:        prevUser.ID.String(),
+		AssetIDs:      []string{selectedInventory.ID},
+		Collaborators: []string{prevUser.ID.String(), prevUser.ID.String()},
 	}
 
 	// Marshal the draftEvent into JSON bytes
@@ -476,6 +479,9 @@ func Test_AddItemsInCategory(t *testing.T) {
 
 	assert.Equal(t, categoryItemResponse[0].CategoryID, selectedCategory.ID)
 	assert.Equal(t, categoryItemResponse[0].ItemID, selectedInventory.ID)
+	assert.Equal(t, len(categoryItemResponse[0].SharableGroups), 2)
+	assert.Equal(t, categoryItemResponse[0].SharableGroups[0], prevUser.ID.String())
+	assert.Equal(t, categoryItemResponse[0].SharableGroups[1], prevUser.ID.String())
 
 	// cleanup
 	db.RemoveCategory(config.CTO_USER, categoryItemResponse[0].CategoryID)
