@@ -131,6 +131,9 @@ export default function MaintenanceItem() {
       />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedMaintenancePlan?.name}`} handleClose={resetSelection} maxSize="md">
+          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
+            Add Selected items
+          </Button>
           <TableComponent
             isLoading={inventoriesLoading}
             hideCheckBox={false}
@@ -147,9 +150,6 @@ export default function MaintenanceItem() {
             handleRowSelection={handleRowSelection}
             emptyComponentSubtext="Create inventory items to associate them."
           />
-          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
-            Add Selected items
-          </Button>
         </SimpleModal>
       )}
     </Stack>

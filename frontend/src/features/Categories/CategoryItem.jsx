@@ -128,7 +128,7 @@ export default function CategoryItem() {
       </Box>
       <Collection
         title="Recently Created Categories"
-        items={categories.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id }))}
+        items={categories?.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id })) || []}
       />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">

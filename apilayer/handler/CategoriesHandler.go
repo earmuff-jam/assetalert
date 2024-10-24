@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -106,10 +107,20 @@ func GetCategory(rw http.ResponseWriter, r *http.Request, user string) {
 
 	resp, err := db.RetrieveCategory(user, userID, categoryID)
 	if err != nil {
-		log.Printf("Unable to retrieve categories. error: %v", err)
-		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(err)
-		return
+		// if there are no rows, we still want to return blank category
+		if err == sql.ErrNoRows {
+			log.Printf("unable to retrieve selected category. error: %+v", err)
+			rw.Header().Add("Content-Type", "application/json")
+			rw.WriteHeader(http.StatusOK)
+			json.NewEncoder(rw).Encode(resp)
+			return
+		} else {
+			log.Printf("Unable to retrieve categories. error: %+v", err)
+			rw.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(rw).Encode(err)
+			return
+		}
+
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusOK)
