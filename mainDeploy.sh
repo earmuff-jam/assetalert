@@ -39,8 +39,8 @@ loadMigration() {
 
     echo "migration flag provided. running migration in sequence."
 
-    chmod +x setup/_loadMigration.sh
-    ./setup/_loadMigration.sh
+    chmod +x setup/prod/_loadMigration.sh
+    ./setup/prod/_loadMigration.sh
 }
 
 uninstall() {
