@@ -71,7 +71,8 @@ export default function MaintenanceItem() {
   };
 
   const addItems = () => {
-    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id }));
+    const collaborators = maintenancePlan.find((v) => v.id === id).sharable_groups;
+    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id, collaborators }));
     resetSelection();
   };
 
@@ -79,7 +80,6 @@ export default function MaintenanceItem() {
     if (id) {
       dispatch(maintenancePlanActions.getItemsInMaintenancePlan(id));
       dispatch(maintenancePlanActions.getSelectedMaintenancePlan(id));
-      dispatch(maintenancePlanActions.getPlans());
     }
   }, [id]);
 
@@ -130,6 +130,9 @@ export default function MaintenanceItem() {
       />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedMaintenancePlan?.name}`} handleClose={resetSelection} maxSize="md">
+          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
+            Add Selected items
+          </Button>
           <TableComponent
             isLoading={inventoriesLoading}
             hideCheckBox={false}
@@ -146,9 +149,6 @@ export default function MaintenanceItem() {
             handleRowSelection={handleRowSelection}
             emptyComponentSubtext="Create inventory items to associate them."
           />
-          <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
-            Add Selected items
-          </Button>
         </SimpleModal>
       )}
     </Stack>

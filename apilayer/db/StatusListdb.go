@@ -11,7 +11,7 @@ import (
 )
 
 // RetrieveStatusDetails ...
-func RetrieveStatusDetails(user string, userID string, statusID string) (*model.StatusList, error) {
+func RetrieveStatusDetails(user string, creatorID string, statusID string) (*model.StatusList, error) {
 
 	db, err := SetupDB(user)
 	if err != nil {
@@ -20,7 +20,7 @@ func RetrieveStatusDetails(user string, userID string, statusID string) (*model.
 	defer db.Close()
 
 	sqlStr := `SELECT id, name, description FROM community.statuses s WHERE s.name=$2 AND $1::UUID = ANY(s.sharable_groups);`
-	row := db.QueryRow(sqlStr, userID, statusID)
+	row := db.QueryRow(sqlStr, creatorID, statusID)
 
 	var selectedStatusID, selectedStatusName, selectedStatusDescription string
 	err = row.Scan(&selectedStatusID, &selectedStatusName, &selectedStatusDescription)

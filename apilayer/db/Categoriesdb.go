@@ -283,14 +283,14 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 }
 
 // UpdateCategory ...
-func UpdateCategory(user string, userID string, draftCategory *model.Category) (*model.Category, error) {
+func UpdateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftCategory.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -392,7 +392,8 @@ func RemoveCategory(user string, categoryID string) error {
 }
 
 // AddAssetToCategory ...
-func AddAssetToCategory(user string, userID string, categoryID string, assetIDs []string) ([]model.CategoryItemResponse, error) {
+func AddAssetToCategory(user string, draftCategory *model.CategoryItemRequest) ([]model.CategoryItemResponse, error) {
+	// draftCategory.UserID, draftCategory.ID, draftCategory.AssetIDs
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -409,16 +410,16 @@ func AddAssetToCategory(user string, userID string, categoryID string, assetIDs 
 	}
 
 	currentTime := time.Now()
-	for _, v := range assetIDs {
+	for _, assetID := range draftCategory.AssetIDs {
 		_, err := tx.Exec(
 			sqlStr,
-			categoryID,
-			v,
-			userID,
+			draftCategory.ID,
+			assetID,
+			draftCategory.UserID,
 			currentTime,
-			userID,
+			draftCategory.UserID,
 			currentTime,
-			pq.Array([]string{userID}),
+			pq.Array(draftCategory.Collaborators),
 		)
 		if err != nil {
 			tx.Rollback()
@@ -455,7 +456,7 @@ func AddAssetToCategory(user string, userID string, categoryID string, assetIDs 
 	WHERE $1::UUID = ANY(ci.sharable_groups) AND ci.category_id = $2
 	ORDER BY ci.updated_at DESC;`
 
-	rows, err := db.Query(sqlStr, userID, categoryID)
+	rows, err := db.Query(sqlStr, draftCategory.UserID, draftCategory.ID)
 	if err != nil {
 		return nil, err
 	}

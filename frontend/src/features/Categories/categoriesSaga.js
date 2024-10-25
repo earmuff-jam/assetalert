@@ -83,9 +83,14 @@ export function* removeCategory(action) {
 
 export function* fetchAddItemsInCategory(action) {
   try {
-    const { rowSelected, id } = action.payload;
     const userID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/category/items`, { id, userID, assetIDs: rowSelected });
+    const { id, rowSelected, collaborators } = action.payload;
+    const response = yield call(instance.post, `${BASEURL}/category/items`, {
+      id,
+      userID,
+      assetIDs: rowSelected,
+      collaborators: collaborators,
+    });
     yield put(categoryActions.addItemsInCategorySuccess(response.data));
   } catch (e) {
     yield put(categoryActions.addItemsInCategoryFailure(e));

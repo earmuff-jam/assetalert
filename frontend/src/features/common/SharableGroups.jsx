@@ -1,9 +1,9 @@
-import { Autocomplete, Button, Stack, TextField } from '@mui/material';
+import { Autocomplete, Button, Chip, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
 
-export default function SharableGroups({ handleSubmit, existingGroups }) {
+export default function SharableGroups({ handleSubmit, existingGroups, creator }) {
   const dispatch = useDispatch();
   const { loading, profiles = [] } = useSelector((state) => state.profile);
 
@@ -48,6 +48,7 @@ export default function SharableGroups({ handleSubmit, existingGroups }) {
         id="sharable-groups-options"
         multiple
         freeSolo
+        limitTags={5}
         loading={loading}
         options={options}
         value={sharableGroups}
@@ -60,6 +61,12 @@ export default function SharableGroups({ handleSubmit, existingGroups }) {
         renderInput={(params) => (
           <TextField {...params} variant="standard" label="Add collaborators" placeholder="Collaborators" />
         )}
+        renderTags={(tagValue, getTagProps) =>
+          tagValue.map((option, index) => {
+            const { key, ...tagProps } = getTagProps({ index });
+            return <Chip key={key} label={option.display} {...tagProps} disabled={option.value === creator} />;
+          })
+        }
       />
       <Button variant="text" onClick={() => handleSubmit(sharableGroups)} disabled={sharableGroups.length === 0}>
         Submit

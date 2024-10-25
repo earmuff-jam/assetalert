@@ -33,9 +33,10 @@ type MaintenancePlan struct {
 //
 // MaintenanceItemRequest instance to resemble list of assets that can be added to a maintenance plan item
 type MaintenanceItemRequest struct {
-	ID       string   `json:"id"`
-	UserID   string   `json:"userID"`
-	AssetIDs []string `json:"assetIDs"`
+	ID            string   `json:"id"`
+	UserID        string   `json:"userID"`
+	AssetIDs      []string `json:"assetIDs"`
+	Collaborators []string `json:"collaborators"`
 }
 
 // MaintenanceItemResponse ...

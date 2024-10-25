@@ -43,7 +43,7 @@ const CategoryList = ({ displayConcise = false }) => {
 
   const buildCaption = (displayConcise, selectedFilter) => {
     if (displayConcise) {
-      return `Viewing recent 4 out of ${categories?.length} categories`;
+      return categories?.length ? `Viewing recently edited categories` : null;
     } else if (selectedFilter) {
       return `Applying ${selectedFilter} filter`;
     } else {
@@ -71,7 +71,11 @@ const CategoryList = ({ displayConcise = false }) => {
             Add Category
           </Button>
           {!displayConcise && (
-            <IconButton size="small" disabled={Boolean(categories) && categories.length <= 0} onClick={downloadCategories}>
+            <IconButton
+              size="small"
+              disabled={Boolean(categories) && categories.length <= 0}
+              onClick={downloadCategories}
+            >
               <FileDownload fontSize="small" />
             </IconButton>
           )}

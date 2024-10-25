@@ -75,7 +75,15 @@ const Signup = ({ handleClose }) => {
     if (loading) {
       return <CircularProgress size="1.2rem" />;
     } else {
-      return isValidUserEmail ? <CheckRounded color="success" /> : <CloseRounded color="error" />;
+      return isValidUserEmail ? (
+        <Stack direction="row" alignItems="center" component="span">
+          <CheckRounded color="success" /> <Typography variant="caption">Unique value for email</Typography>
+        </Stack>
+      ) : (
+        <Stack direction="row" alignItems="center" component="span">
+          <CloseRounded color="error" /> <Typography variant="caption">Existing value for email</Typography>
+        </Stack>
+      );
     }
   };
 
@@ -105,33 +113,30 @@ const Signup = ({ handleClose }) => {
             startAdornment: <InputAdornment position="start">{formFields['username'].icon}</InputAdornment>,
           }}
         />
-        <Stack direction="row" alignItems="center" spacing="1rem">
-          <TextField
-            id={formFields['email'].name}
-            name={formFields['email'].name}
-            label={formFields['email'].label}
-            value={formFields['email'].value}
-            type={formFields['email'].type}
-            variant={formFields['email'].variant}
-            autoComplete={formFields['email'].autocomplete}
-            placeholder={formFields['email'].placeholder}
-            onChange={handleInput}
-            required={formFields['email'].required}
-            fullWidth={formFields['email'].fullWidth}
-            error={!!formFields['email'].errorMsg}
-            helperText={formFields['email'].errorMsg}
-            onKeyDown={(e) => {
-              if (e.code === 'Enter') {
-                submit(e);
-              }
-            }}
-            onBlur={() => dispatch(authActions.isValidUserEmail({ email: formFields.email.value }))}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">{formFields['email'].icon}</InputAdornment>,
-            }}
-          />
-          {validUserEmail(isValidUserEmail, loading)}
-        </Stack>
+        <TextField
+          id={formFields['email'].name}
+          name={formFields['email'].name}
+          label={formFields['email'].label}
+          value={formFields['email'].value}
+          type={formFields['email'].type}
+          variant={formFields['email'].variant}
+          autoComplete={formFields['email'].autocomplete}
+          placeholder={formFields['email'].placeholder}
+          onChange={handleInput}
+          required={formFields['email'].required}
+          fullWidth={formFields['email'].fullWidth}
+          error={!!formFields['email'].errorMsg}
+          helperText={formFields['email'].errorMsg || validUserEmail(isValidUserEmail, loading)}
+          onKeyDown={(e) => {
+            if (e.code === 'Enter') {
+              submit(e);
+            }
+          }}
+          onBlur={() => dispatch(authActions.isValidUserEmail({ email: formFields.email.value }))}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">{formFields['email'].icon}</InputAdornment>,
+          }}
+        />
         <TextField
           id={formFields['password'].name}
           name={formFields['password'].name}

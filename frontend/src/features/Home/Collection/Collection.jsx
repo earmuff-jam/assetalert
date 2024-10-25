@@ -1,7 +1,7 @@
 import LearnMore from './LearnMore';
 import RowHeader from '../../common/RowHeader';
 
-const Collection = ({ title, items }) => {
+const Collection = ({ title, items = [] }) => {
   return (
     <>
       <RowHeader title={title} />

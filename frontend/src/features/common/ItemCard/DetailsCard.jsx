@@ -11,11 +11,14 @@ import SharableGroups from '../SharableGroups';
 import { categoryActions } from '../../Categories/categoriesSlice';
 import { produce } from 'immer';
 import { maintenancePlanActions } from '../../Maintenance/maintenanceSlice';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(relativeTime);
 
 export default function DetailsCard({ selectedItem, isViewingCategory = false }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userID = localStorage.getItem('userID');
   const { favItems = [] } = useSelector((state) => state.profile);
 
   const [openModal, setOpenModal] = useState(false);
@@ -32,6 +35,7 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
   const updateCollaborators = (sharableGroups) => {
     const newMembers = sharableGroups.map((v) => v.value);
     const draftSelectionDetails = produce(selectedItem, (draft) => {
+      draft.updated_by = userID;
       draft.sharable_groups = newMembers;
       if (isViewingCategory) {
         draft.status = draft.status_name;
@@ -41,8 +45,14 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
     });
     if (isViewingCategory) {
       dispatch(categoryActions.updateCategory(draftSelectionDetails));
+      if (!newMembers.includes(userID)) {
+        navigate('/');
+      }
     } else {
       dispatch(maintenancePlanActions.updatePlan(draftSelectionDetails));
+      if (!newMembers.includes(userID)) {
+        navigate('/');
+      }
     }
   };
 
@@ -56,7 +66,9 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
 
     if (isFavourite) {
       // toggle fav off if exists
-      const currentItems = favItems.filter((v) => v.category_id === selectedID || v.maintenance_plan_id === selectedID);
+      const currentItems = favItems?.filter(
+        (v) => v.category_id === selectedID || v.maintenance_plan_id === selectedID
+      );
       const currentItem = currentItems.find(() => true);
       dispatch(profileActions.removeFavItem(currentItem?.id));
     } else {
@@ -108,11 +120,15 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
       {openModal && (
         <SimpleModal
           title="Add sharable groups"
-          subtitle="Assign users as collaborators to selected item."
+          subtitle="Assign collaborators."
           handleClose={handleCloseModal}
           maxSize="sm"
         >
-          <SharableGroups handleSubmit={updateCollaborators} existingGroups={selectedItem?.sharable_groups || []} />
+          <SharableGroups
+            handleSubmit={updateCollaborators}
+            existingGroups={selectedItem?.sharable_groups || []}
+            creator={selectedItem?.created_by}
+          />
         </SimpleModal>
       )}
     </>
