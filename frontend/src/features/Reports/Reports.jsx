@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import RowHeader from '../common/RowHeader';
 import ReportCardWrapper from './ReportCardWrapper';
 import dayjs from 'dayjs';
-import { FilterAltRounded } from '@mui/icons-material';
+import { DownloadRounded, FilterAltRounded } from '@mui/icons-material';
 import { capitalizeFirstLetter } from '../common/utils';
 import ItemDetails from './ItemDetails';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +23,7 @@ export default function Reports() {
     (state) => state.maintenance
   );
 
+  const [includeOverdue, setIncludeOverdue] = useState(true);
   const [sinceValue, setSinceValue] = useState(dayjs().startOf('year'));
   const [selectedAsset, setSelectedAsset] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
@@ -37,6 +38,10 @@ export default function Reports() {
     } else {
       return `Viewing results for the ${dayjs().startOf('year').fromNow()}`;
     }
+  };
+
+  const downloadReports = () => {
+    dispatch(reportActions.downloadReports({ since: sinceValue, includeOverdue: includeOverdue, inventories }));
   };
 
   useEffect(() => {
@@ -75,6 +80,9 @@ export default function Reports() {
         primaryStartIcon={<FilterAltRounded />}
         primaryButtonTextLabel={'Filter results'}
         handleClickPrimaryButton={handleFilter}
+        secondaryStartIcon={<DownloadRounded />}
+        secondaryButtonTextLabel={'Export'}
+        handleClickSecondaryButton={() => downloadReports()}
       />
       <Stack spacing="1rem">
         <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
@@ -128,7 +136,13 @@ export default function Reports() {
           handleClose={closeFilter}
           maxSize="sm"
         >
-          <FilterMenu handleClose={closeFilter} sinceValue={sinceValue} setSinceValue={setSinceValue} />
+          <FilterMenu
+            handleClose={closeFilter}
+            sinceValue={sinceValue}
+            setSinceValue={setSinceValue}
+            includeOverdue={includeOverdue}
+            setIncludeOverdue={setIncludeOverdue}
+          />
         </SimpleModal>
       )}
     </>

@@ -1,15 +1,12 @@
 import { Button, Checkbox, FormControlLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
 import { FILTER_OPTIONS } from './constants';
 import { WarningRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { reportActions } from './reportSlice';
 import { inventoryActions } from '../InventoryList/inventorySlice';
 
-export default function FilterMenu({ handleClose, sinceValue, setSinceValue }) {
+export default function FilterMenu({ handleClose, sinceValue, setSinceValue, includeOverdue, setIncludeOverdue }) {
   const dispatch = useDispatch();
-
-  const [includeOverdue, setIncludeOverdue] = useState(true);
 
   const handleSinceValue = (e) => {
     setSinceValue(e.target.value);

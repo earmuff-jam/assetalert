@@ -21,8 +21,28 @@ export function* fetchReports(action) {
   }
 }
 
+export function* downloadReports(action) {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const { since, includeOverdue, inventories } = action.payload;
+
+    const params = new URLSearchParams();
+    params.append('since', since);
+    params.append('includeOverdue', includeOverdue);
+
+    const response = yield call(instance.get, `${BASEURL}/reports/${USER_ID}?${params.toString()}`);
+    yield put(reportActions.downloadReportsSuccess({ reports: response.data, inventories: inventories }));
+  } catch (e) {
+    yield put(reportActions.downloadReportsFailure(e));
+  }
+}
+
 export function* watchFetchReports() {
   yield takeLatest(`report/getReports`, fetchReports);
 }
 
-export default [watchFetchReports];
+export function* watchDownloadReports() {
+  yield takeLatest(`report/downloadReports`, downloadReports);
+}
+
+export default [watchFetchReports, watchDownloadReports];
