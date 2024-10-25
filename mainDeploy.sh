@@ -17,16 +17,16 @@ help() {
 
 loadEnv() {
     echo "envOnly flag provided. only loading env variables."
-    chmod +x setup/_loadProdEnvVariables.sh
-    ./setup/_loadProdEnvVariables.sh
+    chmod +x setup/prod/_loadProdEnvVariables.sh
+    ./setup/prod/_loadProdEnvVariables.sh
 }
 
 loadProdEnv() {
 
     echo "loadProdEnv flag provided. building all containers in production mode."
 
-    chmod +x setup/_loadProdEnvVariables.sh
-    ./setup/_loadProdEnvVariables.sh
+    chmod +x setup/prod/_loadProdEnvVariables.sh
+    ./setup/prod/_loadProdEnvVariables.sh
 
     docker-compose down
     docker-compose -f docker-compose.deploy.yml up --build -d
