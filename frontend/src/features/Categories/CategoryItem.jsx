@@ -81,7 +81,6 @@ export default function CategoryItem() {
     if (id) {
       dispatch(categoryActions.getItemsForCategory(id));
       dispatch(categoryActions.getCategory(id));
-      dispatch(categoryActions.getCategories());
     }
   }, [id]);
 

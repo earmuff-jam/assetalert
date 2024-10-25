@@ -307,7 +307,7 @@ func UpdateMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string)
 		json.NewEncoder(rw).Encode(err)
 		return
 	}
-	resp, err := db.UpdateMaintenancePlan(user, draftMaintenancePlan.UpdatedBy, draftMaintenancePlan)
+	resp, err := db.UpdateMaintenancePlan(user, draftMaintenancePlan)
 	if err != nil {
 		log.Printf("Unable to update new maintenance plan. error: +%v", err)
 		rw.WriteHeader(http.StatusBadRequest)

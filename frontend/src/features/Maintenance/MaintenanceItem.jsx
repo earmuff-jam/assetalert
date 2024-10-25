@@ -80,7 +80,6 @@ export default function MaintenanceItem() {
     if (id) {
       dispatch(maintenancePlanActions.getItemsInMaintenancePlan(id));
       dispatch(maintenancePlanActions.getSelectedMaintenancePlan(id));
-      dispatch(maintenancePlanActions.getPlans());
     }
   }, [id]);
 

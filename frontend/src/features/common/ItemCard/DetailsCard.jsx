@@ -35,6 +35,7 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
   const updateCollaborators = (sharableGroups) => {
     const newMembers = sharableGroups.map((v) => v.value);
     const draftSelectionDetails = produce(selectedItem, (draft) => {
+      draft.updated_by = userID;
       draft.sharable_groups = newMembers;
       if (isViewingCategory) {
         draft.status = draft.status_name;

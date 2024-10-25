@@ -296,7 +296,7 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 }
 
 // UpdateMaintenancePlan ...
-func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *model.MaintenancePlan) (*model.MaintenancePlan, error) {
+func UpdateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenancePlan) (*model.MaintenancePlan, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -304,7 +304,7 @@ func UpdateMaintenancePlan(user string, userID string, draftMaintenancePlan *mod
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftMaintenancePlan.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.CreatedBy, draftMaintenancePlan.Status)
 	if err != nil {
 		return nil, err
 	}

@@ -283,14 +283,14 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 }
 
 // UpdateCategory ...
-func UpdateCategory(user string, userID string, draftCategory *model.Category) (*model.Category, error) {
+func UpdateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftCategory.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status)
 	if err != nil {
 		return nil, err
 	}
