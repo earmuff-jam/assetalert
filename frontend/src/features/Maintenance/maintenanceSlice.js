@@ -140,8 +140,18 @@ const maintenancePlanSlice = createSlice({
       state.error = '';
       const rawData = action.payload;
       const formattedData = rawData.map((v) => {
-        // eslint-disable-next-line no-unused-vars
-        const { id, activity_id, created_by, updated_by, sharable_groups, maintenance_status, location, ...rest } = v;
+        /* eslint-disable no-unused-vars */
+        const {
+          id,
+          activity_id,
+          created_by,
+          updated_by,
+          sharable_groups,
+          maintenance_status,
+          associated_image_url,
+          location,
+          ...rest
+        } = v;
         return rest;
       });
 

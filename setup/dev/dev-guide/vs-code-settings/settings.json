@@ -1,6 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "window.zoomLevel": 0,
+  "window.zoomLevel": -1,
   "editor.formatOnSave": true,
-  "editor.fontFamily": "Consolas"
+  "editor.fontFamily": "Consolas",
+  "editor.fontSize": 16
 }
