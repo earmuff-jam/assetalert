@@ -47,9 +47,10 @@ type CategoryItem struct {
 //
 // CategoryItemRequest instance to resemble list of assets that can be added to a category
 type CategoryItemRequest struct {
-	ID       string   `json:"id"`
-	UserID   string   `json:"userID"`
-	AssetIDs []string `json:"assetIDs"`
+	ID            string   `json:"id"`
+	UserID        string   `json:"userID"`
+	AssetIDs      []string `json:"assetIDs"`
+	Collaborators []string `json:"collaborators"`
 }
 
 // CategoryItemResponse ...

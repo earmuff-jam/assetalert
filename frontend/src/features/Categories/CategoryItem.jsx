@@ -72,7 +72,8 @@ export default function CategoryItem() {
   };
 
   const addItems = () => {
-    dispatch(categoryActions.addItemsInCategory({ rowSelected, id }));
+    const collaborators = categories.find((v) => v.id === id).sharable_groups;
+    dispatch(categoryActions.addItemsInCategory({ id, rowSelected, collaborators }));
     resetSelection();
   };
 
@@ -80,7 +81,6 @@ export default function CategoryItem() {
     if (id) {
       dispatch(categoryActions.getItemsForCategory(id));
       dispatch(categoryActions.getCategory(id));
-      dispatch(categoryActions.getCategories());
     }
   }, [id]);
 
@@ -127,7 +127,7 @@ export default function CategoryItem() {
       </Box>
       <Collection
         title="Recently Created Categories"
-        items={categories.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id }))}
+        items={categories?.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id })) || []}
       />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
