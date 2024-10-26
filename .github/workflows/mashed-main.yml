@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 env:
-  GO111MODULE: 'on' # Enable Go modules
+  GO111MODULE: "on" # Enable Go modules
   DOCKER_DRIVER: overlay
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
           echo "Attempting to build test container and run migrations..."
           migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
           echo "Attempting to insert test data into container ..."
-          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f setup/devscript/test_data.sql
+          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f setup/dev/test_data.sql
 
       - name: Build Go code
         uses: docker://golang:latest
@@ -61,7 +61,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.0.0'
+          node-version: "20.0.0"
 
       - name: Install dependencies
         run: |
@@ -72,7 +72,7 @@ jobs:
         run: |
           cd frontend &&
           CI=true yarn build
-          
+
       - name: Run linter
         run: |
           cd frontend &&

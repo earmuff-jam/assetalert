@@ -21,15 +21,8 @@ help() {
 
 loadEnv() {
     echo "envOnly flag provided. refreshing env variables."
-    chmod +x setup/_loadEnvVariables.sh
-    ./setup/_loadEnvVariables.sh
-}
-
-adjustPermissions() {
-    # set permissions for new folder
-    echo "resetting permissions on local_uploads folder."
-    chmod +x setup/_adjust_perm_local_uploads.sh
-    ./setup/_adjust_perm_local_uploads.sh
+    chmod +x setup/dev/_loadEnvVariables.sh
+    ./setup/dev/_loadEnvVariables.sh
 }
 
 loadDb() {
@@ -58,8 +51,8 @@ loadDevEnv() {
 loadUnitTest() {
     echo "load test environment flag provided. using test env variables and building all containers. please wait ..."
     
-    chmod +x setup/_loadTestEnvVariables.sh
-    ./setup/_loadTestEnvVariables.sh
+    chmod +x setup/dev/_loadTestEnvVariables.sh
+    ./setup/dev/_loadTestEnvVariables.sh
     
     docker-compose down --remove-orphans --volumes
     docker-compose -f docker-compose-db.yml up --build -d
@@ -80,14 +73,14 @@ loadUnitTest() {
 
 loadMigration() {
     echo "migration flag provided. running migration in sequence."
-    chmod +x setup/_loadMigration.sh
-    ./setup/_loadMigration.sh
+    chmod +x setup/dev/_loadMigration.sh
+    ./setup/dev/_loadMigration.sh
 }
 
 loadData() {
     echo "loadData flag provided. loading all test data."
-    chmod +x setup/_addTestData.sh
-	./setup/_addTestData.sh
+    chmod +x setup/dev/_addTestData.sh
+	./setup/dev/_addTestData.sh
 }
 
 uninstall() {
