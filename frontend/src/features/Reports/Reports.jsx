@@ -44,6 +44,11 @@ export default function Reports() {
     dispatch(reportActions.downloadReports({ since: sinceValue, includeOverdue: includeOverdue, inventories }));
   };
 
+  const formatDate = (date) => {
+    if (!date) return null;
+    return dayjs(date).isValid() && `Since ${dayjs(sinceValue).format('MMM, YYYY')}`;
+  };
+
   useEffect(() => {
     if (!loading && inventories.length > 0) {
       setSelectedAsset(inventories[0] || {});
@@ -66,11 +71,6 @@ export default function Reports() {
       dispatch(reportActions.getReports({ since: dayjs().startOf('year').toISOString(), includeOverdue: true }));
     }
   }, [reportLoading]);
-
-  const formatDate = (date) => {
-    if (!date) return null;
-    return dayjs(date).isValid() && `Since ${dayjs(sinceValue).format('MMM, YYYY')}`;
-  };
 
   return (
     <>
