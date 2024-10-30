@@ -1,8 +1,8 @@
-import NotesList from '../../features/Notes/NotesList';
+import ProfileContent from '../../features/Profile/ProfileContent';
 
 export default {
-  title: 'Notes/NotesList',
-  component: NotesList,
+  title: 'Profile/ProfileContent',
+  component: ProfileContent,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
@@ -11,6 +11,6 @@ export default {
   },
 };
 
-export const EmptyListNoteMode = {
+export const EmptyProfileContent = {
   args: {},
 };

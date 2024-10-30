@@ -5,6 +5,8 @@ import { darkTheme, lightTheme } from '../src/util/Theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { store } from '../src/Store';
+import { Provider } from 'react-redux';
 
 const THEMES = {
   lightTheme: lightTheme,
@@ -16,10 +18,12 @@ export const decorators = [
     const { theme: themeKey } = context.globals;
     const theme = useMemo(() => THEMES[themeKey] || THEMES['lightTheme'], [themeKey]);
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>{story()}</LocalizationProvider>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>{story()}</LocalizationProvider>
+        </ThemeProvider>
+      </Provider>
     );
   },
 ];

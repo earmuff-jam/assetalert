@@ -1,8 +1,8 @@
-import NotesList from '../../features/Notes/NotesList';
+import RecentActivities from '../../features/Activities/RecentActivities';
 
 export default {
-  title: 'Notes/NotesList',
-  component: NotesList,
+  title: 'RecentActivity/RecentActivities',
+  component: RecentActivities,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
@@ -11,6 +11,6 @@ export default {
   },
 };
 
-export const EmptyListNoteMode = {
+export const RecentActivitiesLoadingMode = {
   args: {},
 };

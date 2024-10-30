@@ -13,7 +13,7 @@ const EditInventory = lazy(() => import('../InventoryList/EditInventory'));
 const CategoryList = lazy(() => import('../Categories/CategoryList'));
 const CategoryItem = lazy(() => import('../Categories/CategoryItem'));
 const MaintenanceItem = lazy(() => import('../Maintenance/MaintenanceItem'));
-const RecentList = lazy(() => import('../RecentList/RecentList'));
+const RecentList = lazy(() => import('../Activities/RecentList'));
 
 export const router = createBrowserRouter([
   {
