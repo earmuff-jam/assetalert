@@ -2,11 +2,12 @@
 
 import { useMemo } from 'react';
 import { darkTheme, lightTheme } from '../src/util/Theme';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { store } from '../src/Store';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 const THEMES = {
   lightTheme: lightTheme,
@@ -18,12 +19,16 @@ export const decorators = [
     const { theme: themeKey } = context.globals;
     const theme = useMemo(() => THEMES[themeKey] || THEMES['lightTheme'], [themeKey]);
     return (
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>{story()}</LocalizationProvider>
-        </ThemeProvider>
-      </Provider>
+      <Box sx={{ padding: '2rem' }}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>{story()}</LocalizationProvider>
+            </ThemeProvider>
+          </Provider>
+        </MemoryRouter>
+      </Box>
     );
   },
 ];
