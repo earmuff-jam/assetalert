@@ -1,7 +1,7 @@
 import RecentActivity from '../../features/Activities/RecentActivity';
 
 export default {
-  title: 'RecentActivity/RecentActivity',
+  title: 'Activities/RecentActivity',
   component: RecentActivity,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],

@@ -1,94 +1,66 @@
 import { useEffect, useState } from 'react';
-import { AddRounded, FileDownload } from '@mui/icons-material';
-import { Box, Button, IconButton, Stack } from '@mui/material';
-import AddPlan from './AddPlan';
-import PlanList from './PlanList';
-import RowHeader from '../common/RowHeader';
-import SimpleModal from '../common/SimpleModal';
-import { useDispatch, useSelector } from 'react-redux';
-import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
+import { Skeleton } from '@mui/material';
+import dayjs from 'dayjs';
+import { useDispatch } from 'react-redux';
+import { ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { maintenancePlanActions } from './maintenanceSlice';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import ItemCard from '../common/ItemCard/ItemCard';
 
-const Plan = () => {
+dayjs.extend(relativeTime);
+
+const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSelectedMaintenancePlanID }) => {
   const dispatch = useDispatch();
-  const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
 
-  const [sortedData, setSortedData] = useState([]);
-  const [displayModal, setDisplayModal] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(-1);
 
-  const [selectedFilter, setSelectedFilter] = useState('');
-  const [sortingOrder, setSortingOrder] = useState(true); // false ascending
-  const [selectedMaintenancePlanID, setSelectedMaintenancePlanID] = useState('');
-
-  const toggleModal = () => setDisplayModal(!displayModal);
-  const handleCloseAddNewPlan = () => {
-    setDisplayModal(false);
-    setSelectedMaintenancePlanID('');
+  const handleDelete = (id) => {
+    setOpenDialog(true);
+    setIdToDelete(id);
   };
 
-  const downloadMaintenancePlans = () => {
-    dispatch(maintenancePlanActions.download());
+  const handleEdit = (id) => {
+    setDisplayModal(true);
+    setSelectedMaintenancePlanID(id);
+  };
+  const resetConfirmationBox = () => {
+    setOpenDialog(false);
+    setIdToDelete(-1);
   };
 
-  const filterAndBuildMaintenancePlans = (plans, selectedFilter) => {
-    if (selectedFilter.length > 0) {
-      return plans.filter((element) => element.maintenance_status_name === selectedFilter);
-    } else {
-      return sortedData;
+  const confirmDelete = (id) => {
+    if (id === -1) {
+      return;
     }
+    dispatch(maintenancePlanActions.removePlan(id));
+    resetConfirmationBox();
   };
 
   useEffect(() => {
-    if (sortingOrder) {
-      if (maintenancePlan.length > 0) {
-        const draft = [...maintenancePlan].sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
-        setSortedData(draft);
-      }
-    } else {
-      setSortedData(maintenancePlan);
-    }
-  }, [sortingOrder, maintenancePlan]);
+    dispatch(maintenancePlanActions.getPlans(100));
+  }, []);
+
+  if (loading && !displayModal) {
+    return <Skeleton height="10rem" />;
+  }
+  if (maintenancePlan?.length <= 0 || maintenancePlan == null) return <EmptyComponent />;
 
   return (
-    <Box sx={{ py: 2 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <RowHeader
-          title="Maintenance Plans"
-          caption={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
-        />
-        <Stack direction="row" spacing="1rem">
-          <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
-            Add Plan
-          </Button>
-          <IconButton size="small" onClick={downloadMaintenancePlans}>
-            <FileDownload fontSize="small" />
-          </IconButton>
-        </Stack>
-      </Stack>
-      <FilterAndSortMenu
-        sortingOrder={sortingOrder}
-        setSortingOrder={setSortingOrder}
-        selectedFilter={selectedFilter}
-        setSelectedFilter={setSelectedFilter}
+    <>
+      <ItemCard data={maintenancePlan} handleEdit={handleEdit} handleDelete={handleDelete} prefixURI={'plan'} />
+      <ConfirmationBoxModal
+        openDialog={openDialog}
+        title="Confirm deletion"
+        text="Delete this item?"
+        textVariant="body2"
+        handleClose={resetConfirmationBox}
+        showSubmit={false}
+        maxSize="xs"
+        deleteID={idToDelete}
+        confirmDelete={confirmDelete}
       />
-      <PlanList
-        maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
-        loading={loading}
-        displayModal={displayModal}
-        setDisplayModal={setDisplayModal}
-        setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
-      />
-      {displayModal && (
-        <SimpleModal title="Add new maintenance plan" handleClose={handleCloseAddNewPlan} maxSize="md">
-          <AddPlan
-            handleCloseAddNewPlan={handleCloseAddNewPlan}
-            maintenancePlan={maintenancePlan}
-            selectedMaintenancePlanID={selectedMaintenancePlanID}
-            setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
-          />
-        </SimpleModal>
-      )}
-    </Box>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import RecentList from '../../features/Activities/RecentList';
 
 export default {
-  title: 'RecentActivity/RecentList',
+  title: 'Activities/RecentList',
   component: RecentList,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],

@@ -1,8 +1,8 @@
-import RecentActivities from '../../features/Activities/RecentActivities';
+import AddPlan from '../../features/Maintenance/AddPlan';
 
 export default {
-  title: 'Activities/RecentActivities',
-  component: RecentActivities,
+  title: 'Plan/AddPlan',
+  component: AddPlan,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
@@ -11,6 +11,11 @@ export default {
   },
 };
 
-export const RecentActivitiesLoadingMode = {
-  args: {},
+export const AddPlanDefaultMode = {
+  args: {
+    handleCloseAddNewPlan: () => {},
+    maintenancePlan: [],
+    selectedMaintenancePlanID: () => {},
+    setSelectedMaintenancePlanID: () => {},
+  },
 };
