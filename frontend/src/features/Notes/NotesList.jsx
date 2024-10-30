@@ -1,5 +1,5 @@
 import AddNote from './AddNote';
-import NotesDetails from './NotesDetails';
+import Note from './Note';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Stack, Typography } from '@mui/material';
@@ -7,7 +7,7 @@ import { AddRounded } from '@mui/icons-material';
 import { notesActions } from './notesSlice';
 import SimpleModal from '../common/SimpleModal';
 
-const Notes = () => {
+const NotesList = () => {
   const dispatch = useDispatch();
   const { loading, notes } = useSelector((state) => state.notes);
 
@@ -31,7 +31,7 @@ const Notes = () => {
         <Typography variant="h5" gutterBottom>
           Rough Notes
         </Typography>
-        <Button startIcon={<AddRounded />} onClick={handleEditMode} variant='outlined'>
+        <Button startIcon={<AddRounded />} onClick={handleEditMode} variant="outlined">
           Add note
         </Button>
       </Stack>
@@ -50,9 +50,9 @@ const Notes = () => {
           />
         </SimpleModal>
       )}
-      <NotesDetails notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />
+      <Note notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />
     </Stack>
   );
 };
 
-export default Notes;
+export default NotesList;

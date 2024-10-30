@@ -20,7 +20,7 @@ import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common
 import { notesActions } from './notesSlice';
 import { STATUS_OPTIONS } from './constants';
 
-const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
+const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
   dayjs.extend(relativeTime);
 
@@ -108,8 +108,7 @@ const NotesDetails = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
                     </Stack>
                   </Stack>
                   <Typography variant="body2">{note.description}</Typography>
-                  <Stack sx={{ mt: '1rem' }}>
-                  </Stack>
+                  <Stack sx={{ mt: '1rem' }}></Stack>
                   <Row>
                     <>
                       <Box>
@@ -155,4 +154,4 @@ const Row = ({ children }) => {
   );
 };
 
-export default NotesDetails;
+export default Note;

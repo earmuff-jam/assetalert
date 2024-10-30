@@ -4,7 +4,7 @@ import Layout from '../Layout/Layout';
 import Reports from '../Reports/Reports';
 
 const HomePage = lazy(() => import('../Home/HomePage'));
-const Notes = lazy(() => import('../Notes/Notes'));
+const NotesList = lazy(() => import('../Notes/NotesList'));
 const Plan = lazy(() => import('../Maintenance/Plan'));
 const ProfilePage = lazy(() => import('../Profile/ProfilePage'));
 const AppearanceSettings = lazy(() => import('../Profile/Appearance/Appearance'));
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile/notes',
-        element: <Notes />,
+        element: <NotesList />,
       },
       {
         path: 'recent/activities',

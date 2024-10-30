@@ -1,19 +1,19 @@
-import { primary_theme } from '../../util/Theme';
+import { lightTheme } from '../../util/Theme';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material';
 import { withRouter } from 'storybook-addon-react-router-v6';
 import { Provider } from 'react-redux';
 import { store } from '../../Store';
-import AddNote from '../../Components/Notes/AddNote';
+import NotesList from '../../features/Notes/NotesList';
 
 export default {
-  title: 'ProfilePage/AddNoteComponent',
-  component: AddNote,
+  title: 'Notes/NotesList',
+  component: NotesList,
   decorators: [
     withRouter,
     (Story) => (
       <Provider store={store}>
         <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={primary_theme}>
+          <ThemeProvider theme={lightTheme}>
             <Story />
           </ThemeProvider>
         </StyledEngineProvider>
@@ -28,9 +28,6 @@ export default {
   },
 };
 
-export const PrimaryAddNotes = {
-  args: {
-    noteID: '1',
-    setEditMode: () => {},
-  },
+export const EmptyListNoteMode = {
+  args: {},
 };
