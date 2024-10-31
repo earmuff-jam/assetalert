@@ -36,7 +36,7 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
   const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
 
-  // the timeout allows to close the drawer first before navigation occurs. 
+  // the timeout allows to close the drawer first before navigation occurs.
   // Without this, the drawer behaves weird.
   const handleMenuItemClick = (to) => {
     handleDrawerClose();
