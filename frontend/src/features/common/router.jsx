@@ -4,8 +4,8 @@ import Layout from '../Layout/Layout';
 import Reports from '../Reports/Reports';
 
 const HomePage = lazy(() => import('../Home/HomePage'));
-const Notes = lazy(() => import('../Notes/Notes'));
-const Plan = lazy(() => import('../Maintenance/Plan'));
+const NotesList = lazy(() => import('../Notes/NotesList'));
+const PlanList = lazy(() => import('../Maintenance/PlanList'));
 const ProfilePage = lazy(() => import('../Profile/ProfilePage'));
 const AppearanceSettings = lazy(() => import('../Profile/Appearance/Appearance'));
 const InventoryList = lazy(() => import('../InventoryList/InventoryList'));
@@ -13,7 +13,7 @@ const EditInventory = lazy(() => import('../InventoryList/EditInventory'));
 const CategoryList = lazy(() => import('../Categories/CategoryList'));
 const CategoryItem = lazy(() => import('../Categories/CategoryItem'));
 const MaintenanceItem = lazy(() => import('../Maintenance/MaintenanceItem'));
-const RecentList = lazy(() => import('../RecentList/RecentList'));
+const RecentList = lazy(() => import('../Activities/RecentList'));
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/plans/list',
-        element: <Plan />,
+        element: <PlanList />,
       },
       {
         path: '/plan/:id',
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile/notes',
-        element: <Notes />,
+        element: <NotesList />,
       },
       {
         path: 'recent/activities',

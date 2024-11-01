@@ -26,10 +26,7 @@ const CategoryList = ({ displayConcise = false }) => {
   };
 
   const toggleModal = () => setDisplayModal(!displayModal);
-
-  const downloadCategories = () => {
-    dispatch(categoryActions.download());
-  };
+  const downloadCategories = () => dispatch(categoryActions.download());
 
   const filterAndBuildCategories = (displayConcise, categories, selectedFilter) => {
     if (displayConcise) {

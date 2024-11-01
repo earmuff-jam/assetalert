@@ -33,7 +33,13 @@ const RowHeader = ({
       </Stack>
       <Stack direction="row" spacing={2} useFlexGap>
         {primaryButtonTextLabel ? (
-          <Button color="primary" variant="outlined" disabled={primaryButtonDisabled} onClick={handleClickPrimaryButton} startIcon={primaryStartIcon}>
+          <Button
+            color="primary"
+            variant="outlined"
+            disabled={primaryButtonDisabled}
+            onClick={handleClickPrimaryButton}
+            startIcon={primaryStartIcon}
+          >
             {primaryButtonTextLabel}
           </Button>
         ) : null}
