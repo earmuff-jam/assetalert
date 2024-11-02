@@ -84,11 +84,7 @@ const Overview = () => {
               <Stack spacing="2rem">
                 <Typography variant="h5">Cost Summary</Typography>
                 <RowItem label="Total estimated cost" color="text.secondary" dataValue={prefix('$', totalAssetCosts)} />
-                <RowItem
-                  label="Unestimated"
-                  color="text.secondary"
-                  dataValue={`${zeroCostItems.length || 0} items`}
-                />
+                <RowItem label="Unestimated" color="text.secondary" dataValue={`${zeroCostItems.length || 0} items`} />
               </Stack>
               <Stack>
                 <Typography variant="h5" gutterBottom>

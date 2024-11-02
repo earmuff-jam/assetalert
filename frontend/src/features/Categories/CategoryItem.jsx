@@ -15,7 +15,6 @@ import dayjs from 'dayjs';
 import { ITEMS_IN_CATEGORY_HEADER } from './constants';
 import BarChart from '../../util/Chart/BarChart';
 import DetailsCard from '../common/ItemCard/DetailsCard';
-import Collection from '../Home/Collection/Collection';
 
 export default function CategoryItem() {
   const { id } = useParams();
@@ -125,10 +124,6 @@ export default function CategoryItem() {
           borderColor="rgba(75, 192, 192, 1)"
         />
       </Box>
-      <Collection
-        title="Recently Created Categories"
-        items={categories?.filter((_, index) => index < 3).map((v) => ({ ...v, href: v.id })) || []}
-      />
       {displayModal && (
         <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
           <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>

@@ -16,7 +16,7 @@ const RowHeader = ({
   children,
 }) => {
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+    <Box display="flex" justifyContent="space-between" alignItems="center">
       <Stack>
         <Typography variant={titleVariant} component="h2">
           {title}

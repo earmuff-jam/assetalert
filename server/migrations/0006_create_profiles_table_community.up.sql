@@ -12,7 +12,7 @@ CREATE TABLE profiles
     avatar_url    BYTEA                                                          NULL,
     email_address VARCHAR(250)                                                   NOT NULL UNIQUE,
     phone_number  VARCHAR(250)                                                   NULL,
-    about_me      VARCHAR(250)                                                   NULL,
+    about_me      VARCHAR(500)                                                   NULL,
     appearance    BOOLEAN                                                                 DEFAULT FALSE,
     grid_view     BOOLEAN                                                                 DEFAULT FALSE,
     onlineStatus  BOOLEAN                                                                 DEFAULT FALSE,

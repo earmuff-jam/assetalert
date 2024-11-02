@@ -1,13 +1,12 @@
 import { Box, Button, Checkbox, Divider, FormControlLabel, Skeleton, Stack, Typography } from '@mui/material';
 import { DarkModeRounded, GridViewRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { profileActions } from '../profileSlice';
+import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
+import { profileActions } from './profileSlice';
 
-const AppearanceSettings = () => {
+const AppearanceSettings = ({ loading, profileDetails = {} }) => {
   const dispatch = useDispatch();
-  const { loading, profileDetails } = useSelector((state) => state.profile);
 
   const [displayMode, setDisplayMode] = useState(false);
   const [inventoryLayout, setInventoryLayout] = useState(false); // false is list view
