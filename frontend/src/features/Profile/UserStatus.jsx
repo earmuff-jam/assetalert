@@ -1,7 +1,7 @@
 import { Divider, Stack, Typography } from '@mui/material';
 import ProfileStatsChart from './ProfileStatsChart';
 
-export default function UserStatus({ data, onlySmallScreen }) {
+export default function UserStatus({ onlySmallScreen }) {
   const profileStats = [
     {
       id: 1,

@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Paper, Stack, useMediaQuery } from '@mui/material';
 import UserDemographics from './UserDemographics';
 import UserDetails from './UserDetails';
 import UserStatus from './UserStatus';

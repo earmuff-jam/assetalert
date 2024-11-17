@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   ExpandLess,
   ExpandMore,
-  SettingsRounded,
   AllInboxRounded,
   ChevronLeftRounded,
   ChevronRightRounded,

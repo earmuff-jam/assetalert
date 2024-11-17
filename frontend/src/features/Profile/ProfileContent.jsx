@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { BLANK_PROFILE_DETAILS } from './constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
