@@ -126,9 +126,10 @@ const inventorySlice = createSlice({
       state.loading = true;
       state.error = '';
     },
-    getStorageLocationsSuccess: (state) => {
+    getStorageLocationsSuccess: (state, action) => {
       state.loading = false;
       state.error = '';
+      state.storageLocations = action.payload;
     },
     getStorageLocationsFailure: (state) => {
       state.loading = false;

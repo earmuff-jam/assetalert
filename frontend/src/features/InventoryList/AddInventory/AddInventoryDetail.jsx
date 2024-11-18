@@ -154,7 +154,7 @@ export default function AddInventory({ handleClose }) {
     dispatch(inventoryActions.getStorageLocations());
   }, []);
 
-  if (isLoading) return <Skeleton height="30vh" width="50vw" />;
+  if (isLoading) return <Skeleton height="30vh" />;
 
   return (
     <Box sx={{ width: '100%' }}>

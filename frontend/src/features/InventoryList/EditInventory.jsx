@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Divider,
   FormControlLabel,
   IconButton,
@@ -15,7 +14,13 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BookmarkAddedRounded, CheckRounded, CloseRounded, NoteAddRounded, SwapHorizRounded } from '@mui/icons-material';
+import {
+  BookmarkAddedRounded,
+  CheckRounded,
+  CloseRounded,
+  NoteAddRounded,
+  SwapHorizRounded,
+} from '@mui/icons-material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { BLANK_INVENTORY_FORM } from './constants';
@@ -26,6 +31,7 @@ import { enqueueSnackbar } from 'notistack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import ImagePicker from '../common/ImagePicker/ImagePicker';
 
 const filter = createFilterOptions();
 dayjs.extend(relativeTime);
@@ -35,7 +41,12 @@ const EditInventory = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading: storageLocationsLoading, storageLocations: options, inventory, loading } = useSelector((state) => state.inventory);
+  const {
+    loading: storageLocationsLoading,
+    storageLocations: options,
+    inventory,
+    loading,
+  } = useSelector((state) => state.inventory);
 
   const [openReturnNote, setOpenReturnNotes] = useState(false);
   const [returnDateTime, setReturnDateTime] = useState(null);
@@ -87,19 +98,8 @@ const EditInventory = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const containsErr = Object.values(formData).reduce((acc, el) => {
-      if (el?.errorMsg) {
-        return true;
-      }
-      return acc;
-    }, false);
 
-    const requiredFormFields = Object.values(formData).filter((v) => v?.isRequired);
-    const isRequiredFieldsEmpty = requiredFormFields
-      .filter((el) => el.type === 'text')
-      .some((el) => el.value.trim() === '');
-
-    if (containsErr || isRequiredFieldsEmpty || storageLocation === null || Object.keys(storageLocation).length <= 0) {
+    if (isFormDisabled()) {
       enqueueSnackbar('Unable to update inventory details.', {
         variant: 'error',
       });
@@ -121,6 +121,10 @@ const EditInventory = () => {
     };
     dispatch(inventoryActions.updateInventory(draftRequest));
     navigate('/inventories/list');
+  };
+
+  const handleUpload = (id, imgFormData) => {
+    console.debug(id, imgFormData);
   };
 
   useEffect(() => {
@@ -169,31 +173,33 @@ const EditInventory = () => {
   }, [loading, inventory]);
 
   return (
-    <Container sx={{ marginTop: '1rem' }}>
-      <RowHeader title="Editing inventory" caption={`Editing ${formData.name.value}`}/>
-      <Stack spacing={2}>
+    <>
+      <RowHeader title="Editing inventory" caption={`Editing ${formData.name.value}`} />
+      <Stack spacing={2} marginTop={'1rem'}>
         <Stack direction="row" spacing={2}>
-          {Object.values(formData)
-            .filter((v, index) => index < 2)
-            .map((v) => (
-              <TextField
-                key={v.id}
-                id={v.id}
-                label={v.label}
-                value={v.value}
-                required={v.isRequired}
-                onChange={handleInputChange}
-                fullWidth
-                variant="outlined"
-                size="small"
-                error={!!v.errorMsg}
-                helperText={v.errorMsg}
-                multiline={v.id === 'description'}
-                rows={v.id === 'description' ? 4 : null}
-              />
-            ))}
+          <ImagePicker id={id} handleUpload={handleUpload} />
+          <Stack direction="column" spacing={2} flexGrow={1}>
+            {Object.values(formData)
+              .filter((v, index) => index < 2)
+              .map((v) => (
+                <TextField
+                  key={v.id}
+                  id={v.id}
+                  label={v.label}
+                  value={v.value}
+                  required={v.isRequired}
+                  onChange={handleInputChange}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={!!v.errorMsg}
+                  helperText={v.errorMsg}
+                  multiline={v.id === 'description'}
+                  rows={v.id === 'description' ? 4 : null}
+                />
+              ))}
+          </Stack>
         </Stack>
-
         <Stack direction="row" spacing={2}>
           {Object.values(formData)
             .filter((v, index) => index >= 2 && index < 5)
@@ -462,7 +468,7 @@ const EditInventory = () => {
           Submit
         </Button>
       </Box>
-    </Container>
+    </>
   );
 };
 

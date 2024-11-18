@@ -17,6 +17,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type FItem struct {
+	Name        string
+	Description string
+}
+
 // IngestSvc ...
 //
 // main function to ingest data from the datalake
@@ -42,10 +47,10 @@ func IngestSvc() {
 	if err != nil {
 		log.Fatalf("error during finding a test user... %+v", err)
 	}
-	GenerateFakeDataWithLimit(currentUser, 13, "note", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 80, "inventory", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 23, "category", creatorID)
-	GenerateFakeDataWithLimit(currentUser, 14, "maintenance_plan", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 10, "note", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 10, "inventory", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 10, "category", creatorID)
+	GenerateFakeDataWithLimit(currentUser, 10, "maintenance_plan", creatorID)
 }
 
 // GenerateFakeDataWithLimit ...
@@ -83,16 +88,60 @@ func GenerateFakeDataWithLimit(user string, limit int, typeOf string, creatorID 
 //
 // generate fake category data to test in the application
 func populateFakeCategories(user string, limit int, creatorID string) {
+	fakeCategories := []FItem{
+		{
+			Name:        "Office Equipment",
+			Description: "Track everything from desks and chairs to printers and photocopiers, ensuring your office runs smoothly and efficiently.",
+		},
+		{
+			Name:        "IT Hardware",
+			Description: "Monitor your tech inventory, including laptops, monitors, servers, and peripherals, to keep your digital workspace optimized.",
+		},
+		{
+			Name:        "Vehicles & Fleet",
+			Description: "Keep tabs on company vehicles, from delivery vans to executive cars, and never lose track of your fleet.",
+		},
+		{
+			Name:        "Furniture & Fixtures",
+			Description: "Manage office and workplace furnishings with ease, from ergonomic chairs to lighting setups.",
+		},
+		{
+			Name:        "Tools & Machinery",
+			Description: "Perfect for contractors and manufacturers, this category covers drills, saws, forklifts, and all the heavy-duty essentials.",
+		},
+		{
+			Name:        "Inventory Supplies",
+			Description: "Stay on top of stockroom items like packaging materials, spare parts, and consumables to avoid bottlenecks.",
+		},
+		{
+			Name:        "Marketing Assets",
+			Description: "From banners to branded merchandise, organize and track assets used for promotional and advertising campaigns.",
+		},
+		{
+			Name:        "Maintenance Equipment",
+			Description: "Track repair tools and cleaning supplies so you can keep your facilities in top shape.",
+		},
+		{
+			Name:        "Software Licenses",
+			Description: "Manage software subscriptions and licenses to avoid downtime and ensure compliance with usage agreements.",
+		},
+		{
+			Name:        "Customer Loaned Items",
+			Description: "Easily monitor items lent to clients, like demo products, rental gear, or loaner tools, to ensure timely returns.",
+		},
+	}
 
 	for i := 1; i <= limit; i++ {
-		draftCategory := model.Category{}
-		// time is set for created / updated
 		now := time.Now()
+		draftCategory := model.Category{}
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftCategory.Name = gofakeit.JobTitle()
-		draftCategory.Description = gofakeit.HipsterSentence(2)
+		randomIndex := gofakeit.Number(0, len(fakeCategories)-1)
+		selectedCategory := fakeCategories[randomIndex]
+
+		draftCategory.Name = selectedCategory.Name
+		draftCategory.Description = selectedCategory.Description
 		draftCategory.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
 		draftCategory.MinItemsLimit = gofakeit.Number(1, 10)
 		draftCategory.MaxItemsLimit = gofakeit.Number(10, 100)
@@ -113,7 +162,48 @@ func populateFakeCategories(user string, limit int, creatorID string) {
 //
 // generate fake maintenance plan data to test in the application
 func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
-
+	fakeMaintenancePlans := []FItem{
+		{
+			Name:        "Basic Equipment Checkup",
+			Description: "Regular inspections for wear and tear, ensuring basic functionality of equipment.",
+		},
+		{
+			Name:        "Preventive Maintenance",
+			Description: "Scheduled maintenance to prevent equipment breakdown and extend lifespan.",
+		},
+		{
+			Name:        "Seasonal Maintenance",
+			Description: "Specialized checks and updates before seasonal usage or storage periods.",
+		},
+		{
+			Name:        "Emergency Repair Plan",
+			Description: "Rapid response services to address unexpected equipment failures.",
+		},
+		{
+			Name:        "Software Update Plan",
+			Description: "Regular updates to firmware and software to maintain optimal performance.",
+		},
+		{
+			Name:        "Comprehensive Overhaul",
+			Description: "Full equipment overhaul for restoring it to like-new condition.",
+		},
+		{
+			Name:        "Warranty Support Plan",
+			Description: "Maintenance services covered under manufacturer warranty agreements.",
+		},
+		{
+			Name:        "Energy Efficiency Audit",
+			Description: "Assess and optimize equipment energy usage to reduce operational costs.",
+		},
+		{
+			Name:        "Safety Compliance Plan",
+			Description: "Ensure all equipment meets regulatory safety and compliance standards.",
+		},
+		{
+			Name:        "On-Demand Maintenance",
+			Description: "Maintenance performed only as needed, based on real-time equipment conditions.",
+		},
+	}
 	for i := 1; i <= limit; i++ {
 		draftMaintenancePlan := model.MaintenancePlan{}
 		// time is set for created / updated
@@ -121,8 +211,11 @@ func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
 		daysAgo := gofakeit.Number(1, 30)
 		startDate := now.AddDate(0, 0, -daysAgo)
 
-		draftMaintenancePlan.Name = gofakeit.JobTitle() + " plan "
-		draftMaintenancePlan.Description = gofakeit.HipsterSentence(2)
+		randomIndex := gofakeit.Number(0, len(fakeMaintenancePlans)-1)
+		selectedCategory := fakeMaintenancePlans[randomIndex]
+
+		draftMaintenancePlan.Name = selectedCategory.Name
+		draftMaintenancePlan.Description = selectedCategory.Description
 		draftMaintenancePlan.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
 		draftMaintenancePlan.MinItemsLimit = gofakeit.Number(1, 10)
 		draftMaintenancePlan.MaxItemsLimit = gofakeit.Number(10, 100)
@@ -181,8 +274,8 @@ func populateFakeInventories(user string, limit int, creatorID string) {
 		startDate := now.AddDate(0, 0, -daysAgo)
 		isReturnableStatus := gofakeit.Bool()
 
-		draftInventory.Name = gofakeit.BeerName()
-		draftInventory.Description = gofakeit.HipsterSentence(gofakeit.Number(2, 5))
+		draftInventory.Name = gofakeit.Company()
+		draftInventory.Description = gofakeit.Sentence(gofakeit.Number(2, 5))
 		draftInventory.Price = gofakeit.Price(2, 120)
 		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN", "ALL"})
 		draftInventory.Barcode = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())

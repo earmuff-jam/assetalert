@@ -26,6 +26,11 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection, maxHe
   const [selectedItemID, setSelectedItemID] = useState(-1);
   const handleCloseModal = () => setDisplayModal(false);
 
+  const handleUpload = (id, imgFormData) => {
+    dispatch(inventoryActions.createInventoryImage({ assetID: id, imageData: imgFormData }));
+    handleCloseModal();
+  };
+
   useEffect(() => {
     if (Array.isArray(data)) {
       data.forEach((element) => {
@@ -93,7 +98,7 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection, maxHe
           <SimpleModal title={'Edit image'} handleClose={handleCloseModal} maxSize="sm">
             <ImagePicker
               selectedData={inventories.filter((v) => v.id === selectedItemID).find(() => true)}
-              handleClose={handleCloseModal}
+              handleUpload={handleUpload}
             />
           </SimpleModal>
         )}
