@@ -1,18 +1,17 @@
 import {
   Inventory2Rounded,
   HomeRounded,
-  PreviewRounded,
-  AccountBoxRounded,
   PushPinRounded,
   CategoryRounded,
   SummarizeRounded,
   ReportSharp,
+  Person2Rounded,
 } from '@mui/icons-material';
 
-export const PARENT_MENU_LIST = [
+export const MENU_ACTION_BAR_DEFAULT_LIST = [
   {
     id: 1,
-    icon: <HomeRounded fontSize="small" color="primary" />,
+    icon: <HomeRounded fontSize="small" />,
     label: 'Home',
     to: '/',
   },
@@ -40,24 +39,15 @@ export const PARENT_MENU_LIST = [
     label: 'Reports',
     to: '/reports',
   },
-];
-
-export const SETTINGS_CHILDREN_MENU_LIST = [
   {
-    id: 1,
-    icon: <PreviewRounded fontSize="small" />,
-    label: 'Appearance',
-    to: '/profile/appearance',
-  },
-  {
-    id: 2,
-    icon: <AccountBoxRounded fontSize="small" />,
-    label: 'Profile details',
+    id: 6,
+    icon: <Person2Rounded fontSize="small" />,
+    label: 'Profile',
     to: '/profile',
   },
 ];
 
-export const PINNED_CHILDREN_MENU_LIST = [
+export const PINNED_DEFAULT_INSET_MENU_LIST = [
   {
     id: 1,
     icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,

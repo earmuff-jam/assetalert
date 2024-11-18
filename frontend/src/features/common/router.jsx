@@ -7,7 +7,6 @@ const HomePage = lazy(() => import('../Home/HomePage'));
 const NotesList = lazy(() => import('../Notes/NotesList'));
 const PlanList = lazy(() => import('../Maintenance/PlanList'));
 const ProfilePage = lazy(() => import('../Profile/ProfilePage'));
-const AppearanceSettings = lazy(() => import('../Profile/Appearance/Appearance'));
 const InventoryList = lazy(() => import('../InventoryList/InventoryList'));
 const EditInventory = lazy(() => import('../InventoryList/EditInventory'));
 const CategoryList = lazy(() => import('../Categories/CategoryList'));
@@ -53,15 +52,11 @@ export const router = createBrowserRouter([
         element: <Reports />,
       },
       {
-        path: 'profile',
+        path: '/profile',
         element: <ProfilePage />,
       },
       {
-        path: '/profile/appearance',
-        element: <AppearanceSettings />,
-      },
-      {
-        path: 'profile/notes',
+        path: '/profile/notes',
         element: <NotesList />,
       },
       {

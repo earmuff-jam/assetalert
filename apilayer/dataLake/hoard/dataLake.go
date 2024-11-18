@@ -242,7 +242,7 @@ func GenerateFakeUser(user string, emailAddress string) (string, error) {
 	username = 'IngestSvcUser',
 	full_name = 'John Doe',
 	phone_number = '1234567890',
-	about_me = 'There is a lot of things that are in the unknown. Explore them'
+	about_me = 'I am an architect with a passion for creating functional and aesthetically pleasing spaces that inspire and serve their purpose. My approach to design is rooted in meticulous planning and a deep appreciation for organization.'
 	WHERE email_address = $1
 	RETURNING id;`
 

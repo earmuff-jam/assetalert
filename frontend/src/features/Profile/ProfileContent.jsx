@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { BLANK_PROFILE_DETAILS } from './constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
@@ -62,24 +62,18 @@ const ProfileContent = () => {
 
   return (
     <>
-      <Box sx={{ pb: 2 }}>
-        <Typography variant="h4" gutterBottom>
-          Profile details
-        </Typography>
-        <Typography variant="caption" gutterBottom>
-          Brief details about yourself to help others notice you.
-        </Typography>
-        <Divider />
-      </Box>
-      <Stack spacing={2}>
-        <Typography variant="body1" fontWeight="bold">
-          User name
-        </Typography>
+      <Stack spacing={0.8}>
+        <Stack>
+          <Typography variant="body1" fontWeight="bold" color="text.secondary">
+            User name
+          </Typography>
+          <Typography variant="caption">Your display name throughout the application.</Typography>
+        </Stack>
         <TextField
           fullWidth
           id="username"
           name="username"
-          placeholder="User Name"
+          placeholder="Enter your preferred username."
           value={formData?.username.value || ''}
           onChange={handleChange}
           variant="outlined"
@@ -87,15 +81,14 @@ const ProfileContent = () => {
           error={Boolean(formData.username['errorMsg'].length)}
           helperText={formData.username['errorMsg']}
         />
-        <Typography variant="caption">Your display name throughout the application.</Typography>
-        <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" fontWeight="bold" color="text.secondary">
           First name
         </Typography>
         <TextField
           fullWidth
           id="full_name"
           name="full_name"
-          placeholder="Full name"
+          placeholder="Enter your full name, or the name you go by."
           value={formData?.full_name.value || ''}
           onChange={handleChange}
           variant="outlined"
@@ -103,14 +96,14 @@ const ProfileContent = () => {
           error={Boolean(formData.full_name['errorMsg'].length)}
           helperText={formData.full_name['errorMsg']}
         />
-        <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" fontWeight="bold" color="text.secondary">
           Email address
         </Typography>
         <TextField
           fullWidth
           id="email_address"
           name="email_address"
-          placeholder="Email Address"
+          placeholder="Enter your unique email address"
           value={formData?.email_address.value || ''}
           onChange={handleChange}
           variant="outlined"
@@ -119,14 +112,14 @@ const ProfileContent = () => {
           helperText={formData.email_address['errorMsg']}
         />
 
-        <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" fontWeight="bold" color="text.secondary">
           Phone Number
         </Typography>
         <TextField
           fullWidth
           id="phone_number"
           name="phone_number"
-          placeholder="Phone Number"
+          placeholder="Enter your phone number"
           value={formData?.phone_number.value || ''}
           onChange={handleChange}
           variant="outlined"
@@ -135,14 +128,14 @@ const ProfileContent = () => {
           helperText={formData.phone_number['errorMsg']}
         />
 
-        <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" fontWeight="bold" color="text.secondary">
           About me
         </Typography>
         <TextField
           fullWidth
           id="about_me"
           name="about_me"
-          placeholder="Couple of words to describe yourself."
+          placeholder="Allow yourself to express your unique values with a short bio."
           value={formData?.about_me?.value || ''}
           onChange={handleChange}
           variant="outlined"
@@ -153,7 +146,7 @@ const ProfileContent = () => {
           helperText={formData.about_me['errorMsg']}
         />
 
-        <Typography variant="body1">
+        <Typography variant="caption" color="text.secondary">
           {formData?.updated_on === null
             ? `Created ${dayjs(formData?.created_on).fromNow()}`
             : `Last updated ${dayjs(formData?.updated_on).fromNow()}`}

@@ -1,5 +1,5 @@
 import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
-import { Card, CardActions, CardContent, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardMedia, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { STATUS_OPTIONS } from '../../Notes/constants';
 
@@ -8,7 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
-export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) {
+export default function ItemCard({ data, handleEdit, handleDelete, prefixURI, maxHeight = '65vh' }) {
   const navigate = useNavigate();
 
   const displayTooltip = (item, prefixURI) => {
@@ -27,24 +27,24 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
   };
 
   return (
-    <Stack>
+    <Box sx={{ overflow: 'auto', maxHeight: maxHeight, paddingBottom: '1rem' }}>
       <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
         {data?.map((item, index) => (
-          <Stack key={index} flexGrow={1}>
+          <Stack key={index} flexGrow={1} height="14rem" width="20rem">
             <Card
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                borderRadius: '0.2rem',
-                borderRight: '0.175rem solid',
-                borderColor: item.color ? `${item.color}` : 'primary.main',
               }}
             >
+              <Tooltip title={item.description}>
+                <CardMedia sx={{ height: '10rem' }} image={'/blank_canvas.png'} />
+              </Tooltip>
               <CardContent>
                 <Stack direction="row">
-                  <Stack flexGrow={1} sx={{ minWidth: '20rem', minHeight: '6rem' }}>
+                  <Stack flexGrow={1}>
                     <Stack direction="row" justifyContent="space-between">
-                      <Stack>
+                      <Stack width={'20rem'}>
                         <Typography
                           variant="h6"
                           component="h3"
@@ -53,7 +53,16 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
                         >
                           {item.name}
                         </Typography>
-                        <Typography variant="caption" flexWrap={1} color="text.secondary">
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            width: '100%',
+                          }}
+                          noWrap
+                        >
                           {item.description}
                         </Typography>
                       </Stack>
@@ -105,6 +114,6 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
           </Stack>
         ))}
       </Stack>
-    </Stack>
+    </Box>
   );
 }

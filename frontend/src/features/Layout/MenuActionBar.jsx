@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   ExpandLess,
   ExpandMore,
-  SettingsRounded,
   AllInboxRounded,
   ChevronLeftRounded,
   ChevronRightRounded,
   PushPinRounded,
 } from '@mui/icons-material';
+
 import {
   List,
   ListItemButton,
@@ -22,18 +21,19 @@ import {
   useMediaQuery,
   Typography,
 } from '@mui/material';
-import { useTheme } from '@emotion/react';
-import { PARENT_MENU_LIST, PINNED_CHILDREN_MENU_LIST, SETTINGS_CHILDREN_MENU_LIST } from './constants';
+
 import { useSelector } from 'react-redux';
+import { useTheme } from '@emotion/react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { MENU_ACTION_BAR_DEFAULT_LIST, PINNED_DEFAULT_INSET_MENU_LIST } from './constants';
 
 export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const smallerAndHigher = useMediaQuery(theme.breakpoints.up('sm'));
-
   const { favItems = [] } = useSelector((state) => state.profile);
-
-  const [openSettings, setOpenSettings] = useState(true);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
 
   // the timeout allows to close the drawer first before navigation occurs.
@@ -45,13 +45,12 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
     }, 200);
   };
 
-  const handleSettingsClick = () => setOpenSettings(!openSettings);
   const handlePinnedResourceClick = () => setOpenPinnedResources(!openPinnedResources);
 
-  const formattedFavItemList = favItems.map((v) => ({
+  const formattedPinnedMenuItemList = favItems.map((v) => ({
     id: v.id,
     label: v.category_name || v.maintenance_plan_name,
-    to: v.category_name ? `category/${v.category_id}` : `plan/${v.maintenance_plan_id}`,
+    to: v.category_name ? `/category/${v.category_id}` : `/plan/${v.maintenance_plan_id}`,
     icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,
   }));
 
@@ -84,31 +83,12 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
         </Stack>
         <Divider />
         <List sx={{ width: '100%' }} component="nav" aria-labelledby="nested-list-subheader">
-          {PARENT_MENU_LIST.map((v) => (
-            <ListItemButton key={v.id} onClick={() => handleMenuItemClick(v.to)}>
-              <ListItemIcon>{v.icon}</ListItemIcon>
+          {MENU_ACTION_BAR_DEFAULT_LIST.map((v) => (
+            <ListItemButton key={v.id} selected={pathname === v.to} onClick={() => handleMenuItemClick(v.to)}>
+              <ListItemIcon sx={{ color: pathname === v.to && theme.palette.primary.main }}>{v.icon}</ListItemIcon>
               <ListItemText primary={v.label} />
             </ListItemButton>
           ))}
-
-          <ListItemButton onClick={handleSettingsClick}>
-            <ListItemIcon>
-              <SettingsRounded fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-            {openSettings ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
-          </ListItemButton>
-
-          <Collapse in={openSettings} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {SETTINGS_CHILDREN_MENU_LIST.map((v) => (
-                <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => handleMenuItemClick(v.to)}>
-                  <ListItemIcon>{v.icon}</ListItemIcon>
-                  <ListItemText primary={v.label} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Collapse>
 
           <ListItemButton onClick={handlePinnedResourceClick}>
             <ListItemIcon>
@@ -120,8 +100,13 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
 
           <Collapse in={openPinnedResources} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              {PINNED_CHILDREN_MENU_LIST.concat(formattedFavItemList).map((v) => (
-                <ListItemButton key={v.id} sx={{ pl: 4 }} onClick={() => handleMenuItemClick(v.to)}>
+              {PINNED_DEFAULT_INSET_MENU_LIST.concat(formattedPinnedMenuItemList).map((v) => (
+                <ListItemButton
+                  key={v.id}
+                  sx={{ pl: 4 }}
+                  selected={pathname === v.to}
+                  onClick={() => handleMenuItemClick(v.to)}
+                >
                   <ListItemText primary={v.label} />
                   <ListItemIcon>{v.icon}</ListItemIcon>
                 </ListItemButton>

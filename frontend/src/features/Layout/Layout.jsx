@@ -2,8 +2,8 @@ import { Outlet } from 'react-router-dom';
 import {
   AppBar,
   Box,
-  Button,
   CircularProgress,
+  Container,
   CssBaseline,
   IconButton,
   Skeleton,
@@ -77,16 +77,12 @@ const Layout = () => {
             <Stack direction="row" spacing="0.1rem">
               {!onlySmallScreen ? (
                 <>
-                  <Button
-                    onClick={handleAppearance}
-                    startIcon={profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
-                    variant="outlined"
-                  >
-                    {profileDetails?.appearance ? 'Light mode' : 'Dark mode'}
-                  </Button>
-                  <Button onClick={handleLogout} startIcon={<LogoutRounded />}>
-                    Log off
-                  </Button>
+                  <IconButton onClick={handleAppearance}>
+                    {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+                  </IconButton>
+                  <IconButton onClick={handleLogout}>
+                    <LogoutRounded />
+                  </IconButton>
                 </>
               ) : (
                 <>
@@ -103,11 +99,11 @@ const Layout = () => {
             </Stack>
           </Toolbar>
         </AppBar>
-        <Stack direction="row" spacing="1rem" sx={{ mt: '5rem' }}>
-          <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
-          <Stack sx={{ py: '1rem', flexGrow: 1 }}>
+        <Stack sx={{ mt: '5rem' }}>
+          <Container maxWidth="md">
+            <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
             <Outlet />
-          </Stack>
+          </Container>
         </Stack>
       </Suspense>
     </ThemeProvider>
