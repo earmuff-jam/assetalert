@@ -1,5 +1,5 @@
 import { BookmarkRounded, CheckRounded, RestartAltRounded } from '@mui/icons-material';
-import { Button, Card, CardActions, CardContent, IconButton, Stack, Typography } from '@mui/material';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 
 export default function AddInventoryFormReview({ formData, handleReset, handleSubmit }) {
   return (
