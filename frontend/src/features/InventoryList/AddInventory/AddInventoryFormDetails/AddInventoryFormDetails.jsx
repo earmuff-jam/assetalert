@@ -28,6 +28,7 @@ export default function AddInventoryFormDetails({
             id="name"
             label="Item name"
             value={formData.name.value}
+            placeholder={formData.name.placeholder}
             onChange={handleInputChange}
             fullWidth
             variant="outlined"
@@ -55,6 +56,7 @@ export default function AddInventoryFormDetails({
           id="description"
           label="Description"
           value={formData.description.value}
+          placeholder={formData.description.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"
@@ -68,6 +70,7 @@ export default function AddInventoryFormDetails({
           id="quantity"
           label="Item quantity"
           value={formData.quantity.value}
+          placeholder={formData.quantity.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"

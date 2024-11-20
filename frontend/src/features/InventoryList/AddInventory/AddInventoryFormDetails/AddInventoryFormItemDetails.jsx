@@ -19,6 +19,7 @@ export default function AddInventoryFormItemDetails({
           label="Item price"
           value={formData.price.value}
           onChange={handleInputChange}
+          placeholder={formData.price.placeholder}
           fullWidth
           variant="outlined"
           size="small"
@@ -30,6 +31,7 @@ export default function AddInventoryFormItemDetails({
             id="barcode"
             label="Item Barcode"
             value={formData.barcode.value}
+            placeholder={formData.barcode.placeholder}
             onChange={handleInputChange}
             fullWidth
             variant="outlined"
@@ -41,6 +43,7 @@ export default function AddInventoryFormItemDetails({
             id="sku"
             label="Item SKU"
             value={formData.sku.value}
+            placeholder={formData.sku.placeholder}
             onChange={handleInputChange}
             fullWidth
             variant="outlined"
@@ -55,6 +58,7 @@ export default function AddInventoryFormItemDetails({
             id="bought_at"
             label="Place of purchase"
             value={formData.bought_at.value}
+            placeholder={formData.bought_at.placeholder}
             onChange={handleInputChange}
             fullWidth
             variant="outlined"
@@ -71,7 +75,7 @@ export default function AddInventoryFormItemDetails({
               />
             }
             label={
-              <Stack direction="row" alignItems="center">
+              <Stack direction="row" alignItems="center" spacing={0.5}>
                 <SwapHorizRounded color={formData.is_returnable.value ? 'primary' : 'secondary'} />
                 <Typography variant="caption">Returnable</Typography>
               </Stack>
@@ -84,6 +88,7 @@ export default function AddInventoryFormItemDetails({
               id="return_location"
               label="Item return location"
               value={formData.return_location.value}
+              placeholder={formData.return_location.placeholder}
               onChange={handleInputChange}
               fullWidth
               variant="outlined"
@@ -93,11 +98,12 @@ export default function AddInventoryFormItemDetails({
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
+                disablePast
                 id="return_datetime"
                 label="Return datetime"
-                disablePast
                 value={returnDateTime}
                 onChange={setReturnDateTime}
+                slotProps={{ textField: { size: 'small' } }}
               />
             </LocalizationProvider>
           </Stack>
@@ -109,6 +115,7 @@ export default function AddInventoryFormItemDetails({
           id="max_weight"
           label="Max weight in kg"
           value={formData.max_weight.value}
+          placeholder={formData.max_weight.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"
@@ -120,6 +127,7 @@ export default function AddInventoryFormItemDetails({
           id="min_weight"
           label="Min weight in kg"
           value={formData.min_weight.value}
+          placeholder={formData.min_weight.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"
@@ -131,8 +139,9 @@ export default function AddInventoryFormItemDetails({
       <Stack direction="row" useFlexGap spacing={2}>
         <TextField
           id="max_height"
-          label="Max height in inches"
+          label={formData.max_height.label}
           value={formData.max_height.value}
+          placeholder={formData.max_height.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"
@@ -142,8 +151,9 @@ export default function AddInventoryFormItemDetails({
         />
         <TextField
           id="min_height"
-          label="Min height in inches"
+          label={formData.min_height.label}
           value={formData.min_height.value}
+          placeholder={formData.min_height.placeholder}
           onChange={handleInputChange}
           fullWidth
           variant="outlined"
