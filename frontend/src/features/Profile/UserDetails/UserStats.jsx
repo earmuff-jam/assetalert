@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react';
 import 'chart.js/auto';
 import { Pie } from 'react-chartjs-2';
 
-const ProfileStatsChart = ({ label, value, color, total }) => {
+const UserStats = ({ label, value, color, total }) => {
   const theme = useTheme();
   const data = {
     labels: ['Red', 'Blue', 'Yellow'],
@@ -38,4 +38,4 @@ const ProfileStatsChart = ({ label, value, color, total }) => {
   );
 };
 
-export default ProfileStatsChart;
+export default UserStats;

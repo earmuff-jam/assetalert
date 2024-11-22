@@ -99,7 +99,7 @@ const Layout = () => {
             </Stack>
           </Toolbar>
         </AppBar>
-        <Stack sx={{ mt: '5rem' }}>
+        <Stack sx={{ marginTop: '5rem', marginBottom: '1rem' }}>
           <Container maxWidth="md">
             <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
             <Outlet />

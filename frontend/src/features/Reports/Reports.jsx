@@ -14,6 +14,7 @@ import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
 import SimpleModal from '../common/SimpleModal';
 import FilterMenu from './FilterMenu';
 import { reportActions } from './reportSlice';
+import { FILTER_OPTIONS } from './constants';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export default function Reports() {
   );
 
   const [includeOverdue, setIncludeOverdue] = useState(true);
-  const [sinceValue, setSinceValue] = useState(dayjs().startOf('year'));
+  const [sinceValue, setSinceValue] = useState(FILTER_OPTIONS.find((item) => item.label === 'ytd').value);
   const [selectedAsset, setSelectedAsset] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedMaintenancePlan, setSelectedMaintenancePlan] = useState([]);
@@ -62,7 +63,7 @@ export default function Reports() {
   }, [maintenancePlanListLoading, maintenancePlanList.length]);
 
   useEffect(() => {
-    dispatch(inventoryActions.getAllInventoriesForUser({ since: sinceValue.format('YYYY-MM-DDTHH:mm:ssZ') }));
+    dispatch(inventoryActions.getAllInventoriesForUser({ since: sinceValue }));
     dispatch(maintenancePlanActions.getPlans());
   }, []);
 

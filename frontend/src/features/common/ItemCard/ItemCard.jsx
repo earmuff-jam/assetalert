@@ -8,7 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
-export default function ItemCard({ data, handleEdit, handleDelete, prefixURI, maxHeight = '65vh' }) {
+export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) {
   const navigate = useNavigate();
 
   const displayTooltip = (item, prefixURI) => {
@@ -27,7 +27,7 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI, ma
   };
 
   return (
-    <Box sx={{ overflow: 'auto', maxHeight: maxHeight, paddingBottom: '1rem' }}>
+    <Box sx={{ overflow: 'auto', paddingBottom: '1rem' }}>
       <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
         {data?.map((item, index) => (
           <Stack key={index} flexGrow={1} height="14rem" width="20rem">

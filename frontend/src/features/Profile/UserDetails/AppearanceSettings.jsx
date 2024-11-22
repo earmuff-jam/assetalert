@@ -3,7 +3,7 @@ import { DarkModeRounded, GridViewRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
-import { profileActions } from './profileSlice';
+import { profileActions } from '../profileSlice';
 
 const AppearanceSettings = ({ loading, profileDetails = {} }) => {
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const AppearanceSettings = ({ loading, profileDetails = {} }) => {
   return (
     <>
       <Box sx={{ pb: 2 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" color="text.secondary" gutterBottom>
           Appearance Settings
         </Typography>
         <Typography variant="caption" gutterBottom>
