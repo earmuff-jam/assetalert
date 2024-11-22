@@ -50,48 +50,51 @@ export const GENERIC_TEXTAREA_VARIANT = {
 export const ADD_ASSET_FORM = {
   name: {
     id: 'name',
-    label: 'Item name',
+    label: 'Asset name',
     value: '',
+    placeholder: 'The name of the asset',
     isRequired: true,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Item name is required',
+        message: 'Asset name is required',
       },
       {
         validate: (value) => value.trim().length >= 200,
-        message: 'Item name should be less than 50 characters',
+        message: 'Asset name should be less than 50 characters',
       },
     ],
   },
   description: {
     id: 'description',
-    label: 'Item description',
+    label: 'Asset description',
+    placeholder: 'The detailed description of the asset',
     value: '',
     isRequired: true,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Item description is required',
+        message: 'Asset description is required',
       },
       {
         validate: (value) => value.trim().length >= 500,
-        message: 'Item description should be less than 50 characters',
+        message: 'Asset description should be less than 50 characters',
       },
     ],
   },
   price: {
     id: 'price',
-    label: 'Item price (per unit)',
+    label: 'Asset price (per unit)',
+    placeholder: 'The per unit cost of the asset',
     value: '',
     isRequired: false,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Price for the selected item is required',
+        message: 'Price for the selected Asset is required',
       },
       {
         validate: (value) => isNaN(value) || parseInt(value) <= 0,
@@ -102,39 +105,42 @@ export const ADD_ASSET_FORM = {
   barcode: {
     id: 'barcode',
     label: 'Barcode of item',
+    placeholder: 'The unique identifier for the item',
     value: '',
     isRequired: false,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length >= 50,
-        message: 'Item barcode should be less than 50 characters',
+        message: 'Asset barcode should be less than 50 characters',
       },
     ],
   },
   sku: {
     id: 'sku',
-    label: 'Sku of item',
+    label: 'Sku of asset',
+    placeholder: 'The SKU of the selected asset',
     value: '',
     isRequired: false,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length >= 50,
-        message: 'SKU of item should be less than 50 characters',
+        message: 'SKU of Asset should be less than 50 characters',
       },
     ],
   },
   quantity: {
     id: 'quantity',
-    label: 'Item quantity',
+    label: 'Asset quantity',
     value: '',
+    placeholder: 'Asset quantity',
     isRequired: true,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Quantity for the selected item is required',
+        message: 'Quantity for the selected Asset is required',
       },
       {
         validate: (value) => isNaN(value) || parseInt(value) <= 0,
@@ -145,6 +151,7 @@ export const ADD_ASSET_FORM = {
   bought_at: {
     id: 'bought_at',
     label: 'Where did you buy the item',
+    placeholder: 'The purchase location of the asset',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -174,6 +181,7 @@ export const ADD_ASSET_FORM = {
   return_location: {
     id: 'return_location',
     label: 'Where to return the item',
+    placeholder: 'The return location of the item',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -200,6 +208,7 @@ export const ADD_ASSET_FORM = {
   max_weight: {
     id: 'max_weight',
     label: 'Max weight in kg',
+    placeholder: 'The maximum weight of the asset in kg',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -213,6 +222,7 @@ export const ADD_ASSET_FORM = {
   min_weight: {
     id: 'min_weight',
     label: 'Min weight in kg',
+    placeholder: 'The minimum weight of asset in kg',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -225,7 +235,8 @@ export const ADD_ASSET_FORM = {
   },
   max_height: {
     id: 'max_height',
-    label: 'Max height in kg',
+    label: 'Max height in inches',
+    placeholder: 'The maximum height of asset in inches',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -238,7 +249,8 @@ export const ADD_ASSET_FORM = {
   },
   min_height: {
     id: 'min_height',
-    label: 'Min height in kg',
+    label: 'Min height in inches',
+    placeholder: 'The minimum height of the asset in inches',
     value: '',
     isRequired: false,
     errorMsg: '',
@@ -251,18 +263,17 @@ export const ADD_ASSET_FORM = {
   },
 };
 
-
 export const VIEW_PERSONAL_INVENTORY_LIST_HEADERS = {
   name: {
     id: 1,
     colName: 'name',
-    label: 'Item name',
+    label: 'Asset name',
     modifier: (title) => `${title}`,
   },
   description: {
     id: 2,
     colName: 'description',
-    label: 'Item Description',
+    label: 'Asset Description',
     displayName: 'Description',
   },
   price: {

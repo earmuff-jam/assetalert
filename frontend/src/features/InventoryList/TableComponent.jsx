@@ -29,6 +29,7 @@ import { EmptyComponent } from '../common/utils';
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
+ * @param {string} maxHeight - the maxHeight of the table container, defaults: 65vh
  */
 const TableComponent = ({
   hideActionMenu = false,
@@ -62,7 +63,9 @@ const TableComponent = ({
                 <TableCell padding="checkbox">
                   <Stack direction="row" alignItems="center">
                     <Checkbox size="small" onClick={(ev) => handleRowSelection(ev, 'all')} />
-                    <Typography fontWeight="bold">Action</Typography>
+                    <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
+                      Action
+                    </Typography>
                   </Stack>
                 </TableCell>
               ) : null}
@@ -70,7 +73,9 @@ const TableComponent = ({
                 const column = columns[colKey];
                 return (
                   <TableCell key={column.id}>
-                    <Typography fontWeight="bold">{column.label}</Typography>
+                    <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
+                      {column.label}
+                    </Typography>
                   </TableCell>
                 );
               })}
@@ -85,7 +90,7 @@ const TableComponent = ({
                 <TableRow hover key={row.id}>
                   {!hideActionMenu && (
                     <TableCell padding="checkbox">
-                      <Stack direction="row">
+                      <Stack direction="row" alignItems={'center'} spacing={0}>
                         {!hideCheckBox && (
                           <Checkbox
                             checked={isItemSelected}

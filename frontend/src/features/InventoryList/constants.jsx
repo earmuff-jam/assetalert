@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import QrCodeGen from './QrCodeGen';
+import QrCodeGen from './ViewItemDetails/QrCodeGen';
 import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
 dayjs.extend(relativeTime);
@@ -109,14 +109,14 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
   quantity: {
     id: 7,
     colName: 'quantity',
-    label: 'Quantity',
+    label: 'Qty',
     displayConcise: true,
     modifier: (value) => `${value || '-'}`,
   },
   location: {
     id: 8,
     colName: 'location',
-    label: 'Storage location',
+    label: 'Location',
     displayConcise: true,
     modifier: (value) => `${value || '-'}`,
   },

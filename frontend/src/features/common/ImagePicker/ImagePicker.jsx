@@ -1,12 +1,9 @@
 import { InfoRounded } from '@mui/icons-material';
 import { Button, Stack, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { inventoryActions } from '../../InventoryList/inventorySlice';
 import { enqueueSnackbar } from 'notistack';
 
-export default function ImagePicker({ selectedData = {}, handleClose }) {
-  const dispatch = useDispatch();
+export default function ImagePicker({ id, name, handleUpload }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFileUpload = (event) => {
@@ -23,24 +20,24 @@ export default function ImagePicker({ selectedData = {}, handleClose }) {
     }
   };
 
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append('image', selectedImage);
-    dispatch(inventoryActions.createInventoryImage({ assetID: selectedData.id, imageData: formData }));
-    handleClose();
-  };
-
   return (
     <Stack spacing="1rem">
       <Stack direction="row" spacing="0.2rem">
-        <Typography variant="caption">Select an image to associate with {selectedData.name || ''}</Typography>
         <Tooltip title="Images should be less than 2mb and be of either png, jpg, jpeg or svg format">
           <InfoRounded sx={{ color: 'grey' }} fontSize="small" />
         </Tooltip>
+        <Typography variant="caption">Select an image to associate with {name || ''}</Typography>
       </Stack>
 
       <input type="file" onChange={handleFileUpload} />
-      <Button disabled={!selectedImage} onClick={handleUpload}>
+      <Button
+        disabled={!selectedImage}
+        onClick={() => {
+          const imgFormData = new FormData();
+          imgFormData.append('image', selectedImage);
+          handleUpload(id, imgFormData);
+        }}
+      >
         Upload
       </Button>
     </Stack>

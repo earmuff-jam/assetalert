@@ -24,9 +24,7 @@ export default function AddInventoryInstructions({ stepNumber }) {
       return (
         <Stack paddingBottom="2rem">
           <Typography> Confirm your changes.</Typography>
-          <Typography variant="caption">
-            Adding new items as assets with product details. You can always edit your product later on.
-          </Typography>
+          <Typography variant="caption">You can always edit your product later on.</Typography>
         </Stack>
       );
     default:
