@@ -25,6 +25,7 @@ export default function MaintenanceItem() {
     maintenancePlan,
     selectedMaintenancePlan,
     itemsInMaintenancePlan = [],
+    selectedMaintenancePlanImage,
     loading = false,
   } = useSelector((state) => state.maintenance);
 
@@ -35,6 +36,7 @@ export default function MaintenanceItem() {
     setDisplayModal(true);
     dispatch(inventoryActions.getAllInventoriesForUser());
   };
+
   const handleRowSelection = (_, id) => {
     if (id === 'all') {
       setRowSelected(inventories.map((v) => v.id));
@@ -79,6 +81,7 @@ export default function MaintenanceItem() {
     if (id) {
       dispatch(maintenancePlanActions.getItemsInMaintenancePlan(id));
       dispatch(maintenancePlanActions.getSelectedMaintenancePlan(id));
+      dispatch(maintenancePlanActions.getSelectedImage({ id }));
     }
   }, [id]);
 
@@ -92,7 +95,7 @@ export default function MaintenanceItem() {
         title={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
         caption="View details of selected maintenance plan"
       />
-      <DetailsCard selectedItem={selectedMaintenancePlan} />
+      <DetailsCard selectedItem={selectedMaintenancePlan} selectedImage={selectedMaintenancePlanImage}/>
       <RowHeader
         title="Items"
         caption={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}

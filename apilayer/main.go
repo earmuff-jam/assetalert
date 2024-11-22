@@ -23,6 +23,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/mohit2530/communityCare/bucket"
 	"github.com/mohit2530/communityCare/db"
 	"github.com/mohit2530/communityCare/handler"
 )
@@ -47,6 +48,10 @@ func main() {
 	if err != nil {
 		log.Printf("No env file detected. Using os system configuration.")
 	}
+
+	//	load storage support
+	bucket.InitializeStorageAndBucket()
+
 	router := mux.NewRouter()
 
 	// public routes
@@ -65,18 +70,18 @@ func main() {
 	router.Handle("/api/v1/summary", CustomRequestHandler(handler.GetAssetsAndSummary)).Methods(http.MethodGet)
 
 	// categories
-	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category/items", CustomRequestHandler(handler.GetAllCategoryItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category/items", CustomRequestHandler(handler.AddItemsInCategory)).Methods(http.MethodPost)
+	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.GetCategory)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.CreateCategory)).Methods(http.MethodPost)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.UpdateCategory)).Methods(http.MethodPut)
 	router.Handle("/api/v1/category/{id}", CustomRequestHandler(handler.RemoveCategory)).Methods(http.MethodDelete)
 
 	// maintenance plans
-	router.Handle("/api/v1/maintenance-plans", CustomRequestHandler(handler.GetAllMaintenancePlans)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.GetAllMaintenancePlanItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInMaintenancePlan)).Methods(http.MethodPost)
+	router.Handle("/api/v1/maintenance-plans", CustomRequestHandler(handler.GetAllMaintenancePlans)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.CreateMaintenancePlan)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenancePlan)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan/{id}", CustomRequestHandler(handler.UpdateMaintenancePlan)).Methods(http.MethodPut)
@@ -88,7 +93,10 @@ func main() {
 	router.Handle("/api/v1/profile/{id}/recent-activities", CustomRequestHandler(handler.GetRecentActivities)).Methods(http.MethodGet)
 	router.Handle("/api/v1/profile/{id}", CustomRequestHandler(handler.UpdateProfile)).Methods(http.MethodPut)
 	router.Handle("/api/v1/profile/{id}/username", CustomRequestHandler(handler.GetUsername)).Methods(http.MethodGet)
-	router.Handle("/api/v1/profile/{id}/updateAvatar", CustomRequestHandler(handler.UpdateProfileAvatar)).Methods(http.MethodPost)
+
+	// image
+	router.Handle("/api/v1/{id}/uploadImage", CustomRequestHandler(handler.UploadImage)).Methods(http.MethodPost)
+	router.Handle("/api/v1/{id}/fetchImage", CustomRequestHandler(handler.FetchImage)).Methods(http.MethodGet)
 
 	// inventories
 	router.Handle("/api/v1/profile/{id}/inventories", CustomRequestHandler(handler.GetAllInventories)).Methods(http.MethodGet)
@@ -122,10 +130,6 @@ func main() {
 	)
 
 	http.Handle("/", cors(router))
-
-	// router.Handle("/filestat/list", CustomRequestHandler(handler.GetAllFiles)).Methods(http.MethodGet)
-	router.Handle("/api/v1/filestat/view/{id}/{filename}", CustomRequestHandler(handler.ServeFile)).Methods(http.MethodGet)
-	router.Handle("/api/v1/filestat/create/{id}/{type}/{itemID}", CustomRequestHandler(handler.CreateFile)).Methods(http.MethodPost)
 
 	log.Println("Api is up and running ...")
 	err = http.ListenAndServe(":8087", nil)

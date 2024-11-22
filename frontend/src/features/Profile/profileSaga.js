@@ -68,13 +68,28 @@ export function* updateExistingUserDetails(action) {
 
 export function* fetchUpdateProfileImage(action) {
   try {
-    const { selectedImage, userID } = action.payload;
+    const { id, selectedImage } = action.payload;
     const formData = new FormData();
-    formData.append('avatarSrc', selectedImage);
-    const response = yield call(instance.post, `${BASEURL}/${userID}/updateAvatar`, formData);
+    formData.append('imageSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${id}/uploadImage`, formData);
     yield put(profileActions.updateProfileImageSuccess(response.data));
   } catch (e) {
     yield put(profileActions.updateProfileImageFailure(e));
+  }
+}
+
+export function* fetchAvatar() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    // we need to modify the image to be of arrayBuffer type and build a blob object from it
+    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/fetchImage`, {
+      responseType: 'arraybuffer',
+    });
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const avatarUrl = URL.createObjectURL(blob);
+    yield put(profileActions.fetchAvatarSuccess(avatarUrl));
+  } catch (e) {
+    yield put(profileActions.fetchAvatarFailure(e));
   }
 }
 
@@ -142,6 +157,10 @@ export function* watchFetchUpdateProfileImage() {
   yield takeEvery(`profile/updateProfileImage`, fetchUpdateProfileImage);
 }
 
+export function* watchFetchAvatar() {
+  yield takeEvery(`profile/fetchAvatar`, fetchAvatar);
+}
+
 export function* watchFetchFavItems() {
   yield takeEvery(`profile/getFavItems`, fetchFavItems);
 }
@@ -155,6 +174,7 @@ export function* watchRemoveFavItem() {
 }
 
 export default [
+  watchFetchAvatar,
   watchFetchProfileList,
   watchFetchFavItems,
   watchSaveFavItem,

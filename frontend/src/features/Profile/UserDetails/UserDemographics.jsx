@@ -1,19 +1,43 @@
 import { Avatar, Box, Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
-
-export const UserDemographicsSingleRow = ({ children }) => {
-  return (
-    <Stack direction={'row'} spacing={3} alignItems={'center'} justifyContent={'space-between'}>
-      {children}
-    </Stack>
-  );
-};
+import ImagePicker from '../../common/ImagePicker/ImagePicker';
+import { profileActions } from '../profileSlice';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import UserDemographicsRow from './UserDemographicsRow';
 
 export default function UserDemographics({ data = {}, handleEditMode }) {
+  const dispatch = useDispatch();
+  const { avatar = {}, loading: isAvatarLoading } = useSelector((state) => state.profile);
+  const [editMode, setEditMode] = useState(false);
+
+  const handleUpload = (id, selectedImage) => {
+    dispatch(profileActions.updateProfileImage({ id: id, selectedImage: selectedImage }));
+    setEditMode(false);
+  };
+
+  useEffect(() => {
+      dispatch(profileActions.fetchAvatar());
+  }, [isAvatarLoading]);
+
   return (
     <Paper sx={{ padding: '1rem' }}>
       <Stack alignItems={'center'}>
-        <Avatar sx={{ width: 100, height: 100, marginBottom: '1rem' }} />
+        {editMode ? (
+          <ImagePicker
+            id={data.id}
+            handleUpload={handleUpload}
+            handleCancel={() => setEditMode(false)}
+            name={data.username}
+          />
+        ) : (
+          <Avatar
+            sx={{ width: 100, height: 100, marginBottom: '1rem', cursor: 'pointer' }}
+            onClick={() => setEditMode(true)}
+            src={avatar}
+          />
+        )}
+
         <Stack direction={'row'} alignItems={'center'}>
           <IconButton size="small" onClick={handleEditMode}>
             <EditRounded fontSize="small" color="primary" />
@@ -28,7 +52,7 @@ export default function UserDemographics({ data = {}, handleEditMode }) {
       </Stack>
       <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }} />
       <Stack spacing={1}>
-        <UserDemographicsSingleRow>
+        <UserDemographicsRow>
           <Typography variant="subtitle2" color="text.secondary">
             Username
           </Typography>
@@ -36,8 +60,8 @@ export default function UserDemographics({ data = {}, handleEditMode }) {
           <Typography variant="subtitle2" color="text.secondary">
             {data.username}
           </Typography>
-        </UserDemographicsSingleRow>
-        <UserDemographicsSingleRow>
+        </UserDemographicsRow>
+        <UserDemographicsRow>
           <Typography variant="subtitle2" color="text.secondary">
             Email Address
           </Typography>
@@ -45,8 +69,8 @@ export default function UserDemographics({ data = {}, handleEditMode }) {
           <Typography variant="subtitle2" color="text.secondary">
             {data.email_address}
           </Typography>
-        </UserDemographicsSingleRow>
-        <UserDemographicsSingleRow>
+        </UserDemographicsRow>
+        <UserDemographicsRow>
           <Typography variant="subtitle2" color="text.secondary">
             Phone number
           </Typography>
@@ -54,7 +78,7 @@ export default function UserDemographics({ data = {}, handleEditMode }) {
           <Typography variant="subtitle2" color="text.secondary">
             {data.phone_number}
           </Typography>
-        </UserDemographicsSingleRow>
+        </UserDemographicsRow>
       </Stack>
     </Paper>
   );

@@ -3,8 +3,6 @@ package db
 import (
 	"database/sql"
 	"log"
-	"mime/multipart"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
@@ -215,63 +213,6 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 	return &updatedProfile, nil
 }
 
-// UpdateProfileAvatar ...
-func UpdateProfileAvatar(user string, userID string, header *multipart.FileHeader, fileBytes []byte) (*model.Profile, error) {
-	db, err := SetupDB(user)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
-	var updatedProfile model.Profile
-
-	sqlStr := `
-		UPDATE community.profiles 
-		SET avatar_url = $2
-		WHERE id = $1
-		RETURNING id, username, full_name, avatar_url, phone_number, goal, about_me, onlinestatus, role
-	`
-
-	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
-	var goal sql.NullString
-
-	row := tx.QueryRow(sqlStr, userID, fileBytes)
-
-	err = row.Scan(
-		&updatedProfile.ID,
-		&updatedProfile.Username,
-		&updatedProfile.FullName,
-		&avatarUrl,
-		&updatedProfile.PhoneNumber,
-		&goal,
-		&updatedProfile.AboutMe,
-		&updatedProfile.OnlineStatus,
-	)
-
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	if avatarUrl.Valid {
-		updatedProfile.AvatarUrl = avatarUrl.String
-	} else {
-		updatedProfile.AvatarUrl = ""
-	}
-
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-
-	updatedProfile.Validate()
-	return &updatedProfile, nil
-}
-
 // FetchFavouriteItems ...
 func FetchFavouriteItems(user string, userID string, limit int) ([]model.FavouriteItem, error) {
 	db, err := SetupDB(user)
@@ -423,40 +364,4 @@ func RemoveFavItem(user string, userID string, itemID string) (string, error) {
 	}
 
 	return itemID, nil
-}
-
-// UpdateProfileImage ...
-func UpdateProfileImage(user string, userID string, imageURL string) (bool, error) {
-
-	db, err := SetupDB(user)
-	if err != nil {
-		return false, err
-	}
-	defer db.Close()
-
-	tx, err := db.Begin()
-	if err != nil {
-		log.Printf("unable to start trasanction with selected db pool. error: %+v", err)
-		return false, err
-	}
-	sqlStr := `UPDATE community.profiles p
-		SET associated_image_url = $1,
-			updated_at = $4,
-			updated_by = $2
-			WHERE $2::UUID = ANY(p.sharable_groups) 
-		RETURNING p.id;`
-
-	var updatedProfileID string
-	err = tx.QueryRow(sqlStr, imageURL, userID, time.Now()).Scan(&updatedProfileID)
-	if err != nil {
-		log.Printf("unable to update profile id. error: %+v", err)
-		return false, err
-	}
-
-	if err := tx.Commit(); err != nil {
-		log.Printf("unable to commit. error: %+v", err)
-		return false, err
-	}
-
-	return true, nil
 }

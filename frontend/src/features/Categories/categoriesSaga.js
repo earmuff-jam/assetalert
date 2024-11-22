@@ -97,6 +97,33 @@ export function* fetchAddItemsInCategory(action) {
   }
 }
 
+export function* uploadImage(action) {
+  try {
+    const { id, selectedImage } = action.payload;
+    const formData = new FormData();
+    formData.append('imageSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${id}/uploadImage`, formData);
+    yield put(categoryActions.uploadImageSuccess(response.data));
+  } catch (e) {
+    yield put(categoryActions.uploadImageFailure(e));
+  }
+}
+
+export function* getSelectedImage(action) {
+  try {
+    const { id } = action.payload;
+    // we need to modify the image to be of arrayBuffer type and build a blob object from it
+    const response = yield call(instance.get, `${BASEURL}/${id}/fetchImage`, {
+      responseType: 'arraybuffer',
+    });
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const avatarUrl = URL.createObjectURL(blob);
+    yield put(categoryActions.getSelectedImageSuccess(avatarUrl));
+  } catch (e) {
+    yield put(categoryActions.getSelectedImageFailure(e));
+  }
+}
+
 export function* download() {
   try {
     const userID = localStorage.getItem('userID');
@@ -137,6 +164,14 @@ export function* watchFetchAddItemsInCategory() {
   yield takeLatest(`category/addItemsInCategory`, fetchAddItemsInCategory);
 }
 
+export function* watchUploadImage() {
+  yield takeLatest(`category/uploadImage`, uploadImage);
+}
+
+export function* watchGetSelectedImage() {
+  yield takeLatest(`category/getSelectedImage`, getSelectedImage);
+}
+
 export function* watchDownload() {
   yield takeLatest(`category/download`, download);
 }
@@ -150,4 +185,6 @@ export default [
   watchUpdateCategory,
   watchRemoveCategory,
   watchFetchAddItemsInCategory,
+  watchUploadImage,
+  watchGetSelectedImage,
 ];

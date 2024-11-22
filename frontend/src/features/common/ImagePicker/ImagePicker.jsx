@@ -1,9 +1,9 @@
-import { InfoRounded } from '@mui/icons-material';
-import { Button, Stack, Tooltip, Typography } from '@mui/material';
+import { CloseRounded, CloudCircleRounded, InfoRounded } from '@mui/icons-material';
+import { Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-export default function ImagePicker({ id, name, handleUpload }) {
+export default function ImagePicker({ id, name, handleUpload, handleCancel, disableCancel = false }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFileUpload = (event) => {
@@ -14,10 +14,15 @@ export default function ImagePicker({ id, name, handleUpload }) {
       enqueueSnackbar('Image is not valid or exceeds 2mb size limit.', {
         variant: 'error',
       });
-      return;
+      setSelectedImage(null);
     } else {
       setSelectedImage(file);
     }
+  };
+
+  // fn used to upload image to cloud
+  const uploadFile = () => {
+    handleUpload(id, selectedImage);
   };
 
   return (
@@ -27,17 +32,14 @@ export default function ImagePicker({ id, name, handleUpload }) {
           <InfoRounded sx={{ color: 'grey' }} fontSize="small" />
         </Tooltip>
         <Typography variant="caption">Select an image to associate with {name || ''}</Typography>
+        {!disableCancel ? (
+          <IconButton color="error" size="small" onClick={handleCancel}>
+            <CloseRounded fontSize="small" />
+          </IconButton>
+        ) : null}
       </Stack>
-
-      <input type="file" onChange={handleFileUpload} />
-      <Button
-        disabled={!selectedImage}
-        onClick={() => {
-          const imgFormData = new FormData();
-          imgFormData.append('image', selectedImage);
-          handleUpload(id, imgFormData);
-        }}
-      >
+      <input type="file" style={{ cursor: 'pointer' }} onChange={handleFileUpload} />
+      <Button startIcon={<CloudCircleRounded />} disabled={!selectedImage} onClick={uploadFile}>
         Upload
       </Button>
     </Stack>

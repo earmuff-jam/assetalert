@@ -7,6 +7,7 @@ const initialState = {
   error: '',
   profiles: [],
   profileDetails: {},
+  avatar: '',
   recentActivities: [],
   favItems: [],
 };
@@ -154,6 +155,18 @@ const profileSlice = createSlice({
       state.error = '';
     },
     updateProfileImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    fetchAvatar: (state) => {
+      state.error = '';
+    },
+    fetchAvatarSuccess: (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.avatar = action.payload;
+    },
+    fetchAvatarFailure: (state) => {
       state.loading = false;
       state.error = '';
     },
