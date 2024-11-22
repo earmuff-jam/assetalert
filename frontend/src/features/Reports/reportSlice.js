@@ -33,8 +33,19 @@ const reportSlice = createSlice({
       state.error = '';
       const { reports, inventories } = action.payload;
       const formattedReports = reports.map((v) => {
-        // eslint-disable-next-line no-unused-vars
-        const { id, created_by, updated_by, sharable_groups, ...rest } = v;
+        /* eslint-disable no-unused-vars */
+        const {
+          id,
+          created_at,
+          created_by,
+          creator_name,
+          selected_time_range,
+          updated_at,
+          updated_by,
+          updater_name,
+          sharable_groups,
+          ...rest
+        } = v;
         return rest;
       });
 
@@ -57,6 +68,8 @@ const reportSlice = createSlice({
           maintenance_status,
           associated_image_url,
           location,
+          status,
+          storage_location_id,
           ...rest
         } = v;
         return rest;
