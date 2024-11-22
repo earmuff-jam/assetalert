@@ -33,7 +33,7 @@ const reportSlice = createSlice({
       state.error = '';
       const { reports, inventories } = action.payload;
       const formattedReports = reports.map((v) => {
-        // eslint-disable-next-line no-unused-vars
+        /* eslint-disable no-unused-vars */
         const {
           id,
           created_at,
