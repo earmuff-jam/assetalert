@@ -2,23 +2,12 @@ import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { DeleteRounded, EditRounded, ExpandMoreRounded } from '@mui/icons-material';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Chip,
-  IconButton,
-  Skeleton,
-  Stack,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 import { notesActions } from './notesSlice';
-import { STATUS_OPTIONS } from './constants';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Accordion, Skeleton } from '@mui/material';
+import NoteAccordionSummary from './NoteAccordion/NoteAccordionSummary';
+import NoteAccordionDetails from './NoteAccordion/NoteAccordionDetails';
+import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../common/utils';
 
 const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
@@ -64,72 +53,14 @@ const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
     <>
       {formattedNotes.map((v, index) => (
         <Accordion key={index} elevation={0}>
-          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1a-content" id="panel1a-header">
-            <Stack direction="row" spacing={{ xs: 1 }}>
-              <Typography variant="body1">{v.category}</Typography>
-              <Chip label={v.totalNotes} size="small" />
-            </Stack>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing="1rem">
-              {v.details.map((note, index) => (
-                <Stack
-                  key={index}
-                  sx={{
-                    justifyContent: 'space-between',
-                    flexGrow: 1,
-                    p: 1,
-                    borderRadius: '0.2rem',
-                    borderLeft: '0.175rem solid',
-                    borderColor: note.color ? `${note.color}` : 'primary.main',
-                  }}
-                >
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h6">{note.title}</Typography>
-                    <Stack direction="row" alignSelf="flex-end">
-                      <IconButton
-                        onClick={() => {
-                          setConfirmDelete(true);
-                          setDeleteID(note.noteID);
-                        }}
-                        size="small"
-                      >
-                        <DeleteRounded fontSize="small" color="error" />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          setEditMode(true);
-                          setSelectedNoteID(note.noteID);
-                        }}
-                        size="small"
-                      >
-                        <EditRounded fontSize="small" color="primary" />
-                      </IconButton>
-                    </Stack>
-                  </Stack>
-                  <Typography variant="body2">{note.description}</Typography>
-                  <Stack sx={{ mt: '1rem' }}></Stack>
-                  <Row>
-                    <>
-                      <Box>
-                        <Typography variant="caption">
-                          By {note.updator} {dayjs(note.updated_at).fromNow()}
-                        </Typography>
-                      </Box>
-                      <Tooltip title={STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.display}>
-                        <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
-                          <Typography variant="caption" alignSelf="flex-end">
-                            Status:
-                          </Typography>
-                          {STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.icon}
-                        </Stack>
-                      </Tooltip>
-                    </>
-                  </Row>
-                </Stack>
-              ))}
-            </Stack>
-          </AccordionDetails>
+          <NoteAccordionSummary noteCategory={v.category} totalNotes={v.totalNotes} />
+          <NoteAccordionDetails
+            details={v.details}
+            setEditMode={setEditMode}
+            setSelectedNoteID={setSelectedNoteID}
+            setConfirmDelete={setConfirmDelete}
+            setDeleteID={setDeleteID}
+          />
         </Accordion>
       ))}
       <ConfirmationBoxModal
@@ -143,14 +74,6 @@ const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
         confirmDelete={handleConfirmDelete}
       />
     </>
-  );
-};
-
-const Row = ({ children }) => {
-  return (
-    <Stack direction="row" spacing="0.2rem" alignItems="center" justifyContent="space-between">
-      {children}
-    </Stack>
   );
 };
 

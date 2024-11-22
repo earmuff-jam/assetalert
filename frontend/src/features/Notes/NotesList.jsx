@@ -6,6 +6,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
 import { notesActions } from './notesSlice';
 import SimpleModal from '../common/SimpleModal';
+import NoteHeader from './Header/NoteHeader';
 
 const NotesList = () => {
   const dispatch = useDispatch();
@@ -27,14 +28,8 @@ const NotesList = () => {
 
   return (
     <Stack spacing="1rem">
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h5" gutterBottom>
-          Rough Notes
-        </Typography>
-        <Button startIcon={<AddRounded />} onClick={handleEditMode} variant="outlined">
-          Add note
-        </Button>
-      </Stack>
+      <NoteHeader handleClick={handleEditMode} />
+      <Note notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />
       {editMode && (
         <SimpleModal
           title="Add New Note"
@@ -50,7 +45,6 @@ const NotesList = () => {
           />
         </SimpleModal>
       )}
-      <Note notes={notes} loading={loading} setEditMode={setEditMode} setSelectedNoteID={setSelectedNoteID} />
     </Stack>
   );
 };
