@@ -1,5 +1,5 @@
 import { Divider, Stack, Typography } from '@mui/material';
-import ProfileStatsChart from './ProfileStatsChart';
+import ProfileStatsChart from './UserStats';
 
 export default function UserStatus({ onlySmallScreen }) {
   const profileStats = [

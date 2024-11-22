@@ -1,18 +1,19 @@
 import { Paper, Stack, useMediaQuery } from '@mui/material';
-import UserDemographics from './UserDemographics';
-import UserDetails from './UserDetails';
-import UserStatus from './UserStatus';
+import UserDemographics from './UserDetails/UserDemographics';
+import UserDetails from './UserDetails/UserDetails';
+import UserStatus from './UserDetails/UserStatus';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
-import AppearanceSettings from './AppearanceSettings';
-import ProfileContent from './ProfileContent';
+import AppearanceSettings from './UserDetails/AppearanceSettings';
+import ProfileForm from './ProfileForm/ProfileForm';
 import { useTheme } from '@emotion/react';
 
 const ProfilePage = () => {
   const theme = useTheme();
   const onlySmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const { profileDetails: data = {}, loading } = useSelector((state) => state.profile);
+
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -35,7 +36,7 @@ const ProfilePage = () => {
           title="Edit profile details"
           subtitle="Edit general details about yourself so others can notice you."
         >
-          <ProfileContent />
+          <ProfileForm />
         </SimpleModal>
       )}
     </Stack>
