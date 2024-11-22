@@ -142,7 +142,6 @@ export default function CategoryItem() {
             onRowSelect={() => {}}
             handleRowSelection={handleRowSelection}
             emptyComponentSubtext="Create inventory items to associate them."
-            maxHeight="100%"
           />
         </SimpleModal>
       )}

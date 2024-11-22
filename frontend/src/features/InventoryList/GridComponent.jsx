@@ -18,7 +18,7 @@ import ImagePicker from '../common/ImagePicker/ImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryActions } from './inventorySlice';
 
-const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection, maxHeight = '65vh' }) => {
+const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();
   const { inventories } = useSelector((state) => state.inventory);
 
@@ -50,7 +50,7 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection, maxHe
   if (data.length <= 0) return <EmptyComponent />;
 
   return (
-    <Box sx={{ overflow: 'auto', maxHeight: maxHeight }}>
+    <Box sx={{ overflow: 'auto' }}>
       <Stack spacing={{ xs: 1 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
         {inventories.map((row, index) => {
           const isSelected = (id) => rowSelected.indexOf(id) !== -1;

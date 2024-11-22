@@ -45,7 +45,6 @@ const TableComponent = ({
   handleRowSelection,
   handleEdit,
   emptyComponentSubtext = '',
-  maxHeight = '65vh',
 }) => {
   if (isLoading) return <Skeleton height="10vh" />;
 
@@ -54,7 +53,7 @@ const TableComponent = ({
   }
 
   return (
-    <Box sx={{ overflow: 'auto', maxHeight: maxHeight }}>
+    <Box sx={{ overflow: 'auto' }}>
       <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
         <Table>
           <TableHead>

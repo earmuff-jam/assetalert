@@ -34,7 +34,7 @@ const AppearanceSettings = ({ loading, profileDetails = {} }) => {
   return (
     <>
       <Box sx={{ pb: 2 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" color="text.secondary" gutterBottom>
           Appearance Settings
         </Typography>
         <Typography variant="caption" gutterBottom>
