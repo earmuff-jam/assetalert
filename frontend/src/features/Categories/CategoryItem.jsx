@@ -24,6 +24,7 @@ export default function CategoryItem() {
   const {
     categories,
     selectedCategory,
+    selectedCategoryImage,
     itemsInCategory = [],
     loading = false,
   } = useSelector((state) => state.categories);
@@ -80,6 +81,7 @@ export default function CategoryItem() {
     if (id) {
       dispatch(categoryActions.getItemsForCategory(id));
       dispatch(categoryActions.getCategory(id));
+      dispatch(categoryActions.getSelectedImage({ id }));
     }
   }, [id]);
 
@@ -93,7 +95,7 @@ export default function CategoryItem() {
         title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
         caption="View details of selected category"
       />
-      <DetailsCard selectedItem={selectedCategory} isViewingCategory />
+      <DetailsCard selectedItem={selectedCategory} selectedImage={selectedCategoryImage} isViewingCategory />
       <RowHeader
         title="Items"
         caption={`Total ${itemsInCategory?.length || 0} item(s)`}

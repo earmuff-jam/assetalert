@@ -265,6 +265,49 @@ func populateFakeNotes(user string, limit int, creatorID string) {
 // generate fake personal inventories data to test in the application
 func populateFakeInventories(user string, limit int, creatorID string) {
 
+	fakeAssets := []FItem{
+		{
+			Name:        "Advanced Diagnostics Tool",
+			Description: "Comprehensive equipment diagnostics for identifying underlying issues and optimizing performance.",
+		},
+		{
+			Name:        "Smart Monitoring System",
+			Description: "Real-time monitoring and alerts for equipment status and performance.",
+		},
+		{
+			Name:        "Portable Power Generator",
+			Description: "Reliable backup power source for emergencies and remote operations.",
+		},
+		{
+			Name:        "Heavy-Duty Hydraulic Press",
+			Description: "Powerful and efficient press for industrial-grade applications.",
+		},
+		{
+			Name:        "Precision Calibration Kit",
+			Description: "Tools designed for accurate calibration of sensitive equipment.",
+		},
+		{
+			Name:        "Industrial Cooling System",
+			Description: "High-capacity cooling system to maintain optimal equipment temperatures.",
+		},
+		{
+			Name:        "Ergonomic Workstation Setup",
+			Description: "Customizable workstations designed for enhanced comfort and productivity.",
+		},
+		{
+			Name:        "Wireless Communication Hub",
+			Description: "Centralized hub for seamless wireless communication across devices.",
+		},
+		{
+			Name:        "Autonomous Cleaning Robot",
+			Description: "AI-driven cleaning robot for maintaining cleanliness in industrial spaces.",
+		},
+		{
+			Name:        "High-Performance Filtration Unit",
+			Description: "Advanced filtration system for removing contaminants and ensuring equipment longevity.",
+		},
+	}
+
 	for i := 1; i <= limit; i++ {
 		draftInventory := model.Inventory{}
 
@@ -274,8 +317,11 @@ func populateFakeInventories(user string, limit int, creatorID string) {
 		startDate := now.AddDate(0, 0, -daysAgo)
 		isReturnableStatus := gofakeit.Bool()
 
-		draftInventory.Name = gofakeit.Company()
-		draftInventory.Description = gofakeit.Sentence(gofakeit.Number(2, 5))
+		randomIndex := gofakeit.Number(0, len(fakeAssets)-1)
+		selectedAsset := fakeAssets[randomIndex]
+
+		draftInventory.Name = selectedAsset.Name
+		draftInventory.Description = selectedAsset.Description
 		draftInventory.Price = gofakeit.Price(2, 120)
 		draftInventory.Status = gofakeit.RandString([]string{"COUPONS", "DRAFT", "HIDDEN", "ALL"})
 		draftInventory.Barcode = fmt.Sprintf("%d,%v", gofakeit.Number(2, 20), gofakeit.BeerHop())

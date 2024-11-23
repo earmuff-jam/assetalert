@@ -8,6 +8,7 @@ const initialState = {
   maintenancePlan: [],
   statusOptions: [],
   selectedMaintenancePlan: {},
+  selectedMaintenancePlanImage: '',
   itemsInMaintenancePlan: [],
 };
 
@@ -130,6 +131,29 @@ const maintenancePlanSlice = createSlice({
       state.error = '';
     },
     addItemsInPlanFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    uploadImage: (state) => {
+      state.error = '';
+    },
+    uploadImageSuccess: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    uploadImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedImage: (state) => {
+      state.error = '';
+    },
+    getSelectedImageSuccess: (state, action) => {
+      state.selectedMaintenancePlanImage = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedImageFailure: (state) => {
       state.loading = false;
       state.error = '';
     },

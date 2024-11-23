@@ -1,8 +1,18 @@
-import { Badge, Button, Card, CardActions, CardContent, IconButton, Stack, Typography } from '@mui/material';
+import {
+  Badge,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ShareRounded } from '@mui/icons-material';
+import { AddPhotoAlternateRounded, ShareRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../../Profile/profileSlice';
 import { useEffect, useState } from 'react';
@@ -12,15 +22,17 @@ import { categoryActions } from '../../Categories/categoriesSlice';
 import { produce } from 'immer';
 import { maintenancePlanActions } from '../../Maintenance/maintenanceSlice';
 import { useNavigate } from 'react-router-dom';
+import ImagePicker from '../ImagePicker/ImagePicker';
 
 dayjs.extend(relativeTime);
 
-export default function DetailsCard({ selectedItem, isViewingCategory = false }) {
+export default function DetailsCard({ selectedItem, selectedImage, isViewingCategory = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userID = localStorage.getItem('userID');
   const { favItems = [] } = useSelector((state) => state.profile);
 
+  const [editImgMode, setEditImgMode] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -31,6 +43,15 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
   );
 
   const isShared = selectedItem?.sharable_groups?.length > 1 || false;
+
+  const handleUpload = (id, selectedImage) => {
+    if (isViewingCategory) {
+      dispatch(categoryActions.uploadImage({ id: id, selectedImage: selectedImage }));
+    } else {
+      dispatch(maintenancePlanActions.uploadImage({ id: id, selectedImage: selectedImage }));
+    }
+    setEditImgMode(false);
+  };
 
   const updateCollaborators = (sharableGroups) => {
     const newMembers = sharableGroups.map((v) => v.value);
@@ -78,11 +99,12 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
 
   useEffect(() => {
     dispatch(profileActions.getFavItems({ limit: 1000 }));
-  }, []);
+  }, []); 
 
   return (
     <>
       <Card>
+        <CardMedia sx={{ height: '10rem' }} image={ selectedImage || '/blank_canvas.png'} />
         <CardContent>
           <Stack direction="row" alignItems="flex-start">
             <IconButton size="small" onClick={(ev) => handleFavItem(ev, selectedItem.id, isFavourite)}>
@@ -114,6 +136,9 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
                 Share
               </Button>
             </Badge>
+            <IconButton onClick={() => setEditImgMode(true)}>
+              <AddPhotoAlternateRounded />
+            </IconButton>
           </Stack>
         </CardActions>
       </Card>
@@ -129,6 +154,16 @@ export default function DetailsCard({ selectedItem, isViewingCategory = false })
             existingGroups={selectedItem?.sharable_groups || []}
             creator={selectedItem?.created_by}
           />
+        </SimpleModal>
+      )}
+      {editImgMode && (
+        <SimpleModal
+          title="Assign image"
+          subtitle="Assign image to the selected item."
+          handleClose={() => setEditImgMode(false)}
+          maxSize="sm"
+        >
+          <ImagePicker id={selectedItem.id} name={selectedItem.name} handleUpload={handleUpload} disableCancel />
         </SimpleModal>
       )}
     </>

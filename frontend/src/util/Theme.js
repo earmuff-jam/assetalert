@@ -11,8 +11,8 @@ export const lightTheme = createTheme({
       light: '#F9F7F7',
     },
     background: {
-      paper: '#F8FAFD',
       default: '#FFFBFB',
+      paper: '#F8FAFD',
     },
   },
   typography: {
@@ -83,7 +83,7 @@ export const lightTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: '#FFFBFB',
+          backgroundColor: '#FDF9F9',
         },
       },
     },

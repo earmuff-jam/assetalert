@@ -125,6 +125,33 @@ export function* download() {
   }
 }
 
+export function* uploadImage(action) {
+  try {
+    const { id, selectedImage } = action.payload;
+    const formData = new FormData();
+    formData.append('imageSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${id}/uploadImage`, formData);
+    yield put(maintenancePlanActions.uploadImageSuccess(response.data));
+  } catch (e) {
+    yield put(maintenancePlanActions.uploadImageFailure(e));
+  }
+}
+
+export function* getSelectedImage(action) {
+  try {
+    const { id } = action.payload;
+    // we need to modify the image to be of arrayBuffer type and build a blob object from it
+    const response = yield call(instance.get, `${BASEURL}/${id}/fetchImage`, {
+      responseType: 'arraybuffer',
+    });
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const avatarUrl = URL.createObjectURL(blob);
+    yield put(maintenancePlanActions.getSelectedImageSuccess(avatarUrl));
+  } catch (e) {
+    yield put(maintenancePlanActions.getSelectedImageFailure(e));
+  }
+}
+
 export function* watchGetPlanList() {
   yield takeLatest(`maintenancePlan/getPlans`, getPlans);
 }
@@ -161,6 +188,15 @@ export function* watchDownload() {
   yield takeLatest(`maintenancePlan/download`, download);
 }
 
+export function* watchUploadImage() {
+  yield takeLatest(`maintenancePlan/uploadImage`, uploadImage);
+}
+
+export function* watchGetSelectedImage() {
+  yield takeLatest(`maintenancePlan/getSelectedImage`, getSelectedImage);
+}
+
+
 export default [
   watchGetPlanList,
   watchGetStatusOptions,
@@ -171,4 +207,6 @@ export default [
   watchFetchAddItemsInPlan,
   watchGetItemsInMaintenancePlan,
   watchGetSelectedMaintenancePlan,
+  watchGetSelectedImage,
+  watchUploadImage,
 ];

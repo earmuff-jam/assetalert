@@ -1,12 +1,25 @@
-version: '3'
+version: "3"
 services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+      - minio_config:/root/.minio
+    command: server /data --console-address ":9001"
   backend:
     build:
-      context: ./server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./server/Dockerfile
     restart: always
     ports:
-      - '8089:5432'
+      - "8089:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -15,3 +28,5 @@ services:
       - pg_data:/var/lib/postgresql/data
 volumes:
   pg_data:
+  minio_data:
+  minio_config:

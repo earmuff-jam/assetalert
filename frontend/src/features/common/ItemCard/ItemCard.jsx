@@ -1,5 +1,5 @@
 import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
-import { Box, Card, CardActions, CardContent, CardMedia, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { STATUS_OPTIONS } from '../../Notes/constants';
 
@@ -30,16 +30,13 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
     <Box sx={{ overflow: 'auto', paddingBottom: '1rem' }}>
       <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
         {data?.map((item, index) => (
-          <Stack key={index} flexGrow={1} height="14rem" width="20rem">
+          <Stack key={index} flexGrow={1}>
             <Card
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
-              <Tooltip title={item.description}>
-                <CardMedia sx={{ height: '10rem' }} image={'/blank_canvas.png'} />
-              </Tooltip>
               <CardContent>
                 <Stack direction="row">
                   <Stack flexGrow={1}>

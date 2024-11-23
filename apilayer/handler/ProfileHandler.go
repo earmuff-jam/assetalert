@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -331,73 +330,6 @@ func UpdateProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	resp, err := db.UpdateUserProfile(user, userID, updatedProfile)
 	if err != nil {
 		log.Printf("Unable to update profile details. error: +%v", err)
-		rw.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	rw.Header().Add("Content-Type", "application/json")
-	rw.WriteHeader(http.StatusOK)
-	json.NewEncoder(rw).Encode(resp)
-}
-
-// UpdateProfileAvatar ...
-// swagger:route POST /api/v1/profile/{id}/updateAvatar Profiles updateProfileAvatar
-//
-// # Updates the current user avatar for the selected user. Does not meddle with authentication
-//
-// Parameters:
-//   - +name: id
-//     in: path
-//     description: The userID of the selected user
-//     type: string
-//     required: true
-//   - +name: FileHeader
-//     in: body
-//     description: The full file details of the avatar
-//     type: string
-//     format: byte
-//     required: true
-//
-// Responses:
-// 200: Profile
-// 400: MessageResponse
-// 404: MessageResponse
-// 500: MessageResponse
-func UpdateProfileAvatar(rw http.ResponseWriter, r *http.Request, user string) {
-	vars := mux.Vars(r)
-	userID := vars["id"]
-	if len(userID) <= 0 {
-		log.Printf("Unable to update profile avatar with empty id")
-		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(nil)
-		return
-	}
-
-	err := r.ParseMultipartForm(10 << 20) // 10 MB max
-	if err != nil {
-		log.Printf("Unable to parse form file. error  %+v", err)
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	file, header, err := r.FormFile("avatarSrc")
-	if err != nil {
-		log.Printf("Unable to form file properly. error  %+v", err)
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
-
-	// Read file data into a buffer
-	fileBytes, err := io.ReadAll(file)
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	resp, err := db.UpdateProfileAvatar(user, userID, header, fileBytes)
-	if err != nil {
-		log.Printf("Unable to update profile avatar. error: +%v", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}

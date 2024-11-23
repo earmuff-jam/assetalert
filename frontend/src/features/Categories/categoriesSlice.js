@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   categories: [],
   selectedCategory: {},
+  selectedCategoryImage: '',
   itemsInCategory: [],
 };
 
@@ -119,6 +120,29 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = '';
       state.itemsInCategory = [];
+    },
+    uploadImage: (state) => {
+      state.error = '';
+    },
+    uploadImageSuccess: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    uploadImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedImage: (state) => {
+      state.error = '';
+    },
+    getSelectedImageSuccess: (state, action) => {
+      state.selectedCategoryImage = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
     },
     download: (state) => {
       state.error = '';
