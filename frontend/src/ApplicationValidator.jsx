@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { SnackbarProvider } from 'notistack';
 import { TourProvider } from '@reactour/tour';
 import { RouterProvider } from 'react-router-dom';
-import { Container, Dialog } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { router } from './features/common/router';
 import LandingPage from './features/LandingPage/LandingPage';
 
@@ -31,17 +31,13 @@ const ApplicationValidator = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         autoHideDuration={3000}
       >
-        <Container maxWidth="xl">
-          <Suspense fallback={<Dialog open={loading} title="Loading..." />}>
-            <RouterProvider router={router} />
-          </Suspense>
-        </Container>
+        <Suspense fallback={<Dialog open={loading} title="Loading..." />}>
+          <RouterProvider router={router} />
+        </Suspense>
       </SnackbarProvider>
     </TourProvider>
   ) : (
-    <Container maxWidth="xl">
-      <LandingPage />
-    </Container>
+    <LandingPage />
   );
 };
 

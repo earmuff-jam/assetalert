@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from './authSlice';
-import { SIGN_UP_FORM_FIELDS } from './constants';
+import { authActions } from '../authSlice';
+import { SIGN_UP_FORM_FIELDS } from '../constants';
 import {
   Box,
   Button,
