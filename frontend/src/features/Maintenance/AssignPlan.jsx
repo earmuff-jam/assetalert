@@ -1,9 +1,9 @@
 import { Alert, Box, Card, CardContent, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useAssignItemsToPlan, useFetchPlans } from '../../features/plan';
-import { EmptyComponent } from '../../util/util';
 import { WarningOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { EmptyComponent } from '../common/utils';
 
 const AssignPlan = ({ rowSelected, handleCloseAssignFn }) => {
   const navigate = useNavigate();

@@ -1,14 +1,15 @@
-import { Stack } from '@mui/material';
-import RecentActivities from './RecentActivities';
+import { Divider, Stack } from '@mui/material';
 import RowHeader from '../common/RowHeader';
 import { DownloadRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { profileActions } from '../Profile/profileSlice';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import RecentActivityAccordion from './ActivityAccordion/RecentActivityAccordion';
+
 dayjs.extend(relativeTime);
 
-const RecentList = () => {
+const RecentActivityList = () => {
   const dispatch = useDispatch();
   const downloadRecentActivities = () => {
     const last30Days = dayjs().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ssZ');
@@ -24,9 +25,10 @@ const RecentList = () => {
         primaryStartIcon={<DownloadRounded />}
         handleClickPrimaryButton={downloadRecentActivities}
       />
-      <RecentActivities />
+      <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }} />
+      <RecentActivityAccordion />
     </Stack>
   );
 };
 
-export default RecentList;
+export default RecentActivityList;

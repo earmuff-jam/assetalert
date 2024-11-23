@@ -1,6 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid';
-import EmptyComponent from '../../../util/EmptyComponent';
 import { Box } from '@mui/material';
+import { EmptyComponent } from '../utils';
 
 export default function DataTable({ rows, columns, isEmpty, subtitle }) {
   if (isEmpty) {
@@ -13,7 +13,7 @@ export default function DataTable({ rows, columns, isEmpty, subtitle }) {
         width: '100%',
         display: 'table',
         tableLayout: 'fixed',
-        height: "10rem"
+        height: '10rem',
       }}
     >
       <DataGrid
