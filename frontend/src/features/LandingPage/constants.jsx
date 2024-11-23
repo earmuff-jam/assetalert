@@ -1,6 +1,30 @@
 import dayjs from 'dayjs';
 import { CakeRounded, EmailRounded, LockRounded, SupervisedUserCircleRounded } from '@mui/icons-material';
 
+ export const SAMPLE_DATA = [
+  { name: 'Entertainment', price: 320.0 },
+  { name: 'Tools and equipment', price: 1451.99 },
+  { name: 'Supplies', price: 758.99 },
+  { name: 'Utilities', price: 420.0 },
+  { name: 'Clothing', price: 430.0 },
+  { name: 'Maintenance', price: 200.0 },
+  { name: 'Education', price: 1341.59 },
+  { name: 'Misc', price: 300.0 },
+];
+
+export const COLORS = [
+  'rgba(255, 99, 132, 0.6)', // Red
+  'rgba(54, 162, 235, 0.6)', // Blue
+  'rgba(255, 206, 86, 0.6)', // Yellow
+  'rgba(75, 192, 192, 0.6)', // Green
+  'rgba(153, 102, 255, 0.6)', // Purple
+  'rgba(255, 159, 64, 0.6)', // Orange
+  'rgba(255, 99, 132, 0.6)', // Red
+  'rgba(54, 162, 235, 0.6)', // Blue
+  'rgba(255, 206, 86, 0.6)', // Yellow
+];
+
+
 export const GENERIC_TEXTFIELD_VARIANT = {
   variant: 'outlined',
 };

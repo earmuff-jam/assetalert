@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { ArrowRightRounded } from '@mui/icons-material';
-import { authActions } from './authSlice';
+import { authActions } from '../authSlice';
 import { Box, Button, InputAdornment, Stack, TextField } from '@mui/material';
-import { LOGIN_FORM_FIELDS } from './constants';
+import { LOGIN_FORM_FIELDS } from '../constants';
 
 const Login = () => {
   const dispatch = useDispatch();
