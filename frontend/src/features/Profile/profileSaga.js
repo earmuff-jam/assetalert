@@ -4,11 +4,11 @@ import { profileActions } from './profileSlice';
 import instance from '../../util/Instances';
 
 const DEFAULT_LIMIT = 10;
-const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
+const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
 export function* fetchProfileList() {
   try {
-    const response = yield call(instance.get, `${BASEURL}/list`);
+    const response = yield call(instance.get, `${BASEURL}/profile/list`);
     yield put(profileActions.getProfileListSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileListFailure(e));
@@ -18,7 +18,7 @@ export function* fetchProfileList() {
 export function* fetchExistingUserDetails() {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}`);
     yield put(profileActions.getProfileDetailsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getProfileDetailsFailure(e));
@@ -30,7 +30,7 @@ export function* fetchRecentActivities() {
     const USER_ID = localStorage.getItem('userID');
     const params = new URLSearchParams();
     params.append('limit', DEFAULT_LIMIT);
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent-activities?${params.toString()}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/recent-activities?${params.toString()}`);
     yield put(profileActions.getRecentActivitiesSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getRecentActivitiesFailure(e));
@@ -44,7 +44,7 @@ export function* downloadRecentActivities(action) {
     const { last30Days } = action.payload;
     params.append('until', last30Days);
     params.append('limit', 1000);
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/recent-activities?${params.toString()}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/recent-activities?${params.toString()}`);
     yield put(profileActions.downloadRecentActivitiesSuccess(response.data));
   } catch (e) {
     yield put(profileActions.downloadRecentActivitiesFailure(e));
@@ -55,7 +55,7 @@ export function* updateExistingUserDetails(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
     const { draftData } = action.payload;
-    const response = yield call(instance.put, `${BASEURL}/${USER_ID}`, {
+    const response = yield call(instance.put, `${BASEURL}/profile/${USER_ID}`, {
       id: USER_ID,
       ...draftData,
       updated_by: USER_ID,
@@ -99,7 +99,7 @@ export function* fetchFavItems(action) {
     const { limit } = action.payload;
     const params = new URLSearchParams();
     params.append('limit', limit);
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/fav?${params.toString()}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/fav?${params.toString()}`);
     yield put(profileActions.getFavItemsSuccess(response.data));
   } catch (e) {
     yield put(profileActions.getFavItemsFailure(e));
@@ -110,7 +110,7 @@ export function* saveFavItem(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
     const draftPayload = { ...action.payload, created_by: USER_ID };
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/fav`, { ...draftPayload });
+    const response = yield call(instance.post, `${BASEURL}/profile/${USER_ID}/fav`, { ...draftPayload });
     yield put(profileActions.saveFavItemSuccess(response.data));
   } catch (e) {
     yield put(profileActions.saveFavItemFailure(e));
@@ -122,7 +122,7 @@ export function* removeFavItem(action) {
     const USER_ID = localStorage.getItem('userID');
     const params = new URLSearchParams();
     params.append('itemID', action.payload);
-    const response = yield call(instance.delete, `${BASEURL}/${USER_ID}/fav?${params.toString()}`);
+    const response = yield call(instance.delete, `${BASEURL}/profile/${USER_ID}/fav?${params.toString()}`);
     yield put(profileActions.removeFavItemSuccess(response.data));
   } catch (e) {
     yield put(profileActions.removeFavItemFailure(e));
