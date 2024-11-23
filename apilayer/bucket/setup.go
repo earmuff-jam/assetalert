@@ -11,14 +11,18 @@ import (
 //
 // Allows for the creation of storage container and bucket
 func InitializeStorageAndBucket() {
-	client := initializeStorage()
+	client, err := initializeStorage()
+	if err != nil {
+		log.Printf("unable to initialize minio client storage")
+		return
+	}
 	initializeBucket(client)
 }
 
 // initializeStorage ...
 //
 // Initializes MinIO bucket storage
-func initializeStorage() *minio.Client {
+func initializeStorage() (*minio.Client, error) {
 
 	log.Printf("setting up bucket storage for user %s", os.Getenv("MINIO_ROOT_USER"))
 	endpoint := os.Getenv("MINIO_APP_LOCALHOST_URL")
@@ -30,10 +34,11 @@ func initializeStorage() *minio.Client {
 	minioClient, err := minio.New(endpoint, accessKeyID, secretAccessKey, useSSL)
 	if err != nil {
 		log.Printf("Failed to initialize MinIO client: %+v", err)
+		return nil, err
 	}
 
 	log.Printf("Connected to MinIO bucket storage")
-	return minioClient
+	return minioClient, nil
 }
 
 // initializeBucket ...

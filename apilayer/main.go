@@ -44,9 +44,12 @@ type CustomRequestHandler func(http.ResponseWriter, *http.Request, string)
 func main() {
 
 	// load environment variables
-	err := godotenv.Load(filepath.Join("..", ".env"))
-	if err != nil {
-		log.Printf("No env file detected. Using os system configuration.")
+	instance := os.Getenv("ENVIRONMENT")
+	if instance == "" {
+		err := godotenv.Load(filepath.Join("..", ".env"))
+		if err != nil {
+			log.Printf("No env file detected. Using os system configuration.")
+		}
 	}
 
 	//	load storage support
@@ -132,7 +135,7 @@ func main() {
 	http.Handle("/", cors(router))
 
 	log.Println("Api is up and running ...")
-	err = http.ListenAndServe(":8087", nil)
+	err := http.ListenAndServe(":8087", nil)
 	if err != nil {
 		log.Printf("failed to start the server. error: %+v", err)
 		return

@@ -5,14 +5,14 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy the app package and package-lock.json file
-COPY package.json yarn.lock ./
+COPY frontend/package.json frontend/yarn.lock ./
 
 # Install node packages
 RUN yarn
 
 # Copy the source code and public files
-COPY ./src ./src
-COPY ./public ./public
+COPY ./frontend/src ./src
+COPY ./frontend/public ./public
 
 ARG REACT_APP_LOCALHOST_URL
 

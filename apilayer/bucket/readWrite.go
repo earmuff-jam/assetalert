@@ -13,10 +13,14 @@ import (
 // uploads document in the bucket. function attempts to communicate with the bucket
 func UploadDocumentInBucket(objectName string, filePath string, contentType string) error {
 
-	client := initializeStorage()
+	client, err := initializeStorage()
+	if err != nil {
+		log.Printf("unable to initialize minio client storage")
+		return err
+	}
 	bucketName := os.Getenv("MINIO_APP_BUCKET_NAME")
 
-	_, err := client.FPutObject(bucketName, objectName, filePath, minio.PutObjectOptions{ContentType: contentType})
+	_, err = client.FPutObject(bucketName, objectName, filePath, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		log.Printf("unable to add object to the selected bucket. erorr: %+v", err)
 		return err
@@ -29,7 +33,11 @@ func UploadDocumentInBucket(objectName string, filePath string, contentType stri
 //
 // Retrieves the selected document from the bucket storage
 func RetrieveDocumentFromBucket(documentID string) ([]byte, string, string, error) {
-	client := initializeStorage()
+	client, err := initializeStorage()
+	if err != nil {
+		log.Printf("unable to initialize minio client storage")
+		return nil, "", "", err
+	}
 	bucketName := os.Getenv("MINIO_APP_BUCKET_NAME")
 
 	// Fetch the object from the bucket

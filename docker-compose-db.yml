@@ -15,8 +15,8 @@ services:
     command: server /data --console-address ":9001"
   backend:
     build:
-      context: ./server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./server/Dockerfile
     restart: always
     ports:
       - "8089:5432"
