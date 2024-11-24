@@ -91,7 +91,8 @@ export default function Reports() {
             title="Valuation"
             chipLabel={formatDate(sinceValue)}
             value={`$${reports[0]?.total_valuation.toFixed(2) || 0.0}`}
-            footerText="Total cost of items in dollar value."
+            footerText="Total cost of items in"
+            footerSuffix="dollar value."
           />
           <ReportCardWrapper
             title="Categorized Assets"

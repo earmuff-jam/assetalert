@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Autocomplete, IconButton, Stack, TextField } from '@mui/material';
-import { CheckRounded, CloseRounded, EditRounded, GridViewRounded, ViewListRounded } from '@mui/icons-material';
+import {
+  CheckRounded,
+  CloseRounded,
+  EditRounded,
+  GridViewRounded,
+  SearchRounded,
+  ViewListRounded,
+} from '@mui/icons-material';
 import RowHeader from '../common/RowHeader';
 import SimpleModal from '../common/SimpleModal';
 import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
@@ -29,6 +36,7 @@ const InventoryList = ({ hideActionMenu = false }) => {
   const dispatch = useDispatch();
   const { loading, inventories } = useSelector((state) => state.inventory);
 
+  const [showSearch, setShowSearch] = useState(false);
   const [options, setOptions] = useState([]);
   const [inputColumn, setInputColumn] = useState('');
   const [editLineItem, setEditLineItem] = useState({ editItem: false, rowID: -1, column: '' });
@@ -174,10 +182,32 @@ const InventoryList = ({ hideActionMenu = false }) => {
   }, []);
 
   return (
-    <Stack flexGrow="1">
+    <Stack flexGrow="1" spacing={2}>
       <Stack direction="row" justifyContent="space-between">
-        <RowHeader title="Assets" caption={`Showing ${options.length || 0} asset detail(s)`} />
+        <RowHeader title="Assets" caption={`Viewing ${options.length || 0} asset detail(s)`} />
         <Stack direction="row" alignItems="center">
+          {showSearch ? (
+            <Autocomplete
+              sx={{ minWidth: '15rem' }}
+              id="inventory-items-autocomplete"
+              options={options}
+              autoHighlight
+              forcePopupIcon
+              getOptionLabel={(option) => option.name}
+              onChange={(_, newValue) => {
+                if (newValue) {
+                  setOptions(inventories.filter((option) => option.id === newValue.id));
+                } else {
+                  setOptions(inventories);
+                }
+              }}
+              renderInput={(params) => <TextField variant="standard" {...params} label="Search ..." />}
+            />
+          ) : (
+            <IconButton onClick={() => setShowSearch(!showSearch)}>
+              <SearchRounded />
+            </IconButton>
+          )}
           <IconButton size="small" onClick={() => setGridMode(!gridMode)}>
             {!gridMode ? (
               <GridViewRounded color="primary" fontSize="small" />
@@ -193,42 +223,29 @@ const InventoryList = ({ hideActionMenu = false }) => {
           />
         </Stack>
       </Stack>
-      <Autocomplete
-        sx={{ maxWidth: '20rem', mb: 1 }}
-        id="inventory-items-autocomplete"
-        options={options}
-        autoHighlight
-        getOptionLabel={(option) => option.name}
-        onChange={(_, newValue) => {
-          if (newValue) {
-            setOptions(inventories.filter((option) => option.id === newValue.id));
-          } else {
-            setOptions(inventories);
-          }
-        }}
-        renderInput={(params) => <TextField variant="standard" {...params} label="Search ..." />}
-      />
-      {gridMode ? (
-        <GridComponent
-          isLoading={loading}
-          data={options}
-          rowSelected={rowSelected}
-          handleRowSelection={handleRowSelection}
-        />
-      ) : (
-        <TableComponent
-          isLoading={loading}
-          hideActionMenu={hideActionMenu}
-          data={options}
-          columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
-          rowFormatter={rowFormatter}
-          generateTitleColor={generateTitleColor}
-          rowSelected={rowSelected}
-          onRowSelect={onRowSelect}
-          handleRowSelection={handleRowSelection}
-          handleEdit={handleEdit}
-        />
-      )}
+      <Stack>
+        {gridMode ? (
+          <GridComponent
+            isLoading={loading}
+            data={options}
+            rowSelected={rowSelected}
+            handleRowSelection={handleRowSelection}
+          />
+        ) : (
+          <TableComponent
+            isLoading={loading}
+            hideActionMenu={hideActionMenu}
+            data={options}
+            columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
+            rowFormatter={rowFormatter}
+            generateTitleColor={generateTitleColor}
+            rowSelected={rowSelected}
+            onRowSelect={onRowSelect}
+            handleRowSelection={handleRowSelection}
+            handleEdit={handleEdit}
+          />
+        )}
+      </Stack>
       {modalState === MODAL_STATE.ADD_ITEM && (
         <SimpleModal title="Add New Item" handleClose={handleCloseModal} maxSize="sm">
           <AddInventoryDetail handleClose={handleCloseModal} />

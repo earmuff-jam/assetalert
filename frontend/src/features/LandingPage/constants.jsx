@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { CakeRounded, EmailRounded, LockRounded, SupervisedUserCircleRounded } from '@mui/icons-material';
 
- export const SAMPLE_DATA = [
+export const SAMPLE_DATA = [
   { name: 'Entertainment', price: 320.0 },
   { name: 'Tools and equipment', price: 1451.99 },
   { name: 'Supplies', price: 758.99 },
@@ -24,7 +24,6 @@ export const COLORS = [
   'rgba(255, 206, 86, 0.6)', // Yellow
 ];
 
-
 export const GENERIC_TEXTFIELD_VARIANT = {
   variant: 'outlined',
 };
@@ -39,6 +38,7 @@ export const LOGIN_FORM_FIELDS = {
     placeholder: '',
     value: '',
     name: 'email',
+    size: 'small',
     errorMsg: '',
     required: true,
     type: 'email',
@@ -69,6 +69,7 @@ export const LOGIN_FORM_FIELDS = {
     value: '',
     type: 'password',
     name: 'password',
+    size: 'small',
     errorMsg: '',
     icon: <LockRounded />,
     required: true,
@@ -94,6 +95,7 @@ export const SIGN_UP_FORM_FIELDS = {
     placeholder: 'Enter a username',
     value: '',
     name: 'username',
+    size: 'small',
     errorMsg: '',
     required: true,
     type: 'text',
@@ -120,6 +122,7 @@ export const SIGN_UP_FORM_FIELDS = {
     placeholder: '',
     value: '',
     name: 'email',
+    size: 'small',
     errorMsg: '',
     required: true,
     type: 'email',
@@ -150,6 +153,7 @@ export const SIGN_UP_FORM_FIELDS = {
     value: '',
     type: 'password',
     name: 'password',
+    size: 'small',
     errorMsg: '',
     icon: <LockRounded />,
     required: true,
@@ -172,6 +176,7 @@ export const SIGN_UP_FORM_FIELDS = {
     placeholder: '',
     value: '',
     type: 'date',
+    size: 'small',
     name: 'birthday',
     errorMsg: '',
     icon: <CakeRounded />,

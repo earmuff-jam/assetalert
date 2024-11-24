@@ -53,75 +53,77 @@ const TableComponent = ({
   }
 
   return (
-    <Box sx={{ overflow: 'auto' }}>
-      <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {!hideActionMenu ? (
-                <TableCell padding="checkbox">
-                  <Stack direction="row" alignItems="center">
-                    <Checkbox size="small" onClick={(ev) => handleRowSelection(ev, 'all')} />
-                    <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
-                      Action
-                    </Typography>
-                  </Stack>
-                </TableCell>
-              ) : null}
-              {Object.keys(columns).map((colKey) => {
-                const column = columns[colKey];
-                return (
-                  <TableCell key={column.id}>
-                    <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
-                      {column.label}
-                    </Typography>
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => {
-              const isSelected = (id) => rowSelected.indexOf(id) !== -1;
-              const selectedID = row.id;
-              const isItemSelected = isSelected(selectedID);
+    <Box sx={{ width: '100%', display: 'table', tableLayout: 'fixed', border: '1px solid #ddd', borderRadius: '4px' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {!hideActionMenu ? (
+              <TableCell>
+                <Stack direction="row" alignItems="center">
+                  <Checkbox size="small" onClick={(ev) => handleRowSelection(ev, 'all')} />
+                  <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
+                    Action
+                  </Typography>
+                </Stack>
+              </TableCell>
+            ) : null}
+            {Object.keys(columns).map((colKey) => {
+              const column = columns[colKey];
               return (
-                <TableRow hover key={row.id}>
-                  {!hideActionMenu && (
-                    <TableCell padding="checkbox">
-                      <Stack direction="row" alignItems={'center'} spacing={0}>
-                        {!hideCheckBox && (
-                          <Checkbox
-                            checked={isItemSelected}
-                            color="primary"
-                            size="small"
-                            onClick={(event) => handleRowSelection(event, selectedID)}
-                            inputProps={{ 'aria-labelledby': 'labelId' }}
-                          />
-                        )}
-                        {!hideIconButton && (
-                          <IconButton onClick={() => handleEdit(selectedID)} size="small">
-                            <EditRounded color="primary" fontSize="small" />
-                          </IconButton>
-                        )}
-                        {!hideMoreDetailsButton && (
-                          <IconButton size="small" onClick={() => onRowSelect(row)}>
-                            <FileOpenRounded color="primary" fontSize="small" />
-                          </IconButton>
-                        )}
-                      </Stack>
-                    </TableCell>
-                  )}
-                  {Object.keys(columns).map((colKey) => {
-                    const column = columns[colKey];
-                    return <TableCell key={column.id}>{rowFormatter(row, column.colName, column)}</TableCell>;
-                  })}
-                </TableRow>
+                <TableCell key={column.id}>
+                  <Typography variant="subtitle2" color="text.secondary" fontWeight={'bold'}>
+                    {column.label}
+                  </Typography>
+                </TableCell>
               );
             })}
-          </TableBody>
-        </Table>
-      </Box>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row) => {
+            const isSelected = (id) => rowSelected.indexOf(id) !== -1;
+            const selectedID = row.id;
+            const isItemSelected = isSelected(selectedID);
+            return (
+              <TableRow hover key={row.id}>
+                {!hideActionMenu && (
+                  <TableCell size="small">
+                    <Stack direction="row" spacing={1}>
+                      {!hideCheckBox && (
+                        <Checkbox
+                          checked={isItemSelected}
+                          color="primary"
+                          size="small"
+                          onClick={(event) => handleRowSelection(event, selectedID)}
+                          inputProps={{ 'aria-labelledby': 'labelId' }}
+                        />
+                      )}
+                      {!hideIconButton && (
+                        <IconButton onClick={() => handleEdit(selectedID)} size="small">
+                          <EditRounded color="primary" fontSize="small" />
+                        </IconButton>
+                      )}
+                      {!hideMoreDetailsButton && (
+                        <IconButton size="small" onClick={() => onRowSelect(row)}>
+                          <FileOpenRounded color="primary" fontSize="small" />
+                        </IconButton>
+                      )}
+                    </Stack>
+                  </TableCell>
+                )}
+                {Object.keys(columns).map((colKey) => {
+                  const column = columns[colKey];
+                  return (
+                    <TableCell key={column.id} size="small">
+                      {rowFormatter(row, column.colName, column)}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </Box>
   );
 };
