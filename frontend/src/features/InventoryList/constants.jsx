@@ -84,7 +84,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
     colName: 'description',
     label: 'Description',
     displayName: 'Description',
-    displayConcise: true,
+    displayConcise: false,
     modifier: (value) => `${value || '-'}`,
   },
   price: {
@@ -171,7 +171,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
   updated_at: {
     id: 15,
     colName: 'updated_at',
-    label: 'Updated At',
+    label: 'Updated',
     displayConcise: true,
     modifier: (value) => `${dayjs(value).fromNow()}`,
   },

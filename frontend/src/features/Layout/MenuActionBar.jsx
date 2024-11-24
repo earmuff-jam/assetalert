@@ -18,7 +18,6 @@ import {
   Drawer,
   IconButton,
   Divider,
-  useMediaQuery,
   Typography,
 } from '@mui/material';
 
@@ -27,19 +26,18 @@ import { useTheme } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MENU_ACTION_BAR_DEFAULT_LIST, PINNED_DEFAULT_INSET_MENU_LIST } from './constants';
 
-export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
+export default function MenuActionBar({ openDrawer, handleDrawerClose, smScreenSizeAndHigher, lgScreenSizeAndHigher }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const smallerAndHigher = useMediaQuery(theme.breakpoints.up('sm'));
   const { favItems = [] } = useSelector((state) => state.profile);
   const [openPinnedResources, setOpenPinnedResources] = useState(true);
 
   // the timeout allows to close the drawer first before navigation occurs.
   // Without this, the drawer behaves weird.
   const handleMenuItemClick = (to) => {
-    handleDrawerClose();
+    !lgScreenSizeAndHigher && handleDrawerClose();
     setTimeout(() => {
       navigate(to);
     }, 200);
@@ -57,15 +55,17 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
   return (
     <Stack display="flex">
       <Drawer
-        variant="temporary"
+        variant="persistent"
         open={openDrawer}
         onClose={handleDrawerClose}
         aria-modal="true"
         PaperProps={
-          smallerAndHigher
+          smScreenSizeAndHigher
             ? {
                 sx: {
                   width: 300,
+                  flexShrink: 0,
+                  [`& .MuiDrawer-paper`]: { width: 300, boxSizing: 'border-box' },
                 },
               }
             : {
@@ -75,7 +75,7 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose }) {
               }
         }
       >
-        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem' }}>
           <Typography variant="h5">AssetAlert</Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightRounded /> : <ChevronLeftRounded />}

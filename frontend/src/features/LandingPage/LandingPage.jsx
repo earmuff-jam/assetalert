@@ -2,11 +2,11 @@ import { Container, Stack } from '@mui/material';
 import FloatingBarChart from '../../util/Chart/FloatingBarChart';
 import { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
-import Signup from './Authentication/Signup';
-import Login from './Authentication/Login';
 import Header from './HeroContent/Header';
 import { COLORS, SAMPLE_DATA } from './constants';
 import StyledAppBar from './HeroContent/StyledAppBar';
+import Signup from './Authentication/Signup/Signup';
+import Login from './Authentication/Login/Login';
 
 export default function LandingPage() {
   const [currentForm, setCurrentForm] = useState('');
@@ -54,7 +54,7 @@ export default function LandingPage() {
               : 'Keep an account to keep track of all your inventories.'
           }
           handleClose={closeDisplayModal}
-          maxSize="sm"
+          maxSize="xs"
         >
           {currentForm === 'signup' ? <Signup handleClose={closeDisplayModal} /> : <Login />}
         </SimpleModal>

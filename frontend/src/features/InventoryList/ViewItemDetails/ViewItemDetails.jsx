@@ -12,6 +12,7 @@ export default function ViewItemDetails({ resetSelection, title, selectedRow, co
     <Dialog
       open
       keepMounted
+      maxWidth={'xs'}
       onClose={resetSelection}
       aria-labelledby="detailed-inventory-item"
       scroll="paper"

@@ -26,10 +26,12 @@ import { useTheme } from '@emotion/react';
 const Layout = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const onlySmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const smScreenSizeAndHigher = useMediaQuery(theme.breakpoints.up('sm'));
+  const lgScreenSizeAndHigher = useMediaQuery(theme.breakpoints.up('lg'));
+
   const { loading, profileDetails } = useSelector((state) => state.profile);
 
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(lgScreenSizeAndHigher ? true : false);
 
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
@@ -68,29 +70,37 @@ const Layout = () => {
       >
         <AppBar elevation={0}>
           <Toolbar>
-            <IconButton onClick={handleDrawerOpen}>
-              <MenuOutlined />
+            <IconButton size="small" onClick={handleDrawerOpen}>
+              <MenuOutlined fontSize="small" />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" color="text.secondary" sx={{ flexGrow: 1 }}>
               AssetAlert
             </Typography>
             <Stack direction="row" spacing="0.1rem">
-              {!onlySmallScreen ? (
+              {!smScreenSizeAndHigher ? (
                 <>
-                  <IconButton onClick={handleAppearance}>
-                    {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+                  <IconButton size="small" onClick={handleAppearance}>
+                    {profileDetails?.appearance ? (
+                      <LightModeOutlined fontSize="small" />
+                    ) : (
+                      <DarkModeRounded fontSize="small" />
+                    )}
                   </IconButton>
-                  <IconButton onClick={handleLogout}>
-                    <LogoutRounded />
+                  <IconButton size="small" onClick={handleLogout}>
+                    <LogoutRounded fontSize="small" />
                   </IconButton>
                 </>
               ) : (
                 <>
-                  <IconButton onClick={() => handleAppearance()}>
-                    {profileDetails?.appearance ? <LightModeOutlined /> : <DarkModeRounded />}
+                  <IconButton size="small" onClick={() => handleAppearance()}>
+                    {profileDetails?.appearance ? (
+                      <LightModeOutlined fontSize="small" />
+                    ) : (
+                      <DarkModeRounded fontSize="small" />
+                    )}
                   </IconButton>
                   <Tooltip title="log out">
-                    <IconButton onClick={handleLogout}>
+                    <IconButton size="small" onClick={handleLogout}>
                       <LogoutRounded fontSize="small" />
                     </IconButton>
                   </Tooltip>
@@ -100,10 +110,17 @@ const Layout = () => {
           </Toolbar>
         </AppBar>
         <Stack sx={{ marginTop: '5rem', marginBottom: '1rem' }}>
-          <Container maxWidth="md">
-            <MenuActionBar openDrawer={openDrawer} handleDrawerClose={handleDrawerClose} />
-            <Outlet />
-          </Container>
+          <MenuActionBar
+            openDrawer={openDrawer}
+            handleDrawerClose={handleDrawerClose}
+            smScreenSizeAndHigher={smScreenSizeAndHigher}
+            lgScreenSizeAndHigher={lgScreenSizeAndHigher}
+          />
+          <Stack flexGrow={1}>
+            <Container maxWidth="md">
+              <Outlet />
+            </Container>
+          </Stack>
         </Stack>
       </Suspense>
     </ThemeProvider>

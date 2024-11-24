@@ -1,6 +1,6 @@
-import { Card, CardActions, CardContent, Chip, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Chip, Stack, Typography } from '@mui/material';
 
-export default function ReportCardWrapper({ title, chipLabel, value, iconType, footerText, children }) {
+export default function ReportCardWrapper({ title, chipLabel, value, iconType, footerText, footerSuffix, children }) {
   return (
     <Card
       sx={{
@@ -33,11 +33,14 @@ export default function ReportCardWrapper({ title, chipLabel, value, iconType, f
       </CardContent>
 
       {footerText && (
-        <CardActions sx={{ justifyContent: 'space-between' }}>
+        <Stack direction="row" spacing={0.3} paddingLeft={1}>
           <Typography variant="caption" color="text.secondary">
             {footerText}
           </Typography>
-        </CardActions>
+          <Typography variant="caption" component={'span'} color="primary">
+            {footerSuffix}
+          </Typography>
+        </Stack>
       )}
     </Card>
   );

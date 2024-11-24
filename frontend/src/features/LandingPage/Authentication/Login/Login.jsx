@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
-import { ArrowRightRounded } from '@mui/icons-material';
-import { authActions } from '../authSlice';
-import { Box, Button, InputAdornment, Stack, TextField } from '@mui/material';
-import { LOGIN_FORM_FIELDS } from '../constants';
+import { authActions } from '../../authSlice';
+import { Button, Stack } from '@mui/material';
+import { LOGIN_FORM_FIELDS } from '../../constants';
+import LoginFormFields from './LoginFormFields';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -56,48 +56,18 @@ const Login = () => {
   };
 
   return (
-    <>
-      <Stack spacing="1rem">
-        {Object.values(formFields).map((v, index) => (
-          <TextField
-            key={index}
-            id={v.name}
-            name={v.name}
-            label={v.label}
-            value={v.value}
-            type={v.type}
-            variant={v.variant}
-            autoComplete={v.autocomplete}
-            placeholder={v.placeholder}
-            onChange={handleInput}
-            required={v.required}
-            fullWidth={v.fullWidth}
-            error={!!v.errorMsg}
-            helperText={v.errorMsg}
-            onKeyDown={(e) => {
-              if (e.code === 'Enter') {
-                submit(e);
-              }
-            }}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">{v.icon}</InputAdornment>,
-            }}
-          />
-        ))}
-        <Box>
-          <Button
-            variant="outlined"
-            endIcon={<ArrowRightRounded />}
-            disabled={validate(formFields)}
-            disableRipple={true}
-            disableFocusRipple={true}
-            onClick={submit}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Stack>
-    </>
+    <Stack spacing={1}>
+      <LoginFormFields formFields={formFields} handleInput={handleInput} submit={submit} />
+      <Button
+        variant="text"
+        disabled={validate(formFields)}
+        disableRipple={true}
+        disableFocusRipple={true}
+        onClick={submit}
+      >
+        Login
+      </Button>
+    </Stack>
   );
 };
 
