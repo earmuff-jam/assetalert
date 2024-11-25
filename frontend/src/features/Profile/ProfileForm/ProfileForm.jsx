@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '../profileSlice';
-import TextFieldWithLabel from '../../../util/TextFieldWithLabel/TextFieldWithLabel';
+import TextFieldWithLabel from '../../../common/TextFieldWithLabel/TextFieldWithLabel';
 
 dayjs.extend(relativeTime);
 
