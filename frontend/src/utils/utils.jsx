@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import CryptoJS from 'crypto-js';
-import SimpleModal from '../../util/SimpleModal/SimpleModal';
+import SimpleModal from '@common/SimpleModal/SimpleModal';
 
 /**
  * Function used to decrypt the client location from the local storage. To prevent XSS attacks on

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import AppearanceSettings from './UserDetails/AppearanceSettings';
 import ProfileForm from './ProfileForm/ProfileForm';
 import { useTheme } from '@emotion/react';
-import SimpleModal from '../../util/SimpleModal/SimpleModal';
+import SimpleModal from '@common/SimpleModal/SimpleModal';
 
 const ProfilePage = () => {
   const theme = useTheme();

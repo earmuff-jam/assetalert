@@ -8,7 +8,7 @@ import Note from './Note';
 import AddNote from './AddNote';
 import { notesActions } from './notesSlice';
 import NoteHeader from './Header/NoteHeader';
-import SimpleModal from '../../util/SimpleModal/SimpleModal';
+import SimpleModal from '@common/SimpleModal/SimpleModal';
 
 const NotesList = () => {
   const dispatch = useDispatch();

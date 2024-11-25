@@ -2,12 +2,13 @@ import { Button, IconButton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AddRounded, FileDownload } from '@mui/icons-material';
 import AddCategory from './AddCategory';
-import RowHeader from '../common/RowHeader';
+import RowHeader from '../../utils/RowHeader';
 import Category from './Category';
 import { useDispatch, useSelector } from 'react-redux';
-import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';
+import FilterAndSortMenu from '../../common/FilterAndSortMenu/FilterAndSortMenu';
 import { categoryActions } from './categoriesSlice';
-import SimpleModal from '../../util/SimpleModal/SimpleModal';
+import SimpleModal from '@common/SimpleModal/SimpleModal';
+
 
 const CategoryList = ({ displayConcise = false }) => {
   const dispatch = useDispatch();
