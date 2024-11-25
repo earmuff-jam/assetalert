@@ -5,7 +5,7 @@ import { profileActions } from '../../Profile/profileSlice';
 import ActivityAccordionSummary from './ActivityAccordionSummary';
 import ActivityAccordionDetails from './ActivityAccordionDetails';
 import { RECENT_ACTIVITY_TYPE_MAPPER } from '../constants';
-import { EmptyComponent } from '../../common/utils';
+import { EmptyComponent } from '../../../common/utils';
 
 const RecentActivityAccordion = () => {
   const dispatch = useDispatch();

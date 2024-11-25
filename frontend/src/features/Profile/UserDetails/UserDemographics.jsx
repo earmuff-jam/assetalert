@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
-import ImagePicker from '../../common/ImagePicker/ImagePicker';
+import ImagePicker from '../../../common/ImagePicker/ImagePicker';
 import { profileActions } from '../profileSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ export default function UserDemographics({ data = {}, handleEditMode }) {
   };
 
   useEffect(() => {
-      dispatch(profileActions.fetchAvatar());
+    dispatch(profileActions.fetchAvatar());
   }, [isAvatarLoading]);
 
   return (

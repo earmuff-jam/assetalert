@@ -1,20 +1,20 @@
 import { useParams } from 'react-router-dom';
-import DataTable from '../common/DataTable/DataTable';
+import DataTable from '../../common/DataTable/DataTable';
 import { Box, Button, Skeleton, Stack } from '@mui/material';
-import RowHeader from '../common/RowHeader';
+import RowHeader from '../../common/RowHeader';
 import { AddRounded } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { categoryActions } from './categoriesSlice';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../common/SimpleModal';
 import TableComponent from '../InventoryList/TableComponent';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
-import { generateTitleColor } from '../common/utils';
+import { generateTitleColor } from '../../common/utils';
 import { inventoryActions } from '../InventoryList/inventorySlice';
 import dayjs from 'dayjs';
 import { ITEMS_IN_CATEGORY_HEADER } from './constants';
-import BarChart from '../../util/Chart/BarChart';
-import DetailsCard from '../common/ItemCard/DetailsCard';
+import BarChart from '../../common/Chart/BarChart';
+import DetailsCard from '../../common/ItemCard/DetailsCard';
 
 export default function CategoryItem() {
   const { id } = useParams();
