@@ -1,9 +1,9 @@
 import { Button, IconButton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AddRounded, FileDownload } from '@mui/icons-material';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../utils/SimpleModal';
 import AddCategory from './AddCategory';
-import RowHeader from '../common/RowHeader';
+import RowHeader from '../../utils/RowHeader';
 import Category from './Category';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterAndSortMenu from '../common/FilterAndSortMenu/FilterAndSortMenu';

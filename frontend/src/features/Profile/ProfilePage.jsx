@@ -4,7 +4,7 @@ import UserDetails from './UserDetails/UserDetails';
 import UserStatus from './UserDetails/UserStatus';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../utils/SimpleModal';
 import AppearanceSettings from './UserDetails/AppearanceSettings';
 import ProfileForm from './ProfileForm/ProfileForm';
 import { useTheme } from '@emotion/react';

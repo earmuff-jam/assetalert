@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Stack } from '@mui/material';
 import { notesActions } from './notesSlice';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../utils/SimpleModal';
 import NoteHeader from './Header/NoteHeader';
 
 const NotesList = () => {

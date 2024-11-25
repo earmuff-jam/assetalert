@@ -22,7 +22,7 @@ import { categoryActions } from '../../Categories/categoriesSlice';
 import { produce } from 'immer';
 import { maintenancePlanActions } from '../../Maintenance/maintenanceSlice';
 import { useNavigate } from 'react-router-dom';
-import ImagePicker from '../ImagePicker/ImagePicker';
+import ImagePicker from '../../../common/ImagePicker/ImagePicker';
 
 dayjs.extend(relativeTime);
 

@@ -1,7 +1,7 @@
 import { Container, Stack } from '@mui/material';
-import FloatingBarChart from '../../util/Chart/FloatingBarChart';
+import FloatingBarChart from '../../common/Chart/FloatingBarChart';
 import { useState } from 'react';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../utils/SimpleModal';
 import Header from './HeroContent/Header';
 import { COLORS, SAMPLE_DATA } from './constants';
 import StyledAppBar from './HeroContent/StyledAppBar';
