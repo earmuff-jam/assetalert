@@ -1,8 +1,8 @@
 import { Divider, Stack } from '@mui/material';
-import RowHeader from '../../utils/RowHeader';
+import RowHeader from "@/utils/RowHeader";
 import { DownloadRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import { profileActions } from '../Profile/profileSlice';
+import { profileActions } from "@/Profile/profileSlice";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import RecentActivityAccordion from './ActivityAccordion/RecentActivityAccordion';

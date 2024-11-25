@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../authSlice';
+import { authActions } from "@/authSlice";
 import { Button, Stack } from '@mui/material';
-import { LOGIN_FORM_FIELDS } from '../../constants';
+import { LOGIN_FORM_FIELDS } from "@/constants";
 import LoginFormFields from './LoginFormFields';
 
 const Login = () => {

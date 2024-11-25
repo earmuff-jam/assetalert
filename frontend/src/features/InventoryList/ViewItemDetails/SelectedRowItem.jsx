@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
-import { BUILD_TABLE_CONSTANTS } from '../constants';
+import { BUILD_TABLE_CONSTANTS } from "@/constants";
 import { EmptyComponent } from '@utils/utils';
 
 const SelectedRowItem = ({ selectedRow, columns }) => {

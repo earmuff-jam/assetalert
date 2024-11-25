@@ -6,7 +6,7 @@ import { EmptyComponent } from '@utils/utils';
 import { Accordion, Skeleton } from '@mui/material';
 import { profileActions } from '@features/Profile/profileSlice';
 
-import { RECENT_ACTIVITY_TYPE_MAPPER } from '../constants';
+import { RECENT_ACTIVITY_TYPE_MAPPER } from "@/constants";
 import ActivityAccordionSummary from './ActivityAccordionSummary';
 import ActivityAccordionDetails from './ActivityAccordionDetails';
 

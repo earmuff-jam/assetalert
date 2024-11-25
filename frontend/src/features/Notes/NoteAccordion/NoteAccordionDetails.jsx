@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { DeleteRounded, EditRounded } from '@mui/icons-material';
 import { AccordionDetails, Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
-import { STATUS_OPTIONS } from '../constants';
+import { STATUS_OPTIONS } from "@/constants";
 
 export default function NoteAccordionDetails({
   details,

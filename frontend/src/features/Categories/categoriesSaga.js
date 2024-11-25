@@ -1,6 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { categoryActions } from './categoriesSlice';
-import { REACT_APP_LOCALHOST_URL } from '../../utils/Common';
+import { REACT_APP_LOCALHOST_URL } from "@/utils/Common";
 import instance from '@utils/Instances';
 
 const DEFAULT_LIMIT = 10;

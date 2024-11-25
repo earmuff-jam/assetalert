@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { DownloadRounded, SaveRounded } from '@mui/icons-material';
 import { Box, Button, Input, Stack, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { inventoryActions } from '../inventorySlice';
+import { inventoryActions } from "@/inventorySlice";
 
 const AddBulkUploadInventory = ({ handleClose }) => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Skeleton, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { ADD_ASSET_FORM } from './constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../inventorySlice';
+import { inventoryActions } from "@/inventorySlice";
 import { enqueueSnackbar } from 'notistack';
 import dayjs from 'dayjs';
 import AddInventoryInstructions from './AddInventoryInstructions';

@@ -1,4 +1,4 @@
-import ProfilePage from '../../features/Profile/ProfilePage';
+import ProfilePage from "@/features/Profile/ProfilePage";
 
 export default {
   title: 'Profile/Profile',

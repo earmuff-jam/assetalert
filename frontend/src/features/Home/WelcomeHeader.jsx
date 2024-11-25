@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Dialog, Divider, Chip, Typography, Stack } from '@mui/material';
 import { AddCircleRounded, ContactMailRounded, NotesRounded } from '@mui/icons-material';
-import Title from '../../Components/TitleComponent/Title';
-import AddCommunityEvent from '../../Components/CommunityEventComponent/AddCommunityEvent';
+import Title from "@/Components/TitleComponent/Title";
+import AddCommunityEvent from "@/Components/CommunityEventComponent/AddCommunityEvent";
 
 const WelcomeHeader = () => {
   const navigate = useNavigate();

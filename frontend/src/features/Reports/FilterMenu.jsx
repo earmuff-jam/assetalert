@@ -3,7 +3,7 @@ import { FILTER_OPTIONS } from './constants';
 import { WarningRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { reportActions } from './reportSlice';
-import { inventoryActions } from '../InventoryList/inventorySlice';
+import { inventoryActions } from "@/InventoryList/inventorySlice";
 
 export default function FilterMenu({ handleClose, sinceValue, setSinceValue, includeOverdue, setIncludeOverdue }) {
   const dispatch = useDispatch();

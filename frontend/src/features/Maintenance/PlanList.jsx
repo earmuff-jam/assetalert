@@ -3,9 +3,9 @@ import { AddRounded, FileDownload } from '@mui/icons-material';
 import { Box, Button, IconButton, Stack } from '@mui/material';
 import AddPlan from './AddPlan';
 import Plan from './Plan';
-import RowHeader from '../../utils/RowHeader';
+import RowHeader from "@/utils/RowHeader";
 import { useDispatch, useSelector } from 'react-redux';
-import FilterAndSortMenu from '../../common/FilterAndSortMenu/FilterAndSortMenu';
+import FilterAndSortMenu from "@/common/FilterAndSortMenu/FilterAndSortMenu";
 import { maintenancePlanActions } from './maintenanceSlice';
 import SimpleModal from '@common/SimpleModal/SimpleModal';
 

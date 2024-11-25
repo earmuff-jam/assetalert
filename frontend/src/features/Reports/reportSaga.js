@@ -1,5 +1,5 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
-import { REACT_APP_LOCALHOST_URL } from '../../utils/Common';
+import { REACT_APP_LOCALHOST_URL } from "@/utils/Common";
 import { reportActions } from './reportSlice';
 import instance from '@utils/Instances';
 

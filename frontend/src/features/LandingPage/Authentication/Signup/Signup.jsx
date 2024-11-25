@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../authSlice';
-import { SIGN_UP_FORM_FIELDS } from '../../constants';
+import { authActions } from "@/authSlice";
+import { SIGN_UP_FORM_FIELDS } from "@/constants";
 import { Button, Stack } from '@mui/material';
 import SingupCheckboxField from './SignupCheckboxField';
 import SignupTermsConditions from './SignupTermsConditions';

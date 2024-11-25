@@ -3,8 +3,8 @@ import { CategoryRounded, EngineeringRounded, WarningRounded } from '@mui/icons-
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { assetSummaryActions } from './SummarySlice';
-import { prefix } from '../../utils/utils';
-import RowHeader from '../../utils/RowHeader';
+import { prefix } from "@/utils/utils";
+import RowHeader from "@/utils/RowHeader";
 import dayjs from 'dayjs';
 import PieChart from '@common/Chart/PieChart';
 

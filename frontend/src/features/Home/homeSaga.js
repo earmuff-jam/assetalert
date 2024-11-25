@@ -4,7 +4,7 @@ import instance from '@utils/Instances';
 
 import { takeLatest, put, call } from 'redux-saga/effects';
 import { GEOJSON_API_SEARCH_URL_PARAMS, BLANK_MAP_DETAIL } from './constants';
-import { REACT_APP_GEOCODING_MAP_API_KEY } from '../../utils/Common';
+import { REACT_APP_GEOCODING_MAP_API_KEY } from "@/utils/Common";
 
 export function* fetchAllEvents() {
   try {

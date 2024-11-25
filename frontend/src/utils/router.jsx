@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '../features/Layout/Layout';
-import Reports from '../features/Reports/Reports';
+import Layout from "@/features/Layout/Layout";
+import Reports from "@/features/Reports/Reports";
 
 const HomePage = lazy(() => import('../features/Home/HomePage'));
 const NotesList = lazy(() => import('../features/Notes/NotesList'));

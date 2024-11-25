@@ -1,4 +1,4 @@
-import ProfileContent from '../../features/Profile/ProfileContent';
+import ProfileContent from "@/features/Profile/ProfileContent";
 
 export default {
   title: 'Profile/ProfileContent',
