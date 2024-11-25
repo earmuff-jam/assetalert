@@ -13,7 +13,7 @@ import {
 import dayjs from 'dayjs';
 import { EmptyComponent } from '../common/utils';
 import { useEffect, useState } from 'react';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../util/SimpleModal/SimpleModal';
 import ImagePicker from '../common/ImagePicker/ImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryActions } from './inventorySlice';

@@ -11,10 +11,10 @@ import { inventoryActions } from '../InventoryList/inventorySlice';
 import { maintenancePlanActions } from '../Maintenance/maintenanceSlice';
 import DataTable from '../common/DataTable/DataTable';
 import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
-import SimpleModal from '../common/SimpleModal';
 import FilterMenu from './FilterMenu';
 import { reportActions } from './reportSlice';
 import { FILTER_OPTIONS } from './constants';
+import SimpleModal from '../../util/SimpleModal/SimpleModal';
 
 export default function Reports() {
   const dispatch = useDispatch();

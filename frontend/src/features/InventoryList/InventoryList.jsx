@@ -9,7 +9,7 @@ import {
   ViewListRounded,
 } from '@mui/icons-material';
 import RowHeader from '../common/RowHeader';
-import SimpleModal from '../common/SimpleModal';
+import SimpleModal from '../../util/SimpleModal/SimpleModal';
 import { ConfirmationBoxModal, generateTitleColor } from '../common/utils';
 import TableComponent from './TableComponent';
 import GridComponent from './GridComponent';

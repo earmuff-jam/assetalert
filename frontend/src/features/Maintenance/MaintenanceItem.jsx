@@ -1,6 +1,5 @@
 import { Box, Button, Skeleton, Stack } from '@mui/material';
 import BarChart from '../../util/Chart/BarChart';
-import SimpleModal from '../common/SimpleModal';
 import TableComponent from '../InventoryList/TableComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddRounded } from '@mui/icons-material';
@@ -15,6 +14,7 @@ import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
 import { generateTitleColor } from '../common/utils';
 import dayjs from 'dayjs';
 import { inventoryActions } from '../InventoryList/inventorySlice';
+import SimpleModal from '../../util/SimpleModal/SimpleModal';
 
 export default function MaintenanceItem() {
   const { id } = useParams();
@@ -95,7 +95,7 @@ export default function MaintenanceItem() {
         title={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
         caption="View details of selected maintenance plan"
       />
-      <DetailsCard selectedItem={selectedMaintenancePlan} selectedImage={selectedMaintenancePlanImage}/>
+      <DetailsCard selectedItem={selectedMaintenancePlan} selectedImage={selectedMaintenancePlanImage} />
       <RowHeader
         title="Items"
         caption={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}
