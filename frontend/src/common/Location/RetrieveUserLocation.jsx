@@ -16,7 +16,7 @@ const RetrieveUserLocation = ({ setLocation }) => {
   return (
     <Tooltip title="Assign approximate location">
       <IconButton onClick={handleLocation} disableRipple={true} size="small">
-        <LocationOnRounded fontSize="small" />
+        <LocationOnRounded fontSize="small" color="primary" />
       </IconButton>
     </Tooltip>
   );

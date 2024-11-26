@@ -1,4 +1,3 @@
-// store.js
 import createSagaMiddleware from 'redux-saga';
 import { configureStore } from '@reduxjs/toolkit';
 import { all } from 'redux-saga/effects';
@@ -7,7 +6,9 @@ import auth from './features/LandingPage/authSlice';
 import profile from './features/Profile/profileSlice';
 import notes from './features/Notes/notesSlice';
 import categories from './features/Categories/categoriesSlice';
-import maintenance from './features/Maintenance/maintenanceSlice';
+import categoryItemDetails from './features/CategoryItemDetails/categoryItemDetailsSlice';
+import maintenance from './features/MaintenancePlanList/maintenanceSlice';
+import maintenancePlanItem from './features/MaintenancePlanDetails/maintenancePlanItemSlice';
 import inventory from './features/InventoryList/inventorySlice';
 import summary from './features/Home/SummarySlice';
 import reports from './features/Reports/reportSlice';
@@ -16,37 +17,42 @@ import authSaga from './features/LandingPage/authSaga';
 import profileSaga from './features/Profile/profileSaga';
 import notesSaga from './features/Notes/notesSaga';
 import categoriesSaga from './features/Categories/categoriesSaga';
-import maintenanceSaga from './features/Maintenance/maintenanceSaga';
+import categoryItemSaga from './features/CategoryItemDetails/categoryItemDetailsSaga';
+import maintenanceSaga from './features/MaintenancePlanList/maintenanceSaga';
+import maintenancePlanItemSaga from './features/MaintenancePlanDetails/maintenancePlanItemSaga';
 import inventorySaga from './features/InventoryList/inventorySaga';
 import summarySaga from './features/Home/SummarySaga';
 import reportsSaga from './features/Reports/reportSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
-// Combine all sagas into one root saga
 function* rootSaga() {
   yield all([
     ...authSaga.map((saga) => saga()),
-    ...profileSaga.map((saga) => saga()),
-    ...categoriesSaga.map((saga) => saga()),
     ...notesSaga.map((saga) => saga()),
-    ...inventorySaga.map((saga) => saga()),
-    ...maintenanceSaga.map((saga) => saga()),
-    ...summarySaga.map((saga) => saga()),
     ...reportsSaga.map((saga) => saga()),
+    ...summarySaga.map((saga) => saga()),
+    ...profileSaga.map((saga) => saga()),
+    ...inventorySaga.map((saga) => saga()),
+    ...categoriesSaga.map((saga) => saga()),
+    ...maintenanceSaga.map((saga) => saga()),
+    ...categoryItemSaga.map((saga) => saga()),
+    ...maintenancePlanItemSaga.map((saga) => saga()),
   ]);
 }
 
 export const store = configureStore({
   reducer: {
     auth,
-    profile,
-    categories,
-    inventory,
     notes,
-    maintenance,
-    summary,
     reports,
+    summary,
+    profile,
+    inventory,
+    categories,
+    maintenance,
+    maintenancePlanItem,
+    categoryItemDetails,
   },
   middleware: [sagaMiddleware],
   // devTools: process.env.NODE_ENV !== 'production',

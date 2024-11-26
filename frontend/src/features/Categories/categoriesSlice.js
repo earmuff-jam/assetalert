@@ -1,14 +1,12 @@
-import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   error: '',
   loading: false,
   categories: [],
-  selectedCategory: {},
-  selectedCategoryImage: '',
-  itemsInCategory: [],
 };
 
 const categorySlice = createSlice({
@@ -29,36 +27,6 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = '';
       state.categories = [];
-    },
-    getCategory: (state) => {
-      state.loading = true;
-      state.error = '';
-      state.selectedCategory = {};
-    },
-    getCategorySuccess: (state, action) => {
-      state.selectedCategory = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getCategoryFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.selectedCategory = {};
-    },
-    getItemsForCategory: (state) => {
-      state.loading = true;
-      state.error = '';
-      state.itemsInCategory = [];
-    },
-    getItemsForCategorySuccess: (state, action) => {
-      state.itemsInCategory = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getItemsForCategoryFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.itemsInCategory = [];
     },
     createCategory: (state) => {
       state.loading = true;
@@ -104,43 +72,6 @@ const categorySlice = createSlice({
       state.error = '';
     },
     removeCategoryFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    addItemsInCategory: (state) => {
-      state.loading = true;
-      state.error = '';
-    },
-    addItemsInCategorySuccess: (state, action) => {
-      state.itemsInCategory = [...action.payload];
-      state.loading = false;
-      state.error = '';
-    },
-    addItemsInCategoryFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.itemsInCategory = [];
-    },
-    uploadImage: (state) => {
-      state.error = '';
-    },
-    uploadImageSuccess: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    uploadImageFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    getSelectedImage: (state) => {
-      state.error = '';
-    },
-    getSelectedImageSuccess: (state, action) => {
-      state.selectedCategoryImage = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getSelectedImageFailure: (state) => {
       state.loading = false;
       state.error = '';
     },

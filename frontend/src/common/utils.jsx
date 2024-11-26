@@ -51,9 +51,11 @@ export const ConfirmationBoxModal = ({
   return openDialog ? (
     <SimpleModal title={title} handleClose={handleClose} maxSize={maxSize}>
       <Typography variant={textVariant}>{text}</Typography>
-      <Stack direction="row" justifyContent="flex-end">
+      <Stack direction="row" justifyContent="flex-end" spacing={1}>
         <Button onClick={handleClose}>Go back</Button>
-        <Button onClick={() => confirmDelete(deleteID)}>Confirm</Button>
+        <Button variant="outlined" autoFocus onClick={() => confirmDelete(deleteID)}>
+          Confirm
+        </Button>
       </Stack>
     </SimpleModal>
   ) : null;

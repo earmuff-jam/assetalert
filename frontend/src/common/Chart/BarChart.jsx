@@ -1,5 +1,22 @@
+import { Box } from '@mui/material';
 import 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
+
+const labelContextFn = (context, data) => {
+  let label = context.label || '';
+  if (label) {
+    label += ': ';
+  }
+  const parsedValue = parseFloat(context.formattedValue);
+  if (!isNaN(parsedValue)) {
+    const total = data.reduce((sum, item) => sum + parseFloat(item.count || 0), 0);
+    label += `${parsedValue} (${((parsedValue / total) * 100).toFixed(2)}%)`;
+  } else {
+    label += 'Invalid Data';
+  }
+
+  return label;
+};
 
 const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '25rem' }) => {
   let chartData = {
@@ -24,28 +41,16 @@ const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '2
       },
       tooltip: {
         callbacks: {
-          label: function (context) {
-            let label = context.label || '';
-            if (label) {
-              label += ': ';
-            }
-            if (context.parsed !== null) {
-              label += `${context.parsed} (${(
-                (context.parsed / data.reduce((sum, item) => sum + item.count, 0)) *
-                100
-              ).toFixed(2)}%)`;
-            }
-            return label;
-          },
+          label: (context) => labelContextFn(context, data),
         },
       },
     },
   };
 
   return (
-    <div style={{ width: '100%', height: height }}>
+    <Box width={'100%'} height={height}>
       <Bar data={chartData} options={options} />
-    </div>
+    </Box>
   );
 };
 

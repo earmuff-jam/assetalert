@@ -1,20 +1,18 @@
-import { Stack } from '@mui/material';
-import RowHeader from '../../common/RowHeader';
-import ReportCardWrapper from './ReportCardWrapper';
-import dayjs from 'dayjs';
-import { DownloadRounded, FilterAltRounded } from '@mui/icons-material';
-import { capitalizeFirstLetter } from '../../common/utils';
-import ItemDetails from './ItemDetails';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { inventoryActions } from '../InventoryList/inventorySlice';
-import { maintenancePlanActions } from '../Maintenance/maintenanceSlice';
-import DataTable from '../../common/DataTable/DataTable';
-import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '../Maintenance/constants';
-import SimpleModal from '../../common/SimpleModal';
-import FilterMenu from './FilterMenu';
-import { reportActions } from './reportSlice';
+
+import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Stack } from '@mui/material';
+
 import { FILTER_OPTIONS } from './constants';
+import { reportActions } from './reportSlice';
+import SimpleModal from '../../common/SimpleModal';
+import FilterMenu from './ReportsFilterMenu/FilterMenu';
+import ReportsHeader from './ReportHeader/ReportsHeader';
+import ReportContent from './ReportContent/ReportContent';
+import { inventoryActions } from '../InventoryList/inventorySlice';
+import { maintenancePlanActions } from '../MaintenancePlanList/maintenanceSlice';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -24,31 +22,18 @@ export default function Reports() {
     (state) => state.maintenance
   );
 
-  const [includeOverdue, setIncludeOverdue] = useState(true);
-  const [sinceValue, setSinceValue] = useState(FILTER_OPTIONS.find((item) => item.label === 'ytd').value);
   const [selectedAsset, setSelectedAsset] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
+  const [includeOverdue, setIncludeOverdue] = useState(true);
+
   const [selectedMaintenancePlan, setSelectedMaintenancePlan] = useState([]);
-
-  const handleFilter = () => setDisplayModal(true);
-  const closeFilter = () => setDisplayModal(false);
-
-  const renderCaption = () => {
-    if (sinceValue) {
-      return `Viewing reports since ${dayjs(sinceValue).fromNow()}`;
-    } else {
-      return `Viewing results for the ${dayjs().startOf('year').fromNow()}`;
-    }
-  };
+  const [sinceValue, setSinceValue] = useState(FILTER_OPTIONS.find((item) => item.label === 'ytd').value);
 
   const downloadReports = () => {
     dispatch(reportActions.downloadReports({ since: sinceValue, includeOverdue: includeOverdue, inventories }));
   };
 
-  const formatDate = (date) => {
-    if (!date) return null;
-    return dayjs(date).isValid() && `Since ${dayjs(sinceValue).format('MMM, YYYY')}`;
-  };
+  const closeFilter = () => setDisplayModal(false);
 
   useEffect(() => {
     if (!loading && inventories.length > 0) {
@@ -74,69 +59,23 @@ export default function Reports() {
   }, [reportLoading]);
 
   return (
-    <>
-      <RowHeader
-        title="Reports Overview"
-        caption={renderCaption()}
-        primaryStartIcon={<FilterAltRounded />}
-        primaryButtonTextLabel={'Filter results'}
-        handleClickPrimaryButton={handleFilter}
-        secondaryStartIcon={<DownloadRounded />}
-        secondaryButtonTextLabel={'Export'}
-        handleClickSecondaryButton={() => downloadReports()}
+    <Stack spacing={1}>
+      <ReportsHeader
+        sinceValue={sinceValue}
+        reports={reports}
+        loading={loading}
+        selectedAsset={selectedAsset}
+        setDisplayModal={setDisplayModal}
+        downloadReports={downloadReports}
+        selectedMaintenancePlan={selectedMaintenancePlan}
       />
-      <Stack spacing="1rem">
-        <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
-          <ReportCardWrapper
-            title="Valuation"
-            chipLabel={formatDate(sinceValue)}
-            value={`$${reports[0]?.total_valuation.toFixed(2) || 0.0}`}
-            footerText="Total cost of items in"
-            footerSuffix="dollar value."
-          />
-          <ReportCardWrapper
-            title="Categorized Assets"
-            chipLabel={formatDate(sinceValue)}
-            value={`$${reports[0]?.cost_category_items.toFixed(2) || 0.0}`}
-          />
-        </Stack>
-        <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
-          <ReportCardWrapper title="Recently Added Asset">
-            <ItemDetails
-              loading={loading}
-              avatarValue={
-                Object.keys(selectedMaintenancePlan) > 0 &&
-                capitalizeFirstLetter(selectedAsset?.updater_name?.charAt(0))
-              }
-              label={selectedAsset?.name || ''}
-              caption={selectedAsset?.description || ''}
-            />
-          </ReportCardWrapper>
-          <ReportCardWrapper title="Maintenance due">
-            <ItemDetails
-              loading={loading}
-              avatarValue={
-                Object.keys(selectedMaintenancePlan) > 0 &&
-                capitalizeFirstLetter(selectedMaintenancePlan?.updator?.charAt(0))
-              }
-              label={selectedMaintenancePlan?.name || ''}
-              caption={selectedMaintenancePlan?.description || ''}
-            />
-          </ReportCardWrapper>
-        </Stack>
-        <RowHeader title="Asset Details" caption={`Asset movement since ${dayjs(sinceValue).fromNow()}`} />
-        <DataTable
-          rows={inventories}
-          columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}
-          subtitle={'Associate items into maintenance plan to begin.'}
-        />
-      </Stack>
+      <ReportContent sinceValue={sinceValue} inventories={inventories} />
       {displayModal && (
         <SimpleModal
           title="Filter results"
           subtitle="Select time range to filter the selected results for."
           handleClose={closeFilter}
-          maxSize="sm"
+          maxSize="xs"
         >
           <FilterMenu
             handleClose={closeFilter}
@@ -147,6 +86,6 @@ export default function Reports() {
           />
         </SimpleModal>
       )}
-    </>
+    </Stack>
   );
 }

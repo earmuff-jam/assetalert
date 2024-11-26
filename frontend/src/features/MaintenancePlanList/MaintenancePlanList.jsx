@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import { AddRounded, FileDownload } from '@mui/icons-material';
-import { Box, Button, IconButton, Stack } from '@mui/material';
-import AddPlan from './AddPlan';
-import Plan from './Plan';
-import RowHeader from '../../common/RowHeader';
+
+import { useSelector } from 'react-redux';
+
+import { Box } from '@mui/material';
+
+import Plan from './PlanContent/Plan';
+import AddPlan from './AddPlan/AddPlan';
+import PlanHeader from './PlanHeader/PlanHeader';
 import SimpleModal from '../../common/SimpleModal';
-import { useDispatch, useSelector } from 'react-redux';
-import FilterAndSortMenu from '../../common/FilterAndSortMenu/FilterAndSortMenu';
-import { maintenancePlanActions } from './maintenanceSlice';
 
 const PlanList = () => {
-  const dispatch = useDispatch();
   const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
 
   const [sortedData, setSortedData] = useState([]);
@@ -24,10 +23,6 @@ const PlanList = () => {
   const handleCloseAddNewPlan = () => {
     setDisplayModal(false);
     setSelectedMaintenancePlanID('');
-  };
-
-  const downloadMaintenancePlans = () => {
-    dispatch(maintenancePlanActions.download());
   };
 
   const filterAndBuildMaintenancePlans = (plans, selectedFilter) => {
@@ -51,32 +46,19 @@ const PlanList = () => {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <RowHeader
-          title="Maintenance Plans"
-          caption={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
-        />
-        <Stack direction="row" spacing="1rem">
-          <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
-            Add Plan
-          </Button>
-          <IconButton size="small" onClick={downloadMaintenancePlans}>
-            <FileDownload fontSize="small" />
-          </IconButton>
-        </Stack>
-      </Stack>
-      <FilterAndSortMenu
-        sortingOrder={sortingOrder}
-        setSortingOrder={setSortingOrder}
+      <PlanHeader
+        toggleModal={toggleModal}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
+        sortingOrder={sortingOrder}
+        setSortingOrder={setSortingOrder}
       />
       <Plan
-        maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
         loading={loading}
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
         setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
+        maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
       />
       {displayModal && (
         <SimpleModal title="Add new maintenance plan" handleClose={handleCloseAddNewPlan} maxSize="md">

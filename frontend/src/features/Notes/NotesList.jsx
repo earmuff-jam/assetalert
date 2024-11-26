@@ -1,4 +1,4 @@
-import AddNote from './AddNote';
+import AddNote from './AddNote/AddNote';
 import Note from './Note';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,9 +32,9 @@ const NotesList = () => {
       {editMode && (
         <SimpleModal
           title="Add New Note"
-          subtitle={'Assigned locations are approximate values.'}
+          subtitle={'Notes with assigned locations reflect approximate values.'}
           handleClose={resetData}
-          maxSize="sm"
+          maxSize="xs"
         >
           <AddNote
             setEditMode={setEditMode}

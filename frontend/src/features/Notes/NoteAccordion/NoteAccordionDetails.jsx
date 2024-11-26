@@ -58,9 +58,6 @@ export default function NoteAccordionDetails({
                 </Box>
                 <Tooltip title={STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.display}>
                   <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
-                    <Typography variant="caption" alignSelf="flex-end">
-                      Status:
-                    </Typography>
                     {STATUS_OPTIONS.find((v) => v.label.toLowerCase() === note.status_name)?.icon}
                   </Stack>
                 </Tooltip>

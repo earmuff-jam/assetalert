@@ -17,9 +17,6 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
     return (
       <Tooltip title={displayTitle?.display}>
         <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
-          <Typography variant="caption" alignSelf="flex-end">
-            Status:
-          </Typography>
           {displayTitle?.icon}
         </Stack>
       </Tooltip>
