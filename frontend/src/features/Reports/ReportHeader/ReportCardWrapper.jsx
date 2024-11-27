@@ -37,7 +37,7 @@ export default function ReportCardWrapper({ title, chipLabel, value, iconType, f
           <Typography variant="caption" color="text.secondary">
             {footerText}
           </Typography>
-          <Typography variant="caption" component={'span'} color="primary">
+          <Typography variant="caption" component={'span'} color="success.main">
             {footerSuffix}
           </Typography>
         </Stack>

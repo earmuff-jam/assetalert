@@ -1,16 +1,15 @@
-import { Button, IconButton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { AddRounded, FileDownload } from '@mui/icons-material';
+
+import { useSelector } from 'react-redux';
+
+import { Stack } from '@mui/material';
+
+import Category from './CategoryDetails/Category';
 import SimpleModal from '../../common/SimpleModal';
-import AddCategory from './AddCategory';
-import RowHeader from '../../common/RowHeader';
-import Category from './Category';
-import { useDispatch, useSelector } from 'react-redux';
-import FilterAndSortMenu from '../../common/FilterAndSortMenu/FilterAndSortMenu';
-import { categoryActions } from './categoriesSlice';
+import AddCategory from './AddCategory/AddCategory';
+import CategoryHeader from './CategoryHeader/CategoryHeader';
 
 const CategoryList = ({ displayConcise = false }) => {
-  const dispatch = useDispatch();
   const { categories = [], loading } = useSelector((state) => state.categories);
 
   const [sortedData, setSortedData] = useState([]);
@@ -26,7 +25,6 @@ const CategoryList = ({ displayConcise = false }) => {
   };
 
   const toggleModal = () => setDisplayModal(!displayModal);
-  const downloadCategories = () => dispatch(categoryActions.download());
 
   const filterAndBuildCategories = (displayConcise, categories, selectedFilter) => {
     if (displayConcise) {
@@ -35,16 +33,6 @@ const CategoryList = ({ displayConcise = false }) => {
       return categories.filter((element) => element.status_name === selectedFilter);
     } else {
       return sortedData;
-    }
-  };
-
-  const buildCaption = (displayConcise, selectedFilter) => {
-    if (displayConcise) {
-      return categories?.length ? `Viewing recently edited categories` : null;
-    } else if (selectedFilter) {
-      return `Applying ${selectedFilter} filter`;
-    } else {
-      return 'Organize items into categories.';
     }
   };
 
@@ -61,31 +49,16 @@ const CategoryList = ({ displayConcise = false }) => {
 
   return (
     <Stack sx={{ py: 2 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <RowHeader title="Categories" caption={buildCaption(displayConcise, selectedFilter)} />
-        <Stack direction="row" spacing="1rem">
-          <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
-            Add Category
-          </Button>
-          {!displayConcise && (
-            <IconButton
-              size="small"
-              disabled={Boolean(categories) && categories.length <= 0}
-              onClick={downloadCategories}
-            >
-              <FileDownload fontSize="small" />
-            </IconButton>
-          )}
-        </Stack>
-      </Stack>
-      {!displayConcise && (
-        <FilterAndSortMenu
-          sortingOrder={sortingOrder}
-          setSortingOrder={setSortingOrder}
-          selectedFilter={selectedFilter}
-          setSelectedFilter={setSelectedFilter}
-        />
-      )}
+      <CategoryHeader
+        categories={categories}
+        toggleModal={toggleModal}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+        sortingOrder={sortingOrder}
+        setSortingOrder={setSortingOrder}
+        displayConcise={displayConcise}
+        disableDownloadIcon={Boolean(categories) && categories.length <= 0}
+      />
       <Category
         categories={filterAndBuildCategories(displayConcise, categories, selectedFilter)} // sorted data is after sort method
         loading={loading}
@@ -93,7 +66,7 @@ const CategoryList = ({ displayConcise = false }) => {
         setDisplayModal={setDisplayModal}
       />
       {displayModal && (
-        <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="md">
+        <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="xs">
           <AddCategory
             categories={categories}
             loading={loading}

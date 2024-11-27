@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Skeleton } from '@mui/material';
+
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
-import { ConfirmationBoxModal, EmptyComponent } from '../../common/utils';
-import { maintenancePlanActions } from './maintenanceSlice';
+
+import { Skeleton } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import ItemCard from '../../common/ItemCard/ItemCard';
+
+import { categoryActions } from '../categoriesSlice';
+import ItemCard from '../../../common/ItemCard/ItemCard';
+import { ConfirmationBoxModal, EmptyComponent } from '../../../common/utils';
 
 dayjs.extend(relativeTime);
 
-const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSelectedMaintenancePlanID }) => {
+const Category = ({ categories = [], loading, setSelectedCategoryID, setDisplayModal }) => {
   const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -22,9 +25,10 @@ const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSele
 
   const handleEdit = (id) => {
     setDisplayModal(true);
-    setSelectedMaintenancePlanID(id);
+    setSelectedCategoryID(id);
   };
-  const resetConfirmationBox = () => {
+
+  const reset = () => {
     setOpenDialog(false);
     setIdToDelete(-1);
   };
@@ -33,29 +37,30 @@ const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSele
     if (id === -1) {
       return;
     }
-    dispatch(maintenancePlanActions.removePlan(id));
-    resetConfirmationBox();
+    dispatch(categoryActions.removeCategory({ id }));
+    reset();
   };
 
   useEffect(() => {
-    dispatch(maintenancePlanActions.getPlans(100));
+    dispatch(categoryActions.getCategories(100));
   }, []);
 
-  if (loading && !displayModal) {
+  if (loading) {
     return <Skeleton height="10rem" />;
   }
-  if (maintenancePlan?.length <= 0 || maintenancePlan == null) return <EmptyComponent />;
+  if (categories?.length <= 0 || categories == null) {
+    return <EmptyComponent />;
+  }
 
   return (
     <>
-      <ItemCard data={maintenancePlan} handleEdit={handleEdit} handleDelete={handleDelete} prefixURI={'plan'} />
+      <ItemCard data={categories} handleDelete={handleDelete} handleEdit={handleEdit} prefixURI={'category'} />
       <ConfirmationBoxModal
         openDialog={openDialog}
         title="Confirm deletion"
         text="Delete this item?"
         textVariant="body2"
-        handleClose={resetConfirmationBox}
-        showSubmit={false}
+        handleClose={reset}
         maxSize="xs"
         deleteID={idToDelete}
         confirmDelete={confirmDelete}
@@ -64,4 +69,4 @@ const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSele
   );
 };
 
-export default Plan;
+export default Category;

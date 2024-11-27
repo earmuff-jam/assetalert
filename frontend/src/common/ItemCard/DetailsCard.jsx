@@ -1,18 +1,23 @@
-import { Badge, Button, Card, CardActions, CardContent, CardMedia, IconButton, Stack, Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { AddPhotoAlternateRounded, ShareRounded } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { profileActions } from '../../features/Profile/profileSlice';
 import { useEffect, useState } from 'react';
+
+import dayjs from 'dayjs';
+import { produce } from 'immer';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import relativeTime from 'dayjs/plugin/relativeTime';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { AddPhotoAlternateRounded, ShareRounded } from '@mui/icons-material';
+import { Badge, Button, Card, CardActions, CardContent, CardMedia, IconButton, Stack, Typography } from '@mui/material';
+
 import SimpleModal from '../SimpleModal';
 import SharableGroups from '../SharableGroups';
-import { categoryActions } from '../../features/Categories/categoriesSlice';
-import { produce } from 'immer';
-import { maintenancePlanActions } from '../../features/Maintenance/maintenanceSlice';
-import { useNavigate } from 'react-router-dom';
 import ImagePicker from '../ImagePicker/ImagePicker';
+import { profileActions } from '../../features/Profile/profileSlice';
+import { categoryActions } from '../../features/Categories/categoriesSlice';
+import { maintenancePlanActions } from '../../features/MaintenancePlanList/maintenanceSlice';
+import { categoryItemDetailsActions } from '../../features/CategoryItemDetails/categoryItemDetailsSlice';
+import { maintenancePlanItemActions } from '../../features/MaintenancePlanDetails/maintenancePlanItemSlice';
 
 dayjs.extend(relativeTime);
 
@@ -36,9 +41,9 @@ export default function DetailsCard({ selectedItem, selectedImage, isViewingCate
 
   const handleUpload = (id, selectedImage) => {
     if (isViewingCategory) {
-      dispatch(categoryActions.uploadImage({ id: id, selectedImage: selectedImage }));
+      dispatch(categoryItemDetailsActions.uploadImage({ id: id, selectedImage: selectedImage }));
     } else {
-      dispatch(maintenancePlanActions.uploadImage({ id: id, selectedImage: selectedImage }));
+      dispatch(maintenancePlanItemActions.uploadImage({ id: id, selectedImage: selectedImage }));
     }
     setEditImgMode(false);
   };

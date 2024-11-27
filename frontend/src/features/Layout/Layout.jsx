@@ -1,4 +1,10 @@
+import { Suspense, useEffect, useState } from 'react';
+
 import { Outlet } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useTheme } from '@emotion/react';
+import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -14,14 +20,11 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import { Suspense, useEffect, useState } from 'react';
+
 import MenuActionBar from './MenuActionBar';
-import { darkTheme, lightTheme } from '../../utils/Theme';
-import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../LandingPage/authSlice';
 import { profileActions } from '../Profile/profileSlice';
-import { useTheme } from '@emotion/react';
+import { darkTheme, lightTheme } from '../../utils/Theme';
 
 const Layout = () => {
   const theme = useTheme();

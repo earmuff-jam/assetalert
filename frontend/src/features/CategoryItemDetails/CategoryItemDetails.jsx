@@ -1,36 +1,38 @@
+import { useEffect, useState } from 'react';
+
+import dayjs from 'dayjs';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AddRounded } from '@mui/icons-material';
 import { Box, Button, Skeleton, Stack } from '@mui/material';
+
+import RowHeader from '../../common/RowHeader';
 import BarChart from '../../common/Chart/BarChart';
 import SimpleModal from '../../common/SimpleModal';
-import TableComponent from '../InventoryList/TableComponent';
-import { useDispatch, useSelector } from 'react-redux';
-import { AddRounded } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
-import DetailsCard from '../../common/ItemCard/DetailsCard';
-import RowHeader from '../../common/RowHeader';
-import DataTable from '../../common/DataTable/DataTable';
-import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from './constants';
-import { maintenancePlanActions } from './maintenanceSlice';
-import { useParams } from 'react-router-dom';
-import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
 import { generateTitleColor } from '../../common/utils';
-import dayjs from 'dayjs';
+import DataTable from '../../common/DataTable/DataTable';
+import DetailsCard from '../../common/ItemCard/DetailsCard';
+import TableComponent from '../InventoryList/TableComponent';
 import { inventoryActions } from '../InventoryList/inventorySlice';
+import { ITEMS_IN_CATEGORY_HEADER } from '../Categories/constants';
+import { categoryItemDetailsActions } from './categoryItemDetailsSlice';
+import { VIEW_INVENTORY_LIST_HEADERS } from '../InventoryList/constants';
 
-export default function MaintenanceItem() {
+export default function CategoryItemDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
   const {
-    maintenancePlan,
-    selectedMaintenancePlan,
-    itemsInMaintenancePlan = [],
-    selectedMaintenancePlanImage,
+    selectedCategory,
+    selectedCategoryImage,
+    itemsInCategory = [],
     loading = false,
-  } = useSelector((state) => state.maintenance);
+  } = useSelector((state) => state.categoryItemDetails);
 
-  const [displayModal, setDisplayModal] = useState(false);
   const [rowSelected, setRowSelected] = useState([]);
+  const [displayModal, setDisplayModal] = useState(false);
 
   const handleOpenModal = () => {
     setDisplayModal(true);
@@ -72,16 +74,16 @@ export default function MaintenanceItem() {
   };
 
   const addItems = () => {
-    const collaborators = maintenancePlan.find((v) => v.id === id).sharable_groups;
-    dispatch(maintenancePlanActions.addItemsInPlan({ rowSelected, id, collaborators }));
+    const collaborators = selectedCategory.sharable_groups;
+    dispatch(categoryItemDetailsActions.addItemsInCategory({ id, rowSelected, collaborators }));
     resetSelection();
   };
 
   useEffect(() => {
     if (id) {
-      dispatch(maintenancePlanActions.getItemsInMaintenancePlan(id));
-      dispatch(maintenancePlanActions.getSelectedMaintenancePlan(id));
-      dispatch(maintenancePlanActions.getSelectedImage({ id }));
+      dispatch(categoryItemDetailsActions.getItemsForCategory(id));
+      dispatch(categoryItemDetailsActions.getCategory(id));
+      dispatch(categoryItemDetailsActions.getSelectedImage({ id }));
     }
   }, [id]);
 
@@ -92,29 +94,29 @@ export default function MaintenanceItem() {
   return (
     <Stack direction="column" spacing="1rem">
       <RowHeader
-        title={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
-        caption="View details of selected maintenance plan"
+        title={selectedCategory?.name ? `${selectedCategory.name} Overview` : 'Category Overview'}
+        caption="View details of selected category"
       />
-      <DetailsCard selectedItem={selectedMaintenancePlan} selectedImage={selectedMaintenancePlanImage} />
+      <DetailsCard selectedItem={selectedCategory} selectedImage={selectedCategoryImage} isViewingCategory />
       <RowHeader
         title="Items"
-        caption={`Total ${itemsInMaintenancePlan?.length || 0} item(s)`}
+        caption={`Total ${itemsInCategory?.length || 0} item(s)`}
         primaryButtonTextLabel="Add Items"
         primaryStartIcon={<AddRounded />}
         handleClickPrimaryButton={handleOpenModal}
       />
       <DataTable
-        rows={itemsInMaintenancePlan}
-        columns={ITEMS_IN_MAINTENANCE_PLAN_HEADER}
-        isEmpty={itemsInMaintenancePlan === null}
-        subtitle={'Associate items into maintenance plan to begin.'}
+        rows={itemsInCategory}
+        columns={ITEMS_IN_CATEGORY_HEADER}
+        isEmpty={itemsInCategory === null}
+        subtitle={'Associate items into category to begin.'}
       />
       <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
           legendLabel="Name Vs Cost"
           data={
-            itemsInMaintenancePlan
+            itemsInCategory
               ?.filter((_, index) => index < 10)
               ?.map((v, index) => ({
                 label: v.name,
@@ -127,7 +129,7 @@ export default function MaintenanceItem() {
         />
       </Box>
       {displayModal && (
-        <SimpleModal title={`Add items to ${selectedMaintenancePlan?.name}`} handleClose={resetSelection} maxSize="md">
+        <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
           <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
             Add Selected items
           </Button>
@@ -136,9 +138,7 @@ export default function MaintenanceItem() {
             hideCheckBox={false}
             hideIconButton={true}
             hideMoreDetailsButton={true}
-            data={inventories.filter(
-              (inventory) => !itemsInMaintenancePlan?.some((item) => item.item_id === inventory.id)
-            )}
+            data={inventories.filter((inventory) => !itemsInCategory?.some((item) => item.item_id === inventory.id))}
             columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
             rowFormatter={rowFormatter}
             generateTitleColor={generateTitleColor}

@@ -7,9 +7,6 @@ const initialState = {
   loading: false,
   maintenancePlan: [],
   statusOptions: [],
-  selectedMaintenancePlan: {},
-  selectedMaintenancePlanImage: '',
-  itemsInMaintenancePlan: [],
 };
 
 const maintenancePlanSlice = createSlice({
@@ -31,34 +28,7 @@ const maintenancePlanSlice = createSlice({
       state.error = '';
       state.maintenancePlan = [];
     },
-    getSelectedMaintenancePlan: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    getSelectedMaintenancePlanSuccess: (state, action) => {
-      state.loading = false;
-      state.error = '';
-      state.selectedMaintenancePlan = action.payload;
-    },
-    getSelectedMaintenancePlanFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.selectedMaintenancePlan = {};
-    },
-    getItemsInMaintenancePlan: (state) => {
-      state.loading = true;
-      state.error = '';
-    },
-    getItemsInMaintenancePlanSuccess: (state, action) => {
-      state.itemsInMaintenancePlan = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getItemsInMaintenancePlanFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.itemsInMaintenancePlan = [];
-    },
+  
     getStatusOptions: (state) => {
       state.loading = true;
       state.error = '';
@@ -118,42 +88,6 @@ const maintenancePlanSlice = createSlice({
       state.error = '';
     },
     removePlanFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    addItemsInPlan: (state) => {
-      state.loading = true;
-      state.error = '';
-    },
-    addItemsInPlanSuccess: (state, action) => {
-      state.itemsInMaintenancePlan = [...action.payload];
-      state.loading = false;
-      state.error = '';
-    },
-    addItemsInPlanFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    uploadImage: (state) => {
-      state.error = '';
-    },
-    uploadImageSuccess: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    uploadImageFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
-    getSelectedImage: (state) => {
-      state.error = '';
-    },
-    getSelectedImageSuccess: (state, action) => {
-      state.selectedMaintenancePlanImage = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getSelectedImageFailure: (state) => {
       state.loading = false;
       state.error = '';
     },

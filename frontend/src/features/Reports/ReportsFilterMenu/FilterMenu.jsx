@@ -1,9 +1,10 @@
-import { Button, Checkbox, FormControlLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
-import { FILTER_OPTIONS } from './constants';
-import { WarningRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import { reportActions } from './reportSlice';
-import { inventoryActions } from '../InventoryList/inventorySlice';
+
+import { Button, Checkbox, FormControlLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
+
+import { FILTER_OPTIONS } from '../constants';
+import { reportActions } from '../reportSlice';
+import { inventoryActions } from '../../InventoryList/inventorySlice';
 
 export default function FilterMenu({ handleClose, sinceValue, setSinceValue, includeOverdue, setIncludeOverdue }) {
   const dispatch = useDispatch();
@@ -40,12 +41,7 @@ export default function FilterMenu({ handleClose, sinceValue, setSinceValue, inc
         control={
           <Checkbox checked={includeOverdue} onChange={() => setIncludeOverdue(!includeOverdue)} color="primary" />
         }
-        label={
-          <Stack direction="row" alignItems="center">
-            <WarningRounded color="secondary" />
-            <Typography variant="caption">Include overdue items</Typography>
-          </Stack>
-        }
+        label={<Typography variant="caption">Include overdue items</Typography>}
       />
       <Button disabled={sinceValue.length <= 0} onClick={submit}>
         Submit

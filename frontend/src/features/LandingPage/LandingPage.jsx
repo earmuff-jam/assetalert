@@ -1,12 +1,14 @@
-import { Container, Stack } from '@mui/material';
-import FloatingBarChart from '../../common/Chart/FloatingBarChart';
 import { useState } from 'react';
-import SimpleModal from '../../common/SimpleModal';
+
+import { Container, Stack } from '@mui/material';
+
 import Header from './HeroContent/Header';
-import { COLORS, SAMPLE_DATA } from './constants';
-import StyledAppBar from './HeroContent/StyledAppBar';
-import Signup from './Authentication/Signup/Signup';
 import Login from './Authentication/Login/Login';
+import { COLORS, SAMPLE_DATA } from './constants';
+import SimpleModal from '../../common/SimpleModal';
+import Signup from './Authentication/Signup/Signup';
+import StyledAppBar from './HeroContent/StyledAppBar';
+import FloatingBarChart from './HeroContent/FloatingBarChart';
 
 export default function LandingPage() {
   const [currentForm, setCurrentForm] = useState('');

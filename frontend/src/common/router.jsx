@@ -5,13 +5,13 @@ import Reports from '../features/Reports/Reports';
 
 const HomePage = lazy(() => import('../features/Home/HomePage'));
 const NotesList = lazy(() => import('../features/Notes/NotesList'));
-const PlanList = lazy(() => import('../features/Maintenance/PlanList'));
+const MaintenancePlanList = lazy(() => import('../features/MaintenancePlanList/MaintenancePlanList'));
 const ProfilePage = lazy(() => import('../features/Profile/ProfilePage'));
 const InventoryList = lazy(() => import('../features/InventoryList/InventoryList'));
-const EditInventory = lazy(() => import('../features/InventoryList/EditInventory'));
+const EditInventory = lazy(() => import('../features/InventoryList/EditInventory/EditInventory'));
 const CategoryList = lazy(() => import('../features/Categories/CategoryList'));
-const CategoryItem = lazy(() => import('../features/Categories/CategoryItem'));
-const MaintenanceItem = lazy(() => import('../features/Maintenance/MaintenanceItem'));
+const CategoryItemDetails = lazy(() => import('../features/CategoryItemDetails/CategoryItemDetails'));
+const MaintenancePlanItemDetails = lazy(() => import('../features/MaintenancePlanDetails/MaintenancePlanItemDetails'));
 const RecentActivityList = lazy(() => import('../features/Activities/RecentActivityList'));
 
 export const router = createBrowserRouter([
@@ -37,15 +37,15 @@ export const router = createBrowserRouter([
       },
       {
         path: '/category/:id',
-        element: <CategoryItem />,
+        element: <CategoryItemDetails />,
       },
       {
         path: '/plans/list',
-        element: <PlanList />,
+        element: <MaintenancePlanList />,
       },
       {
         path: '/plan/:id',
-        element: <MaintenanceItem />,
+        element: <MaintenancePlanItemDetails />,
       },
       {
         path: '/reports',

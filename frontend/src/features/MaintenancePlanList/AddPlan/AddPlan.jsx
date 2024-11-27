@@ -1,26 +1,18 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
 import { useEffect, useState } from 'react';
-import { BLANK_MAINTENANCE_PLAN, ITEM_TYPE_MAPPER } from './constants';
-import ColorPicker from '../../common/ColorPicker';
-import { enqueueSnackbar } from 'notistack';
+
 import dayjs from 'dayjs';
-import { maintenancePlanActions } from './maintenanceSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import RetrieveUserLocation from '../../common/Location/RetrieveUserLocation';
-import LocationPicker from '../../common/Location/LocationPicker';
 import { produce } from 'immer';
+import { enqueueSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Autocomplete, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+
+import ColorPicker from '../../../common/ColorPicker';
+import { maintenancePlanActions } from '../maintenanceSlice';
+import LocationPicker from '../../../common/Location/LocationPicker';
+import { BLANK_MAINTENANCE_PLAN, ITEM_TYPE_MAPPER } from '../constants';
+import RetrieveUserLocation from '../../../common/Location/RetrieveUserLocation';
+
 
 const AddPlan = ({
   handleCloseAddNewPlan,

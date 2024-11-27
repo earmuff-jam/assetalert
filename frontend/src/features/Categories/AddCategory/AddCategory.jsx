@@ -11,14 +11,14 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
-import { ADD_CATEGORY_FORM_FIELDS } from './constants';
-import ColorPicker from '../../common/ColorPicker';
+import { ADD_CATEGORY_FORM_FIELDS } from '../constants';
+import ColorPicker from '../../../common/ColorPicker';
 import { useDispatch } from 'react-redux';
-import { categoryActions } from './categoriesSlice';
+import { categoryActions } from '../categoriesSlice';
 import { AddRounded, CheckCircleRounded, InfoOutlined } from '@mui/icons-material';
-import RetrieveUserLocation from '../../common/Location/RetrieveUserLocation';
-import LocationPicker from '../../common/Location/LocationPicker';
-import { STATUS_OPTIONS } from '../Notes/constants';
+import RetrieveUserLocation from '../../../common/Location/RetrieveUserLocation';
+import LocationPicker from '../../../common/Location/LocationPicker';
+import { STATUS_OPTIONS } from '../../Notes/constants';
 
 const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCategoryID, setSelectedCategoryID }) => {
   const dispatch = useDispatch();
