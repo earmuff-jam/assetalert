@@ -11,12 +11,12 @@ import {
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { EmptyComponent } from '../../common/utils';
+import { EmptyComponent } from '../utils';
 import { useEffect, useState } from 'react';
-import SimpleModal from '../../common/SimpleModal';
-import ImagePicker from '../../common/ImagePicker/ImagePicker';
+import SimpleModal from '../SimpleModal';
+import ImagePicker from '../ImagePicker/ImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from './inventorySlice';
+import { inventoryActions } from '../../features/InventoryList/inventorySlice';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();

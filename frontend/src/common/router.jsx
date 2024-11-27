@@ -1,18 +1,25 @@
 import { lazy } from 'react';
+
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '../features/Layout/Layout';
-import Reports from '../features/Reports/Reports';
+
+import Layout from '../features/Layout/Layout'; // can't lazy load this
 
 const HomePage = lazy(() => import('../features/Home/HomePage'));
+const Reports = lazy(() => import('../features/Reports/Reports'));
 const NotesList = lazy(() => import('../features/Notes/NotesList'));
-const MaintenancePlanList = lazy(() => import('../features/MaintenancePlanList/MaintenancePlanList'));
+
 const ProfilePage = lazy(() => import('../features/Profile/ProfilePage'));
-const InventoryList = lazy(() => import('../features/InventoryList/InventoryList'));
-const EditInventory = lazy(() => import('../features/InventoryList/EditInventory/EditInventory'));
 const CategoryList = lazy(() => import('../features/Categories/CategoryList'));
-const CategoryItemDetails = lazy(() => import('../features/CategoryItemDetails/CategoryItemDetails'));
-const MaintenancePlanItemDetails = lazy(() => import('../features/MaintenancePlanDetails/MaintenancePlanItemDetails'));
+const InventoryList = lazy(() => import('../features/InventoryList/InventoryList'));
 const RecentActivityList = lazy(() => import('../features/Activities/RecentActivityList'));
+
+const EditInventory = lazy(() => import('../features/InventoryList/EditInventory/EditInventory'));
+const MaintenancePlanList = lazy(() => import('../features/MaintenancePlanList/MaintenancePlanList'));
+const CategoryItemDetails = lazy(() => import('../features/CategoryItemDetails/CategoryItemDetails'));
+
+const MaintenancePlanItemDetails = lazy(() =>
+  import('../features/MaintenancePlanItemDetails/MaintenancePlanItemDetails')
+);
 
 export const router = createBrowserRouter([
   {
