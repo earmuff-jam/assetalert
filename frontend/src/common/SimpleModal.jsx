@@ -1,8 +1,18 @@
-import { Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from '@mui/material';
-import { CloseRounded, DownloadRounded } from '@mui/icons-material';
+import { CloseRounded } from '@mui/icons-material';
+import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from '@mui/material';
 
 const SimpleModal = (props) => {
-  const { title, subtitle, handleClose, maxSize, showExport = false, handleExport = () => {}, children } = props;
+  const {
+    title,
+    subtitle,
+    handleClose,
+    maxSize,
+    showSecondaryButton = false,
+    disableSecondaryButton,
+    secondaryButtonAction,
+    secondaryButtonIcon,
+    children,
+  } = props;
 
   return (
     <Dialog open={true} onClose={handleClose} maxWidth={maxSize ?? 'xl'} fullWidth>
@@ -13,10 +23,10 @@ const SimpleModal = (props) => {
             {subtitle ? <Typography variant="caption">{subtitle}</Typography> : null}
           </Stack>
           <Stack direction="row" alignItems="center">
-            {showExport && (
-              <Button endIcon={<DownloadRounded />} onClick={handleExport}>
-                Export
-              </Button>
+            {showSecondaryButton && (
+              <IconButton color="primary" onClick={secondaryButtonAction} disabled={disableSecondaryButton}>
+                {secondaryButtonIcon}
+              </IconButton>
             )}
             <IconButton aria-label="close" onClick={handleClose} color="error">
               <CloseRounded />

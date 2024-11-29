@@ -393,7 +393,6 @@ func RemoveCategory(user string, categoryID string) error {
 
 // AddAssetToCategory ...
 func AddAssetToCategory(user string, draftCategory *model.CategoryItemRequest) ([]model.CategoryItemResponse, error) {
-	// draftCategory.UserID, draftCategory.ID, draftCategory.AssetIDs
 	db, err := SetupDB(user)
 	if err != nil {
 		return nil, err
@@ -479,6 +478,38 @@ func AddAssetToCategory(user string, draftCategory *model.CategoryItemRequest) (
 	}
 
 	return data, nil
+}
+
+// RemoveAssetAssociationFromCategory ...
+func RemoveAssetAssociationFromCategory(user string, draftCategory *model.CategoryItemRequest) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.category_item
+               WHERE category_id = $1 AND id = ANY($2);`
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("Error starting transaction: %+v", err)
+		return err
+	}
+
+	_, err = tx.Exec(sqlStr, draftCategory.ID, pq.Array(draftCategory.AssetIDs))
+	if err != nil {
+		tx.Rollback()
+		log.Printf("Error executing delete query: %+v", err)
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("Error committing transaction: %+v", err)
+		return err
+	}
+
+	return nil
 }
 
 // UpdateCategoryImage ...

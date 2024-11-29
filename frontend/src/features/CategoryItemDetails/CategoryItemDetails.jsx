@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Skeleton, Stack } from '@mui/material';
+import { AddRounded } from '@mui/icons-material';
 
 import SimpleModal from '../../common/SimpleModal';
 import { inventoryActions } from '../InventoryList/inventorySlice';
@@ -37,6 +38,16 @@ export default function CategoryItemDetails() {
     setRowSelected([]);
   };
 
+  const addItems = () => {
+    const collaborators = selectedCategory.sharable_groups;
+    dispatch(categoryItemDetailsActions.addItemsInCategory({ id: selectedCategory?.id, rowSelected, collaborators }));
+    resetSelection();
+  };
+
+  const handleRemoveAssociation = () => {
+    dispatch(categoryItemDetailsActions.removeItemsFromCategory({ id: selectedCategory?.id, rowSelected }));
+  };
+
   useEffect(() => {
     if (id) {
       dispatch(categoryItemDetailsActions.getItemsForCategory(id));
@@ -57,16 +68,28 @@ export default function CategoryItemDetails() {
         itemsInCategory={itemsInCategory}
         handleOpenModal={handleOpenModal}
       />
-      <CategoryItemDetailsDataTable itemsInCategory={itemsInCategory} handleOpenModal={handleOpenModal} />
+      <CategoryItemDetailsDataTable
+        rowSelected={rowSelected}
+        setRowSelected={setRowSelected}
+        itemsInCategory={itemsInCategory}
+        handleOpenModal={handleOpenModal}
+        handleRemoveAssociation={handleRemoveAssociation}
+      />
       <CategoryItemDetailsGraph itemsInCategory={itemsInCategory} />
       {displayModal && (
-        <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
+        <SimpleModal
+          title={`Add items to ${selectedCategory?.name}`}
+          handleClose={resetSelection}
+          showSecondaryButton
+          secondaryButtonAction={addItems}
+          disableSecondaryButton={rowSelected.length <= 0}
+          secondaryButtonIcon={<AddRounded />}
+          maxSize="md"
+        >
           <CategoryItemDetailsAddAsset
             rowSelected={rowSelected}
-            selectedCategory={selectedCategory}
             setRowSelected={setRowSelected}
             itemsInCategory={itemsInCategory}
-            resetSelection={resetSelection}
           />
         </SimpleModal>
       )}

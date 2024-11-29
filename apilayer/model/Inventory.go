@@ -33,7 +33,7 @@ type Inventory struct {
 	CreatorName        string     `json:"creator_name"`
 	UpdatedAt          time.Time  `json:"updated_at"`
 	UpdatedBy          string     `json:"updated_by"`
-	UpdaterName        string     `json:"updater_name"`
+	UpdaterName        string     `json:"updator"`
 	BoughtAt           string     `json:"bought_at"`
 	SharableGroups     []string   `json:"sharable_groups"`
 }

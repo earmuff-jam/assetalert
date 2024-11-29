@@ -515,6 +515,181 @@ func Test_AddItemsInCategory_InvalidDBUser(t *testing.T) {
 	assert.Equal(t, "400 Bad Request", res.Status)
 }
 
+func Test_RemoveAssociationFromCategory(t *testing.T) {
+
+	// retrieve the selected profile
+	draftUserCredentials := model.UserCredentials{
+		Email:             "admin@gmail.com",
+		Role:              "TESTER",
+		EncryptedPassword: "1231231",
+	}
+
+	db.PreloadAllTestVariables()
+	prevUser, err := db.RetrieveUser(config.CTO_USER, &draftUserCredentials)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	draftCategory := model.Category{
+		Name:           "Kitty litter box",
+		Description:    "Palette storage of kitty litter",
+		Color:          "#f7f7f7",
+		Status:         "general",
+		MaxItemsLimit:  120,
+		MinItemsLimit:  1,
+		CreatedBy:      prevUser.ID.String(),
+		UpdatedBy:      prevUser.ID.String(),
+		SharableGroups: []string{prevUser.ID.String()},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err := json.Marshal(draftCategory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/category", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	CreateCategory(w, req, config.CTO_USER)
+	res := w.Result()
+	defer res.Body.Close()
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+	assert.Equal(t, 200, res.StatusCode)
+
+	var selectedCategory model.Category
+	err = json.Unmarshal(data, &selectedCategory)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
+	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
+	assert.Equal(t, selectedCategory.StatusName, "general")
+	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
+	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
+	assert.Equal(t, len(selectedCategory.SharableGroups), 1)
+	assert.Equal(t, selectedCategory.SharableGroups[0], prevUser.ID.String())
+
+	// retrieve inventory list
+	req = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/profile/%s/inventories", prevUser.ID), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": prevUser.ID.String()})
+	w = httptest.NewRecorder()
+	GetAllInventories(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+
+	var inventories []model.Inventory
+	err = json.Unmarshal(data, &inventories)
+	if err != nil {
+		t.Errorf("expected error to be nil but got %+v", err)
+	}
+
+	selectedInventory := inventories[0]
+
+	draftAssets := model.CategoryItemRequest{
+		ID:            selectedCategory.ID,
+		UserID:        prevUser.ID.String(),
+		AssetIDs:      []string{selectedInventory.ID},
+		Collaborators: []string{prevUser.ID.String(), prevUser.ID.String()},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftAssets)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	// retrieve inventory list
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/category/items", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+	AddItemsInCategory(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Greater(t, len(data), 0)
+
+	var categoryItemResponse []model.CategoryItemResponse
+	err = json.Unmarshal(data, &categoryItemResponse)
+	if err != nil {
+		t.Errorf("expected error to be nil got %v", err)
+	}
+
+	assert.Equal(t, categoryItemResponse[0].CategoryID, selectedCategory.ID)
+	assert.Equal(t, categoryItemResponse[0].ItemID, selectedInventory.ID)
+	assert.Equal(t, len(categoryItemResponse[0].SharableGroups), 2)
+	assert.Equal(t, categoryItemResponse[0].SharableGroups[0], prevUser.ID.String())
+	assert.Equal(t, categoryItemResponse[0].SharableGroups[1], prevUser.ID.String())
+
+	// Remove items from category
+
+	draftAssetToRemove := model.CategoryItemRequest{
+		ID:            selectedCategory.ID,
+		UserID:        prevUser.ID.String(),
+		AssetIDs:      []string{selectedInventory.ID},
+		Collaborators: []string{prevUser.ID.String(), prevUser.ID.String()},
+	}
+
+	// Marshal the draftEvent into JSON bytes
+	requestBody, err = json.Marshal(draftAssetToRemove)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/api/v1/category/remove/items", bytes.NewBuffer(requestBody))
+	w = httptest.NewRecorder()
+	RemoveAssociationFromCategory(w, req, config.CTO_USER)
+	res = w.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, 200, res.StatusCode)
+
+	// cleanup
+	db.RemoveCategory(config.CTO_USER, categoryItemResponse[0].CategoryID)
+}
+
+func Test_RemoveAssociationFromCategory_IncorrectUserID(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v1/categories?id=%s&limit=%d", "", 5), nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "request"})
+	w := httptest.NewRecorder()
+	db.PreloadAllTestVariables()
+	RemoveAssociationFromCategory(w, req, config.CTO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
+func Test_RemoveAssociationFromCategory_InvalidDBUser(t *testing.T) {
+
+	draftCategory := model.Category{}
+	requestBody, err := json.Marshal(draftCategory)
+	if err != nil {
+		t.Errorf("failed to marshal JSON: %v", err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/category", bytes.NewBuffer(requestBody))
+	w := httptest.NewRecorder()
+	RemoveAssociationFromCategory(w, req, config.CEO_USER)
+	res := w.Result()
+
+	assert.Equal(t, 400, res.StatusCode)
+	assert.Equal(t, "400 Bad Request", res.Status)
+}
+
 func Test_UpdateCategory(t *testing.T) {
 
 	// profile are automatically derieved from the auth table

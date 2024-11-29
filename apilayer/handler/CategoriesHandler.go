@@ -273,6 +273,45 @@ func AddItemsInCategory(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// RemoveAssociationFromCategory ...
+// swagger:route POST /api/v1/category/remove/items Categories RemoveAssociationFromCategory
+//
+// # Removes association between the category and asset item
+//
+// Parameters:
+//   - +name: CategoryItemRequest
+//     in: body
+//     description: The object containing the array of assets to update with the userID
+//     type: CategoryItemRequest
+//     required: true
+//
+// Responses:
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func RemoveAssociationFromCategory(rw http.ResponseWriter, r *http.Request, user string) {
+
+	draftCategoryItemRequest := &model.CategoryItemRequest{}
+	err := json.NewDecoder(r.Body).Decode(draftCategoryItemRequest)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	err = db.RemoveAssetAssociationFromCategory(user, draftCategoryItemRequest)
+	if err != nil {
+		log.Printf("Unable to remove assets from selected category. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+}
+
 // UpdateCategory ...
 // swagger:route PUT /api/v1/category/{id} Categories updateCategory
 //

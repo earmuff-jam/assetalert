@@ -224,6 +224,45 @@ func AddItemsInMaintenancePlan(rw http.ResponseWriter, r *http.Request, user str
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// RemoveAssociationFromMaintenancePlan ...
+// swagger:route POST /api/v1/plan/remove/items MaintenancePlans RemoveAssociationFromMaintenancePlan
+//
+// # Removes association between the maintenance plan and asset item
+//
+// Parameters:
+//   - +name: MaintenanceItemRequest
+//     in: body
+//     description: The object containing the array of assets to be removed
+//     type: MaintenanceItemRequest
+//     required: true
+//
+// Responses:
+// 200: MessageResponse
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func RemoveAssociationFromMaintenancePlan(rw http.ResponseWriter, r *http.Request, user string) {
+
+	draftMaintenancePlanItemRequest := &model.MaintenanceItemRequest{}
+	err := json.NewDecoder(r.Body).Decode(draftMaintenancePlanItemRequest)
+	r.Body.Close()
+	if err != nil {
+		log.Printf("Unable to decode request parameters. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	err = db.RemoveAssetAssociationFromMaintenancePlan(user, draftMaintenancePlanItemRequest)
+	if err != nil {
+		log.Printf("Unable to remove assets from selected maintenance plan. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+}
+
 // CreateMaintenancePlan ...
 // swagger:route POST /api/v1/plan MaintenancePlans createMaintenancePlan
 //

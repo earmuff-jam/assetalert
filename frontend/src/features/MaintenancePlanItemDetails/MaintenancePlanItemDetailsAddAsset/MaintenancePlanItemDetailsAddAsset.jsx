@@ -1,20 +1,12 @@
 import dayjs from 'dayjs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
-import { maintenancePlanItemActions } from '../maintenancePlanItemSlice';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
 import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
 
-export default function MaintenancePlanItemDetailsAddAsset({
-  rowSelected,
-  setRowSelected,
-  resetSelection,
-  selectedMaintenancePlan,
-  itemsInMaintenancePlan,
-}) {
-  const dispatch = useDispatch();
+export default function MaintenancePlanItemDetailsAddAsset({ rowSelected, setRowSelected, itemsInMaintenancePlan }) {
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
 
   const handleRowSelection = (_, id) => {
@@ -46,19 +38,8 @@ export default function MaintenancePlanItemDetailsAddAsset({
     return row[column] ?? '-';
   };
 
-  const addItems = () => {
-    const collaborators = selectedMaintenancePlan.sharable_groups;
-    dispatch(
-      maintenancePlanItemActions.addItemsInPlan({ id: selectedMaintenancePlan?.id, rowSelected, collaborators })
-    );
-    resetSelection();
-  };
-
   return (
     <Stack spacing={1}>
-      <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
-        Add Selected items
-      </Button>
       <TableComponent
         showActions={false}
         isLoading={inventoriesLoading}

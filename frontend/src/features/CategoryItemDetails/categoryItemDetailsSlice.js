@@ -56,6 +56,21 @@ const categoryItemDetailsSlice = createSlice({
       state.error = '';
       state.itemsInCategory = [];
     },
+    removeItemsFromCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    removeItemsFromCategorySuccess: (state, action) => {
+      const removedItems = action.payload;
+      const filteredItemsFromCategoryList = state.itemsInCategory.filter((v) => !removedItems.includes(v.id));
+      state.loading = false;
+      state.error = '';
+      state.itemsInCategory = [...filteredItemsFromCategoryList];
+    },
+    removeItemsFromCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     uploadImage: (state) => {
       state.error = '';
     },

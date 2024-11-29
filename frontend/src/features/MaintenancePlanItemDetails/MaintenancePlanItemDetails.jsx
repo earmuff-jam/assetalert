@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Skeleton, Stack } from '@mui/material';
+import { AddRounded } from '@mui/icons-material';
 
 import SimpleModal from '../../common/SimpleModal';
 import { inventoryActions } from '../InventoryList/inventorySlice';
@@ -32,6 +33,20 @@ export default function MaintenancePlanItemDetails() {
     dispatch(inventoryActions.getAllInventoriesForUser());
   };
 
+  const addItems = () => {
+    const collaborators = selectedMaintenancePlan.sharable_groups;
+    dispatch(
+      maintenancePlanItemActions.addItemsInPlan({ id: selectedMaintenancePlan?.id, rowSelected, collaborators })
+    );
+    resetSelection();
+  };
+
+  const handleRemoveAssociation = () => {
+    dispatch(
+      maintenancePlanItemActions.removeItemsFromMaintenancePlan({ id: selectedMaintenancePlan?.id, rowSelected })
+    );
+  };
+
   const resetSelection = () => {
     setDisplayModal(false);
     setRowSelected([]);
@@ -57,15 +72,28 @@ export default function MaintenancePlanItemDetails() {
         item={selectedMaintenancePlan}
         image={selectedMaintenancePlanImage}
       />
-      <MaintenancePlanItemDetailsContent totalItems={itemsInMaintenancePlan} handleOpenModal={handleOpenModal} />
+      <MaintenancePlanItemDetailsContent
+        rowSelected={rowSelected}
+        setRowSelected={setRowSelected}
+        itemsInMaintenancePlan={itemsInMaintenancePlan}
+        handleOpenModal={handleOpenModal}
+        handleRemoveAssociation={handleRemoveAssociation}
+      />
       <MaintenancePlanItemDetailsGraph totalItems={itemsInMaintenancePlan} />
       {displayModal && (
-        <SimpleModal title={`Add items to ${selectedMaintenancePlan?.name}`} handleClose={resetSelection} maxSize="md">
+        <SimpleModal
+          title={`Add items to ${selectedMaintenancePlan?.name}`}
+          handleClose={resetSelection}
+          maxSize="md"
+          showSecondaryButton
+          secondaryButtonAction={addItems}
+          secondaryButtonIcon={<AddRounded />}
+          disableSecondaryButton={rowSelected.length <= 0}
+        >
           <MaintenancePlanItemDetailsAddAsset
             rowSelected={rowSelected}
             setRowSelected={setRowSelected}
             resetSelection={resetSelection}
-            selectedMaintenancePlan={selectedMaintenancePlan}
             itemsInMaintenancePlan={itemsInMaintenancePlan}
           />
         </SimpleModal>
