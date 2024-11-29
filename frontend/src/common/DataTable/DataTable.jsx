@@ -1,5 +1,7 @@
-import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
+
+import { DataGrid } from '@mui/x-data-grid';
+
 import { EmptyComponent } from '../utils';
 
 export default function DataTable({ rows, columns, isEmpty, subtitle }) {

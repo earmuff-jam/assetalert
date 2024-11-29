@@ -38,19 +38,10 @@ export const EmptyComponent = ({ subtitle = '' }) => (
 /**
  * Confirmation Box Modal
  */
-export const ConfirmationBoxModal = ({
-  openDialog,
-  title,
-  handleClose,
-  maxSize,
-  textVariant,
-  text,
-  deleteID,
-  confirmDelete,
-}) => {
+export const ConfirmationBoxModal = ({ openDialog, title, handleClose, maxSize, deleteID, confirmDelete }) => {
   return openDialog ? (
     <SimpleModal title={title} handleClose={handleClose} maxSize={maxSize}>
-      <Typography variant={textVariant}>{text}</Typography>
+      <Typography variant="subtitle2">Delete this item?</Typography>
       <Stack direction="row" justifyContent="flex-end" spacing={1}>
         <Button onClick={handleClose}>Go back</Button>
         <Button variant="outlined" autoFocus onClick={() => confirmDelete(deleteID)}>
@@ -59,33 +50,6 @@ export const ConfirmationBoxModal = ({
       </Stack>
     </SimpleModal>
   ) : null;
-};
-
-/**
- * generate title color fn is used to build out the title and associated color with it.
- * @param {Object} row - the currently selected row
- * @param {Boolean} isCategory - if the selection is pertaining to category
- * @param {Boolean} override - if the table does not need these values
- */
-export const generateTitleColor = (row, isCategory, override) => {
-  let title = null;
-  let color = null;
-
-  if (override) {
-    title = '';
-    color = '';
-    return { title, color };
-  }
-
-  if (isCategory) {
-    title = row?.category_item.length > 0 && `Assigned ${row?.category_item[0].category_name} Category`;
-    color = row?.category_item.length > 0 && row?.category_item[0].associated_color;
-  } else {
-    title =
-      row?.maintenance_item.length > 0 && `Assigned ${row?.maintenance_item[0].maintenance_plan_name} Maintenance Plan`;
-    color = row?.maintenance_item.length > 0 && row?.maintenance_item[0].associated_color;
-  }
-  return { title, color };
 };
 
 /**
@@ -159,4 +123,18 @@ export const prefix = (prefixVal, value, roundUpTo = 2) => {
     }
   }
   return value;
+};
+
+/**
+ * Function used to pluralize the selected word. Eg, Dog -> dogs.
+ * @param {string} stringToEdit - The string that is to be pluralized
+ * @param {int} size - The number that determines if the words needs to be pluralized or not
+ * @returns {string} - The new string that is pluralized if necessary
+ */
+export const pluralizeWord = (stringToEdit, size) => {
+  if (size <= 1) {
+    return `${size} ${stringToEdit}`;
+  } else {
+    return `${size} ${stringToEdit}s`;
+  }
 };

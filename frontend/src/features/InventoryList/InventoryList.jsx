@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Autocomplete, IconButton, Stack, TextField } from '@mui/material';
 import {
   CheckRounded,
@@ -8,19 +12,18 @@ import {
   SearchRounded,
   ViewListRounded,
 } from '@mui/icons-material';
+
 import RowHeader from '../../common/RowHeader';
 import SimpleModal from '../../common/SimpleModal';
-import { ConfirmationBoxModal, generateTitleColor } from '../../common/utils';
-import TableComponent from './TableComponent';
-import GridComponent from './GridComponent';
-import { VIEW_INVENTORY_LIST_HEADERS } from './constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import AddInventoryDetail from './AddInventory/AddInventoryDetail';
-import VerticalMenu from './AddInventory/VerticalMenu';
 import { inventoryActions } from './inventorySlice';
-import AddBulkUploadInventory from './AddInventory/AddBulkUploadInventory';
+import VerticalMenu from './AddInventory/VerticalMenu';
+import { VIEW_INVENTORY_LIST_HEADERS } from './constants';
 import ViewItemDetails from './ViewItemDetails/ViewItemDetails';
+import GridComponent from '../../common/DataTable/GridComponent';
+import AddInventoryDetail from './AddInventory/AddInventoryDetail';
+import { ConfirmationBoxModal, pluralizeWord } from '../../common/utils';
+import AddBulkUploadInventory from './AddInventory/AddBulkUploadInventory';
+import TableComponent from '../../common/DataTable/CustomTableComponent/TableComponent';
 
 const MODAL_STATE = {
   NONE: 'none',
@@ -31,7 +34,7 @@ const MODAL_STATE = {
   ASSIGN_MAINTENANCE_PLAN: 'assign_maintenance_plan',
 };
 
-const InventoryList = ({ hideActionMenu = false }) => {
+const InventoryList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, inventories } = useSelector((state) => state.inventory);
@@ -184,7 +187,7 @@ const InventoryList = ({ hideActionMenu = false }) => {
   return (
     <Stack flexGrow="1" spacing={2}>
       <Stack direction="row" justifyContent="space-between">
-        <RowHeader title="Assets" caption={`Viewing ${options.length || 0} asset detail(s)`} />
+        <RowHeader title="Assets" caption={`Viewing ${pluralizeWord('asset detail', options?.length)}`} />
         <Stack direction="row" alignItems="center">
           {showSearch ? (
             <Autocomplete
@@ -234,11 +237,10 @@ const InventoryList = ({ hideActionMenu = false }) => {
         ) : (
           <TableComponent
             isLoading={loading}
-            hideActionMenu={hideActionMenu}
             data={options}
+            hideCheckBox
             columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
             rowFormatter={rowFormatter}
-            generateTitleColor={generateTitleColor}
             rowSelected={rowSelected}
             onRowSelect={onRowSelect}
             handleRowSelection={handleRowSelection}
@@ -267,8 +269,6 @@ const InventoryList = ({ hideActionMenu = false }) => {
       <ConfirmationBoxModal
         openDialog={openDialog}
         title="Confirm deletion"
-        text="Delete this item?"
-        textVariant="body2"
         handleClose={reset}
         maxSize="xs"
         deleteID={idToDelete}

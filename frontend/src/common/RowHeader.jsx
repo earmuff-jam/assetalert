@@ -34,6 +34,7 @@ const RowHeader = ({
       <Stack direction="row" spacing={2} useFlexGap>
         {primaryButtonTextLabel ? (
           <Button
+            size="small"
             color="primary"
             variant="outlined"
             disabled={primaryButtonDisabled}
@@ -45,6 +46,7 @@ const RowHeader = ({
         ) : null}
         {secondaryButtonTextLabel ? (
           <Button
+            size="small"
             color="primary"
             variant="outlined"
             onClick={handleClickSecondaryButton}

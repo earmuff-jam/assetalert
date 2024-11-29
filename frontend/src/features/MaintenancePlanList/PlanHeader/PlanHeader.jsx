@@ -19,7 +19,7 @@ export default function PlanHeader({ toggleModal, selectedFilter, setSelectedFil
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <RowHeader
           title="Maintenance Plans"
-          caption={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plan(s)'}
+          caption={selectedFilter ? `Applying ${selectedFilter} filter` : 'Assign items to maintenance plans'}
         />
         <Stack direction="row" spacing="1rem">
           <Button onClick={toggleModal} startIcon={<AddRounded />} variant="outlined">
