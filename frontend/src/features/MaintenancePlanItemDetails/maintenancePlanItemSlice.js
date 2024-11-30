@@ -54,6 +54,21 @@ const maintenancePlanItemSlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    removeItemsFromMaintenancePlan: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    removeItemsFromMaintenancePlanSuccess: (state, action) => {
+      const removedItems = action.payload;
+      const filteredItems = state.itemsInMaintenancePlan.filter((v) => !removedItems.includes(v.id));
+      state.loading = false;
+      state.error = '';
+      state.itemsInMaintenancePlan = [...filteredItems];
+    },
+    removeItemsFromMaintenancePlanFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     uploadImage: (state) => {
       state.error = '';
     },

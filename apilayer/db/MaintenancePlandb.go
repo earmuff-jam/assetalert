@@ -503,6 +503,39 @@ func AddAssetToMaintenancePlan(user string, draftMaintenanceItemRequest *model.M
 	return data, nil
 }
 
+// RemoveAssetAssociationFromMaintenancePlan ...
+func RemoveAssetAssociationFromMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceItemRequest) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.maintenance_item
+               WHERE maintenance_plan_id = $1 AND id = ANY($2);`
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("Error starting transaction: %+v", err)
+		return err
+	}
+
+	_, err = tx.Exec(sqlStr, draftMaintenancePlan.ID, pq.Array(draftMaintenancePlan.AssetIDs))
+	if err != nil {
+		tx.Rollback()
+		log.Printf("Error executing delete query: %+v", err)
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("Error committing transaction: %+v", err)
+		return err
+	}
+
+	return nil
+}
+
+
 // UpdateMaintenancePlanImage ...
 func UpdateMaintenancePlanImage(user string, userID string, maintenanceID string, imageURL string) (bool, error) {
 

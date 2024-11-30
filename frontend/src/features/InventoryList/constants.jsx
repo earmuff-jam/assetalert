@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
+
 import relativeTime from 'dayjs/plugin/relativeTime';
-import QrCodeGen from './ViewItemDetails/QrCodeGen';
 import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
+import QrCodeGen from './ViewItemDetails/QrCodeGen';
 dayjs.extend(relativeTime);
 
 /**
@@ -92,7 +93,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
     colName: 'price',
     label: 'Cost',
     displayConcise: true,
-    modifier: (value) => `${value || '-'}`,
+    modifier: (value) => `${+value || '-'}`,
   },
   barcode: {
     id: 5,
@@ -111,7 +112,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
     colName: 'quantity',
     label: 'Qty',
     displayConcise: true,
-    modifier: (value) => `${value || '-'}`,
+    modifier: (value) => `${+value || '-'}`,
   },
   location: {
     id: 8,
@@ -177,7 +178,7 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
   },
   updator_name: {
     id: 17,
-    colName: 'updater_name',
+    colName: 'updator',
     label: 'Updated By',
     displayConcise: true,
     modifier: (value) => `${value || '-'}`,

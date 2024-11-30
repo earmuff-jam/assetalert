@@ -75,6 +75,8 @@ func main() {
 	// categories
 	router.Handle("/api/v1/category/items", CustomRequestHandler(handler.GetAllCategoryItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category/items", CustomRequestHandler(handler.AddItemsInCategory)).Methods(http.MethodPost)
+	router.Handle("/api/v1/category/remove/items", CustomRequestHandler(handler.RemoveAssociationFromCategory)).Methods(http.MethodPost)
+
 	router.Handle("/api/v1/categories", CustomRequestHandler(handler.GetAllCategories)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.GetCategory)).Methods(http.MethodGet)
 	router.Handle("/api/v1/category", CustomRequestHandler(handler.CreateCategory)).Methods(http.MethodPost)
@@ -84,6 +86,8 @@ func main() {
 	// maintenance plans
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.GetAllMaintenancePlanItems)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plans/items", CustomRequestHandler(handler.AddItemsInMaintenancePlan)).Methods(http.MethodPost)
+	router.Handle("/api/v1/plan/remove/items", CustomRequestHandler(handler.RemoveAssociationFromMaintenancePlan)).Methods(http.MethodPost)
+
 	router.Handle("/api/v1/maintenance-plans", CustomRequestHandler(handler.GetAllMaintenancePlans)).Methods(http.MethodGet)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.CreateMaintenancePlan)).Methods(http.MethodPost)
 	router.Handle("/api/v1/plan", CustomRequestHandler(handler.GetMaintenancePlan)).Methods(http.MethodGet)

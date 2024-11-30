@@ -11,6 +11,7 @@ const RowHeader = ({
   primaryStartIcon,
   secondaryButtonTextLabel,
   secondaryStartIcon,
+  secondaryButtonDisabled,
   handleClickPrimaryButton,
   handleClickSecondaryButton,
   children,
@@ -49,6 +50,7 @@ const RowHeader = ({
             size="small"
             color="primary"
             variant="outlined"
+            disabled={secondaryButtonDisabled}
             onClick={handleClickSecondaryButton}
             startIcon={secondaryStartIcon}
           >

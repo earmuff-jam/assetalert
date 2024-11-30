@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const ITEMS_IN_MAINTENANCE_PLAN_HEADER = [
   { field: 'name', headerName: 'Name', flex: 1 },
@@ -6,7 +6,7 @@ export const ITEMS_IN_MAINTENANCE_PLAN_HEADER = [
   { field: 'price', headerName: 'Price', flex: 1 },
   { field: 'quantity', headerName: 'Quantity', flex: 1 },
   { field: 'location', headerName: 'Storage Location', flex: 1 },
-  { field: 'updater_name', headerName: 'Last updated by', flex: 1 },
+  { field: 'updator', headerName: 'Last updated by', flex: 1 },
 ];
 
 export const ITEM_TYPE_MAPPER = {
@@ -34,7 +34,6 @@ export const ITEM_TYPE_MAPPER = {
     display: 'Quaterly',
     value: 'quaterly',
     since: dayjs().add(3, 'months').toISOString(),
-
   },
   semiannually: {
     display: 'Semi-annually',

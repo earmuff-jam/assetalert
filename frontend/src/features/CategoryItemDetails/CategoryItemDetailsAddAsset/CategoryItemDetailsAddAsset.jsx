@@ -1,20 +1,12 @@
 import dayjs from 'dayjs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
-import { categoryItemDetailsActions } from '../categoryItemDetailsSlice';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
 import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
 
-export default function CategoryItemDetailsAddAsset({
-  selectedCategory,
-  rowSelected,
-  setRowSelected,
-  resetSelection,
-  itemsInCategory,
-}) {
-  const dispatch = useDispatch();
+export default function CategoryItemDetailsAddAsset({ rowSelected, setRowSelected, itemsInCategory }) {
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
 
   const unassignedAssetsForCategories = inventories.filter(
@@ -54,17 +46,8 @@ export default function CategoryItemDetailsAddAsset({
     return row[column] ?? '-';
   };
 
-  const addItems = () => {
-    const collaborators = selectedCategory.sharable_groups;
-    dispatch(categoryItemDetailsActions.addItemsInCategory({ id: selectedCategory?.id, rowSelected, collaborators }));
-    resetSelection();
-  };
-
   return (
     <Stack spacing={1}>
-      <Button variant="outlined" disabled={rowSelected.length <= 0} sx={{ mt: '1rem' }} onClick={addItems}>
-        Add Selected items
-      </Button>
       <TableComponent
         isLoading={inventoriesLoading}
         showActions={false}

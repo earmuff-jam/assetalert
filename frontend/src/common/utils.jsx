@@ -44,7 +44,7 @@ export const ConfirmationBoxModal = ({ openDialog, title, handleClose, maxSize, 
       <Typography variant="subtitle2">Delete this item?</Typography>
       <Stack direction="row" justifyContent="flex-end" spacing={1}>
         <Button onClick={handleClose}>Go back</Button>
-        <Button variant="outlined" autoFocus onClick={() => confirmDelete(deleteID)}>
+        <Button variant="outlined" autoFocus onClick={() => confirmDelete(deleteID || true)}>
           Confirm
         </Button>
       </Stack>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Skeleton, Stack } from '@mui/material';
+import { AddRounded } from '@mui/icons-material';
 
 import SimpleModal from '../../common/SimpleModal';
 import { inventoryActions } from '../InventoryList/inventorySlice';
@@ -12,6 +13,8 @@ import CategoryItemDetailsGraph from './CategoryItemDetailsContent/CategoryItemD
 import CategoryItemDetailsHeader from './CategoryItemDetailsHeader/CategoryItemDetailsHeader';
 import CategoryItemDetailsAddAsset from './CategoryItemDetailsAddAsset/CategoryItemDetailsAddAsset';
 import CategoryItemDetailsDataTable from './CategoryItemDetailsContent/CategoryItemDetailsDataTable';
+import { ConfirmationBoxModal } from '../../common/utils';
+import { enqueueSnackbar } from 'notistack';
 
 export default function CategoryItemDetails() {
   const { id } = useParams();
@@ -26,15 +29,41 @@ export default function CategoryItemDetails() {
 
   const [rowSelected, setRowSelected] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
+  const [openConfirmationBoxModal, setOpenConfirmationBoxModal] = useState(false);
 
   const handleOpenModal = () => {
     setDisplayModal(true);
     dispatch(inventoryActions.getAllInventoriesForUser());
   };
 
+  const handleOpenConfirmationBoxModal = () => setOpenConfirmationBoxModal(!openConfirmationBoxModal);
+
   const resetSelection = () => {
     setDisplayModal(false);
     setRowSelected([]);
+  };
+
+  const resetConfirmationBoxModal = () => setOpenConfirmationBoxModal(false);
+
+  const confirmDelete = () => {
+    dispatch(categoryItemDetailsActions.removeItemsFromCategory({ id: selectedCategory?.id, rowSelected }));
+    enqueueSnackbar(`Removed association of assets for ${selectedCategory.name}.`, {
+      variant: 'default',
+    });
+    resetConfirmationBoxModal();
+  };
+
+  const addItems = () => {
+    const collaborators = selectedCategory.sharable_groups;
+    dispatch(categoryItemDetailsActions.addItemsInCategory({ id: selectedCategory?.id, rowSelected, collaborators }));
+    enqueueSnackbar(`Added association of assets for ${selectedCategory.name}.`, {
+      variant: 'success',
+    });
+    resetSelection();
+  };
+
+  const handleRemoveAssociation = () => {
+    handleOpenConfirmationBoxModal();
   };
 
   useEffect(() => {
@@ -57,19 +86,38 @@ export default function CategoryItemDetails() {
         itemsInCategory={itemsInCategory}
         handleOpenModal={handleOpenModal}
       />
-      <CategoryItemDetailsDataTable itemsInCategory={itemsInCategory} handleOpenModal={handleOpenModal} />
+      <CategoryItemDetailsDataTable
+        rowSelected={rowSelected}
+        setRowSelected={setRowSelected}
+        itemsInCategory={itemsInCategory}
+        handleOpenModal={handleOpenModal}
+        handleRemoveAssociation={handleRemoveAssociation}
+      />
       <CategoryItemDetailsGraph itemsInCategory={itemsInCategory} />
       {displayModal && (
-        <SimpleModal title={`Add items to ${selectedCategory?.name}`} handleClose={resetSelection} maxSize="md">
+        <SimpleModal
+          title={`Add items to ${selectedCategory?.name}`}
+          handleClose={resetSelection}
+          showSecondaryButton
+          secondaryButtonAction={addItems}
+          disableSecondaryButton={rowSelected.length <= 0}
+          secondaryButtonIcon={<AddRounded />}
+          maxSize="md"
+        >
           <CategoryItemDetailsAddAsset
             rowSelected={rowSelected}
-            selectedCategory={selectedCategory}
             setRowSelected={setRowSelected}
             itemsInCategory={itemsInCategory}
-            resetSelection={resetSelection}
           />
         </SimpleModal>
       )}
+      <ConfirmationBoxModal
+        openDialog={openConfirmationBoxModal}
+        title="Confirm deletion"
+        handleClose={resetConfirmationBoxModal}
+        maxSize="xs"
+        confirmDelete={confirmDelete}
+      />
     </Stack>
   );
 }

@@ -52,6 +52,21 @@ export function* fetchAddItemsInPlan(action) {
   }
 }
 
+export function* removeItemsFromMaintenancePlan(action) {
+  try {
+    const userID = localStorage.getItem('userID');
+    const { id, rowSelected } = action.payload;
+    yield call(instance.post, `${BASEURL}/plan/remove/items`, {
+      id,
+      userID,
+      assetIDs: rowSelected,
+    });
+    yield put(maintenancePlanItemActions.removeItemsFromMaintenancePlanSuccess(rowSelected));
+  } catch (e) {
+    yield put(maintenancePlanItemActions.removeItemsFromMaintenancePlanFailure(e));
+  }
+}
+
 export function* uploadImage(action) {
   try {
     const { id, selectedImage } = action.payload;
@@ -91,6 +106,10 @@ export function* watchFetchAddItemsInPlan() {
   yield takeLatest(`maintenancePlanItem/addItemsInPlan`, fetchAddItemsInPlan);
 }
 
+export function* watchRemoveItemsFromMaintenancePlan() {
+  yield takeLatest(`maintenancePlanItem/removeItemsFromMaintenancePlan`, removeItemsFromMaintenancePlan);
+}
+
 export function* watchUploadImage() {
   yield takeLatest(`maintenancePlanItem/uploadImage`, uploadImage);
 }
@@ -103,6 +122,7 @@ export default [
   watchFetchAddItemsInPlan,
   watchGetItemsInMaintenancePlan,
   watchGetSelectedMaintenancePlan,
+  watchRemoveItemsFromMaintenancePlan,
   watchGetSelectedImage,
   watchUploadImage,
 ];
