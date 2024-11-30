@@ -14,6 +14,7 @@ import MaintenancePlanItemDetailsHeader from './MaintenancePlanItemDetailsHeader
 import MaintenancePlanItemDetailsContent from './MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsContent';
 import MaintenancePlanItemDetailsAddAsset from './MaintenancePlanItemDetailsAddAsset/MaintenancePlanItemDetailsAddAsset';
 import { ConfirmationBoxModal } from '../../common/utils';
+import { enqueueSnackbar } from 'notistack';
 
 export default function MaintenancePlanItemDetails() {
   const { id } = useParams();
@@ -43,6 +44,9 @@ export default function MaintenancePlanItemDetails() {
     dispatch(
       maintenancePlanItemActions.removeItemsFromMaintenancePlan({ id: selectedMaintenancePlan?.id, rowSelected })
     );
+    enqueueSnackbar(`Removed association of assets for ${selectedMaintenancePlan.name}.`, {
+      variant: 'default',
+    });
     resetConfirmationBoxModal();
   };
 
@@ -51,6 +55,9 @@ export default function MaintenancePlanItemDetails() {
     dispatch(
       maintenancePlanItemActions.addItemsInPlan({ id: selectedMaintenancePlan?.id, rowSelected, collaborators })
     );
+    enqueueSnackbar(`Added association of assets for ${selectedMaintenancePlan.name}.`, {
+      variant: 'success',
+    });
     resetSelection();
   };
 

@@ -14,6 +14,7 @@ import CategoryItemDetailsHeader from './CategoryItemDetailsHeader/CategoryItemD
 import CategoryItemDetailsAddAsset from './CategoryItemDetailsAddAsset/CategoryItemDetailsAddAsset';
 import CategoryItemDetailsDataTable from './CategoryItemDetailsContent/CategoryItemDetailsDataTable';
 import { ConfirmationBoxModal } from '../../common/utils';
+import { enqueueSnackbar } from 'notistack';
 
 export default function CategoryItemDetails() {
   const { id } = useParams();
@@ -46,12 +47,18 @@ export default function CategoryItemDetails() {
 
   const confirmDelete = () => {
     dispatch(categoryItemDetailsActions.removeItemsFromCategory({ id: selectedCategory?.id, rowSelected }));
+    enqueueSnackbar(`Removed association of assets for ${selectedCategory.name}.`, {
+      variant: 'default',
+    });
     resetConfirmationBoxModal();
   };
 
   const addItems = () => {
     const collaborators = selectedCategory.sharable_groups;
     dispatch(categoryItemDetailsActions.addItemsInCategory({ id: selectedCategory?.id, rowSelected, collaborators }));
+    enqueueSnackbar(`Added association of assets for ${selectedCategory.name}.`, {
+      variant: 'success',
+    });
     resetSelection();
   };
 
