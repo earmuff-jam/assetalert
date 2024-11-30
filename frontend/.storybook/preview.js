@@ -1,13 +1,13 @@
 /** @type { import('@storybook/react').Preview } */
 
 import { useMemo } from 'react';
-import { darkTheme, lightTheme } from '../src/util/Theme';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { store } from '../src/Store';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
+import { darkTheme, lightTheme } from '../src/utils/Theme';
+import { store } from '../src/Store';
 
 const THEMES = {
   lightTheme: lightTheme,
@@ -40,16 +40,16 @@ export const globalTypes = {
     description: 'theme selection',
     toolbar: {
       icon: 'paintbrush',
-      title: 'Select a theme',
+      title: 'Light Theme',
       dynamicTitle: true,
       items: [
         {
           value: 'lightTheme',
-          title: 'lightTheme',
+          title: 'Light Theme',
         },
         {
           value: 'darkTheme',
-          title: 'darkTheme',
+          title: 'Dark Theme',
         },
       ],
     },
@@ -65,6 +65,7 @@ const preview = {
         date: /Date$/i,
       },
     },
+    layout: 'fullscreen',
   },
 };
 

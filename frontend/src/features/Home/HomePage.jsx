@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +15,19 @@ const Overview = () => {
   const dispatch = useDispatch();
   const { assetSummary = [], loading } = useSelector((state) => state.summary);
 
+  const assetsUnderCategories = assetSummary?.AssetSummaryList?.filter(
+    (v) => v.type.toUpperCase() === 'C' && v.items[0] != ''
+  );
+  const assetsUnderMaintenancePlans = assetSummary?.AssetSummaryList?.filter(
+    (v) => v.type.toUpperCase() === 'M' && v.items[0] != ''
+  );
+  const assetsPastDue = assetSummary?.AssetList?.reduce((acc, el) => {
+    if (dayjs(el.returntime).isBefore(dayjs())) {
+      acc.push(el.name);
+    }
+    return acc;
+  }, []);
+
   useEffect(() => {
     dispatch(assetSummaryActions.getAssetSummary());
   }, []);
@@ -26,9 +41,9 @@ const Overview = () => {
       <RowHeader title="Overview" caption="View summary details about your assets" />
       <Stack spacing={{ xs: 1 }}>
         <HomeHeader
-          categories={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'C')}
-          maintenancePlans={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'M')}
-          assets={assetSummary?.AssetList}
+          assetsUnderCategories={assetsUnderCategories}
+          assetsUnderMaintenancePlans={assetsUnderMaintenancePlans}
+          assetsPastDue={assetsPastDue}
         />
         <HomeContent
           assets={assetSummary?.AssetList}
