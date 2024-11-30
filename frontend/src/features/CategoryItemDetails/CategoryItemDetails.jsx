@@ -13,6 +13,7 @@ import CategoryItemDetailsGraph from './CategoryItemDetailsContent/CategoryItemD
 import CategoryItemDetailsHeader from './CategoryItemDetailsHeader/CategoryItemDetailsHeader';
 import CategoryItemDetailsAddAsset from './CategoryItemDetailsAddAsset/CategoryItemDetailsAddAsset';
 import CategoryItemDetailsDataTable from './CategoryItemDetailsContent/CategoryItemDetailsDataTable';
+import { ConfirmationBoxModal } from '../../common/utils';
 
 export default function CategoryItemDetails() {
   const { id } = useParams();
@@ -27,15 +28,25 @@ export default function CategoryItemDetails() {
 
   const [rowSelected, setRowSelected] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
+  const [openConfirmationBoxModal, setOpenConfirmationBoxModal] = useState(false);
 
   const handleOpenModal = () => {
     setDisplayModal(true);
     dispatch(inventoryActions.getAllInventoriesForUser());
   };
 
+  const handleOpenConfirmationBoxModal = () => setOpenConfirmationBoxModal(!openConfirmationBoxModal);
+
   const resetSelection = () => {
     setDisplayModal(false);
     setRowSelected([]);
+  };
+
+  const resetConfirmationBoxModal = () => setOpenConfirmationBoxModal(false);
+
+  const confirmDelete = () => {
+    dispatch(categoryItemDetailsActions.removeItemsFromCategory({ id: selectedCategory?.id, rowSelected }));
+    resetConfirmationBoxModal();
   };
 
   const addItems = () => {
@@ -45,7 +56,7 @@ export default function CategoryItemDetails() {
   };
 
   const handleRemoveAssociation = () => {
-    dispatch(categoryItemDetailsActions.removeItemsFromCategory({ id: selectedCategory?.id, rowSelected }));
+    handleOpenConfirmationBoxModal();
   };
 
   useEffect(() => {
@@ -93,6 +104,13 @@ export default function CategoryItemDetails() {
           />
         </SimpleModal>
       )}
+      <ConfirmationBoxModal
+        openDialog={openConfirmationBoxModal}
+        title="Confirm deletion"
+        handleClose={resetConfirmationBoxModal}
+        maxSize="xs"
+        confirmDelete={confirmDelete}
+      />
     </Stack>
   );
 }

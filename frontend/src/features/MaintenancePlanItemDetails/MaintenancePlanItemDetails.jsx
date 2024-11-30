@@ -13,6 +13,7 @@ import MaintenancePlanItemDetailsGraph from './MaintenancePlanItemDetailsContent
 import MaintenancePlanItemDetailsHeader from './MaintenancePlanItemDetailsHeader/MaintenancePlanItemDetailsHeader';
 import MaintenancePlanItemDetailsContent from './MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsContent';
 import MaintenancePlanItemDetailsAddAsset from './MaintenancePlanItemDetailsAddAsset/MaintenancePlanItemDetailsAddAsset';
+import { ConfirmationBoxModal } from '../../common/utils';
 
 export default function MaintenancePlanItemDetails() {
   const { id } = useParams();
@@ -25,12 +26,24 @@ export default function MaintenancePlanItemDetails() {
     loading = false,
   } = useSelector((state) => state.maintenancePlanItem);
 
-  const [displayModal, setDisplayModal] = useState(false);
   const [rowSelected, setRowSelected] = useState([]);
+  const [displayModal, setDisplayModal] = useState(false);
+  const [openConfirmationBoxModal, setOpenConfirmationBoxModal] = useState(false);
 
   const handleOpenModal = () => {
     setDisplayModal(true);
     dispatch(inventoryActions.getAllInventoriesForUser());
+  };
+
+  const handleOpenConfirmationBoxModal = () => setOpenConfirmationBoxModal(!openConfirmationBoxModal);
+
+  const resetConfirmationBoxModal = () => setOpenConfirmationBoxModal(false);
+
+  const confirmDelete = () => {
+    dispatch(
+      maintenancePlanItemActions.removeItemsFromMaintenancePlan({ id: selectedMaintenancePlan?.id, rowSelected })
+    );
+    resetConfirmationBoxModal();
   };
 
   const addItems = () => {
@@ -42,9 +55,7 @@ export default function MaintenancePlanItemDetails() {
   };
 
   const handleRemoveAssociation = () => {
-    dispatch(
-      maintenancePlanItemActions.removeItemsFromMaintenancePlan({ id: selectedMaintenancePlan?.id, rowSelected })
-    );
+    handleOpenConfirmationBoxModal();
   };
 
   const resetSelection = () => {
@@ -98,6 +109,13 @@ export default function MaintenancePlanItemDetails() {
           />
         </SimpleModal>
       )}
+      <ConfirmationBoxModal
+        openDialog={openConfirmationBoxModal}
+        title="Confirm deletion"
+        handleClose={resetConfirmationBoxModal}
+        maxSize="xs"
+        confirmDelete={confirmDelete}
+      />
     </Stack>
   );
 }

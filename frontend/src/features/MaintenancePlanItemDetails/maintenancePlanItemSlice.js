@@ -60,10 +60,10 @@ const maintenancePlanItemSlice = createSlice({
     },
     removeItemsFromMaintenancePlanSuccess: (state, action) => {
       const removedItems = action.payload;
-      const filteredItemsFromCategoryList = state.itemsInMaintenancePlan.filter((v) => !removedItems.includes(v.id));
+      const filteredItems = state.itemsInMaintenancePlan.filter((v) => !removedItems.includes(v.id));
       state.loading = false;
       state.error = '';
-      state.itemsInMaintenancePlan = [...filteredItemsFromCategoryList];
+      state.itemsInMaintenancePlan = [...filteredItems];
     },
     removeItemsFromMaintenancePlanFailure: (state) => {
       state.loading = false;

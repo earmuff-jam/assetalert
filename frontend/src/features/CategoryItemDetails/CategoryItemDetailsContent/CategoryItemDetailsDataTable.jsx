@@ -3,8 +3,8 @@ import { AddRounded, RemoveRounded } from '@mui/icons-material';
 
 import RowHeader from '../../../common/RowHeader';
 import { pluralizeWord } from '../../../common/utils';
-import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
 import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
+import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
 
 export default function CategoryItemDetailsDataTable({
   rowSelected,

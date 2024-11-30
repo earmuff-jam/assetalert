@@ -241,7 +241,7 @@ func CreateCategory(rw http.ResponseWriter, r *http.Request, user string) {
 // Parameters:
 //   - +name: CategoryItemRequest
 //     in: body
-//     description: The object containing the array of assets to update with the userID
+//     description: The object containing the array of assets to be removed from the association for categories
 //     type: CategoryItemRequest
 //     required: true
 //

@@ -192,7 +192,7 @@ func GetAllMaintenancePlanItems(rw http.ResponseWriter, r *http.Request, user st
 // Parameters:
 //   - +name: MaintenanceItemRequest
 //     in: body
-//     description: The object containing the array of assets to update with the userID
+//     description:The object containing the array of assets to be removed from the association for maintenance plans
 //     type: MaintenanceItemRequest
 //     required: true
 //
