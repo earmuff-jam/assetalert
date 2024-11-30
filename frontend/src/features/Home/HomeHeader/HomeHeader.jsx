@@ -4,6 +4,7 @@ import { Card, CardContent, IconButton, Stack, Skeleton, Typography } from '@mui
 import { CategoryRounded, EngineeringRounded, WarningRounded } from '@mui/icons-material';
 
 import RowHeader from '../../../common/RowHeader';
+import { pluralizeWord } from '../../../common/utils';
 
 export default function HomeHeader({ categories = [], maintenancePlans = [], assets = [] }) {
   const totalPastDueItems = assets.filter((v) => dayjs(v.returntime).isBefore(dayjs())).length || 0;
@@ -27,7 +28,7 @@ export default function HomeHeader({ categories = [], maintenancePlans = [], ass
       <Stack direction="row" spacing={{ xs: 1 }} useFlexGap flexWrap="wrap">
         <CardItem>
           <ColumnItem
-            label="under assigned categories"
+            label="assigned categories"
             icon={<CategoryRounded />}
             color="primary"
             dataLabel={totalItemsUnderCategory}
@@ -36,7 +37,7 @@ export default function HomeHeader({ categories = [], maintenancePlans = [], ass
         </CardItem>
         <CardItem>
           <ColumnItem
-            label="under assigned maintenance plan"
+            label="assigned maintenance plan"
             icon={<EngineeringRounded />}
             color="primary"
             dataLabel={totalItemsUnderMaintenancePlans}
@@ -45,7 +46,7 @@ export default function HomeHeader({ categories = [], maintenancePlans = [], ass
         </CardItem>
         <CardItem>
           <ColumnItem
-            label="require attention"
+            label="past return deadline"
             icon={<WarningRounded />}
             color="error"
             dataLabel={totalPastDueItems}
@@ -66,19 +67,21 @@ const CardItem = ({ children }) => (
 const ColumnItem = ({ label, dataLabel, icon, color, loading }) => {
   if (loading) return <Skeleton height="1rem" />;
   return (
-    <Stack>
-      <Typography textAlign="center" variant="h4" color={color}>
+    <Stack textAlign="center">
+      <Typography variant="h4" color={color}>
         {dataLabel}
       </Typography>
       <Stack direction="row" alignItems="center" justifyContent="center">
         <IconButton disabled size="small">
           {icon}
         </IconButton>
-        <Typography variant="caption" textAlign="center">
-          item(s)
+        <Typography variant="caption" color="text.secondary">
+          {pluralizeWord('asset', dataLabel)}
         </Typography>
       </Stack>
-      <Typography>{label}</Typography>
+      <Typography variant="subtitle2" color="text.secondary">
+        {label}
+      </Typography>
     </Stack>
   );
 };
