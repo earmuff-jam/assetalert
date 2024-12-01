@@ -1,6 +1,9 @@
 import { Typography, Stack, Divider, Paper } from '@mui/material';
 import { CheckCircleOutlineRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 const BIO_PLACEHOLDER = 'Add short bio about yourself to let others know details about you.';
 
