@@ -55,9 +55,13 @@ export const ConfirmationBoxModal = ({ openDialog, title, handleClose, maxSize, 
 /**
  * Takes array of notes and transforms them into objects categorized by the date and time
  *
- * Recently updated - Up to the last week
- * Last Week - Up to the previous week
- * Last month and beyond - everything else
+ * Recently Edited - Up to the last week
+ * Edited within last week - Up to the previous week
+ * Edited couple of months ago - everything else
+ *
+ * Color Primary is used for Recently Edited
+ * Color Secondary is used for Edited within last week
+ * Color Default is used for Edit couple of month ago
  *
  * @param {Array} notes
  * @returns {Array} refactored notes
@@ -69,12 +73,16 @@ export const categorizeNotes = (notes) => {
     const differenceInDays = Math.floor((currentTime - updatedTime) / (1000 * 3600 * 24));
 
     let category;
+    let color;
     if (differenceInDays <= 7) {
-      category = 'Recently added notes';
+      category = 'Recently Edited';
+      color = 'primary';
     } else if (differenceInDays <= 14) {
-      category = 'Last Week';
+      category = 'Edited within last week';
+      color = 'secondary';
     } else {
-      category = 'Last Month and Beyond';
+      category = 'Edited couple of months ago';
+      color = 'default';
     }
 
     if (!acc[category]) {
@@ -82,6 +90,7 @@ export const categorizeNotes = (notes) => {
         id: acc.length + 1,
         category: category,
         totalNotes: 0,
+        color: color,
         details: [],
       };
     }

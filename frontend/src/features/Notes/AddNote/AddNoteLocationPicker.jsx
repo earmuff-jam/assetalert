@@ -1,4 +1,4 @@
-import LocationPicker from '../../../common/Location/LocationPicker';
+import LocationPicker from '@common/Location/LocationPicker';
 
 export default function AddNoteLocationPicker({ subtitle, location, setLocation, editMode, displayLocationPicker }) {
   return displayLocationPicker ? (

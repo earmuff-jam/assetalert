@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
+
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
-import { notesActions } from './notesSlice';
-import relativeTime from 'dayjs/plugin/relativeTime';
+
 import { Accordion, Skeleton } from '@mui/material';
-import NoteAccordionSummary from './NoteAccordion/NoteAccordionSummary';
-import NoteAccordionDetails from './NoteAccordion/NoteAccordionDetails';
-import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '../../common/utils';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { notesActions } from '@features/Notes/notesSlice';
+import { categorizeNotes, ConfirmationBoxModal, EmptyComponent } from '@common/utils';
+import NoteAccordionSummary from '@features/Notes/NoteAccordion/NoteAccordionSummary';
+import NoteAccordionDetails from '@features/Notes/NoteAccordion/NoteAccordionDetails';
 
 const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
   const dispatch = useDispatch();
@@ -53,7 +55,7 @@ const Note = ({ notes, loading, setEditMode, setSelectedNoteID }) => {
     <>
       {formattedNotes.map((v, index) => (
         <Accordion key={index} elevation={0}>
-          <NoteAccordionSummary noteCategory={v.category} totalNotes={v.totalNotes} />
+          <NoteAccordionSummary title={v.category} totalNotes={v.totalNotes} color={v.color} />
           <NoteAccordionDetails
             details={v.details}
             setEditMode={setEditMode}

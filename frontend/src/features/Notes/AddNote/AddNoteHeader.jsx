@@ -1,14 +1,17 @@
-import { InputAdornment, TextField } from '@mui/material';
-import RetrieveUserLocation from '../../../common/Location/RetrieveUserLocation';
-import TextFieldWithLabel from '../../../common/TextFieldWithLabel/TextFieldWithLabel';
+import { InputAdornment, TextField, Typography } from '@mui/material';
+
+import RetrieveUserLocation from '@common/Location/RetrieveUserLocation';
+import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
 
 export default function AddNoteHeader({ formFields, handleInput, setLocation }) {
   return (
     <>
+      <Typography variant="subtitle2" color="text.secondary">
+        {formFields.title.label}
+      </Typography>
       <TextField
         id={formFields.title.name}
         name={formFields.title.name}
-        label={formFields.title.label}
         value={formFields.title.value}
         size={formFields.title.size}
         placeholder={formFields.title.placeholder}
