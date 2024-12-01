@@ -19,7 +19,6 @@ const GENERIC_TEXTAREA_VARIANT = {
   multiline: true,
   rows: 4,
   variant: 'outlined',
-  fullWidth: true,
 };
 
 // these options are as enum in db

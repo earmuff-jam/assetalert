@@ -1,11 +1,13 @@
-import AddNote from './AddNote/AddNote';
-import Note from './Note';
 import { useEffect, useState } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Stack } from '@mui/material';
-import { notesActions } from './notesSlice';
-import SimpleModal from '../../common/SimpleModal';
-import NoteHeader from './Header/NoteHeader';
+import Note from '@features/Notes/Note/Note';
+import SimpleModal from '@common/SimpleModal';
+import AddNote from '@features/Notes/AddNote/AddNote';
+import { notesActions } from '@features/Notes/notesSlice';
+import NoteHeader from '@features/Notes/Header/NoteHeader';
 
 const NotesList = () => {
   const dispatch = useDispatch();
