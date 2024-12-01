@@ -1,5 +1,5 @@
 import { AccordionDetails } from '@mui/material';
-import RecentActivity from '../RecentActivity/RecentActivity';
+import RecentActivity from '@features/RecentActivities/RecentActivity/RecentActivity';
 
 export default function RecentActivityAccordionDetails({ index, activity }) {
   return (
