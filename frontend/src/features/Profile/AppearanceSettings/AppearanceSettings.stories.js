@@ -1,4 +1,4 @@
-import AppearanceSettings from '@features/Profile/UserDetails/AppearanceSettings';
+import AppearanceSettings from '@features/Profile/AppearanceSettings/AppearanceSettings';
 
 export default {
   title: 'Profile/AppearanceSettings',

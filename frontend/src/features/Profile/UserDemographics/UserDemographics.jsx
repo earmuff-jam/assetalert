@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileActions } from '@features/Profile/profileSlice';
 import ImagePicker from '@common/ImagePicker/ImagePicker';
-import UserDemographicsRow from '@features/Profile/UserDetails/UserDemographicsRow';
+import UserDemographicsRow from '@features/Profile/UserDemographics/UserDemographicsRow';
 
 export default function UserDemographics({ data = {}, handleEditMode }) {
   const dispatch = useDispatch();

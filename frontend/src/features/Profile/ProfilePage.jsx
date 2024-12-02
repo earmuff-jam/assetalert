@@ -2,11 +2,11 @@ import { Paper, Stack, useMediaQuery } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import UserDemographics from '@features/Profile/UserDetails/UserDemographics';
-import UserDetails from '@features/Profile/UserDetails/UserDetails';
-import UserStatus from '@features/Profile/UserDetails/UserStatus';
-import AppearanceSettings from '@features/Profile/UserDetails/AppearanceSettings';
 import SimpleModal from '@common/SimpleModal';
+import UserDemographics from '@features/Profile/UserDemographics/UserDemographics';
+import UserDetails from '@features/Profile/UserDetails/UserDetails';
+import UserStatus from '@features/Profile/UserStatus/UserStatus';
+import AppearanceSettings from '@features/Profile/AppearanceSettings/AppearanceSettings';
 import ProfileForm from '@features/Profile/ProfileForm/ProfileForm';
 
 const ProfilePage = () => {

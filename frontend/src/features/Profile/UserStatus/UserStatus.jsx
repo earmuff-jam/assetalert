@@ -1,4 +1,4 @@
-import UserStats from '@features/Profile/UserDetails/UserStats';
+import UserStats from '@features/Profile/UserStats/UserStats';
 import { Divider, Stack, Typography } from '@mui/material';
 
 export default function UserStatus({ onlySmallScreen }) {

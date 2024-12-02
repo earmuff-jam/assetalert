@@ -42,7 +42,7 @@ const AppearanceSettings = ({ loading, profileDetails = {} }) => {
           Appearance Settings
         </Typography>
         <Typography variant="caption" gutterBottom>
-          Change the look and feel of the application. Switch between dark mode and light mode if needed.
+          Change the look and feel of the application.
         </Typography>
         <Divider />
       </Box>
