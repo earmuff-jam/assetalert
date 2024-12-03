@@ -1,10 +1,9 @@
 import { Paper } from '@mui/material';
+import RowHeader from '@common/RowHeader';
+import { pluralizeWord } from '@common/utils';
 import { AddRounded, RemoveRounded } from '@mui/icons-material';
-
-import RowHeader from '../../../common/RowHeader';
-import { pluralizeWord } from '../../../common/utils';
-import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
-import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
+import { VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
+import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 
 export default function MaintenancePlanItemDetailsContent({
   rowSelected,

@@ -2,9 +2,8 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
 import { Stack } from '@mui/material';
-
-import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
-import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
+import { VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
+import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 
 export default function MaintenancePlanItemDetailsAddAsset({ rowSelected, setRowSelected, itemsInMaintenancePlan }) {
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);

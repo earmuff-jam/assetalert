@@ -18,7 +18,7 @@ const labelContextFn = (context, data) => {
   return label;
 };
 
-const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '25rem' }) => {
+const BarChart = ({ data, legendLabel, backgroundColor, height = '25rem' }) => {
   let chartData = {
     labels: data.map((d) => d.label),
     datasets: [
@@ -26,8 +26,8 @@ const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '2
         label: `${legendLabel}`,
         data: data.map((d) => d.count),
         backgroundColor: backgroundColor,
-        borderColor: borderColor,
         borderWidth: 1,
+        barThickness: 50,
       },
     ],
   };
@@ -43,6 +43,11 @@ const BarChart = ({ data, legendLabel, backgroundColor, borderColor, height = '2
         callbacks: {
           label: (context) => labelContextFn(context, data),
         },
+      },
+    },
+    scales: {
+      x: {
+        display: false,
       },
     },
   };
