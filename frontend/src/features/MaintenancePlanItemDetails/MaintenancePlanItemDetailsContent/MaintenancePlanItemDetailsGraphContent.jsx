@@ -4,10 +4,10 @@ import { useTheme } from '@emotion/react';
 import BarChart from '@common/Chart/BarChart';
 import { EmptyComponent } from '@common/utils';
 
-export default function MaintenancePlanItemDetailsGraphContent({ totalItems = [] }) {
+export default function MaintenancePlanItemDetailsGraphContent({ associatedAssets = [] }) {
   const theme = useTheme();
 
-  if (!totalItems || totalItems?.length <= 0) {
+  if (!associatedAssets || associatedAssets?.length <= 0) {
     return <EmptyComponent subtitle="Associate assets." />;
   }
   return (
@@ -17,7 +17,7 @@ export default function MaintenancePlanItemDetailsGraphContent({ totalItems = []
         <BarChart
           legendLabel="Name / Cost"
           data={
-            totalItems
+            associatedAssets
               ?.filter((_, index) => index < 10)
               ?.map((v, index) => ({
                 label: v.name,

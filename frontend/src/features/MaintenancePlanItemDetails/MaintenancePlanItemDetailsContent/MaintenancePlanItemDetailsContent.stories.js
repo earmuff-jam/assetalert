@@ -13,7 +13,7 @@ export const MaintenancePlanItemDetailsContentMultipleList = Template.bind({});
 export const MaintenancePlanItemDetailsContentEmpty = Template.bind({});
 
 MaintenancePlanItemDetailsContentDefault.args = {
-  rowSelected: ['6e9df958-cb4d-4d5f-a38c-c31544eaa115'],
+  selectedIDList: ['6e9df958-cb4d-4d5f-a38c-c31544eaa115'],
   itemsInMaintenancePlan: [
     {
       id: '6e9df958-cb4d-4d5f-a38c-c31544eaa115',
@@ -33,21 +33,21 @@ MaintenancePlanItemDetailsContentDefault.args = {
       sharable_groups: ['fa956520-fc6c-4783-acc6-4ba743fae9dc'],
     },
   ],
-  setRowSelected: () => {},
+  setSelectedIDList: () => {},
   handleOpenModal: () => {},
   handleRemoveAssociation: () => {},
 };
 
 MaintenancePlanItemDetailsContentEmpty.args = {
-  rowSelected: [],
+  selectedIDList: [],
   itemsInMaintenancePlan: [],
-  setRowSelected: () => {},
+  setSelectedIDList: () => {},
   handleOpenModal: () => {},
   handleRemoveAssociation: () => {},
 };
 
 MaintenancePlanItemDetailsContentMultipleList.args = {
-  rowSelected: [],
+  selectedIDList: [],
   itemsInMaintenancePlan: [
     {
       id: '6e9df958-cb4d-4d5f-a38c-c31544eaa115',
@@ -84,7 +84,7 @@ MaintenancePlanItemDetailsContentMultipleList.args = {
       sharable_groups: ['fa956520-fc6c-4783-acc6-4ba743fae9dc'],
     },
   ],
-  setRowSelected: () => {},
+  setSelectedIDList: () => {},
   handleOpenModal: () => {},
   handleRemoveAssociation: () => {},
 };

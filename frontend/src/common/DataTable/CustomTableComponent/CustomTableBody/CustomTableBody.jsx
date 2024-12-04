@@ -6,7 +6,7 @@ import CustomShowActionsTableCell from './CustomShowActionsTableCell';
 export default function CustomTableBody({
   data,
   columns,
-  rowSelected,
+  selectedIDList,
   hideCheckBox,
   handleRowSelection,
   rowFormatter,
@@ -19,7 +19,7 @@ export default function CustomTableBody({
   return (
     <TableBody>
       {data.map((row) => {
-        const isSelected = (id) => rowSelected.indexOf(id) !== -1;
+        const isSelected = (id) => selectedIDList && selectedIDList.indexOf(id) !== -1;
         const selectedID = row.id;
         const isItemSelected = isSelected(selectedID);
         return (

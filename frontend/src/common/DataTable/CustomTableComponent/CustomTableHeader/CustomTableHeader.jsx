@@ -1,6 +1,6 @@
 import { Checkbox, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 
-export default function CustomTableHeader({ rowSelected, hideCheckBox, handleRowSelection, columns, showActions }) {
+export default function CustomTableHeader({ selectedIDList, hideCheckBox, handleRowSelection, columns, showActions }) {
   return (
     <TableHead>
       <TableRow>
@@ -8,7 +8,7 @@ export default function CustomTableHeader({ rowSelected, hideCheckBox, handleRow
           <TableCell>
             <Checkbox
               size="small"
-              value={Boolean(rowSelected.length)}
+              value={Boolean(selectedIDList?.length)}
               onClick={(ev) => handleRowSelection(ev, 'all')}
             />
           </TableCell>

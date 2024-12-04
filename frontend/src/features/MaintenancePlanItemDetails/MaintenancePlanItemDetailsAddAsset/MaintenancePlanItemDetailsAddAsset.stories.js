@@ -11,7 +11,7 @@ const Template = (args) => <MaintenancePlanItemDetailsAddAsset {...args} />;
 export const MaintenancePlanItemDetailsAddAssetDefault = Template.bind({});
 
 MaintenancePlanItemDetailsAddAssetDefault.args = {
-  rowSelected: [],
-  setRowSelected: () => {},
+  selectedIDList: [],
+  setSelectedIDList: () => {},
   itemsInMaintenancePlan: [],
 };

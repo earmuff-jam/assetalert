@@ -5,25 +5,32 @@ import { Stack } from '@mui/material';
 import { VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
 import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 
-export default function MaintenancePlanItemDetailsAddAsset({ rowSelected, setRowSelected, itemsInMaintenancePlan }) {
+export default function MaintenancePlanItemDetailsAddAsset({
+  selectedIDList,
+  setSelectedIDList,
+  itemsInMaintenancePlan,
+}) {
   const { inventories, loading: inventoriesLoading } = useSelector((state) => state.inventory);
 
   const handleRowSelection = (_, id) => {
     if (id === 'all') {
-      setRowSelected(inventories.map((v) => v.id));
+      setSelectedIDList(inventories.map((v) => v.id));
     } else {
-      const selectedIndex = rowSelected.indexOf(id);
+      const selectedIndex = selectedIDList.indexOf(id);
       let draftSelected = [];
       if (selectedIndex === -1) {
-        draftSelected = draftSelected.concat(rowSelected, id);
+        draftSelected = draftSelected.concat(selectedIDList, id);
       } else if (selectedIndex === 0) {
-        draftSelected = draftSelected.concat(rowSelected.slice(1));
-      } else if (selectedIndex === rowSelected.length - 1) {
-        draftSelected = draftSelected.concat(rowSelected.slice(0, -1));
+        draftSelected = draftSelected.concat(selectedIDList.slice(1));
+      } else if (selectedIndex === selectedIDList.length - 1) {
+        draftSelected = draftSelected.concat(selectedIDList.slice(0, -1));
       } else if (selectedIndex > 0) {
-        draftSelected = draftSelected.concat(rowSelected.slice(0, selectedIndex), rowSelected.slice(selectedIndex + 1));
+        draftSelected = draftSelected.concat(
+          selectedIDList.slice(0, selectedIndex),
+          selectedIDList.slice(selectedIndex + 1)
+        );
       }
-      setRowSelected(draftSelected);
+      setSelectedIDList(draftSelected);
     }
   };
 
@@ -45,7 +52,7 @@ export default function MaintenancePlanItemDetailsAddAsset({ rowSelected, setRow
         data={inventories.filter((inventory) => !itemsInMaintenancePlan?.some((item) => item.item_id === inventory.id))}
         columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
         rowFormatter={rowFormatter}
-        rowSelected={rowSelected}
+        selectedIDList={selectedIDList}
         handleRowSelection={handleRowSelection}
         emptyComponentSubtext="Associate assets."
       />
