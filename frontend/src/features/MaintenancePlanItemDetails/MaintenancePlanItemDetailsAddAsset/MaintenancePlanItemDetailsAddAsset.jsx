@@ -14,7 +14,11 @@ export default function MaintenancePlanItemDetailsAddAsset({
 
   const handleRowSelection = (_, id) => {
     if (id === 'all') {
-      setSelectedIDList(inventories.map((v) => v.id));
+      if (selectedIDList.length !== 0) {
+        setSelectedIDList([]);
+      } else {
+        setSelectedIDList(inventories.map((v) => v.id));
+      }
     } else {
       const selectedIndex = selectedIDList.indexOf(id);
       let draftSelected = [];
@@ -47,6 +51,7 @@ export default function MaintenancePlanItemDetailsAddAsset({
   return (
     <Stack spacing={1}>
       <TableComponent
+        paper
         showActions={false}
         isLoading={inventoriesLoading}
         data={inventories.filter((inventory) => !itemsInMaintenancePlan?.some((item) => item.item_id === inventory.id))}

@@ -21,6 +21,7 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
  */
 const TableComponent = ({
+  paper = false,
   showActions = true,
   hideCheckBox = false,
   hideIconButton = false,
@@ -42,7 +43,7 @@ const TableComponent = ({
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={paper ? Paper : null}>
       <Table>
         <CustomTableHeader
           columns={columns}
