@@ -8,7 +8,7 @@ export default function CustomTableHeader({ selectedIDList, hideCheckBox, handle
           <TableCell>
             <Checkbox
               size="small"
-              value={Boolean(selectedIDList?.length)}
+              checked={Boolean(selectedIDList?.length)}
               onClick={(ev) => handleRowSelection(ev, 'all')}
             />
           </TableCell>
