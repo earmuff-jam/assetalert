@@ -15,7 +15,7 @@ import { profileActions } from '../../features/Profile/profileSlice';
 import DetailsCardItemContent from './ItemContent/DetailsCardItemContent';
 import DetailsCardItemActions from './ItemContent/DetailsCardItemActions';
 import { categoryActions } from '../../features/Categories/categoriesSlice';
-import { maintenancePlanActions } from '../../features/MaintenancePlanList/maintenanceSlice';
+import { maintenancePlanActions } from '../../features/MaintenancePlan/maintenanceSlice';
 import { categoryItemDetailsActions } from '../../features/CategoryItemDetails/categoryItemDetailsSlice';
 import { maintenancePlanItemActions } from '../../features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
 

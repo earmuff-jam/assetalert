@@ -3,13 +3,12 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Box } from '@mui/material';
+import SimpleModal from '@common/SimpleModal';
+import MaintenancePlanHeader from '@features/MaintenancePlan/MaintenancePlanHeader/MaintenancePlanHeader';
+import MaintenancePlanContent from '@features/MaintenancePlan/MaintenancePlanContent/MaintenancePlanContent';
+import MaintenancePlanAddPlan from '@features/MaintenancePlan/MaintenancePlanAddPlan/MaintenancePlanAddPlan';
 
-import Plan from './PlanContent/Plan';
-import AddPlan from './AddPlan/AddPlan';
-import PlanHeader from './PlanHeader/PlanHeader';
-import SimpleModal from '../../common/SimpleModal';
-
-const PlanList = () => {
+const MaintenancePlanList = () => {
   const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
 
   const [sortedData, setSortedData] = useState([]);
@@ -46,14 +45,14 @@ const PlanList = () => {
 
   return (
     <Box sx={{ py: 2 }}>
-      <PlanHeader
+      <MaintenancePlanHeader
         toggleModal={toggleModal}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         sortingOrder={sortingOrder}
         setSortingOrder={setSortingOrder}
       />
-      <Plan
+      <MaintenancePlanContent
         loading={loading}
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
@@ -61,8 +60,14 @@ const PlanList = () => {
         maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
       />
       {displayModal && (
-        <SimpleModal title="Add new maintenance plan" handleClose={handleCloseAddNewPlan} maxSize="md">
-          <AddPlan
+        <SimpleModal
+          title="Add new maintenance plan"
+          subtitle="Create maintenance plan to associate assets and periodically perform checks on them.
+"
+          handleClose={handleCloseAddNewPlan}
+          maxSize="sm"
+        >
+          <MaintenancePlanAddPlan
             handleCloseAddNewPlan={handleCloseAddNewPlan}
             maintenancePlan={maintenancePlan}
             selectedMaintenancePlanID={selectedMaintenancePlanID}
@@ -74,4 +79,4 @@ const PlanList = () => {
   );
 };
 
-export default PlanList;
+export default MaintenancePlanList;

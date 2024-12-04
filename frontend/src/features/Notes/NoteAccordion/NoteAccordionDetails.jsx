@@ -4,7 +4,7 @@ import { DeleteRounded, EditRounded } from '@mui/icons-material';
 import { AccordionDetails, Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { STATUS_OPTIONS } from '@features/Notes/constants';
+import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
 
 dayjs.extend(relativeTime);
 

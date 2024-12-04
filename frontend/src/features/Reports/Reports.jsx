@@ -10,7 +10,7 @@ import ReportsHeader from '@features/Reports/ReportHeader/ReportsHeader';
 import ReportContent from '@features/Reports/ReportContent/ReportContent';
 import { inventoryActions } from '@features/InventoryList/inventorySlice';
 import ReportsFilterMenu from '@features/Reports/ReportsFilterMenu/ReportsFilterMenu';
-import { maintenancePlanActions } from '@features/MaintenancePlanList/maintenanceSlice';
+import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 
 export default function Reports() {
   const dispatch = useDispatch();

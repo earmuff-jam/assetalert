@@ -14,7 +14,7 @@ const InventoryList = lazy(() => import('@features/InventoryList/InventoryList')
 const RecentActivityList = lazy(() => import('@features/RecentActivities/RecentActivityList'));
 
 const EditInventory = lazy(() => import('@features/InventoryList/EditInventory/EditInventory'));
-const MaintenancePlanList = lazy(() => import('@features/MaintenancePlanList/MaintenancePlanList'));
+const MaintenancePlanList = lazy(() => import('@features/MaintenancePlan/MaintenancePlanList'));
 const CategoryItemDetails = lazy(() => import('@features/CategoryItemDetails/CategoryItemDetails'));
 
 const MaintenancePlanItemDetails = lazy(() =>

@@ -1,4 +1,4 @@
-import { STATUS_OPTIONS } from '@features/Notes/constants';
+import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
 import { FormControl, MenuItem, Select, Typography } from '@mui/material';
 
 export default function AddNoteStatusOptions({ label, value, name, handleStatus }) {

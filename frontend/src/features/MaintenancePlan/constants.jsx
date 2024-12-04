@@ -56,23 +56,33 @@ export const BLANK_MAINTENANCE_PLAN = {
   name: {
     value: '',
     name: 'name',
+    label: 'Title',
+    placeholder: 'Add a title to your maintenance plan',
+    size: 'small',
     required: true,
+    fullWidth: true,
     errorMsg: '',
     validators: [
       {
         validate: (value) => value.trim().length === 0,
-        message: 'Plan name is required',
+        message: 'Title is required',
       },
       {
         validate: (value) => value.trim().length >= 50,
-        message: 'Plan name should be less than 50 characters',
+        message: 'Title should be less than 50 characters',
       },
     ],
   },
   description: {
     value: '',
     name: 'description',
+    label: 'Description',
+    placeholder: 'Add a short descrption to your maintenance plan in less than 100 characters.',
     required: true,
+    size: 'small',
+    fullWidth: true,
+    rows: 4,
+    multiline: true,
     errorMsg: '',
     validators: [
       {
@@ -86,13 +96,14 @@ export const BLANK_MAINTENANCE_PLAN = {
     ],
   },
   min_items_limit: {
-    label: 'Min items count',
+    label: 'Min items',
     placeholder: 'Mininum count of items',
     value: '',
+    size: 'small',
     name: 'min_items_limit',
+    fullWidth: true,
     errorMsg: '',
     required: true,
-    fullWidth: true,
     validators: [
       {
         validate: (value) => {
@@ -113,9 +124,10 @@ export const BLANK_MAINTENANCE_PLAN = {
     ...GENERIC_FORM_FIELDS,
   },
   max_items_limit: {
-    label: 'Max items count',
+    label: 'Max items',
     placeholder: 'Maximum count of items',
     value: '',
+    size: 'small',
     name: 'max_items_limit',
     errorMsg: '',
     required: true,

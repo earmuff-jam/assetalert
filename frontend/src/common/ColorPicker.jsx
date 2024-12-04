@@ -7,7 +7,14 @@ const ColorPicker = ({ label, value, handleChange }) => {
       <Typography variant="subtitle2" color="text.secondary">
         {label}
       </Typography>
-      <MuiColorInput size="small" fullWidth format="hex" value={value} onChange={handleChange} />
+      <MuiColorInput
+        size="small"
+        fullWidth
+        format="hex"
+        value={value}
+        onChange={handleChange}
+        placeholder="Select a color"
+      />
     </>
   );
 };

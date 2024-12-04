@@ -73,6 +73,14 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) (*[]mode
 			}
 		}
 
+		content, _, _, err := FetchImage(maintenancePlanID.String)
+		if err != nil {
+			if err.Error() == "NoSuchKey" {
+				log.Printf("cannot find the selected document. error: %+v", err)
+			}
+		}
+
+		ec.Image = content
 		ec.ID = maintenancePlanID.String
 		ec.SharableGroups = sharableGroups
 		data = append(data, ec)
@@ -534,7 +542,6 @@ func RemoveAssetAssociationFromMaintenancePlan(user string, draftMaintenancePlan
 
 	return nil
 }
-
 
 // UpdateMaintenancePlanImage ...
 func UpdateMaintenancePlanImage(user string, userID string, maintenanceID string, imageURL string) (bool, error) {

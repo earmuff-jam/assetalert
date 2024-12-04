@@ -1,6 +1,28 @@
-import { Button, Stack, Typography } from '@mui/material';
-import SimpleModal from './SimpleModal';
 import CryptoJS from 'crypto-js';
+
+import { Button, Stack, Typography } from '@mui/material';
+
+import SimpleModal from '@common/SimpleModal';
+
+/**
+ * Function used to convert a valid base64 encoded string to a binary data set. Used
+ * in the context of images that need to be displayed in the list of categories or list
+ * of maintenance plans.
+ *
+ * @type {string} base64EncodedString - The string that is a valid representation of image.
+ * @returns valid bytes of images in Uint8Array format.
+ */
+export const Base64ToUint8Array = (base64EncodedString) => {
+  const binaryString = atob(base64EncodedString);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes;
+};
 
 /**
  * Function used to decrypt the client location from the local storage. To prevent XSS attacks on

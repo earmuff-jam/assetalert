@@ -1,11 +1,11 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import instance from '../../utils/Instances';
-import { maintenancePlanActions } from './maintenanceSlice';
-import { REACT_APP_LOCALHOST_URL } from '../../utils/Common';
+import instance from '@utils/Instances';
+import { Base64ToUint8Array } from '@common/utils';
+import { REACT_APP_LOCALHOST_URL } from '@utils/Common';
+import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 
 const DEFAULT_LIMIT = 10;
-const MAINTENANCE_STATUS_OPTION_TYPE = 'maintenance';
 const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
 export function* getPlans(action) {
@@ -20,22 +20,25 @@ export function* getPlans(action) {
     }
     const response = yield call(instance.get, `${BASEURL}/maintenance-plans?${params.toString()}`);
     const data = Array.isArray(response.data) ? response.data : [];
+
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        if (item.image) {
+          try {
+            // decode the image url into a valid data
+            const binaryData = Base64ToUint8Array(item.image);
+            const blob = new Blob([binaryData], { type: 'image/png' });
+            item.image = URL.createObjectURL(blob);
+          } catch (error) {
+            console.debug(error);
+          }
+        }
+      });
+    }
+
     yield put(maintenancePlanActions.getPlansSuccess(data));
   } catch (e) {
     yield put(maintenancePlanActions.getPlansFailure(e));
-  }
-}
-
-export function* getStatusOptions() {
-  try {
-    const userID = localStorage.getItem('userID');
-    const params = new URLSearchParams();
-    params.append('id', userID);
-    params.append('type', MAINTENANCE_STATUS_OPTION_TYPE);
-    const response = yield call(instance.get, `${BASEURL}/status/list?${params.toString()}`);
-    yield put(maintenancePlanActions.getStatusOptionsSuccess(response.data));
-  } catch (e) {
-    yield put(maintenancePlanActions.getStatusOptionsFailure(e));
   }
 }
 
@@ -53,8 +56,15 @@ export function* updatePlan(action) {
   try {
     const { id } = action.payload;
     const userID = localStorage.getItem('userID');
-    const response = yield call(instance.put, `${BASEURL}/plan/${id}`, { ...action.payload, updated_by: userID });
-    yield put(maintenancePlanActions.updatePlanSuccess(response.data));
+    const currentMaintenancePlan = { ...action.payload };
+    const draftMaintenancePlan = Object.assign({}, { ...currentMaintenancePlan });
+    if (draftMaintenancePlan?.image) {
+      delete draftMaintenancePlan['image'];
+    }
+    const response = yield call(instance.put, `${BASEURL}/plan/${id}`, { ...draftMaintenancePlan, updated_by: userID });
+    yield put(
+      maintenancePlanActions.updatePlanSuccess({ ...response.data, image: currentMaintenancePlan?.image || '' })
+    );
   } catch (e) {
     yield put(maintenancePlanActions.updatePlanFailure(e));
   }
@@ -68,7 +78,6 @@ export function* removePlan(action) {
     yield put(maintenancePlanActions.removePlanFailure(e));
   }
 }
-
 
 export function* download() {
   try {
@@ -84,10 +93,6 @@ export function* download() {
 
 export function* watchGetPlanList() {
   yield takeLatest(`maintenancePlan/getPlans`, getPlans);
-}
-
-export function* watchGetStatusOptions() {
-  yield takeLatest(`maintenancePlan/getStatusOptions`, getStatusOptions);
 }
 
 export function* watchCreatePlan() {
@@ -106,12 +111,4 @@ export function* watchDownload() {
   yield takeLatest(`maintenancePlan/download`, download);
 }
 
-
-export default [
-  watchGetPlanList,
-  watchGetStatusOptions,
-  watchCreatePlan,
-  watchDownload,
-  watchUpdatePlan,
-  watchRemovePlan,
-];
+export default [watchGetPlanList, watchCreatePlan, watchDownload, watchUpdatePlan, watchRemovePlan];
