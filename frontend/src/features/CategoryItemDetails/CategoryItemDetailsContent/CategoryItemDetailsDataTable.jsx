@@ -64,7 +64,7 @@ export default function CategoryItemDetailsDataTable({
         rowFormatter={rowFormatter}
         rowSelected={rowSelected}
         handleRowSelection={handleRowSelection}
-        emptyComponentSubtext="Create inventory items to associate them."
+        emptyComponentSubtext="Associate assets."
       />
     </Paper>
   );

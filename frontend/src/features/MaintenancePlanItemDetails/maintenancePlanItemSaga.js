@@ -39,11 +39,11 @@ export function* getItemsInMaintenancePlan(action) {
 export function* fetchAddItemsInPlan(action) {
   try {
     const userID = localStorage.getItem('userID');
-    const { id, rowSelected, collaborators } = action.payload;
+    const { id, selectedIDList, collaborators } = action.payload;
     const response = yield call(instance.post, `${BASEURL}/plans/items`, {
       id,
       userID,
-      assetIDs: rowSelected,
+      assetIDs: selectedIDList,
       collaborators: collaborators,
     });
     yield put(maintenancePlanItemActions.addItemsInPlanSuccess(response.data));
@@ -55,13 +55,13 @@ export function* fetchAddItemsInPlan(action) {
 export function* removeItemsFromMaintenancePlan(action) {
   try {
     const userID = localStorage.getItem('userID');
-    const { id, rowSelected } = action.payload;
+    const { id, selectedIDList } = action.payload;
     yield call(instance.post, `${BASEURL}/plan/remove/items`, {
       id,
       userID,
-      assetIDs: rowSelected,
+      assetIDs: selectedIDList,
     });
-    yield put(maintenancePlanItemActions.removeItemsFromMaintenancePlanSuccess(rowSelected));
+    yield put(maintenancePlanItemActions.removeItemsFromMaintenancePlanSuccess(selectedIDList));
   } catch (e) {
     yield put(maintenancePlanItemActions.removeItemsFromMaintenancePlanFailure(e));
   }
@@ -86,6 +86,13 @@ export function* getSelectedImage(action) {
     const response = yield call(instance.get, `${BASEURL}/${id}/fetchImage`, {
       responseType: 'arraybuffer',
     });
+
+    const textDecoder = new TextDecoder();
+    const responseText = textDecoder.decode(new Uint8Array(response.data));
+    if (responseText.includes('NoSuchKey')) {
+      throw new Error('NoSuchKey: Image does not exist');
+    }
+
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
     const avatarUrl = URL.createObjectURL(blob);
     yield put(maintenancePlanItemActions.getSelectedImageSuccess(avatarUrl));

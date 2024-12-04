@@ -236,6 +236,7 @@ const InventoryList = () => {
           />
         ) : (
           <TableComponent
+            paper
             isLoading={loading}
             data={options}
             hideCheckBox

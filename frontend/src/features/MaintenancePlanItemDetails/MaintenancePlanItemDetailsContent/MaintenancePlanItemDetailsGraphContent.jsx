@@ -1,19 +1,23 @@
-import { Box, Paper } from '@mui/material';
-
-import RowHeader from '../../../common/RowHeader';
-import BarChart from '../../../common/Chart/BarChart';
+import { Box, Stack } from '@mui/material';
+import RowHeader from '@common/RowHeader';
 import { useTheme } from '@emotion/react';
+import BarChart from '@common/Chart/BarChart';
+import { EmptyComponent } from '@common/utils';
 
-export default function CategoryItemDetailsGraph({ itemsInCategory }) {
+export default function MaintenancePlanItemDetailsGraphContent({ associatedAssets = [] }) {
   const theme = useTheme();
+
+  if (!associatedAssets || associatedAssets?.length <= 0) {
+    return <EmptyComponent subtitle="Associate assets." />;
+  }
   return (
-    <Paper elevation={1} sx={{ padding: '1rem' }}>
+    <Stack spacing={2}>
       <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
           legendLabel="Name / Cost"
           data={
-            itemsInCategory
+            associatedAssets
               ?.filter((_, index) => index < 10)
               ?.map((v, index) => ({
                 label: v.name,
@@ -24,6 +28,6 @@ export default function CategoryItemDetailsGraph({ itemsInCategory }) {
           backgroundColor={[theme.palette.primary.light, theme.palette.secondary.main]}
         />
       </Box>
-    </Paper>
+    </Stack>
   );
 }

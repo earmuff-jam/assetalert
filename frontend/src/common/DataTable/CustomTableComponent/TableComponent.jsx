@@ -6,6 +6,7 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
 
 /**
  * TableComponent React Function - Displays the inventory table
+ * @param {boolean} showActions - determines if actionButtons should be present, defaults: true
  * @param {boolean} hideCheckBox - determines if associated icons should be present, defaults: false
  * @param {boolean} hideIconButton - determines if associated icons should be present, defaults: false
  * @param {boolean} hideMoreDetailsButton - determines if associated icons should be present, defaults: false
@@ -13,14 +14,14 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
  * @param {Array<Object>} columns - the columns to display for the table
  * @param {Function} rowFormatter - the row formatter to format each row
  * @param {Array<Object>} data - the data to display for each row in the table
- * @param {Array<String>} rowSelected - the array of IDs that represent each item
+ * @param {Array<String>} selectedIDList - the array of IDs that represent each item
  * @param {Function} onRowSelect - the function that is used to select a specific row
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
- * @param {string} maxHeight - the maxHeight of the table container, defaults: 65vh
  */
 const TableComponent = ({
+  paper = false,
   showActions = true,
   hideCheckBox = false,
   hideIconButton = false,
@@ -29,7 +30,7 @@ const TableComponent = ({
   columns,
   data,
   rowFormatter,
-  rowSelected,
+  selectedIDList,
   onRowSelect,
   handleRowSelection,
   handleEdit,
@@ -42,11 +43,11 @@ const TableComponent = ({
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={paper ? Paper : null}>
       <Table>
         <CustomTableHeader
           columns={columns}
-          rowSelected={rowSelected}
+          selectedIDList={selectedIDList}
           showActions={showActions}
           hideCheckBox={hideCheckBox}
           handleRowSelection={handleRowSelection}
@@ -54,7 +55,7 @@ const TableComponent = ({
         <CustomTableBody
           data={data}
           columns={columns}
-          rowSelected={rowSelected}
+          selectedIDList={selectedIDList}
           hideCheckBox={hideCheckBox}
           handleRowSelection={handleRowSelection}
           rowFormatter={rowFormatter}

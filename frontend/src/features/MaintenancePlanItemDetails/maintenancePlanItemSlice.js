@@ -91,6 +91,7 @@ const maintenancePlanItemSlice = createSlice({
     getSelectedImageFailure: (state) => {
       state.loading = false;
       state.error = '';
+      state.selectedMaintenancePlanImage = '';
     },
   },
 });

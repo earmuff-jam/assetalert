@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 
+import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import SimpleModal from '@common/SimpleModal';
 import { Skeleton, Stack } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
-
-import SimpleModal from '../../common/SimpleModal';
-import { inventoryActions } from '../InventoryList/inventorySlice';
-import { maintenancePlanItemActions } from './maintenancePlanItemSlice';
-import MaintenancePlanItemDetailsGraph from './MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsGraph';
-import MaintenancePlanItemDetailsHeader from './MaintenancePlanItemDetailsHeader/MaintenancePlanItemDetailsHeader';
-import MaintenancePlanItemDetailsContent from './MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsContent';
-import MaintenancePlanItemDetailsAddAsset from './MaintenancePlanItemDetailsAddAsset/MaintenancePlanItemDetailsAddAsset';
-import { ConfirmationBoxModal } from '../../common/utils';
-import { enqueueSnackbar } from 'notistack';
+import { ConfirmationBoxModal } from '@common/utils';
+import { inventoryActions } from '@features/InventoryList/inventorySlice';
+import { maintenancePlanItemActions } from '@features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
+import MaintenancePlanItemDetailsGraph from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsGraph';
+import MaintenancePlanItemDetailsHeader from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsHeader/MaintenancePlanItemDetailsHeader';
+import MaintenancePlanItemDetailsContent from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsContent';
+import MaintenancePlanItemDetailsAddAsset from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsAddAsset/MaintenancePlanItemDetailsAddAsset';
 
 export default function MaintenancePlanItemDetails() {
   const { id } = useParams();
@@ -27,7 +26,7 @@ export default function MaintenancePlanItemDetails() {
     loading = false,
   } = useSelector((state) => state.maintenancePlanItem);
 
-  const [rowSelected, setRowSelected] = useState([]);
+  const [selectedIDList, setSelectedIDList] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
   const [openConfirmationBoxModal, setOpenConfirmationBoxModal] = useState(false);
 
@@ -42,7 +41,10 @@ export default function MaintenancePlanItemDetails() {
 
   const confirmDelete = () => {
     dispatch(
-      maintenancePlanItemActions.removeItemsFromMaintenancePlan({ id: selectedMaintenancePlan?.id, rowSelected })
+      maintenancePlanItemActions.removeItemsFromMaintenancePlan({
+        id: selectedMaintenancePlan?.id,
+        selectedIDList,
+      })
     );
     enqueueSnackbar(`Removed association of assets for ${selectedMaintenancePlan.name}.`, {
       variant: 'default',
@@ -53,7 +55,11 @@ export default function MaintenancePlanItemDetails() {
   const addItems = () => {
     const collaborators = selectedMaintenancePlan.sharable_groups;
     dispatch(
-      maintenancePlanItemActions.addItemsInPlan({ id: selectedMaintenancePlan?.id, rowSelected, collaborators })
+      maintenancePlanItemActions.addItemsInPlan({
+        id: selectedMaintenancePlan?.id,
+        selectedIDList,
+        collaborators,
+      })
     );
     enqueueSnackbar(`Added association of assets for ${selectedMaintenancePlan.name}.`, {
       variant: 'success',
@@ -67,7 +73,7 @@ export default function MaintenancePlanItemDetails() {
 
   const resetSelection = () => {
     setDisplayModal(false);
-    setRowSelected([]);
+    setSelectedIDList([]);
   };
 
   useEffect(() => {
@@ -83,7 +89,7 @@ export default function MaintenancePlanItemDetails() {
   }
 
   return (
-    <Stack direction="column" spacing="1rem">
+    <Stack spacing={3}>
       <MaintenancePlanItemDetailsHeader
         label={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
         caption="View details of selected maintenance plan"
@@ -91,13 +97,13 @@ export default function MaintenancePlanItemDetails() {
         image={selectedMaintenancePlanImage}
       />
       <MaintenancePlanItemDetailsContent
-        rowSelected={rowSelected}
-        setRowSelected={setRowSelected}
+        selectedIDList={selectedIDList}
+        setSelectedIDList={setSelectedIDList}
         itemsInMaintenancePlan={itemsInMaintenancePlan}
         handleOpenModal={handleOpenModal}
         handleRemoveAssociation={handleRemoveAssociation}
       />
-      <MaintenancePlanItemDetailsGraph totalItems={itemsInMaintenancePlan} />
+      <MaintenancePlanItemDetailsGraph associatedAssets={itemsInMaintenancePlan} />
       {displayModal && (
         <SimpleModal
           title={`Add items to ${selectedMaintenancePlan?.name}`}
@@ -106,11 +112,11 @@ export default function MaintenancePlanItemDetails() {
           showSecondaryButton
           secondaryButtonAction={addItems}
           secondaryButtonIcon={<AddRounded />}
-          disableSecondaryButton={rowSelected.length <= 0}
+          disableSecondaryButton={selectedIDList.length <= 0}
         >
           <MaintenancePlanItemDetailsAddAsset
-            rowSelected={rowSelected}
-            setRowSelected={setRowSelected}
+            selectedIDList={selectedIDList}
+            setSelectedIDList={setSelectedIDList}
             resetSelection={resetSelection}
             itemsInMaintenancePlan={itemsInMaintenancePlan}
           />

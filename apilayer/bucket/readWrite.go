@@ -1,6 +1,7 @@
 package bucket
 
 import (
+	"errors"
 	"io"
 	"log"
 	"os"
@@ -57,7 +58,7 @@ func RetrieveDocumentFromBucket(documentID string) ([]byte, string, string, erro
 	if err != nil {
 		if minio.ToErrorResponse(err).Code == "NoSuchKey" {
 			log.Printf("Object metadata not found: %s", documentID)
-			return nil, "", "", nil // Gracefully return empty data if metadata doesn't exist
+			return nil, "", "", errors.New("NoSuchKey") // Catch the error code and return the error code
 		}
 		log.Printf("Error retrieving object metadata: %+v", err)
 		return nil, "", "", err
