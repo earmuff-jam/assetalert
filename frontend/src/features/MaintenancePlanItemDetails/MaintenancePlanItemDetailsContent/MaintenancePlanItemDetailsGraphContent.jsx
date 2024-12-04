@@ -8,7 +8,7 @@ export default function MaintenancePlanItemDetailsGraphContent({ totalItems = []
   const theme = useTheme();
 
   if (!totalItems || totalItems?.length <= 0) {
-    return <EmptyComponent subtitle="Associate items to view chart." />;
+    return <EmptyComponent subtitle="Associate assets." />;
   }
   return (
     <>

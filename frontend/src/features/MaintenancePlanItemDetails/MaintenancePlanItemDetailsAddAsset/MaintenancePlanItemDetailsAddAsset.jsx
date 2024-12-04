@@ -47,7 +47,7 @@ export default function MaintenancePlanItemDetailsAddAsset({ rowSelected, setRow
         rowFormatter={rowFormatter}
         rowSelected={rowSelected}
         handleRowSelection={handleRowSelection}
-        emptyComponentSubtext="Create inventory items to associate them."
+        emptyComponentSubtext="Associate assets."
       />
     </Stack>
   );
