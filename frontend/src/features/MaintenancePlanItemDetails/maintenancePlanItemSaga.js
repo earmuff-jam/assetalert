@@ -86,6 +86,13 @@ export function* getSelectedImage(action) {
     const response = yield call(instance.get, `${BASEURL}/${id}/fetchImage`, {
       responseType: 'arraybuffer',
     });
+
+    const textDecoder = new TextDecoder();
+    const responseText = textDecoder.decode(new Uint8Array(response.data));
+    if (responseText.includes('NoSuchKey')) {
+      throw new Error('NoSuchKey: Image does not exist');
+    }
+
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
     const avatarUrl = URL.createObjectURL(blob);
     yield put(maintenancePlanItemActions.getSelectedImageSuccess(avatarUrl));

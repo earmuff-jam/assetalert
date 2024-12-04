@@ -94,6 +94,14 @@ func FetchImage(rw http.ResponseWriter, r *http.Request, user string) {
 
 	content, contentType, fileName, err := db.FetchImage(ID)
 	if err != nil {
+		if err.Error() == "NoSuchKey" {
+			log.Printf("cannot find the selected document. error: %+v", err)
+			// Write response headers and content only
+			rw.Header().Set("Content-Type", contentType)
+			rw.WriteHeader(http.StatusOK)
+			rw.Write([]byte("NoSuchKey"))
+			return
+		}
 		log.Printf("Failed to retrieve image. error: %+v", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		return

@@ -42,6 +42,10 @@ func FetchImage(userID string) ([]byte, string, string, error) {
 
 	content, contentType, fileName, err := bucket.RetrieveDocumentFromBucket(userID)
 	if err != nil {
+		if err.Error() == "NoSuchKey" {
+			log.Printf("cannot find the selected document. error: %+v", err)
+			return nil, "", "", err
+		}
 		log.Printf("unable to retrieve the selected document. error: %+v", err)
 		return nil, "", "", err
 	}
