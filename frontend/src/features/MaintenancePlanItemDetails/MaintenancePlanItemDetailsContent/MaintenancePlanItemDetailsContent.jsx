@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import RowHeader from '@common/RowHeader';
 import { pluralizeWord } from '@common/utils';
 import { AddRounded, RemoveRounded } from '@mui/icons-material';
@@ -48,26 +48,28 @@ export default function MaintenancePlanItemDetailsContent({
 
   return (
     <Paper elevation={1} sx={{ padding: '1rem' }}>
-      <RowHeader
-        title="Items"
-        caption={`Total ${pluralizeWord('item', itemsInMaintenancePlan?.length || 0)}`}
-        primaryButtonTextLabel="Add"
-        primaryStartIcon={<AddRounded />}
-        handleClickPrimaryButton={handleOpenModal}
-        secondaryButtonTextLabel="Remove"
-        secondaryStartIcon={<RemoveRounded color="error" />}
-        handleClickSecondaryButton={handleRemoveAssociation}
-        secondaryButtonDisabled={selectedIDList.length <= 0}
-      />
-      <TableComponent
-        showActions={false}
-        data={itemsInMaintenancePlan}
-        columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
-        rowFormatter={rowFormatter}
-        selectedIDList={selectedIDList}
-        handleRowSelection={handleRowSelection}
-        emptyComponentSubtext="Associate assets."
-      />
+      <Stack spacing={2}>
+        <RowHeader
+          title="Items"
+          caption={`Total ${pluralizeWord('item', itemsInMaintenancePlan?.length || 0)}`}
+          primaryButtonTextLabel="Add"
+          primaryStartIcon={<AddRounded />}
+          handleClickPrimaryButton={handleOpenModal}
+          secondaryButtonTextLabel="Remove"
+          secondaryStartIcon={<RemoveRounded color="error" />}
+          handleClickSecondaryButton={handleRemoveAssociation}
+          secondaryButtonDisabled={selectedIDList.length <= 0}
+        />
+        <TableComponent
+          showActions={false}
+          data={itemsInMaintenancePlan}
+          columns={Object.values(VIEW_INVENTORY_LIST_HEADERS).filter((v) => v.displayConcise)}
+          rowFormatter={rowFormatter}
+          selectedIDList={selectedIDList}
+          handleRowSelection={handleRowSelection}
+          emptyComponentSubtext="Associate assets."
+        />
+      </Stack>
     </Paper>
   );
 }

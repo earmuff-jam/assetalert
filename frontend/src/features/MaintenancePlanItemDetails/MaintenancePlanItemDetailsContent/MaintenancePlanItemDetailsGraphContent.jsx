@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import RowHeader from '@common/RowHeader';
 import { useTheme } from '@emotion/react';
 import BarChart from '@common/Chart/BarChart';
@@ -11,7 +11,7 @@ export default function MaintenancePlanItemDetailsGraphContent({ associatedAsset
     return <EmptyComponent subtitle="Associate assets." />;
   }
   return (
-    <>
+    <Stack spacing={2}>
       <RowHeader title="Graph" caption="Graph details for last 10 recently updated" />
       <Box sx={{ position: 'relative', width: 'calc(100% - 1rem)' }}>
         <BarChart
@@ -28,6 +28,6 @@ export default function MaintenancePlanItemDetailsGraphContent({ associatedAsset
           backgroundColor={[theme.palette.primary.light, theme.palette.secondary.main]}
         />
       </Box>
-    </>
+    </Stack>
   );
 }

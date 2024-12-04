@@ -89,7 +89,7 @@ export default function MaintenancePlanItemDetails() {
   }
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={3}>
       <MaintenancePlanItemDetailsHeader
         label={selectedMaintenancePlan?.name ? `${selectedMaintenancePlan.name} Overview` : 'Maintenance Plan Overview'}
         caption="View details of selected maintenance plan"

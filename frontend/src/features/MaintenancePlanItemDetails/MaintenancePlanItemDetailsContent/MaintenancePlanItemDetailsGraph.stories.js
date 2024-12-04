@@ -13,7 +13,7 @@ export const MaintenancePlanItemDetailsGraphMultiple = Template.bind({});
 export const MaintenancePlanItemDetailsGraphEmpty = Template.bind({});
 
 MaintenancePlanItemDetailsGraphDefault.args = {
-  totalItems: [
+  associatedAssets: [
     {
       id: '6e9df958-cb4d-4d5f-a38c-c31544eaa115',
       plan_id: 'd4d6ce04-1eb1-42fc-89ae-26abb6ac0c2b',
@@ -35,11 +35,11 @@ MaintenancePlanItemDetailsGraphDefault.args = {
 };
 
 MaintenancePlanItemDetailsGraphEmpty.args = {
-  totalItems: [],
+  associatedAssets: [],
 };
 
 MaintenancePlanItemDetailsGraphMultiple.args = {
-  totalItems: [
+  associatedAssets: [
     {
       id: '6e9df958-cb4d-4d5f-a38c-c31544eaa115',
       plan_id: 'd4d6ce04-1eb1-42fc-89ae-26abb6ac0c2b',
