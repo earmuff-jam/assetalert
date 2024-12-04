@@ -6,6 +6,7 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
 
 /**
  * TableComponent React Function - Displays the inventory table
+ * @param {boolean} showActions - determines if actionButtons should be present, defaults: true
  * @param {boolean} hideCheckBox - determines if associated icons should be present, defaults: false
  * @param {boolean} hideIconButton - determines if associated icons should be present, defaults: false
  * @param {boolean} hideMoreDetailsButton - determines if associated icons should be present, defaults: false
@@ -18,7 +19,6 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
- * @param {string} maxHeight - the maxHeight of the table container, defaults: 65vh
  */
 const TableComponent = ({
   showActions = true,
