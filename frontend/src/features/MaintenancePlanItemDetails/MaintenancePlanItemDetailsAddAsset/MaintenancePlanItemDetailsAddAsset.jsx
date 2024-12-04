@@ -59,7 +59,7 @@ export default function MaintenancePlanItemDetailsAddAsset({
         rowFormatter={rowFormatter}
         selectedIDList={selectedIDList}
         handleRowSelection={handleRowSelection}
-        emptyComponentSubtext="Associate assets."
+        emptyComponentSubtext="Add assets to associated them with selected plan."
       />
     </Stack>
   );
