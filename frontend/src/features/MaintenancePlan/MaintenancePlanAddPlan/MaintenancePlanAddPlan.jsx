@@ -153,7 +153,7 @@ const MaintenancePlanAddPlan = ({
   };
 
   useEffect(() => {
-    if (!loading && selectedMaintenancePlanID !== null) {
+    if (selectedMaintenancePlanID !== null) {
       const draftMaintenancePlan = maintenancePlan.filter((v) => v.id === selectedMaintenancePlanID).find(() => true);
       setFormData(
         produce(formData, (draft) => {
@@ -166,7 +166,7 @@ const MaintenancePlanAddPlan = ({
 
       const currentPlanType = Object.values(ITEM_TYPE_MAPPER).find((v) => v.value === draftMaintenancePlan?.plan_type);
 
-      setStatus(draftMaintenancePlan?.maintenance_status_name);
+      setStatus(draftMaintenancePlan?.maintenance_status_name || STATUS_OPTIONS[0].label);
       setPlanType(currentPlanType?.value || '');
       setLocation(draftMaintenancePlan?.location);
       setPlanColor(draftMaintenancePlan?.color);
@@ -180,8 +180,8 @@ const MaintenancePlanAddPlan = ({
       <Stack spacing={2} sx={{ width: '100%' }}>
         <MaintenancePlanAddPlanForm
           formFields={formData}
-          handleInputChange={handleInputChange}
           setLocation={setLocation}
+          handleInputChange={handleInputChange}
         />
         <MaintenancePlanAddTypeOptions value={planType} handleChange={handlePlanChange} />
         <MaintenancePlanAddFormLimit formFields={formData} handleInputChange={handleInputChange} />

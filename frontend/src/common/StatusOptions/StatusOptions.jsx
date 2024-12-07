@@ -8,9 +8,9 @@ export default function StatusOptions({ value, onChange }) {
   return (
     <FormControl fullWidth>
       <InputLabel id="status-selector-label">
-        <Stack direction="row" spacing="1rem" alignItems="center">
-          <Typography>Overall status of items within container</Typography>
-          <Tooltip title="Overall status of items within container. May contain items with other statuses as well.">
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Typography>Overall status of assets within container</Typography>
+          <Tooltip title="Overall status of assets within container. Individual items may contain different status than selected one for the category.">
             <InfoOutlined fontSize="small" />
           </Tooltip>
         </Stack>
@@ -19,8 +19,8 @@ export default function StatusOptions({ value, onChange }) {
       <Select
         labelId="status-selector-labelId"
         id="status-selector"
+        name="status"
         value={value}
-        name={'status'}
         onChange={onChange}
         variant="standard"
       >

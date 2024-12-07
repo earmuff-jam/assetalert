@@ -68,8 +68,8 @@ const MaintenancePlanList = () => {
           maxSize="sm"
         >
           <MaintenancePlanAddPlan
-            handleCloseAddNewPlan={handleCloseAddNewPlan}
             maintenancePlan={maintenancePlan}
+            handleCloseAddNewPlan={handleCloseAddNewPlan}
             selectedMaintenancePlanID={selectedMaintenancePlanID}
             setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
           />
