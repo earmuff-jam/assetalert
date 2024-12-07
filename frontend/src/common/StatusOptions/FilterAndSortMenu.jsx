@@ -1,7 +1,10 @@
-import { CloseRounded, FilterAltRounded, SortRounded } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { STATUS_OPTIONS } from '../../features/Notes/constants';
 import { useState } from 'react';
+
+import { Box, IconButton, Menu, MenuItem, Paper, Stack, Tooltip, Typography } from '@mui/material';
+
+import { CloseRounded, FilterAltRounded, SortRounded } from '@mui/icons-material';
+
+import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
 
 export default function FilterAndSortMenu({ sortingOrder, setSortingOrder, selectedFilter, setSelectedFilter }) {
   const [anchorEl, setAnchorEl] = useState(null);

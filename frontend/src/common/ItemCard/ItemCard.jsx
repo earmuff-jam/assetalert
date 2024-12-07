@@ -1,10 +1,23 @@
-import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
-import { Box, Card, CardActions, CardContent, IconButton, Stack, Tooltip, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { STATUS_OPTIONS } from '../../features/Notes/constants';
-
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
+import { AlarmAddRounded, DeleteRounded, EditNoteRounded } from '@mui/icons-material';
+
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+
+import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
 
 dayjs.extend(relativeTime);
 
@@ -17,7 +30,7 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
     return (
       <Tooltip title={displayTitle?.display}>
         <Stack direction="row" spacing="0.2rem" alignItems="center" alignSelf="flex-end">
-          {displayTitle?.icon}
+          <Chip variant="outlined" size="small" label={displayTitle?.display.split(' ')[0]} />
         </Stack>
       </Tooltip>
     );
@@ -25,7 +38,7 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
 
   return (
     <Box sx={{ overflow: 'auto', paddingBottom: '1rem' }}>
-      <Stack spacing={{ xs: 1 }} direction="row" useFlexGap flexWrap="wrap">
+      <Stack spacing={{ xs: 2 }} direction="row" useFlexGap flexWrap="wrap">
         {data?.map((item, index) => (
           <Stack key={index} flexGrow={1}>
             <Card
@@ -34,6 +47,7 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
                 flexDirection: 'column',
               }}
             >
+              <CardMedia sx={{ height: '10rem' }} image={item.image || '/blank_canvas.png'} />
               <CardContent>
                 <Stack direction="row">
                   <Stack flexGrow={1}>

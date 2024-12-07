@@ -5,7 +5,7 @@ import { AddRounded, FileDownload } from '@mui/icons-material';
 
 import RowHeader from '../../../common/RowHeader';
 import { categoryActions } from '../categoriesSlice';
-import FilterAndSortMenu from '../../../common/FilterAndSortMenu/FilterAndSortMenu';
+import FilterAndSortMenu from '../../../common/StatusOptions/FilterAndSortMenu';
 
 export default function CategoryHeader({
   categories,

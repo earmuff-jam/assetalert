@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import RowHeader from '@common/RowHeader';
 import DataTable from '@common/DataTable/DataTable';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '@features/MaintenancePlanList/constants';
+import { ITEMS_IN_MAINTENANCE_PLAN_HEADER } from '@features/MaintenancePlan/constants';
 
 dayjs.extend(relativeTime);
 

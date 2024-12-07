@@ -5,14 +5,19 @@ import { useDispatch } from 'react-redux';
 
 import { Skeleton } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
-import ItemCard from '../../../common/ItemCard/ItemCard';
-import { maintenancePlanActions } from '../maintenanceSlice';
-import { ConfirmationBoxModal, EmptyComponent } from '../../../common/utils';
+import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
+import { ConfirmationBoxModal, EmptyComponent } from '@common/utils';
+import ItemCard from '@common/ItemCard/ItemCard';
 
 dayjs.extend(relativeTime);
 
-const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSelectedMaintenancePlanID }) => {
+const MaintenancePlanContent = ({
+  maintenancePlan,
+  loading,
+  displayModal,
+  setDisplayModal,
+  setSelectedMaintenancePlanID,
+}) => {
   const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -64,4 +69,4 @@ const Plan = ({ maintenancePlan, loading, displayModal, setDisplayModal, setSele
   );
 };
 
-export default Plan;
+export default MaintenancePlanContent;

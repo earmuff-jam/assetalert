@@ -16,7 +16,7 @@ export default function TextFieldWithLabel({
   helperText,
 }) {
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} sx={{ flexGrow: 1 }}>
       <Stack spacing={0}>
         <Typography variant="subtitle2" color="text.secondary">
           {label}
@@ -36,6 +36,7 @@ export default function TextFieldWithLabel({
         multiline={multiline}
         error={error}
         rows={rows}
+        fullWidth
         helperText={helperText}
       />
     </Stack>

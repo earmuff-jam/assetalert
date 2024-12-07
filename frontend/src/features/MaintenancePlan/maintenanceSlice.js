@@ -1,12 +1,11 @@
-import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   error: '',
   loading: false,
   maintenancePlan: [],
-  statusOptions: [],
 };
 
 const maintenancePlanSlice = createSlice({
@@ -27,22 +26,6 @@ const maintenancePlanSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.maintenancePlan = [];
-    },
-  
-    getStatusOptions: (state) => {
-      state.loading = true;
-      state.error = '';
-      state.statusOptions = [];
-    },
-    getStatusOptionsSuccess: (state, action) => {
-      state.statusOptions = action.payload;
-      state.loading = false;
-      state.error = '';
-    },
-    getStatusOptionsFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-      state.statusOptions = [];
     },
     createPlan: (state) => {
       state.loading = true;
@@ -68,7 +51,6 @@ const maintenancePlanSlice = createSlice({
         return v.id !== draftMaintenancePlan.id;
       });
       state.maintenancePlan = [draftMaintenancePlan, ...filteredMaintenancePlan];
-      // TODO: remove this after removing selected maintenance workflow - https://github.com/earmuff-jam/mashed/issues/215
       state.selectedMaintenancePlan = draftMaintenancePlan;
       state.loading = false;
       state.error = '';

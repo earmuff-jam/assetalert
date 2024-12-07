@@ -26,6 +26,7 @@ type MaintenancePlan struct {
 	UpdatedAt         time.Time `json:"updated_at"`
 	Updator           string    `json:"updator"`
 	SharableGroups    []string  `json:"sharable_groups"`
+	Image             []byte    `json:"image,omitempty"`
 }
 
 // MaintenanceItemRequest ...

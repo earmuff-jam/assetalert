@@ -1,25 +1,24 @@
-import { InputAdornment, TextField, Typography } from '@mui/material';
+import { InputAdornment, Stack, TextField, Typography } from '@mui/material';
 
 import RetrieveUserLocation from '@common/Location/RetrieveUserLocation';
 import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
 
-export default function AddNoteHeader({ formFields, handleInput, setLocation }) {
+export default function MaintenancePlanAddPlanForm({ formFields, handleInputChange, setLocation }) {
   return (
-    <>
+    <Stack spacing={1}>
       <Typography variant="subtitle2" color="text.secondary">
-        {formFields.title.label}
+        {formFields.name.label}
       </Typography>
       <TextField
-        id={formFields.title.name}
-        name={formFields.title.name}
-        value={formFields.title.value}
-        size={formFields.title.size}
-        placeholder={formFields.title.placeholder}
-        onChange={handleInput}
-        required={formFields.title.required}
-        error={Boolean(formFields.title['errorMsg'].length)}
-        helperText={formFields.title['errorMsg']}
-        variant={formFields.title.variant}
+        id="name"
+        value={formFields.name.value}
+        onChange={handleInputChange}
+        placeholder={formFields.name.placeholder}
+        fullWidth
+        variant="outlined"
+        size={formFields.name.size}
+        error={Boolean(formFields.name['errorMsg'].length)}
+        helperText={formFields.name['errorMsg']}
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
@@ -35,7 +34,7 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
         value={formFields.description.value}
         size={formFields.description.size}
         placeholder={formFields.description.placeholder}
-        onChange={handleInput}
+        onChange={handleInputChange}
         required={formFields.description.required}
         fullWidth={formFields.description.fullWidth}
         error={Boolean(formFields.description.errorMsg)}
@@ -44,6 +43,6 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
         rows={formFields.description.rows || 4}
         multiline={formFields.description.multiline || false}
       />
-    </>
+    </Stack>
   );
 }

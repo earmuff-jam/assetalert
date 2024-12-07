@@ -1,24 +1,16 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { ADD_CATEGORY_FORM_FIELDS } from '../constants';
 import ColorPicker from '../../../common/ColorPicker';
 import { useDispatch } from 'react-redux';
 import { categoryActions } from '../categoriesSlice';
-import { AddRounded, CheckCircleRounded, InfoOutlined } from '@mui/icons-material';
+import { AddRounded, CheckCircleRounded } from '@mui/icons-material';
 import RetrieveUserLocation from '../../../common/Location/RetrieveUserLocation';
 import LocationPicker from '../../../common/Location/LocationPicker';
-import { STATUS_OPTIONS } from '../../Notes/constants';
+
+import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
+import StatusOptions from '@common/StatusOptions/StatusOptions';
 
 const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCategoryID, setSelectedCategoryID }) => {
   const dispatch = useDispatch();
@@ -212,31 +204,7 @@ const AddCategory = ({ categories, loading, handleCloseAddCategory, selectedCate
                   />
                 ))}
             </Stack>
-            <FormControl fullWidth>
-              <InputLabel id="status-selector-label">
-                <Stack direction="row" spacing="1rem" alignItems="center">
-                  <Typography>Overall status of items within container</Typography>
-                  <Tooltip title="Overall status of items within container. May contain items with other statuses as well.">
-                    <InfoOutlined fontSize="small" />
-                  </Tooltip>
-                </Stack>
-              </InputLabel>
-
-              <Select
-                labelId="status-selector-labelId"
-                id="status-selector"
-                value={status}
-                name={'status'}
-                onChange={handleStatus}
-                variant="standard"
-              >
-                {STATUS_OPTIONS.map((option) => (
-                  <MenuItem key={option.id} value={option.label}>
-                    {option.display}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <StatusOptions value={status} onChange={handleStatus} />
             <Stack direction="row" spacing="1rem">
               {Object.values(formFields)
                 .slice(2)

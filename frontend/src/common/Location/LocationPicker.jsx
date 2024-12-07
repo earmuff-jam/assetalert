@@ -12,7 +12,13 @@ import { Vector as VectorSource } from 'ol/source';
 import { defaults as defaultControls } from 'ol/control.js';
 import { Box, Stack, Typography } from '@mui/material';
 
-const LocationPicker = ({ location = { lon: 0, lat: 0 }, onLocationChange, disabled = false, subtitle, editMode = false }) => {
+const LocationPicker = ({
+  location = { lon: 0, lat: 0 },
+  onLocationChange,
+  disabled = false,
+  subtitle,
+  editMode = false,
+}) => {
   const mapRef = useRef();
   const markerRef = useRef();
 
@@ -53,7 +59,7 @@ const LocationPicker = ({ location = { lon: 0, lat: 0 }, onLocationChange, disab
 
     if (editMode) {
       map.on('click', function (event) {
-        const clickedCoordinate = toLonLat(event.coordinate); 
+        const clickedCoordinate = toLonLat(event.coordinate);
         const [lon, lat] = clickedCoordinate;
         updateMarker(vectorLayer, lon, lat, markerRef);
         // If onLocationChange callback is provided, call it with new location

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { REACT_APP_LOCALHOST_URL } from './Common';
+import { REACT_APP_LOCALHOST_URL, REACT_APP_DEPLOYMENT_ENVIRONMENT } from './Common';
 
 const UNAUTHORIZED_INSTANCES = [400, 401, 500];
 
@@ -24,10 +24,15 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (UNAUTHORIZED_INSTANCES.includes(error?.response?.status)) {
-      localStorage.removeItem('userID');
-      window.history.replaceState({}, '');
-      window.location = '/';
+    if (REACT_APP_DEPLOYMENT_ENVIRONMENT === 'PROD') {
+      // in production env, if the server throws an invalid error,
+      // we want to be able to catch it, and log the user out. this is to
+      // prevent failsafe operations in the prod env.
+      if (UNAUTHORIZED_INSTANCES.includes(error?.response?.status)) {
+        localStorage.removeItem('userID');
+        window.history.replaceState({}, '');
+        window.location = '/';
+      }
     }
   }
 );
