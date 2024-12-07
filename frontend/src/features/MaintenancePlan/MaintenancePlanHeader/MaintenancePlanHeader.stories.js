@@ -1,18 +1,18 @@
-import PlanHeader from '@features/MaintenancePlan/MaintenancePlanHeader/MaintenancePlanHeader';
+import MaintenancePlanHeader from '@features/MaintenancePlan/MaintenancePlanHeader/MaintenancePlanHeader';
 
 export default {
-  title: 'MaintenancePlan/PlanHeader',
-  component: PlanHeader,
+  title: 'Maintenance/MaintenancePlan/MaintenancePlanHeader',
+  component: MaintenancePlanHeader,
   tags: ['autodocs'],
 };
 
-const Template = (args) => <PlanHeader {...args} />;
+const Template = (args) => <MaintenancePlanHeader {...args} />;
 
-export const PlanHeaderDefault = Template.bind({});
-export const PlanHeaderDraftStatus = Template.bind({});
-export const PlanHeaderASCSortingOrder = Template.bind({});
+export const MaintenancePlanHeaderDefault = Template.bind({});
+export const MaintenancePlanHeaderDraftStatus = Template.bind({});
+export const MaintenancePlanHeaderASCSortingOrder = Template.bind({});
 
-PlanHeaderDefault.args = {
+MaintenancePlanHeaderDefault.args = {
   toggleModal: () => {},
   selectedFilter: null,
   setSelectedFilter: () => {},
@@ -20,7 +20,7 @@ PlanHeaderDefault.args = {
   setSortingOrder: () => {},
 };
 
-PlanHeaderDraftStatus.args = {
+MaintenancePlanHeaderDraftStatus.args = {
   toggleModal: () => {},
   selectedFilter: 'draft',
   setSelectedFilter: () => {},
@@ -28,7 +28,7 @@ PlanHeaderDraftStatus.args = {
   setSortingOrder: () => {},
 };
 
-PlanHeaderASCSortingOrder.args = {
+MaintenancePlanHeaderASCSortingOrder.args = {
   toggleModal: () => {},
   selectedFilter: null,
   setSelectedFilter: () => {},

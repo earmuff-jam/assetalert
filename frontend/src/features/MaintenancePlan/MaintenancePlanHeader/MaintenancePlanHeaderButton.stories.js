@@ -1,16 +1,16 @@
-import PlanHeaderButton from '@features/MaintenancePlanList/MaintenancePlanHeader/MaintenancePlanHeaderButton';
+import MaintenancePlanHeaderButton from '@features/MaintenancePlan/MaintenancePlanHeader/MaintenancePlanHeaderButton';
 
 export default {
-  title: 'MaintenancePlan/PlanHeaderButton',
-  component: PlanHeaderButton,
+  title: 'Maintenance/MaintenancePlan/MaintenancePlanHeaderButton',
+  component: MaintenancePlanHeaderButton,
   tags: ['autodocs'],
 };
 
-const Template = (args) => <PlanHeaderButton {...args} />;
+const Template = (args) => <MaintenancePlanHeaderButton {...args} />;
 
-export const PlanHeaderButtonDefault = Template.bind({});
+export const MaintenancePlanHeaderButtonDefault = Template.bind({});
 
-PlanHeaderButtonDefault.args = {
+MaintenancePlanHeaderButtonDefault.args = {
   handleButtonClick: () => {},
   handleIconButtonClick: () => {},
 };

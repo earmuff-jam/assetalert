@@ -1,7 +1,7 @@
 import MaintenancePlanContent from '@features/MaintenancePlan/MaintenancePlanContent/MaintenancePlanContent';
 
 export default {
-  title: 'MaintenancePlan/PlanContent',
+  title: 'Maintenance/MaintenancePlan/MaintenancePlanContent',
   component: MaintenancePlanContent,
   tags: ['autodocs'],
 };
