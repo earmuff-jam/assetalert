@@ -1,11 +1,11 @@
 import {
   Inventory2Rounded,
   HomeRounded,
-  PushPinRounded,
   CategoryRounded,
   SummarizeRounded,
   ReportSharp,
   Person2Rounded,
+  BookmarkRounded,
 } from '@mui/icons-material';
 
 export const MENU_ACTION_BAR_DEFAULT_LIST = [
@@ -50,13 +50,13 @@ export const MENU_ACTION_BAR_DEFAULT_LIST = [
 export const PINNED_DEFAULT_INSET_MENU_LIST = [
   {
     id: 1,
-    icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,
+    icon: <BookmarkRounded fontSize="small" color="warning" />,
     label: 'Recent Activities',
     to: '/recent/activities',
   },
   {
     id: 2,
-    icon: <PushPinRounded fontSize="small" sx={{ transform: 'rotate(45deg)' }} color="warning" />,
+    icon: <BookmarkRounded fontSize="small" color="warning" />,
     label: 'Personal Notes',
     to: '/profile/notes',
   },

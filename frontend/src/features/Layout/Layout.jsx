@@ -3,28 +3,22 @@ import { Suspense, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useTheme } from '@emotion/react';
-import { DarkModeRounded, LightModeOutlined, LogoutRounded, MenuOutlined } from '@mui/icons-material';
 import {
-  AppBar,
   Box,
   CircularProgress,
   Container,
   CssBaseline,
-  IconButton,
   Skeleton,
   Stack,
   ThemeProvider,
-  Toolbar,
-  Tooltip,
-  Typography,
   useMediaQuery,
 } from '@mui/material';
 
-import MenuActionBar from './MenuActionBar';
-import { authActions } from '../LandingPage/authSlice';
-import { profileActions } from '../Profile/profileSlice';
-import { darkTheme, lightTheme } from '../../utils/Theme';
+import { useTheme } from '@emotion/react';
+import { darkTheme, lightTheme } from '@utils/Theme';
+import AppToolbar from '@features/Layout/AppToolbar/AppToolbar';
+import { profileActions } from '@features/Profile/profileSlice';
+import MenuActionBar from '@features/Layout/MenuActionBar/MenuActionBar';
 
 const Layout = () => {
   const theme = useTheme();
@@ -32,7 +26,7 @@ const Layout = () => {
   const smScreenSizeAndHigher = useMediaQuery(theme.breakpoints.up('sm'));
   const lgScreenSizeAndHigher = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const { loading, profileDetails } = useSelector((state) => state.profile);
+  const { profileDetails, loading } = useSelector((state) => state.profile);
 
   const [openDrawer, setOpenDrawer] = useState(lgScreenSizeAndHigher ? true : false);
 
@@ -41,17 +35,6 @@ const Layout = () => {
     dispatch(profileActions.getFavItems({ limit: 10 }));
   };
   const handleDrawerClose = () => setOpenDrawer(false);
-
-  const handleLogout = () => {
-    dispatch(authActions.getLogout());
-    localStorage.clear();
-    window.location.href = '/';
-  };
-
-  const handleAppearance = () => {
-    const draftData = { ...profileDetails, appearance: !profileDetails.appearance || false };
-    dispatch(profileActions.updateProfileDetails({ draftData }));
-  };
 
   useEffect(() => {
     dispatch(profileActions.getProfileDetails());
@@ -71,47 +54,11 @@ const Layout = () => {
           </Box>
         }
       >
-        <AppBar elevation={0}>
-          <Toolbar>
-            <IconButton size="small" onClick={handleDrawerOpen}>
-              <MenuOutlined fontSize="small" />
-            </IconButton>
-            <Typography variant="h6" color="text.secondary" sx={{ flexGrow: 1 }}>
-              AssetAlert
-            </Typography>
-            <Stack direction="row" spacing="0.1rem">
-              {!smScreenSizeAndHigher ? (
-                <>
-                  <IconButton size="small" onClick={handleAppearance}>
-                    {profileDetails?.appearance ? (
-                      <LightModeOutlined fontSize="small" />
-                    ) : (
-                      <DarkModeRounded fontSize="small" />
-                    )}
-                  </IconButton>
-                  <IconButton size="small" onClick={handleLogout}>
-                    <LogoutRounded fontSize="small" />
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <IconButton size="small" onClick={() => handleAppearance()}>
-                    {profileDetails?.appearance ? (
-                      <LightModeOutlined fontSize="small" />
-                    ) : (
-                      <DarkModeRounded fontSize="small" />
-                    )}
-                  </IconButton>
-                  <Tooltip title="log out">
-                    <IconButton size="small" onClick={handleLogout}>
-                      <LogoutRounded fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </>
-              )}
-            </Stack>
-          </Toolbar>
-        </AppBar>
+        <AppToolbar
+          profileDetails={profileDetails}
+          handleDrawerOpen={handleDrawerOpen}
+          smScreenSizeAndHigher={smScreenSizeAndHigher}
+        />
         <Stack sx={{ marginTop: '5rem', marginBottom: '1rem' }}>
           <MenuActionBar
             openDrawer={openDrawer}
@@ -119,11 +66,9 @@ const Layout = () => {
             smScreenSizeAndHigher={smScreenSizeAndHigher}
             lgScreenSizeAndHigher={lgScreenSizeAndHigher}
           />
-          <Stack flexGrow={1}>
-            <Container maxWidth="md">
-              <Outlet />
-            </Container>
-          </Stack>
+          <Container maxWidth="md">
+            <Outlet />
+          </Container>
         </Stack>
       </Suspense>
     </ThemeProvider>
