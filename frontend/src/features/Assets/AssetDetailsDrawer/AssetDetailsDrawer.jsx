@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Dialog, Slide } from '@mui/material';
-import ViewAssetDetailsHeader from '@features/InventoryList/AssetDetailsDrawer/AssetDetailsDrawerHeader';
-import AssetDetailsDrawerContent from '@features/InventoryList/AssetDetailsDrawer/AssetDetailsDrawerContent';
+import ViewAssetDetailsHeader from '@features/Assets/AssetDetailsDrawer/AssetDetailsDrawerHeader';
+import AssetDetailsDrawerContent from '@features/Assets/AssetDetailsDrawer/AssetDetailsDrawerContent';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;

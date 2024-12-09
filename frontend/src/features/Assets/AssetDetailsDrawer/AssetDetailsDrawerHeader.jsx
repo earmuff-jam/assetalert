@@ -1,4 +1,3 @@
-import React from 'react';
 import { CloseRounded } from '@mui/icons-material';
 import { DialogTitle, IconButton, Stack } from '@mui/material';
 

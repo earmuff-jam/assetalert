@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import SimpleModal from '@common/SimpleModal';
 import { Stack, TextField } from '@mui/material';
 import GridComponent from '@common/DataTable/GridComponent';
-import { inventoryActions } from '@features/InventoryList/inventorySlice';
+import { inventoryActions } from '@features/Assets/inventorySlice';
 import { CheckRounded, CloseRounded, EditRounded } from '@mui/icons-material';
+import AddAssetDetails from '@features/Assets/AddAssetFormDetails/AddAssetDetails';
 import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
-import AddInventory from '@features/InventoryList/AddInventory/AddInventoryDetail';
-import { MODAL_STATE, VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
-import AssetDetailsDrawer from '@features/InventoryList/AssetDetailsDrawer/AssetDetailsDrawer';
-import AddBulkUploadInventory from '@features/InventoryList/AddInventory/AddBulkUploadInventory';
+import AddAssetsInBulk from '@features/Assets/AddAssetsInBulk/AddAssetsInBulk';
+import { MODAL_STATE, VIEW_INVENTORY_LIST_HEADERS } from '@features/Assets/constants';
+import AssetDetailsDrawer from '@features/Assets/AssetDetailsDrawer/AssetDetailsDrawer';
 
 export default function AssetListContent({
   loading,
@@ -154,12 +154,12 @@ export default function AssetListContent({
       </Stack>
       {modalState === MODAL_STATE.ADD_ITEM && (
         <SimpleModal title="Add New Item" handleClose={handleCloseModal} maxSize="sm">
-          <AddInventory handleClose={handleCloseModal} />
+          <AddAssetDetails handleClose={handleCloseModal} />
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.BULK_ITEM && (
         <SimpleModal title="Add Bulk Item" handleClose={handleCloseModal} maxSize="sm">
-          <AddBulkUploadInventory handleClose={handleCloseModal} />
+          <AddAssetsInBulk handleClose={handleCloseModal} />
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.MORE_DETAILS && (

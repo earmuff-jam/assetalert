@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Stack } from '@mui/material';
 
-import { VIEW_INVENTORY_LIST_HEADERS } from '../../InventoryList/constants';
+import { VIEW_INVENTORY_LIST_HEADERS } from '../../Assets/constants';
 import TableComponent from '../../../common/DataTable/CustomTableComponent/TableComponent';
 
 export default function CategoryItemDetailsAddAsset({ rowSelected, setRowSelected, itemsInCategory }) {

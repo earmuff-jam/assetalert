@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Stack } from '@mui/material';
 import { ConfirmationBoxModal } from '@common/utils';
-import { MODAL_STATE } from '@features/InventoryList/constants';
-import { inventoryActions } from '@features/InventoryList/inventorySlice';
-import AssetListHeader from '@features/InventoryList/AssetListHeader/AssetListHeader';
-import AssetListContent from '@features/InventoryList/AssetListContent/AssetListContent';
+import { MODAL_STATE } from '@features/Assets/constants';
+import { inventoryActions } from '@features/Assets/inventorySlice';
+import AssetListHeader from '@features/Assets/AssetListHeader/AssetListHeader';
+import AssetListContent from '@features/Assets/AssetListContent/AssetListContent';
 
 export default function AssetList() {
   const dispatch = useDispatch();

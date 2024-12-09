@@ -6,8 +6,8 @@ import { GridViewRounded, SearchRounded, ViewListRounded } from '@mui/icons-mate
 
 import RowHeader from '@common/RowHeader';
 import { pluralizeWord } from '@common/utils';
-import { MODAL_STATE } from '@features/InventoryList/constants';
-import VerticalMenu from '@features/InventoryList/AddInventory/VerticalMenu';
+import { MODAL_STATE } from '@features/Assets/constants';
+import VerticalMenu from '@features/Assets/AssetListHeader/VerticalMenu';
 
 export default function AssetListHeader({
   gridMode,

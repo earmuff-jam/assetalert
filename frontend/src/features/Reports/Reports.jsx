@@ -8,7 +8,7 @@ import { FILTER_OPTIONS } from '@features/Reports/constants';
 import { reportActions } from '@features/Reports/reportSlice';
 import ReportsHeader from '@features/Reports/ReportHeader/ReportsHeader';
 import ReportContent from '@features/Reports/ReportContent/ReportContent';
-import { inventoryActions } from '@features/InventoryList/inventorySlice';
+import { inventoryActions } from '@features/Assets/inventorySlice';
 import ReportsFilterMenu from '@features/Reports/ReportsFilterMenu/ReportsFilterMenu';
 import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 

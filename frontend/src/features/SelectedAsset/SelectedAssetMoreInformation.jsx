@@ -1,10 +1,10 @@
-import { Checkbox, FormControlLabel, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
-import { BookmarkAddedRounded, CloseRounded, NoteAddRounded, SwapHorizRounded } from '@mui/icons-material';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import { BookmarkAddedRounded, CloseRounded, NoteAddRounded, SwapHorizRounded } from '@mui/icons-material';
+import { Checkbox, FormControlLabel, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
 
-export default function EditInventoryMoreInformation({
+export default function SelectedAssetMoreInformation({
   formData,
   returnDateTime,
   setReturnDateTime,

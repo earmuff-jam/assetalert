@@ -8,7 +8,7 @@ import SimpleModal from '@common/SimpleModal';
 import { Skeleton, Stack } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
 import { ConfirmationBoxModal } from '@common/utils';
-import { inventoryActions } from '@features/InventoryList/inventorySlice';
+import { inventoryActions } from '@features/Assets/inventorySlice';
 import { maintenancePlanItemActions } from '@features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
 import MaintenancePlanItemDetailsGraph from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsContent/MaintenancePlanItemDetailsGraph';
 import MaintenancePlanItemDetailsHeader from '@features/MaintenancePlanItemDetails/MaintenancePlanItemDetailsHeader/MaintenancePlanItemDetailsHeader';

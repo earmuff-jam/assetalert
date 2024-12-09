@@ -1,6 +1,6 @@
 import { EmptyComponent } from '@common/utils';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
-import { BUILD_TABLE_CONSTANTS } from '@features/InventoryList/constants';
+import { BUILD_TABLE_CONSTANTS } from '@features/Assets/constants';
 
 export default function AssetDetailsDrawerContent({ selectedRow = {}, columns = [] }) {
   if (Object.keys(selectedRow).length === 0) {

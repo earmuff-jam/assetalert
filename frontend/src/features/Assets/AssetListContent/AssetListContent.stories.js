@@ -1,5 +1,5 @@
-import AssetListContent from '@features/InventoryList/AssetListContent/AssetListContent';
-import { MODAL_STATE } from '@features/InventoryList/constants';
+import AssetListContent from '@features/Assets/AssetListContent/AssetListContent';
+import { MODAL_STATE } from '@features/Assets/constants';
 import dayjs from 'dayjs';
 
 export default {

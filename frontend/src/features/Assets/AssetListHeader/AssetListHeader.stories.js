@@ -1,4 +1,4 @@
-import AssetListHeader from '@features/InventoryList/AssetListHeader/AssetListHeader';
+import AssetListHeader from '@features/Assets/AssetListHeader/AssetListHeader';
 
 export default {
   title: 'AssetList/AssetListHeader/AssetListHeader',

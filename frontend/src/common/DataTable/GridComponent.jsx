@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import SimpleModal from '../SimpleModal';
 import ImagePicker from '../ImagePicker/ImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../../features/InventoryList/inventorySlice';
+import { inventoryActions } from '../../features/Assets/inventorySlice';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();

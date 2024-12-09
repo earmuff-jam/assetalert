@@ -1,10 +1,11 @@
-import { Autocomplete, Stack, TextField, createFilterOptions } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { inventoryActions } from '../inventorySlice';
+import { Autocomplete, Stack, TextField, createFilterOptions } from '@mui/material';
+
+import { inventoryActions } from '@features/Assets/inventorySlice';
 
 const filter = createFilterOptions();
 
-export default function EditInventoryFormFields({
+export default function SelectedAssetFormFields({
   formData,
   handleInputChange,
   options,
