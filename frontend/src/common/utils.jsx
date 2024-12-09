@@ -157,12 +157,16 @@ export const prefix = (prefixVal, value, roundUpTo = 2) => {
 };
 
 /**
- * Function used to pluralize the selected word. Eg, Dog -> dogs.
+ * Function used to pluralize the selected word. If the word does not exist, it will
+ * ignore the word. Eg, ('Dog', 2) -> 2 dogs, ('', 2) -> 2
  * @param {string} stringToEdit - The string that is to be pluralized
  * @param {int} size - The number that determines if the words needs to be pluralized or not
  * @returns {string} - The new string that is pluralized if necessary
  */
-export const pluralizeWord = (stringToEdit, size) => {
+export const pluralizeWord = (stringToEdit = '', size) => {
+  if (!stringToEdit) {
+    return `${size}`;
+  }
   if (size <= 1) {
     return `${size} ${stringToEdit}`;
   } else {

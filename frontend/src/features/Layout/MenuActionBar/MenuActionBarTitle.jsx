@@ -10,7 +10,7 @@ export default function MenuActionBarTitle({ theme, handleDrawerClose }) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '0.75rem',
-        backgroundColor: 'primary.light',
+        backgroundColor: 'primary.main',
       }}
     >
       <Typography variant="h4">AssetAlert</Typography>

@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Skeleton, Stack } from '@mui/material';
 
-import RowHeader from '../../common/RowHeader';
-import HomeHeader from './HomeHeader/HomeHeader';
-import HomeContent from './HomeContent/HomeContent';
-import { assetSummaryActions } from './SummarySlice';
+import RowHeader from '@common/RowHeader';
+import { assetSummaryActions } from '@features/Home/SummarySlice';
+import OverviewHeader from '@features/Home/OverviewHeader/OverviewHeader';
+import OverviewContent from '@features/Home/OverviewContent/OverviewContent';
 
-const Overview = () => {
+export default function Overview() {
   const dispatch = useDispatch();
   const { assetSummary = [], loading } = useSelector((state) => state.summary);
 
@@ -38,14 +38,14 @@ const Overview = () => {
 
   return (
     <>
-      <RowHeader title="Overview" caption="View summary details about your assets" />
-      <Stack spacing={{ xs: 1 }}>
-        <HomeHeader
+      <RowHeader title="Overview" caption="View a summarized report about your assets." />
+      <Stack spacing={2}>
+        <OverviewHeader
           assetsUnderCategories={assetsUnderCategories}
           assetsUnderMaintenancePlans={assetsUnderMaintenancePlans}
           assetsPastDue={assetsPastDue}
         />
-        <HomeContent
+        <OverviewContent
           assets={assetSummary?.AssetList}
           categories={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'C')}
           maintenancePlans={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'M')}
@@ -53,6 +53,4 @@ const Overview = () => {
       </Stack>
     </>
   );
-};
-
-export default Overview;
+}

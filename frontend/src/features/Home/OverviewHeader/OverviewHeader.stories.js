@@ -1,12 +1,12 @@
-import HomeHeader from './HomeHeader';
+import OverviewHeader from '@features/Home/OverviewHeader/OverviewHeader';
 
 export default {
-  title: 'Home/HomeHeader',
-  component: HomeHeader,
+  title: 'Home/OverviewHeader/OverviewHeader',
+  component: OverviewHeader,
   tags: ['autodocs'],
 };
 
-export const HomeHeaderDefault = {
+export const OverviewHeaderDefault = {
   args: {
     assetsUnderCategories: [
       {
@@ -38,7 +38,7 @@ export const HomeHeaderDefault = {
   },
 };
 
-export const HomeHeaderEmptyData = {
+export const OverviewHeaderEmptyData = {
   args: {
     assetsUnderCategories: [],
     assetsUnderMaintenancePlans: [],

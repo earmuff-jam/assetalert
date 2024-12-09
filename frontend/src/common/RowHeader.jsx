@@ -19,7 +19,7 @@ const RowHeader = ({
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Stack>
-        <Typography variant={titleVariant} component="h2">
+        <Typography variant={titleVariant} component="h2" color="text.secondary">
           {title}
         </Typography>
         {caption ? (

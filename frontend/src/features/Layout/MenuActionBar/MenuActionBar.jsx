@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { AllInboxRounded, BookmarkRounded, ExpandLess, ExpandMore } from '@mui/icons-material';
 
-import { Collapse, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import { Collapse, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
 
 import MenuActionBarTitle from '@features/Layout/MenuActionBar/MenuActionBarTitle';
 import MenuActionBarListItem from '@features/Layout/MenuActionBar/MenuActionBarListItem';
@@ -62,7 +62,6 @@ export default function MenuActionBar({ openDrawer, handleDrawerClose, smScreenS
         }
       >
         <MenuActionBarTitle theme={theme} handleDrawerClose={handleDrawerClose} />
-        <Divider />
         <List sx={{ width: '100%' }} component="nav" aria-labelledby="nested-list-subheader" disablePadding>
           {MENU_ACTION_BAR_DEFAULT_LIST.map((item) => (
             <MenuActionBarListItem
