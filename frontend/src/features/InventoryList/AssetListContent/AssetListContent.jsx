@@ -10,8 +10,8 @@ import { inventoryActions } from '@features/InventoryList/inventorySlice';
 import { CheckRounded, CloseRounded, EditRounded } from '@mui/icons-material';
 import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 import AddInventory from '@features/InventoryList/AddInventory/AddInventoryDetail';
-import ViewItemDetails from '@features/InventoryList/ViewItemDetails/ViewItemDetails';
 import { MODAL_STATE, VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
+import AssetDetailsDrawer from '@features/InventoryList/AssetDetailsDrawer/AssetDetailsDrawer';
 import AddBulkUploadInventory from '@features/InventoryList/AddInventory/AddBulkUploadInventory';
 
 export default function AssetListContent({
@@ -163,7 +163,7 @@ export default function AssetListContent({
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.MORE_DETAILS && (
-        <ViewItemDetails
+        <AssetDetailsDrawer
           columns={Object.values(VIEW_INVENTORY_LIST_HEADERS)}
           resetSelection={handleCloseModal}
           title="View Item Details"

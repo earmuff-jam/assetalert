@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 
+import QrCodeGen from '@common/QrCodeGen';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
-import QrCodeGen from './ViewItemDetails/QrCodeGen';
 dayjs.extend(relativeTime);
 
 /**
