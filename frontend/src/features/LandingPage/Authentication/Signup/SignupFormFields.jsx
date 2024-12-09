@@ -1,8 +1,11 @@
-import { CheckRounded, CloseRounded } from '@mui/icons-material';
-import { Stack, TextField, InputAdornment, Typography, CircularProgress } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from '../../authSlice';
 import { produce } from 'immer';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { CheckRounded, CloseRounded } from '@mui/icons-material';
+
+import { Stack, TextField, InputAdornment, Typography, CircularProgress } from '@mui/material';
+
+import { authActions } from '@features/LandingPage/authSlice';
 
 export default function SignupFormFields({ formFields, setFormFields, submit }) {
   const dispatch = useDispatch();
