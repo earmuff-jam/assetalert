@@ -7,6 +7,20 @@ import QrCodeGen from './ViewItemDetails/QrCodeGen';
 dayjs.extend(relativeTime);
 
 /**
+ * Modal State is the display state of modal between adding a single inventory, adding a bulk
+ * inventory and removing inventories
+ *
+ */
+export const MODAL_STATE = {
+  NONE: 'none',
+  ADD_ITEM: 'item',
+  BULK_ITEM: 'bulk',
+  MORE_DETAILS: 'more',
+  ASSIGN_CATEGORY: 'assign_category',
+  ASSIGN_MAINTENANCE_PLAN: 'assign_maintenance_plan',
+};
+
+/**
  * default inventories landing page items to encourage users to use
  * various features of the application
  */
