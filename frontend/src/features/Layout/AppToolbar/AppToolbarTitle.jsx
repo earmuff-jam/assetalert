@@ -1,15 +1,17 @@
 import { MenuOutlined } from '@mui/icons-material';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Stack, Typography } from '@mui/material';
 
 export default function AppToolbarTitle({ onClick }) {
   return (
     <>
-      <IconButton size="small" onClick={onClick}>
-        <MenuOutlined fontSize="small" />
+      <IconButton size="medium" onClick={onClick}>
+        <MenuOutlined fontSize="medium" />
       </IconButton>
-      <Typography variant="h6" color="text.secondary" sx={{ flexGrow: 1 }}>
-        AssetAlert
-      </Typography>
+      <Stack flexGrow={1} direction="row" alignItems="center">
+        <Typography variant="h4" color="text.secondary" sx={{ cursor: 'pointer' }}>
+          AssetAlert
+        </Typography>
+      </Stack>
     </>
   );
 }

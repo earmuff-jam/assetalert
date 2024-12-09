@@ -15,6 +15,7 @@ export default function UserDetails({ data = {} }) {
         padding: '1rem',
         display: 'flex',
         flexDirection: 'column',
+        flexGrow: 1,
       }}
     >
       <Typography variant="h5" color="text.secondary">

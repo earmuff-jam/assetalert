@@ -32,7 +32,7 @@ const ProfilePage = () => {
         <SimpleModal
           open={editMode}
           handleClose={() => setEditMode(false)}
-          maxSize={'sm'}
+          maxSize={'xs'}
           title="Edit profile details"
           subtitle="Edit general details about yourself so others can notice you."
         >
