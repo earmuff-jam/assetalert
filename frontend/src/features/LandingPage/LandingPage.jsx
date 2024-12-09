@@ -2,16 +2,17 @@ import { useState } from 'react';
 
 import { Container, Stack } from '@mui/material';
 
-import Header from './HeroContent/Header';
-import Login from './Authentication/Login/Login';
-import { COLORS, SAMPLE_DATA } from './constants';
-import SimpleModal from '../../common/SimpleModal';
-import Signup from './Authentication/Signup/Signup';
-import StyledAppBar from './HeroContent/StyledAppBar';
-import FloatingBarChart from './HeroContent/FloatingBarChart';
+import SimpleModal from '@common/SimpleModal';
+import FloatingBarChart from '@common/Chart/FloatingBarChart';
+import Login from '@features/LandingPage/Authentication/Login/Login';
+
+import { COLORS, SAMPLE_DATA } from '@features/LandingPage/constants';
+import HeroContent from '@features/LandingPage/HeroContent/HeroContent';
+import Signup from '@features/LandingPage/Authentication/Signup/Signup';
+import StyledAppBar from '@features/LandingPage/StyledAppBar/StyledAppBar';
 
 export default function LandingPage() {
-  const [currentForm, setCurrentForm] = useState('');
+  const [formType, setFormType] = useState('');
   const [displayModal, setDisplayModal] = useState(false);
 
   const openDisplayModal = () => setDisplayModal(true);
@@ -19,12 +20,12 @@ export default function LandingPage() {
 
   const openSignupModal = () => {
     openDisplayModal();
-    setCurrentForm('signup');
+    setFormType('signup');
   };
 
   const openLoginModal = () => {
     openDisplayModal();
-    setCurrentForm('signin');
+    setFormType('signin');
   };
 
   const formattedData = SAMPLE_DATA.map((v, index) => ({
@@ -36,31 +37,31 @@ export default function LandingPage() {
 
   return (
     <>
-      <StyledAppBar elevation={0} />
+      <StyledAppBar />
       <Container maxWidth="md">
         <Stack spacing={2}>
-          <Header openSignupModal={openSignupModal} openLoginModal={openLoginModal} />
+          <HeroContent openSignupModal={openSignupModal} openLoginModal={openLoginModal} />
           <FloatingBarChart
             data={formattedData}
             backgroundColor={formattedData.map((d) => d.color)}
             borderColor={formattedData.map((d) => d.color)}
           />
         </Stack>
+        {displayModal && (
+          <SimpleModal
+            title={formType === 'signin' ? 'Sign In' : 'Sign Up'}
+            subtitle={
+              formType === 'signin'
+                ? 'Login to manage your account.'
+                : 'Keep an account to keep track of all your inventories.'
+            }
+            handleClose={closeDisplayModal}
+            maxSize="xs"
+          >
+            {formType === 'signup' ? <Signup handleClose={closeDisplayModal} /> : <Login />}
+          </SimpleModal>
+        )}
       </Container>
-      {displayModal && (
-        <SimpleModal
-          title={currentForm === 'signin' ? 'Sign In' : 'Sign Up'}
-          subtitle={
-            currentForm === 'signin'
-              ? 'Login to manage your account.'
-              : 'Keep an account to keep track of all your inventories.'
-          }
-          handleClose={closeDisplayModal}
-          maxSize="xs"
-        >
-          {currentForm === 'signup' ? <Signup handleClose={closeDisplayModal} /> : <Login />}
-        </SimpleModal>
-      )}
     </>
   );
 }

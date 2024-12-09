@@ -1,20 +1,18 @@
 import 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
+
+import { Box } from '@mui/material';
+
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const FloatingBarChart = ({
-  data,
-  backgroundColor,
-  borderColor,
-  height = '25rem',
-}) => {
+const FloatingBarChart = ({ data, backgroundColor, borderColor, height = '25rem' }) => {
   let chartData = {
-    labels: data.map(d => d.label),
+    labels: data.map((d) => d.label),
     datasets: [
       {
-        data: data.map(d => ({
+        data: data.map((d) => ({
           x: d.label,
           y: [d.start, d.end], // Start and end values for floating bars
         })),
@@ -45,10 +43,12 @@ const FloatingBarChart = ({
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             const label = context.dataset.label || '';
             if (context.raw) {
-              return `${label}: ${context.raw.y[1] - context.raw.y[0]} (Range: ${context.raw.y[0]} - ${context.raw.y[1]})`;
+              return `${label}: ${context.raw.y[1] - context.raw.y[0]} (Range: ${context.raw.y[0]} - ${
+                context.raw.y[1]
+              })`;
             }
             return label;
           },
@@ -58,9 +58,9 @@ const FloatingBarChart = ({
   };
 
   return (
-    <div style={{ width: '100%', height: height }}>
+    <Box style={{ width: '100%', height: height }}>
       <Bar data={chartData} options={options} />
-    </div>
+    </Box>
   );
 };
 

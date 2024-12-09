@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../authSlice';
-import { SIGN_UP_FORM_FIELDS } from '../../constants';
 import { Button, Stack } from '@mui/material';
-import SingupCheckboxField from './SignupCheckboxField';
-import SignupTermsConditions from './SignupTermsConditions';
-import SignupFormFields from './SignupFormFields';
+import { authActions } from '@features/LandingPage/authSlice';
+import { SIGN_UP_FORM_FIELDS } from '@features/LandingPage/constants';
+import SignupFormFields from '@features/LandingPage/Authentication/Signup/SignupFormFields';
+import SingupCheckboxField from '@features/LandingPage/Authentication/Signup/SignupCheckboxField';
+import SignupTermsConditions from '@features/LandingPage/Authentication/Signup/SignupTermsConditions';
 
 export default function Signup({ handleClose }) {
   const dispatch = useDispatch();

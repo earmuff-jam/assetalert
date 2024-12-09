@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { produce } from 'immer';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../authSlice';
 import { Button, Stack } from '@mui/material';
-import { LOGIN_FORM_FIELDS } from '../../constants';
-import LoginFormFields from './LoginFormFields';
+import { authActions } from '@features/LandingPage/authSlice';
+import { LOGIN_FORM_FIELDS } from '@features/LandingPage/constants';
+import LoginFormFields from '@features/LandingPage/Authentication/Login/LoginFormFields';
 
 const Login = () => {
   const dispatch = useDispatch();
