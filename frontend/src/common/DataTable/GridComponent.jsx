@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+import { useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Box,
   Card,
@@ -10,13 +15,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import dayjs from 'dayjs';
-import { EmptyComponent } from '../utils';
-import { useEffect, useState } from 'react';
-import SimpleModal from '../SimpleModal';
-import ImagePicker from '../ImagePicker/ImagePicker';
-import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../../features/InventoryList/inventorySlice';
+
+import { EmptyComponent } from '@common/utils';
+import SimpleModal from '@common/SimpleModal';
+import ImagePicker from '@common/ImagePicker/ImagePicker';
+import { inventoryActions } from '@features/Assets/inventorySlice';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();
@@ -26,33 +29,20 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
   const [selectedItemID, setSelectedItemID] = useState(-1);
   const handleCloseModal = () => setDisplayModal(false);
 
+  const selectedAsset = inventories.filter((v) => v.id === selectedItemID).find(() => true);
+
   const handleUpload = (id, imgFormData) => {
     dispatch(inventoryActions.createInventoryImage({ assetID: id, imageData: imgFormData }));
     handleCloseModal();
   };
 
-  useEffect(() => {
-    if (Array.isArray(data)) {
-      data.forEach((element) => {
-        if (element.associated_image_url.length > 0) {
-          dispatch(
-            inventoryActions.retrieveSelectedImage({
-              assetID: element.id,
-              filename: `${element.associated_image_url}.png`,
-            })
-          );
-        }
-      });
-    }
-  }, [data]);
-
   if (isLoading) return <Skeleton height="10vh" />;
-  if (data.length <= 0) return <EmptyComponent />;
+  if (data?.length <= 0) return <EmptyComponent />;
 
   return (
     <Box sx={{ overflow: 'auto' }}>
       <Stack spacing={{ xs: 1 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
-        {inventories.map((row, index) => {
+        {data.map((row, index) => {
           const isSelected = (id) => rowSelected.indexOf(id) !== -1;
           const selectedID = row.id;
           const isItemSelected = isSelected(selectedID);
@@ -67,7 +57,7 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
                 <Tooltip title={row.description}>
                   <CardMedia
                     sx={{ height: '10rem' }}
-                    image={row.selectedImage ? row.selectedImage : '/blank_canvas.png'}
+                    image={row.image || '/blank_canvas.png'}
                     onClick={() => {
                       setDisplayModal(true);
                       setSelectedItemID(selectedID);
@@ -95,11 +85,8 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
           );
         })}
         {displayModal && (
-          <SimpleModal title={'Edit image'} handleClose={handleCloseModal} maxSize="sm">
-            <ImagePicker
-              selectedData={inventories.filter((v) => v.id === selectedItemID).find(() => true)}
-              handleUpload={handleUpload}
-            />
+          <SimpleModal title={'Edit image'} handleClose={handleCloseModal} maxSize="xs">
+            <ImagePicker id={selectedAsset.id} name={selectedAsset.name} handleUpload={handleUpload} disableCancel />
           </SimpleModal>
         )}
       </Stack>

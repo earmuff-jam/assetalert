@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: '',
   inventory: {},
+  selectedImage: '',
   inventories: [],
   storageLocations: [],
 };
@@ -150,17 +151,30 @@ const inventorySlice = createSlice({
     retrieveSelectedImageFailure: (state) => {
       state.error = '';
     },
-    createInventoryImage: (state) => {
+    uploadImage: (state) => {
       state.loading = true;
       state.error = '';
     },
-    createInventoryImageSuccess: (state) => {
+    uploadImageSuccess: (state) => {
       state.loading = false;
       state.error = '';
     },
-    createInventoryImageFailure: (state) => {
+    uploadImageFailure: (state) => {
       state.loading = false;
       state.error = '';
+    },
+    getSelectedImage: (state) => {
+      state.error = '';
+    },
+    getSelectedImageSuccess: (state, action) => {
+      state.selectedImage = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getSelectedImageFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.selectedImage = '';
     },
   },
 });

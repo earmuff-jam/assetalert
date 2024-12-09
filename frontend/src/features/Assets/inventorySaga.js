@@ -1,9 +1,10 @@
-import { takeLatest, put, call, takeEvery } from 'redux-saga/effects';
-import { REACT_APP_LOCALHOST_URL } from '../../utils/Common';
-import { inventoryActions } from './inventorySlice';
-import instance from '../../utils/Instances';
+import instance from '@utils/Instances';
+import { Base64ToUint8Array } from '@common/utils';
+import { REACT_APP_LOCALHOST_URL } from '@utils/Common';
+import { inventoryActions } from '@features/Assets/inventorySlice';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
-const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1/profile`;
+const BASEURL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 const STORAGE_LOCATIONS_BASE_URL = `${REACT_APP_LOCALHOST_URL}/api/v1`;
 
 export function* fetchAllInventoriesForUser(action) {
@@ -16,7 +17,24 @@ export function* fetchAllInventoriesForUser(action) {
       params.append('since', since);
     }
 
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories?${params.toString()}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/inventories?${params.toString()}`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        if (item.image) {
+          try {
+            // decode the image url into a valid data
+            const binaryData = Base64ToUint8Array(item.image);
+            const blob = new Blob([binaryData], { type: 'image/png' });
+            item.image = URL.createObjectURL(blob);
+          } catch (error) {
+            console.debug(error);
+          }
+        }
+      });
+    }
+
     yield put(inventoryActions.getAllInventoriesForUserSuccess(response.data || {}));
   } catch (e) {
     yield put(inventoryActions.getAllInventoriesForUserFailure(e));
@@ -26,7 +44,7 @@ export function* fetchAllInventoriesForUser(action) {
 export function* fetchInvByID({ payload }) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `${BASEURL}/${USER_ID}/inventories/${payload}`);
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/inventories/${payload}`);
     yield put(inventoryActions.getInvByIDSuccess(response.data || []));
   } catch (e) {
     yield put(inventoryActions.getInvByIDFailure(e));
@@ -36,7 +54,7 @@ export function* fetchInvByID({ payload }) {
 export function* fetchAddNewInventory(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories`, {
+    const response = yield call(instance.post, `${BASEURL}/profile/${USER_ID}/inventories`, {
       ...action.payload,
       created_by: USER_ID,
     });
@@ -49,7 +67,7 @@ export function* fetchAddNewInventory(action) {
 export function* fetchAddBulkInventory(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories/bulk`, { ...action.payload });
+    const response = yield call(instance.post, `${BASEURL}/profile/${USER_ID}/inventories/bulk`, { ...action.payload });
     yield put(inventoryActions.addBulkInventorySuccess(response.data));
   } catch (e) {
     yield put(inventoryActions.addBulkInventoryFailure(e));
@@ -59,7 +77,7 @@ export function* fetchAddBulkInventory(action) {
 export function* fetchUpdateExistingInventoryDetails(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories`, { ...action.payload });
+    const response = yield call(instance.put, `${BASEURL}/profile/${USER_ID}/inventories`, { ...action.payload });
     yield put(inventoryActions.updateInventorySuccess(response.data));
   } catch (e) {
     yield put(inventoryActions.updateInventoryFailure(e));
@@ -69,7 +87,7 @@ export function* fetchUpdateExistingInventoryDetails(action) {
 export function* fetchUpdateAssetCol(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.put, `${BASEURL}/${USER_ID}/inventories/${action.payload.assetID}`, {
+    const response = yield call(instance.put, `${BASEURL}/profile/${USER_ID}/inventories/${action.payload.assetID}`, {
       ...action.payload,
     });
     yield put(inventoryActions.updateAssetColSuccess(response.data || []));
@@ -81,7 +99,9 @@ export function* fetchUpdateAssetCol(action) {
 export function* fetchRemoveInventoryRows(action) {
   try {
     const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `${BASEURL}/${USER_ID}/inventories/prune`, { ...action.payload });
+    const response = yield call(instance.post, `${BASEURL}/profile/${USER_ID}/inventories/prune`, {
+      ...action.payload,
+    });
     yield put(inventoryActions.removeInventoryRowsSuccess(response.data));
   } catch (e) {
     yield put(inventoryActions.removeInventoryRowsFailure(e));
@@ -97,26 +117,37 @@ export function* fetchStorageLocations() {
   }
 }
 
-export function* retrieveSelectedImage(action) {
+export function* uploadImage(action) {
   try {
-    const { assetID, filename } = action.payload;
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.get, `/filestat/view/${USER_ID}/${filename}`, { responseType: 'blob' });
-    const imageUrl = URL.createObjectURL(response.data);
-    yield put(inventoryActions.retrieveSelectedImageSuccess({ assetID: assetID, imageData: imageUrl || [] }));
+    const { id, selectedImage } = action.payload;
+    const formData = new FormData();
+    formData.append('imageSrc', selectedImage);
+    const response = yield call(instance.post, `${BASEURL}/${id}/uploadImage`, formData);
+    yield put(inventoryActions.uploadImageSuccess(response.data));
   } catch (e) {
-    yield put(inventoryActions.retrieveSelectedImageFailure(e));
+    yield put(inventoryActions.uploadImageFailure(e));
   }
 }
 
-export function* createInventoryImage(action) {
+export function* getSelectedImage(action) {
   try {
-    const { assetID, imageData } = action.payload;
-    const USER_ID = localStorage.getItem('userID');
-    const response = yield call(instance.post, `/filestat/create/${USER_ID}/A/${assetID}`, imageData);
-    yield put(inventoryActions.createInventoryImageSuccess(response.data || []));
+    const { id } = action.payload;
+    // we need to modify the image to be of arrayBuffer type and build a blob object from it
+    const response = yield call(instance.get, `${BASEURL}/${id}/fetchImage`, {
+      responseType: 'arraybuffer',
+    });
+
+    const textDecoder = new TextDecoder();
+    const responseText = textDecoder.decode(new Uint8Array(response.data));
+    if (responseText.includes('NoSuchKey')) {
+      throw new Error('NoSuchKey: Image does not exist');
+    }
+
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const avatarUrl = URL.createObjectURL(blob);
+    yield put(inventoryActions.getSelectedImageSuccess(avatarUrl));
   } catch (e) {
-    yield put(inventoryActions.createInventoryImageFailure(e));
+    yield put(inventoryActions.getSelectedImageFailure(e));
   }
 }
 
@@ -156,20 +187,20 @@ export function* watchUpdateAssetCol() {
   yield takeLatest(`inventory/updateAssetCol`, fetchUpdateAssetCol);
 }
 
-export function* watchRetrieveSelectedImage() {
-  yield takeEvery(`inventory/retrieveSelectedImage`, retrieveSelectedImage);
+export function* watchUploadImage() {
+  yield takeEvery(`inventory/uploadImage`, uploadImage);
 }
 
-export function* watchCreateInventoryImage() {
-  yield takeLatest(`inventory/createInventoryImage`, createInventoryImage);
+export function* watchGetSelectedImage() {
+  yield takeLatest(`inventory/getSelectedImage`, getSelectedImage);
 }
 
 export default [
   watchFetchInvByID,
   watchUpdateAssetCol,
   watchFetchAddNewInventory,
-  watchRetrieveSelectedImage,
-  watchCreateInventoryImage,
+  watchUploadImage,
+  watchGetSelectedImage,
   watchFetchAddBulkInventory,
   watchFetchRemoveInventoryRows,
   watchFetchAllStorageLocations,

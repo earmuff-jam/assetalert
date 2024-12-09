@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material';
-import AddInventoryFormItemDetails from './AddInventoryFormDetails/AddInventoryFormItemDetails';
-import AddInventoryFormDetails from './AddInventoryFormDetails/AddInventoryFormDetails';
-import AddInventoryFormReview from './AddInventoryFormDetails/AddInventoryFormReview';
+import AddInventoryFormReview from '@features/Assets/AddAssetFormDetails/AddInventoryFormReview';
+import AddInventoryFormDetails from '@features/Assets/AddAssetFormDetails/AddInventoryFormDetails';
+import AddInventoryFormItemDetails from '@features/Assets/AddAssetFormDetails/AddInventoryFormItemDetails';
 
-export default function AddInventoryForm({
+export default function AddAssetFormSelection({
   stepNumber,
   formData,
   storageLocation,

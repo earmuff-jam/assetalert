@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
 import { Stack } from '@mui/material';
-import { VIEW_INVENTORY_LIST_HEADERS } from '@features/InventoryList/constants';
+import { VIEW_INVENTORY_LIST_HEADERS } from '@features/Assets/constants';
 import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 
 export default function MaintenancePlanItemDetailsAddAsset({

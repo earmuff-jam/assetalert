@@ -160,6 +160,13 @@ func retrieveAllInventoryDetailsForUser(tx *sql.Tx, additionalWhereClause string
 			inventory.AssociatedImageURL = associatedImageURL.String
 		}
 
+		content, _, _, err := FetchImage(inventory.ID)
+		if err != nil {
+			if err.Error() == "NoSuchKey" {
+				log.Printf("cannot find the selected document. error: %+v", err)
+			}
+		}
+		inventory.Image = content
 		data = append(data, inventory)
 	}
 

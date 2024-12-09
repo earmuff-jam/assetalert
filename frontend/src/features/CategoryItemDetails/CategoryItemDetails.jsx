@@ -7,7 +7,7 @@ import { Skeleton, Stack } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
 
 import SimpleModal from '../../common/SimpleModal';
-import { inventoryActions } from '../InventoryList/inventorySlice';
+import { inventoryActions } from '../Assets/inventorySlice';
 import { categoryItemDetailsActions } from './categoryItemDetailsSlice';
 import CategoryItemDetailsGraph from './CategoryItemDetailsContent/CategoryItemDetailsGraph';
 import CategoryItemDetailsHeader from './CategoryItemDetailsHeader/CategoryItemDetailsHeader';
