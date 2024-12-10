@@ -1,103 +1,67 @@
-import { IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
-import { BookmarkAddedRounded, CloseRounded, NoteAddRounded, SwapHorizRounded } from '@mui/icons-material';
+import { Stack } from '@mui/material';
+import { BookmarkAddedRounded, SwapHorizRounded } from '@mui/icons-material';
+import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
 import SelectedAssetMoreInfoCheckbox from '@features/SelectedAsset/SelectedAssetMoreInformationCheckbox';
-import SelectedAssetReturnInformationHeader from '@features/SelectedAsset/SelectedAssetReturnInformationHeader';
 import SelectedAssetReturnInformationContent from '@features/SelectedAsset/SelectedAssetReturnInformationContent';
 
 export default function SelectedAssetMoreInformation({
-  formData,
+  formFields,
   returnDateTime,
   setReturnDateTime,
   openReturnNote,
-  setOpenReturnNotes,
+  setOpenReturnNote,
   handleCheckbox,
   handleInputChange,
 }) {
+  const isReturnable = Boolean(formFields.is_returnable.value);
+  const isBookmarked = Boolean(formFields.is_bookmarked.value);
+
   return (
-    <Stack spacing={1}>
+    <Stack spacing={2}>
       <SelectedAssetMoreInfoCheckbox
-        isChecked={formData.is_bookmarked.value}
+        isChecked={isBookmarked}
         handleCheckbox={handleCheckbox}
         target="is_bookmarked"
         label="Bookmark"
-        icon={<BookmarkAddedRounded color={formData.is_bookmarked.value ? 'primary' : 'secondary'} />}
+        icon={<BookmarkAddedRounded color={isBookmarked ? 'primary' : 'secondary'} />}
       />
-      <Stack spacing={2} justifyContent="space-between">
+      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
         <SelectedAssetMoreInfoCheckbox
-          isChecked={formData.is_returnable.value}
+          isChecked={isReturnable}
           handleCheckbox={handleCheckbox}
           target="is_returnable"
           label="Returnable"
-          icon={<SwapHorizRounded color={formData.is_returnable.value ? 'primary' : 'secondary'} />}
+          icon={<SwapHorizRounded color={isReturnable ? 'primary' : 'secondary'} />}
         />
-        <SelectedAssetReturnInformationHeader
-          openReturnNote={openReturnNote}
-          setOpenReturnNotes={setOpenReturnNotes}
-          display={Boolean(formData.is_returnable.value)}
-        />
-        <SelectedAssetReturnInformationContent
-          openNote={openReturnNote}
-          formFields={formData}
-          returnDateTime={returnDateTime}
-          setReturnDateTime={setReturnDateTime}
-          handleInputChange={handleInputChange}
-        />
-        {/* {formData.is_returnable.value && (
-            {Object.values(formData)
-              .filter((v, index) => index === 10)
-              .map((v) => (
-                <TextField
-                  key={v.id}
-                  id={v.id}
-                  label={v.label}
-                  value={v.value}
-                  required={v.isRequired}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                  size="small"
-                  error={!!v.errorMsg}
-                  helperText={v.errorMsg}
-                />
-              ))}
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                id="return_datetime"
-                label="Return datetime"
-                disablePast
-                value={returnDateTime}
-                onChange={setReturnDateTime}
-                slotProps={{
-                  textField: {
-                    helperText: 'Estimated return date time',
-                    size: 'small',
-                  },
-                }}
-              />
-            </LocalizationProvider>
-            {openReturnNote && (
-              <>
-                {Object.values(formData)
-                  .filter((v, index) => index === 15)
-                  .map((v) => (
-                    <TextField
-                      key={v.id}
-                      id={v.id}
-                      label={v.label}
-                      value={v.value}
-                      required={v.isRequired}
-                      onChange={handleInputChange}
-                      variant="outlined"
-                      size="small"
-                      error={!!v.errorMsg}
-                      helperText={v.errorMsg}
-                      multiline
-                      rows={4}
-                    />
-                  ))}
-              </>
-            )}
-          )} */}
+        {isReturnable && (
+          <SelectedAssetReturnInformationContent
+            openReturnNote={openReturnNote}
+            setOpenReturnNote={setOpenReturnNote}
+            formFields={formFields}
+            returnDateTime={returnDateTime}
+            setReturnDateTime={setReturnDateTime}
+            handleInputChange={handleInputChange}
+          />
+        )}
       </Stack>
+      {openReturnNote && (
+        <TextFieldWithLabel
+          id={formFields.return_notes.name}
+          name={formFields.return_notes.name}
+          label={formFields.return_notes.label}
+          value={formFields.return_notes.value}
+          size={formFields.return_notes.size}
+          placeholder={formFields.return_notes.placeholder}
+          handleChange={handleInputChange}
+          required={formFields.return_notes.required}
+          fullWidth={formFields.return_notes.fullWidth}
+          error={Boolean(formFields.return_notes.errorMsg)}
+          helperText={formFields.return_notes.errorMsg}
+          variant={formFields.return_notes.variant}
+          multiline
+          rows={4}
+        />
+      )}
     </Stack>
   );
 }

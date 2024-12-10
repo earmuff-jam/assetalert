@@ -366,9 +366,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   max_weight: {
     id: 'max_weight',
+    name: 'max_weight',
     label: 'Max weight in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -380,9 +382,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   min_weight: {
     id: 'min_weight',
+    name: 'min_weight',
     label: 'Min weight in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -394,9 +398,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   max_height: {
     id: 'max_height',
+    name: 'max_height',
     label: 'Max height in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -408,9 +414,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   min_height: {
     id: 'min_height',
+    name: 'min_height',
     label: 'Min height in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -422,15 +430,18 @@ export const BLANK_INVENTORY_FORM = {
   },
   return_notes: {
     id: 'return_notes',
+    name: 'return_notes',
     label: 'Return notes',
+    placeholder: 'Add return notes in less than 500 characters',
     value: '',
     type: 'text',
     isRequired: false,
+    size: 'small',
     errorMsg: '',
     validators: [
       {
-        validate: (value) => value.trim().length >= 50,
-        message: 'Return notes should be less than 50 characters',
+        validate: (value) => value.trim().length >= 500,
+        message: 'Return notes should be less than 500 characters',
       },
     ],
   },

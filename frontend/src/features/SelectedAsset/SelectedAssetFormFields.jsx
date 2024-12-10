@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { Autocomplete, Stack, TextField, createFilterOptions } from '@mui/material';
+import { Autocomplete, CardMedia, Stack, TextField, createFilterOptions } from '@mui/material';
 
 import { inventoryActions } from '@features/Assets/inventorySlice';
 import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
@@ -16,37 +16,45 @@ export default function SelectedAssetFormFields({
   const dispatch = useDispatch();
   return (
     <Stack spacing={2} marginTop={'1rem'}>
-      <Stack spacing={2} flexGrow={1}>
-        <TextFieldWithLabel
-          id={formFields.name.name}
-          name={formFields.name.name}
-          label={formFields.name.label}
-          value={formFields.name.value}
-          size={formFields.name.size}
-          placeholder={formFields.name.placeholder}
-          onChange={handleInputChange}
-          required={formFields.name.required}
-          fullWidth={formFields.name.fullWidth}
-          error={Boolean(formFields.name.errorMsg)}
-          helperText={formFields.name.errorMsg}
-          variant={formFields.name.variant}
+      <Stack direction="row" spacing={2} alignItems={'center'}>
+        <CardMedia
+          component="img"
+          sx={{ width: 300 }}
+          image="/blank_canvas.png"
+          alt="Default placeholder image for the asset"
         />
-        <TextFieldWithLabel
-          id={formFields.description.name}
-          name={formFields.description.name}
-          label={formFields.description.label}
-          value={formFields.description.value}
-          size={formFields.description.size}
-          placeholder={formFields.description.placeholder}
-          onChange={handleInputChange}
-          required={formFields.description.required}
-          fullWidth={formFields.description.fullWidth}
-          error={Boolean(formFields.description.errorMsg)}
-          helperText={formFields.description.errorMsg}
-          variant={formFields.description.variant}
-          multiline={true}
-          rows={4}
-        />
+        <Stack spacing={2} flexGrow={1}>
+          <TextFieldWithLabel
+            id={formFields.name.name}
+            name={formFields.name.name}
+            label={formFields.name.label}
+            value={formFields.name.value}
+            size={formFields.name.size}
+            placeholder={formFields.name.placeholder}
+            handleChange={handleInputChange}
+            required={formFields.name.required}
+            fullWidth={formFields.name.fullWidth}
+            error={Boolean(formFields.name.errorMsg)}
+            helperText={formFields.name.errorMsg}
+            variant={formFields.name.variant}
+          />
+          <TextFieldWithLabel
+            id={formFields.description.name}
+            name={formFields.description.name}
+            label={formFields.description.label}
+            value={formFields.description.value}
+            size={formFields.description.size}
+            placeholder={formFields.description.placeholder}
+            handleChange={handleInputChange}
+            required={formFields.description.required}
+            fullWidth={formFields.description.fullWidth}
+            error={Boolean(formFields.description.errorMsg)}
+            helperText={formFields.description.errorMsg}
+            variant={formFields.description.variant}
+            multiline={true}
+            rows={4}
+          />
+        </Stack>
       </Stack>
       <Stack direction="row" spacing={2}>
         <TextFieldWithLabel
@@ -56,7 +64,7 @@ export default function SelectedAssetFormFields({
           value={formFields.price.value}
           size={formFields.price.size}
           placeholder={formFields.price.placeholder}
-          onChange={handleInputChange}
+          handleChange={handleInputChange}
           required={formFields.price.required}
           fullWidth={formFields.price.fullWidth}
           error={Boolean(formFields.price.errorMsg)}
@@ -70,7 +78,7 @@ export default function SelectedAssetFormFields({
           value={formFields.barcode.value}
           size={formFields.barcode.size}
           placeholder={formFields.barcode.placeholder}
-          onChange={handleInputChange}
+          handleChange={handleInputChange}
           required={formFields.barcode.required}
           fullWidth={formFields.barcode.fullWidth}
           error={Boolean(formFields.barcode.errorMsg)}
@@ -84,7 +92,7 @@ export default function SelectedAssetFormFields({
           value={formFields.sku.value}
           size={formFields.sku.size}
           placeholder={formFields.sku.placeholder}
-          onChange={handleInputChange}
+          handleChange={handleInputChange}
           required={formFields.sku.required}
           fullWidth={formFields.sku.fullWidth}
           error={Boolean(formFields.sku.errorMsg)}
@@ -100,7 +108,7 @@ export default function SelectedAssetFormFields({
           value={formFields.quantity.value}
           size={formFields.quantity.size}
           placeholder={formFields.quantity.placeholder}
-          onChange={handleInputChange}
+          handleChange={handleInputChange}
           required={formFields.quantity.required}
           fullWidth={formFields.quantity.fullWidth}
           error={Boolean(formFields.quantity.errorMsg)}
@@ -114,7 +122,7 @@ export default function SelectedAssetFormFields({
           value={formFields.bought_at.value}
           size={formFields.bought_at.size}
           placeholder={formFields.bought_at.placeholder}
-          onChange={handleInputChange}
+          handleChange={handleInputChange}
           required={formFields.bought_at.required}
           fullWidth={formFields.bought_at.fullWidth}
           error={Boolean(formFields.bought_at.errorMsg)}

@@ -9,7 +9,7 @@ import RowHeader from '@common/RowHeader';
 import SimpleModal from '@common/SimpleModal';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ImagePicker from '@common/ImagePicker/ImagePicker';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { BLANK_INVENTORY_FORM } from '@features/Assets/constants';
 import { inventoryActions } from '@features/Assets/inventorySlice';
 import { AddPhotoAlternateRounded, CheckRounded } from '@mui/icons-material';
@@ -32,7 +32,7 @@ export default function SelectedAsset() {
   } = useSelector((state) => state.inventory);
 
   const [editImgMode, setEditImgMode] = useState(false);
-  const [openReturnNote, setOpenReturnNotes] = useState(false);
+  const [openReturnNote, setOpenReturnNote] = useState(false);
   const [returnDateTime, setReturnDateTime] = useState(null);
   const [storageLocation, setStorageLocation] = useState({});
   const [formData, setFormData] = useState({ ...BLANK_INVENTORY_FORM });
@@ -58,6 +58,10 @@ export default function SelectedAsset() {
   };
 
   const handleCheckbox = (name, value) => {
+    // close the return note subsection if the parent is disabled
+    if (name === 'is_returnable' && openReturnNote) {
+      setOpenReturnNote(false);
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: { ...prevFormData[name], value },
@@ -147,7 +151,7 @@ export default function SelectedAsset() {
       }
 
       if (inventory?.return_notes) {
-        setOpenReturnNotes(true);
+        setOpenReturnNote(true);
         selectedAsset.return_notes.value = inventory.return_notes;
       }
 
@@ -176,18 +180,28 @@ export default function SelectedAsset() {
         <Typography variant="caption">More information</Typography>
       </Divider>
       <SelectedAssetMoreInformation
-        formData={formData}
+        formFields={formData}
         returnDateTime={returnDateTime}
         setReturnDateTime={setReturnDateTime}
         openReturnNote={openReturnNote}
-        setOpenReturnNotes={setOpenReturnNotes}
+        setOpenReturnNote={setOpenReturnNote}
         handleCheckbox={handleCheckbox}
         handleInputChange={handleInputChange}
       />
       <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Typography variant="caption">Weight and Dimension</Typography>
       </Divider>
-      <SelectedAssetWeightDimension formData={formData} handleInputChange={handleInputChange} />
+      <SelectedAssetWeightDimension formFields={formData} handleInputChange={handleInputChange} />
+      <Stack sx={{ margin: '1rem 0rem' }}>
+        <Button
+          startIcon={<CheckRounded fontSize="small" />}
+          onClick={handleSubmit}
+          disabled={isFormDisabled()}
+          variant="outlined"
+        >
+          Submit
+        </Button>
+      </Stack>
       {editImgMode && (
         <SimpleModal
           title="Assign image"
@@ -198,16 +212,6 @@ export default function SelectedAsset() {
           <ImagePicker id={id} name={formData.name.value} handleUpload={handleUpload} disableCancel />
         </SimpleModal>
       )}
-      <Stack marginTop={1}>
-        <Button
-          startIcon={<CheckRounded fontSize="small" />}
-          onClick={handleSubmit}
-          disabled={isFormDisabled()}
-          variant="outlined"
-        >
-          Submit
-        </Button>
-      </Stack>
     </>
   );
 }
