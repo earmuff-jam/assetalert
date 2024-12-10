@@ -1,6 +1,6 @@
 import { Stack, TextField } from '@mui/material';
 
-export default function EditInventoryWeightDimension({ formData, handleInputChange }) {
+export default function SelectedAssetWeightDimension({ formData, handleInputChange }) {
   return (
     <Stack spacing={1}>
       <Stack direction="row" spacing={2}>

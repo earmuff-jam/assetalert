@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import SimpleModal from '../SimpleModal';
 import ImagePicker from '../ImagePicker/ImagePicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../../features/InventoryList/inventorySlice';
+import { inventoryActions } from '../../features/Assets/inventorySlice';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();
@@ -32,9 +32,9 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
   };
 
   useEffect(() => {
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) && data?.length > 0) {
       data.forEach((element) => {
-        if (element.associated_image_url.length > 0) {
+        if (element.associated_image_url?.length > 0) {
           dispatch(
             inventoryActions.retrieveSelectedImage({
               assetID: element.id,
@@ -47,12 +47,12 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
   }, [data]);
 
   if (isLoading) return <Skeleton height="10vh" />;
-  if (data.length <= 0) return <EmptyComponent />;
+  if (data?.length <= 0) return <EmptyComponent />;
 
   return (
     <Box sx={{ overflow: 'auto' }}>
       <Stack spacing={{ xs: 1 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
-        {inventories.map((row, index) => {
+        {data.map((row, index) => {
           const isSelected = (id) => rowSelected.indexOf(id) !== -1;
           const selectedID = row.id;
           const isItemSelected = isSelected(selectedID);

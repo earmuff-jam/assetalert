@@ -7,6 +7,8 @@ dayjs.extend(relativeTime);
 export const ADD_NEW_INVENTORY_SUBTITLE_TEXT =
   'Add items for your own inventory. Store items under here that are for your personal use. All Items stored with due process until the user profile is abandoned.';
 
+export const ADD_ASSET_STEPS = ['Add inventory', 'Add more details', 'Publish inventory'];
+
 export const INVENTORY_TABS = [
   {
     id: 1,

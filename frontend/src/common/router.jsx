@@ -10,10 +10,10 @@ const NotesList = lazy(() => import('@features/Notes/NotesList'));
 
 const ProfilePage = lazy(() => import('@features/Profile/ProfilePage'));
 const CategoryList = lazy(() => import('@features/Categories/CategoryList'));
-const InventoryList = lazy(() => import('@features/InventoryList/InventoryList'));
+const AssetList = lazy(() => import('@features/Assets/AssetList'));
 const RecentActivityList = lazy(() => import('@features/RecentActivities/RecentActivityList'));
 
-const EditInventory = lazy(() => import('@features/InventoryList/EditInventory/EditInventory'));
+const SelectedAsset = lazy(() => import('@features/SelectedAsset/SelectedAsset'));
 const MaintenancePlanList = lazy(() => import('@features/MaintenancePlan/MaintenancePlanList'));
 const CategoryItemDetails = lazy(() => import('@features/CategoryItemDetails/CategoryItemDetails'));
 
@@ -32,11 +32,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/inventories/list',
-        element: <InventoryList />,
+        element: <AssetList />,
       },
       {
         path: '/inventories/:id/update',
-        element: <EditInventory />,
+        element: <SelectedAsset />,
       },
       {
         path: '/categories/list',

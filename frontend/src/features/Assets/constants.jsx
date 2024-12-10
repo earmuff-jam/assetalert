@@ -1,10 +1,24 @@
 import dayjs from 'dayjs';
 
+import QrCodeGen from '@common/QrCodeGen';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
-import QrCodeGen from './ViewItemDetails/QrCodeGen';
 dayjs.extend(relativeTime);
+
+/**
+ * Modal State is the display state of modal between adding a single inventory, adding a bulk
+ * inventory and removing inventories
+ *
+ */
+export const MODAL_STATE = {
+  NONE: 'none',
+  ADD_ITEM: 'item',
+  BULK_ITEM: 'bulk',
+  MORE_DETAILS: 'more',
+  ASSIGN_CATEGORY: 'assign_category',
+  ASSIGN_MAINTENANCE_PLAN: 'assign_maintenance_plan',
+};
 
 /**
  * default inventories landing page items to encourage users to use
@@ -190,6 +204,8 @@ export const BLANK_INVENTORY_FORM = {
   name: {
     id: 'name',
     label: 'Item name',
+    name: 'name',
+    size: 'small',
     value: '',
     type: 'text',
     isRequired: true,
@@ -209,7 +225,9 @@ export const BLANK_INVENTORY_FORM = {
     id: 'description',
     label: 'Item description',
     value: '',
+    name: 'description',
     type: 'text',
+    size: 'small',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -227,6 +245,8 @@ export const BLANK_INVENTORY_FORM = {
     id: 'price',
     label: 'Item price (per unit)',
     value: '',
+    name: 'price',
+    size: 'small',
     type: 'number',
     isRequired: false,
     errorMsg: '',
@@ -243,9 +263,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   barcode: {
     id: 'barcode',
+    name: 'barcode',
     label: 'Barcode of item',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -257,9 +279,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   sku: {
     id: 'sku',
+    name: 'sku',
     label: 'Sku of item',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -271,9 +295,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   quantity: {
     id: 'quantity',
+    name: 'quantity',
     label: 'Item quantity',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -289,9 +315,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   bought_at: {
     id: 'bought_at',
+    name: 'bought_at',
     label: 'Where did you buy the item',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [],
@@ -322,9 +350,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   return_location: {
     id: 'return_location',
+    name: 'return_location',
     label: 'Where to return the item',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
