@@ -9,7 +9,7 @@ import RowHeader from '@common/RowHeader';
 import SimpleModal from '@common/SimpleModal';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import ImagePicker from '@common/ImagePicker/ImagePicker';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { BLANK_INVENTORY_FORM } from '@features/Assets/constants';
 import { inventoryActions } from '@features/Assets/inventorySlice';
 import { AddPhotoAlternateRounded, CheckRounded } from '@mui/icons-material';
@@ -166,7 +166,7 @@ export default function SelectedAsset() {
         handleClickPrimaryButton={() => setEditImgMode(!editImgMode)}
       />
       <SelectedAssetFormFields
-        formData={formData}
+        formFields={formData}
         handleInputChange={handleInputChange}
         options={storageLocations}
         storageLocation={storageLocation}
@@ -198,12 +198,16 @@ export default function SelectedAsset() {
           <ImagePicker id={id} name={formData.name.value} handleUpload={handleUpload} disableCancel />
         </SimpleModal>
       )}
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        <Box sx={{ flex: '1 1 auto' }} />
-        <Button startIcon={<CheckRounded fontSize="small" />} onClick={handleSubmit} disabled={isFormDisabled()}>
+      <Stack marginTop={1}>
+        <Button
+          startIcon={<CheckRounded fontSize="small" />}
+          onClick={handleSubmit}
+          disabled={isFormDisabled()}
+          variant="outlined"
+        >
           Submit
         </Button>
-      </Box>
+      </Stack>
     </>
   );
 }

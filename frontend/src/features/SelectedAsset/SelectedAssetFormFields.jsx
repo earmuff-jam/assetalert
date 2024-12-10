@@ -2,11 +2,12 @@ import { useDispatch } from 'react-redux';
 import { Autocomplete, Stack, TextField, createFilterOptions } from '@mui/material';
 
 import { inventoryActions } from '@features/Assets/inventorySlice';
+import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
 
 const filter = createFilterOptions();
 
 export default function SelectedAssetFormFields({
-  formData,
+  formFields,
   handleInputChange,
   options,
   storageLocation,
@@ -15,69 +16,112 @@ export default function SelectedAssetFormFields({
   const dispatch = useDispatch();
   return (
     <Stack spacing={2} marginTop={'1rem'}>
-      <Stack direction="column" spacing={2} flexGrow={1}>
-        {Object.values(formData)
-          .filter((v, index) => index < 2)
-          .map((v) => (
-            <TextField
-              key={v.id}
-              id={v.id}
-              label={v.label}
-              value={v.value}
-              required={v.isRequired}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              error={!!v.errorMsg}
-              helperText={v.errorMsg}
-              multiline={v.id === 'description'}
-              rows={v.id === 'description' ? 4 : null}
-            />
-          ))}
+      <Stack spacing={2} flexGrow={1}>
+        <TextFieldWithLabel
+          id={formFields.name.name}
+          name={formFields.name.name}
+          label={formFields.name.label}
+          value={formFields.name.value}
+          size={formFields.name.size}
+          placeholder={formFields.name.placeholder}
+          onChange={handleInputChange}
+          required={formFields.name.required}
+          fullWidth={formFields.name.fullWidth}
+          error={Boolean(formFields.name.errorMsg)}
+          helperText={formFields.name.errorMsg}
+          variant={formFields.name.variant}
+        />
+        <TextFieldWithLabel
+          id={formFields.description.name}
+          name={formFields.description.name}
+          label={formFields.description.label}
+          value={formFields.description.value}
+          size={formFields.description.size}
+          placeholder={formFields.description.placeholder}
+          onChange={handleInputChange}
+          required={formFields.description.required}
+          fullWidth={formFields.description.fullWidth}
+          error={Boolean(formFields.description.errorMsg)}
+          helperText={formFields.description.errorMsg}
+          variant={formFields.description.variant}
+          multiline={true}
+          rows={4}
+        />
       </Stack>
-
       <Stack direction="row" spacing={2}>
-        {Object.values(formData)
-          .filter((v, index) => index >= 2 && index < 5)
-          .map((v) => (
-            <TextField
-              key={v.id}
-              id={v.id}
-              label={v.label}
-              value={v.value}
-              required={v.isRequired}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              error={!!v.errorMsg}
-              helperText={v.errorMsg}
-            />
-          ))}
+        <TextFieldWithLabel
+          id={formFields.price.name}
+          name={formFields.price.name}
+          label={formFields.price.label}
+          value={formFields.price.value}
+          size={formFields.price.size}
+          placeholder={formFields.price.placeholder}
+          onChange={handleInputChange}
+          required={formFields.price.required}
+          fullWidth={formFields.price.fullWidth}
+          error={Boolean(formFields.price.errorMsg)}
+          helperText={formFields.price.errorMsg}
+          variant={formFields.price.variant}
+        />
+        <TextFieldWithLabel
+          id={formFields.barcode.name}
+          name={formFields.barcode.name}
+          label={formFields.barcode.label}
+          value={formFields.barcode.value}
+          size={formFields.barcode.size}
+          placeholder={formFields.barcode.placeholder}
+          onChange={handleInputChange}
+          required={formFields.barcode.required}
+          fullWidth={formFields.barcode.fullWidth}
+          error={Boolean(formFields.barcode.errorMsg)}
+          helperText={formFields.barcode.errorMsg}
+          variant={formFields.barcode.variant}
+        />
+        <TextFieldWithLabel
+          id={formFields.sku.name}
+          name={formFields.sku.name}
+          label={formFields.sku.label}
+          value={formFields.sku.value}
+          size={formFields.sku.size}
+          placeholder={formFields.sku.placeholder}
+          onChange={handleInputChange}
+          required={formFields.sku.required}
+          fullWidth={formFields.sku.fullWidth}
+          error={Boolean(formFields.sku.errorMsg)}
+          helperText={formFields.sku.errorMsg}
+          variant={formFields.sku.variant}
+        />
       </Stack>
-
-      <Stack direction="row" spacing={2}>
-        {/* Ignore autocomplete for its own row */}
-        {Object.values(formData)
-          .filter((v, index) => index >= 5 && index < 7)
-          .map((v) => (
-            <TextField
-              key={v.id}
-              id={v.id}
-              label={v.label}
-              value={v.value}
-              required={v.isRequired}
-              onChange={handleInputChange}
-              fullWidth
-              variant="outlined"
-              size="small"
-              error={!!v.errorMsg}
-              helperText={v.errorMsg}
-            />
-          ))}
+      <Stack direction="row" spacing={1}>
+        <TextFieldWithLabel
+          id={formFields.quantity.name}
+          name={formFields.quantity.name}
+          label={formFields.quantity.label}
+          value={formFields.quantity.value}
+          size={formFields.quantity.size}
+          placeholder={formFields.quantity.placeholder}
+          onChange={handleInputChange}
+          required={formFields.quantity.required}
+          fullWidth={formFields.quantity.fullWidth}
+          error={Boolean(formFields.quantity.errorMsg)}
+          helperText={formFields.quantity.errorMsg}
+          variant={formFields.quantity.variant}
+        />
+        <TextFieldWithLabel
+          id={formFields.bought_at.name}
+          name={formFields.bought_at.name}
+          label={formFields.bought_at.label}
+          value={formFields.bought_at.value}
+          size={formFields.bought_at.size}
+          placeholder={formFields.bought_at.placeholder}
+          onChange={handleInputChange}
+          required={formFields.bought_at.required}
+          fullWidth={formFields.bought_at.fullWidth}
+          error={Boolean(formFields.bought_at.errorMsg)}
+          helperText={formFields.bought_at.errorMsg}
+          variant={formFields.bought_at.variant}
+        />
       </Stack>
-
       <Autocomplete
         fullWidth
         freeSolo
@@ -99,7 +143,6 @@ export default function SelectedAssetFormFields({
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
-
           const { inputValue } = params;
           // Suggest the creation of a new value
           const isExisting = options.some((option) => inputValue === option.location);
@@ -109,7 +152,6 @@ export default function SelectedAssetFormFields({
               location: `Add "${inputValue}"`,
             });
           }
-
           return filtered;
         }}
         selectOnFocus

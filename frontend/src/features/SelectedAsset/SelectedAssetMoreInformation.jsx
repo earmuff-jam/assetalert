@@ -1,8 +1,8 @@
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import { IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import { BookmarkAddedRounded, CloseRounded, NoteAddRounded, SwapHorizRounded } from '@mui/icons-material';
-import { Checkbox, FormControlLabel, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
+import SelectedAssetMoreInfoCheckbox from '@features/SelectedAsset/SelectedAssetMoreInformationCheckbox';
+import SelectedAssetReturnInformationHeader from '@features/SelectedAsset/SelectedAssetReturnInformationHeader';
+import SelectedAssetReturnInformationContent from '@features/SelectedAsset/SelectedAssetReturnInformationContent';
 
 export default function SelectedAssetMoreInformation({
   formData,
@@ -14,64 +14,35 @@ export default function SelectedAssetMoreInformation({
   handleInputChange,
 }) {
   return (
-    <>
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={formData.is_bookmarked.value}
-              onChange={(e) => handleCheckbox('is_bookmarked', e.target.checked)}
-              color="primary"
-            />
-          }
-          label={
-            <Stack direction="row" alignItems="center">
-              <BookmarkAddedRounded color={formData.is_bookmarked.value ? 'primary' : 'secondary'} />
-              <Typography variant="caption">Bookmarked</Typography>
-            </Stack>
-          }
+    <Stack spacing={1}>
+      <SelectedAssetMoreInfoCheckbox
+        isChecked={formData.is_bookmarked.value}
+        handleCheckbox={handleCheckbox}
+        target="is_bookmarked"
+        label="Bookmark"
+        icon={<BookmarkAddedRounded color={formData.is_bookmarked.value ? 'primary' : 'secondary'} />}
+      />
+      <Stack spacing={2} justifyContent="space-between">
+        <SelectedAssetMoreInfoCheckbox
+          isChecked={formData.is_returnable.value}
+          handleCheckbox={handleCheckbox}
+          target="is_returnable"
+          label="Returnable"
+          icon={<SwapHorizRounded color={formData.is_returnable.value ? 'primary' : 'secondary'} />}
         />
-      </Stack>
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={formData.is_returnable.value}
-              onChange={(e) => handleCheckbox('is_returnable', e.target.checked)}
-              color="primary"
-            />
-          }
-          label={
-            <Stack direction="row" alignItems="center">
-              <SwapHorizRounded color={formData.is_returnable.value ? 'primary' : 'secondary'} />
-              <Typography variant="caption">Returnable</Typography>
-            </Stack>
-          }
+        <SelectedAssetReturnInformationHeader
+          openReturnNote={openReturnNote}
+          setOpenReturnNotes={setOpenReturnNotes}
+          display={Boolean(formData.is_returnable.value)}
         />
-        {formData.is_returnable.value && (
-          <Stack
-            direction="column"
-            spacing={2}
-            justifyContent="space-between"
-            border={`0.1rem solid black`}
-            padding="1rem"
-          >
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="h6">Return Information</Typography>
-              {!openReturnNote ? (
-                <Tooltip title="Add note">
-                  <IconButton size="small" onClick={() => setOpenReturnNotes(!openReturnNote)}>
-                    <NoteAddRounded fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Tooltip title="Close note">
-                  <IconButton size="small" onClick={() => setOpenReturnNotes(!openReturnNote)}>
-                    <CloseRounded fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </Stack>
+        <SelectedAssetReturnInformationContent
+          openNote={openReturnNote}
+          formFields={formData}
+          returnDateTime={returnDateTime}
+          setReturnDateTime={setReturnDateTime}
+          handleInputChange={handleInputChange}
+        />
+        {/* {formData.is_returnable.value && (
             {Object.values(formData)
               .filter((v, index) => index === 10)
               .map((v) => (
@@ -125,9 +96,8 @@ export default function SelectedAssetMoreInformation({
                   ))}
               </>
             )}
-          </Stack>
-        )}
+          )} */}
       </Stack>
-    </>
+    </Stack>
   );
 }
