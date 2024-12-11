@@ -1,23 +1,25 @@
-import { Box, Button, Divider, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AddPhotoAlternateRounded, CheckRounded } from '@mui/icons-material';
+
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { BLANK_INVENTORY_FORM } from '../constants';
-import RowHeader from '../../../common/RowHeader';
-import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../inventorySlice';
 import { enqueueSnackbar } from 'notistack';
-import ImagePicker from '../../../common/ImagePicker/ImagePicker';
-import SimpleModal from '../../../common/SimpleModal';
-import EditInventoryFormFields from './EditInventoryFormFields';
-import EditInventoryMoreInformation from './EditInventoryMoreInformation';
-import EditInventoryWeightDimension from './EditInventoryWeightDimension';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import RowHeader from '@common/RowHeader';
+import SimpleModal from '@common/SimpleModal';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import ImagePicker from '@common/ImagePicker/ImagePicker';
+import { Button, Divider, Stack, Typography } from '@mui/material';
+import { BLANK_INVENTORY_FORM } from '@features/Assets/constants';
+import { inventoryActions } from '@features/Assets/inventorySlice';
+import { AddPhotoAlternateRounded, CheckRounded } from '@mui/icons-material';
+import SelectedAssetFormFields from '@features/SelectedAsset/SelectedAssetFormFields';
+import SelectedAssetWeightDimension from '@features/SelectedAsset/SelectedAssetWeightDimension';
+import SelectedAssetMoreInformation from '@features/SelectedAsset/SelectedAssetMoreInformation';
 
 dayjs.extend(relativeTime);
 
-const EditInventory = () => {
+export default function SelectedAsset() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,11 +28,12 @@ const EditInventory = () => {
     loading: storageLocationsLoading,
     storageLocations,
     inventory,
+    selectedImage,
     loading,
   } = useSelector((state) => state.inventory);
 
   const [editImgMode, setEditImgMode] = useState(false);
-  const [openReturnNote, setOpenReturnNotes] = useState(false);
+  const [openReturnNote, setOpenReturnNote] = useState(false);
   const [returnDateTime, setReturnDateTime] = useState(null);
   const [storageLocation, setStorageLocation] = useState({});
   const [formData, setFormData] = useState({ ...BLANK_INVENTORY_FORM });
@@ -56,6 +59,10 @@ const EditInventory = () => {
   };
 
   const handleCheckbox = (name, value) => {
+    // close the return note subsection if the parent is disabled
+    if (name === 'is_returnable' && openReturnNote) {
+      setOpenReturnNote(false);
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: { ...prevFormData[name], value },
@@ -106,12 +113,14 @@ const EditInventory = () => {
   };
 
   const handleUpload = (id, imgFormData) => {
-    console.debug(id, imgFormData);
+    dispatch(inventoryActions.uploadImage({ id: id, selectedImage: imgFormData }));
+    setEditImgMode(false);
   };
 
   useEffect(() => {
     if (id.length > 0) {
       dispatch(inventoryActions.getInvByID(id));
+      dispatch(inventoryActions.getSelectedImage({ id }));
     }
   }, [id]);
 
@@ -145,7 +154,7 @@ const EditInventory = () => {
       }
 
       if (inventory?.return_notes) {
-        setOpenReturnNotes(true);
+        setOpenReturnNote(true);
         selectedAsset.return_notes.value = inventory.return_notes;
       }
 
@@ -157,35 +166,46 @@ const EditInventory = () => {
   return (
     <>
       <RowHeader
-        title="Editing inventory"
+        title="Viewing asset details"
         caption={`Editing ${formData.name.value}`}
         primaryStartIcon={<AddPhotoAlternateRounded />}
         primaryButtonTextLabel={'Add Image'}
         handleClickPrimaryButton={() => setEditImgMode(!editImgMode)}
       />
-      <EditInventoryFormFields
-        formData={formData}
+      <SelectedAssetFormFields
+        formFields={formData}
+        selectedImage={selectedImage}
         handleInputChange={handleInputChange}
         options={storageLocations}
         storageLocation={storageLocation}
         setStorageLocation={setStorageLocation}
       />
-      <Divider>
+      <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Typography variant="caption">More information</Typography>
       </Divider>
-      <EditInventoryMoreInformation
-        formData={formData}
+      <SelectedAssetMoreInformation
+        formFields={formData}
         returnDateTime={returnDateTime}
         setReturnDateTime={setReturnDateTime}
         openReturnNote={openReturnNote}
-        setOpenReturnNotes={setOpenReturnNotes}
+        setOpenReturnNote={setOpenReturnNote}
         handleCheckbox={handleCheckbox}
         handleInputChange={handleInputChange}
       />
-      <Divider>
+      <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Typography variant="caption">Weight and Dimension</Typography>
       </Divider>
-      <EditInventoryWeightDimension formData={formData} handleInputChange={handleInputChange} />
+      <SelectedAssetWeightDimension formFields={formData} handleInputChange={handleInputChange} />
+      <Stack sx={{ margin: '1rem 0rem' }}>
+        <Button
+          startIcon={<CheckRounded fontSize="small" />}
+          onClick={handleSubmit}
+          disabled={isFormDisabled()}
+          variant="outlined"
+        >
+          Submit
+        </Button>
+      </Stack>
       {editImgMode && (
         <SimpleModal
           title="Assign image"
@@ -196,14 +216,6 @@ const EditInventory = () => {
           <ImagePicker id={id} name={formData.name.value} handleUpload={handleUpload} disableCancel />
         </SimpleModal>
       )}
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        <Box sx={{ flex: '1 1 auto' }} />
-        <Button startIcon={<CheckRounded fontSize="small" />} onClick={handleSubmit} disabled={isFormDisabled()}>
-          Submit
-        </Button>
-      </Box>
     </>
   );
-};
-
-export default EditInventory;
+}

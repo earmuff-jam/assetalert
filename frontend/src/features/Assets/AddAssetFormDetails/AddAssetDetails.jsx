@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Skeleton, Step, StepLabel, Stepper, Typography } from '@mui/material';
-import { ADD_ASSET_FORM } from './constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../inventorySlice';
-import { enqueueSnackbar } from 'notistack';
+
 import dayjs from 'dayjs';
-import AddInventoryInstructions from './AddInventoryInstructions';
-import AddInventoryForm from './AddInventoryForm';
+import { enqueueSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
 
-const ADD_ASSET_STEPS = ['Add inventory', 'Add more details', 'Publish inventory'];
+import { ADD_ASSET_FORM } from './constants';
+import { inventoryActions } from '../inventorySlice';
 
-export default function AddInventory({ handleClose }) {
+import { Box, Skeleton, Typography } from '@mui/material';
+import AddAssetSteps from '@features/Assets/AddAssetFormDetails/AddAssetSteps';
+import AddAssetFormSelection from '@features/Assets/AddAssetFormDetails/AddAssetFormSelection';
+import AddAssetActionButtons from '@features/Assets/AddAssetFormDetails/AddAssetActionButtons';
+import AddAssetFormInstructions from '@features/Assets/AddAssetFormDetails/AddAssetFormInstructions';
+
+export default function AddAssetDetails({ handleClose }) {
   const dispatch = useDispatch();
   const { storageLocations: options, isLoading } = useSelector((state) => state.inventory);
 
@@ -158,57 +161,31 @@ export default function AddInventory({ handleClose }) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
-        {ADD_ASSET_STEPS.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = <Typography variant="caption">Optional</Typography>;
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      <>
-        <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-        <AddInventoryInstructions stepNumber={activeStep + 1} />
-        <AddInventoryForm
-          stepNumber={activeStep + 1}
-          formData={formData}
-          storageLocation={storageLocation}
-          setStorageLocation={setStorageLocation}
-          handleInputChange={handleInputChange}
-          handleCheckbox={handleCheckbox}
-          handleReset={handleReset}
-          handleSubmit={handleSubmit}
-          options={options}
-          returnDateTime={returnDateTime}
-          setReturnDateTime={setReturnDateTime}
-        />
-        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-          <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-            Back
-          </Button>
-          <Box sx={{ flex: '1 1 auto' }} />
-          {isStepOptional(activeStep) && (
-            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-              Skip
-            </Button>
-          )}
-
-          {activeStep !== ADD_ASSET_STEPS.length - 1 ? (
-            <Button disabled={isDisabled()} onClick={handleNext}>
-              Next
-            </Button>
-          ) : null}
-        </Box>
-      </>
+      <AddAssetSteps activeStep={activeStep} isStepOptional={isStepOptional} isStepSkipped={isStepSkipped} />
+      <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+      <AddAssetFormInstructions stepNumber={activeStep + 1} />
+      <AddAssetFormSelection
+        stepNumber={activeStep + 1}
+        formData={formData}
+        storageLocation={storageLocation}
+        setStorageLocation={setStorageLocation}
+        handleInputChange={handleInputChange}
+        handleCheckbox={handleCheckbox}
+        handleReset={handleReset}
+        handleSubmit={handleSubmit}
+        options={options}
+        returnDateTime={returnDateTime}
+        setReturnDateTime={setReturnDateTime}
+      />
+      <AddAssetActionButtons
+        activeStep={activeStep}
+        handleBack={handleBack}
+        handleNext={handleNext}
+        handleSkip={handleSkip}
+        isStepOptional={isStepOptional}
+        isNextDisabled={isDisabled()}
+        isBackDisabled={activeStep === 0}
+      />
     </Box>
   );
 }

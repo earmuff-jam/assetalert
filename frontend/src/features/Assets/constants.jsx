@@ -1,10 +1,24 @@
 import dayjs from 'dayjs';
 
+import QrCodeGen from '@common/QrCodeGen';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CheckRounded, CloseRounded } from '@mui/icons-material';
 
-import QrCodeGen from './ViewItemDetails/QrCodeGen';
 dayjs.extend(relativeTime);
+
+/**
+ * Modal State is the display state of modal between adding a single inventory, adding a bulk
+ * inventory and removing inventories
+ *
+ */
+export const MODAL_STATE = {
+  NONE: 'none',
+  ADD_ITEM: 'item',
+  BULK_ITEM: 'bulk',
+  MORE_DETAILS: 'more',
+  ASSIGN_CATEGORY: 'assign_category',
+  ASSIGN_MAINTENANCE_PLAN: 'assign_maintenance_plan',
+};
 
 /**
  * default inventories landing page items to encourage users to use
@@ -189,7 +203,10 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
 export const BLANK_INVENTORY_FORM = {
   name: {
     id: 'name',
-    label: 'Item name',
+    label: 'Asset name',
+    name: 'name',
+    size: 'small',
+    placeholder: 'Asset name',
     value: '',
     type: 'text',
     isRequired: true,
@@ -207,9 +224,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   description: {
     id: 'description',
-    label: 'Item description',
+    label: 'Asset description',
     value: '',
+    name: 'description',
+    placeholder: 'Asset description in less than 500 characters',
     type: 'text',
+    size: 'small',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -225,8 +245,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   price: {
     id: 'price',
-    label: 'Item price (per unit)',
+    label: 'Asset price (per unit)',
     value: '',
+    name: 'price',
+    size: 'small',
+    placeholder: 'Asset price per unit',
     type: 'number',
     isRequired: false,
     errorMsg: '',
@@ -243,9 +266,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   barcode: {
     id: 'barcode',
-    label: 'Barcode of item',
+    name: 'barcode',
+    label: 'Barcode',
     value: '',
     type: 'text',
+    size: 'small',
+    placeholder: 'Barcode of the selected asset',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -257,9 +283,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   sku: {
     id: 'sku',
-    label: 'Sku of item',
+    name: 'sku',
+    label: 'SKU',
     value: '',
     type: 'text',
+    size: 'small',
+    placeholder: 'SKU of the selected asset',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -271,9 +300,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   quantity: {
     id: 'quantity',
-    label: 'Item quantity',
+    name: 'quantity',
+    label: 'Asset quantity',
     value: '',
     type: 'number',
+    placeholder: 'The quantity of the asset',
+    size: 'small',
     isRequired: true,
     errorMsg: '',
     validators: [
@@ -289,16 +321,20 @@ export const BLANK_INVENTORY_FORM = {
   },
   bought_at: {
     id: 'bought_at',
-    label: 'Where did you buy the item',
+    name: 'bought_at',
+    label: 'Place of purchase',
+    placeholder: 'Where did you buy this item?',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [],
   },
   location: {
     id: 'location',
-    label: 'Where do you want to store the item',
+    label: 'Storage location',
+    placeholder: 'Where do you want to store the item',
     type: 'text',
     isRequired: false,
     errorMsg: '',
@@ -322,9 +358,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   return_location: {
     id: 'return_location',
-    label: 'Where to return the item',
+    name: 'return_location',
+    label: 'Return location',
+    placeholder: 'Where to return the item',
     value: '',
     type: 'text',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -336,9 +375,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   max_weight: {
     id: 'max_weight',
-    label: 'Max weight in kg',
+    name: 'max_weight',
+    label: 'Maxmimum weight',
+    placeholder: 'Maximum weight of the selected asset in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -350,9 +392,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   min_weight: {
     id: 'min_weight',
-    label: 'Min weight in kg',
+    name: 'min_weight',
+    label: 'Minimum Weight',
+    placeholder: 'Minimum weight of the selected asset in kg',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -364,9 +409,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   max_height: {
     id: 'max_height',
-    label: 'Max height in kg',
+    name: 'max_height',
+    label: 'Maximum height',
+    placeholder: 'Maximum height of selected asset in inches',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -378,9 +426,12 @@ export const BLANK_INVENTORY_FORM = {
   },
   min_height: {
     id: 'min_height',
-    label: 'Min height in kg',
+    name: 'min_height',
+    label: 'Minimum height',
+    placeholder: 'Minimum height of selected asset in inches',
     value: '',
     type: 'number',
+    size: 'small',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -392,15 +443,18 @@ export const BLANK_INVENTORY_FORM = {
   },
   return_notes: {
     id: 'return_notes',
+    name: 'return_notes',
     label: 'Return notes',
+    placeholder: 'Add return notes in less than 500 characters',
     value: '',
     type: 'text',
     isRequired: false,
+    size: 'small',
     errorMsg: '',
     validators: [
       {
-        validate: (value) => value.trim().length >= 50,
-        message: 'Return notes should be less than 50 characters',
+        validate: (value) => value.trim().length >= 500,
+        message: 'Return notes should be less than 500 characters',
       },
     ],
   },

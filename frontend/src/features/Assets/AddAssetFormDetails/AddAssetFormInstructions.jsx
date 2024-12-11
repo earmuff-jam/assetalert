@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 
-export default function AddInventoryInstructions({ stepNumber }) {
+export default function AddAssetFormInstructions({ stepNumber }) {
   switch (stepNumber) {
     case 1:
       return (

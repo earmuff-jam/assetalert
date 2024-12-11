@@ -5,7 +5,7 @@ import AppToolbarActionButtons from '@features/Layout/AppToolbar/AppToolbarActio
 export default function AppToolbar({ profileDetails, handleDrawerOpen, smScreenSizeAndHigher }) {
   return (
     <AppBar elevation={0}>
-      <Toolbar>
+      <Toolbar sx={{ backgroundColor: 'accentColor.default' }}>
         <AppToolbarTitle onClick={handleDrawerOpen} />
         <AppToolbarActionButtons profileDetails={profileDetails} smScreenSizeAndHigher={smScreenSizeAndHigher} />
       </Toolbar>

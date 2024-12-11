@@ -9,7 +9,7 @@ import categories from './features/Categories/categoriesSlice';
 import categoryItemDetails from './features/CategoryItemDetails/categoryItemDetailsSlice';
 import maintenance from './features/MaintenancePlan/maintenanceSlice';
 import maintenancePlanItem from './features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
-import inventory from './features/InventoryList/inventorySlice';
+import inventory from './features/Assets/inventorySlice';
 import summary from './features/Home/SummarySlice';
 import reports from './features/Reports/reportSlice';
 
@@ -20,7 +20,7 @@ import categoriesSaga from './features/Categories/categoriesSaga';
 import categoryItemSaga from './features/CategoryItemDetails/categoryItemDetailsSaga';
 import maintenanceSaga from './features/MaintenancePlan/maintenanceSaga';
 import maintenancePlanItemSaga from './features/MaintenancePlanItemDetails/maintenancePlanItemSaga';
-import inventorySaga from './features/InventoryList/inventorySaga';
+import inventorySaga from './features/Assets/inventorySaga';
 import summarySaga from './features/Home/SummarySaga';
 import reportsSaga from './features/Reports/reportSaga';
 

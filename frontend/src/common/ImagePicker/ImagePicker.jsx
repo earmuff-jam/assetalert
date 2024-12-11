@@ -26,12 +26,14 @@ export default function ImagePicker({ id, name, handleUpload, handleCancel, disa
   };
 
   return (
-    <Stack spacing="1rem">
-      <Stack direction="row" spacing="0.2rem">
+    <Stack spacing={1}>
+      <Stack direction="row" spacing={0.2} alignItems={'center'}>
         <Tooltip title="Images should be less than 2mb and be of either png, jpg, jpeg or svg format">
           <InfoRounded sx={{ color: 'grey' }} fontSize="small" />
         </Tooltip>
-        <Typography variant="caption">Select an image to associate with {name || ''}</Typography>
+        <Typography flexGrow={1} variant="caption">
+          Select an image to associate with {name || ''}
+        </Typography>
         {!disableCancel ? (
           <IconButton color="error" size="small" onClick={handleCancel}>
             <CloseRounded fontSize="small" />

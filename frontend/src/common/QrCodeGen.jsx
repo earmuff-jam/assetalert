@@ -1,5 +1,6 @@
-import { Stack, Typography } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
+
+import { Stack, Typography } from '@mui/material';
 
 const QrCodeGen = ({ value }) => {
   return (

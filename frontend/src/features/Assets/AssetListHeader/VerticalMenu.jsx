@@ -1,8 +1,13 @@
-import { IconButton, Menu, MenuItem } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 
-export default function VerticalMenu({ rowSelected, handleAddInventory, handleBulkInventory, handleRemoveInventory }) {
+export default function VerticalMenu({
+  disableDelete,
+  handleAddInventory,
+  handleBulkInventory,
+  handleRemoveInventory,
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -12,7 +17,7 @@ export default function VerticalMenu({ rowSelected, handleAddInventory, handleBu
   const options = [
     { id: 1, label: 'Add Item', action: handleAddInventory, disabled: false },
     { id: 2, label: 'Add Bulk', action: handleBulkInventory, disabled: false },
-    { id: 3, label: 'Delete Selected', action: handleRemoveInventory, disabled: rowSelected.length <= 0 },
+    { id: 3, label: 'Delete Selected', action: handleRemoveInventory, disabled: disableDelete },
   ];
 
   return (
