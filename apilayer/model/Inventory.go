@@ -28,6 +28,7 @@ type Inventory struct {
 	MaxHeight          string     `json:"max_height"`
 	MinHeight          string     `json:"min_height"`
 	AssociatedImageURL string     `json:"associated_image_url"`
+	Image              []byte     `json:"image,omitempty"`
 	CreatedAt          time.Time  `json:"created_at"`
 	CreatedBy          string     `json:"created_by"`
 	CreatorName        string     `json:"creator_name"`
