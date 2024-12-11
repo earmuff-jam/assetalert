@@ -4,10 +4,10 @@ import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 
 import { Skeleton } from '@mui/material';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
-import { ConfirmationBoxModal, EmptyComponent } from '@common/utils';
 import ItemCard from '@common/ItemCard/ItemCard';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { ConfirmationBoxModal, EmptyComponent } from '@common/utils';
+import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 
 dayjs.extend(relativeTime);
 

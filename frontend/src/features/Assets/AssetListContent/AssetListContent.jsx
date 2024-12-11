@@ -7,10 +7,12 @@ import SimpleModal from '@common/SimpleModal';
 import { Stack, TextField } from '@mui/material';
 import GridComponent from '@common/DataTable/GridComponent';
 import { inventoryActions } from '@features/Assets/inventorySlice';
+
 import { CheckRounded, CloseRounded, EditRounded } from '@mui/icons-material';
-import AddAssetDetails from '@features/Assets/AddAssetFormDetails/AddAssetDetails';
-import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 import AddAssetsInBulk from '@features/Assets/AddAssetsInBulk/AddAssetsInBulk';
+import AddAssetDetails from '@features/Assets/AddAssetFormDetails/AddAssetDetails';
+
+import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
 import { MODAL_STATE, VIEW_INVENTORY_LIST_HEADERS } from '@features/Assets/constants';
 import AssetDetailsDrawer from '@features/Assets/AssetDetailsDrawer/AssetDetailsDrawer';
 

@@ -28,6 +28,7 @@ export default function SelectedAsset() {
     loading: storageLocationsLoading,
     storageLocations,
     inventory,
+    selectedImage,
     loading,
   } = useSelector((state) => state.inventory);
 
@@ -112,12 +113,14 @@ export default function SelectedAsset() {
   };
 
   const handleUpload = (id, imgFormData) => {
-    console.debug(id, imgFormData);
+    dispatch(inventoryActions.uploadImage({ id: id, selectedImage: imgFormData }));
+    setEditImgMode(false);
   };
 
   useEffect(() => {
     if (id.length > 0) {
       dispatch(inventoryActions.getInvByID(id));
+      dispatch(inventoryActions.getSelectedImage({ id }));
     }
   }, [id]);
 
@@ -171,6 +174,7 @@ export default function SelectedAsset() {
       />
       <SelectedAssetFormFields
         formFields={formData}
+        selectedImage={selectedImage}
         handleInputChange={handleInputChange}
         options={storageLocations}
         storageLocation={storageLocation}

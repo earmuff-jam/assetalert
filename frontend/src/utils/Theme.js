@@ -128,6 +128,9 @@ export const darkTheme = createTheme({
       primary: '#FFFFFF',
       secondary: '#B0B0B0',
     },
+    accentColor: {
+      default: '#232B35',
+    },
   },
   typography: {
     fontFamily: 'Nunito, sans-serif',

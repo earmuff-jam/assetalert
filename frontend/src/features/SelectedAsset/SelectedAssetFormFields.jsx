@@ -8,6 +8,7 @@ const filter = createFilterOptions();
 
 export default function SelectedAssetFormFields({
   formFields,
+  selectedImage,
   handleInputChange,
   options,
   storageLocation,
@@ -20,7 +21,7 @@ export default function SelectedAssetFormFields({
         <CardMedia
           component="img"
           sx={{ width: 300 }}
-          image="/blank_canvas.png"
+          image={selectedImage}
           alt="Default placeholder image for the asset"
         />
         <Stack spacing={2} flexGrow={1}>
