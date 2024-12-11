@@ -14,6 +14,9 @@ export const lightTheme = createTheme({
       default: '#FFFBFB',
       paper: '#F8FAFD',
     },
+    accentColor: {
+      default: '#EEEEF2',
+    },
   },
   typography: {
     fontFamily: 'Nunito, sans-serif',

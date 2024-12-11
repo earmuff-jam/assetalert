@@ -203,9 +203,10 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
 export const BLANK_INVENTORY_FORM = {
   name: {
     id: 'name',
-    label: 'Item name',
+    label: 'Asset name',
     name: 'name',
     size: 'small',
+    placeholder: 'Asset name',
     value: '',
     type: 'text',
     isRequired: true,
@@ -223,9 +224,10 @@ export const BLANK_INVENTORY_FORM = {
   },
   description: {
     id: 'description',
-    label: 'Item description',
+    label: 'Asset description',
     value: '',
     name: 'description',
+    placeholder: 'Asset description in less than 500 characters',
     type: 'text',
     size: 'small',
     isRequired: true,
@@ -243,10 +245,11 @@ export const BLANK_INVENTORY_FORM = {
   },
   price: {
     id: 'price',
-    label: 'Item price (per unit)',
+    label: 'Asset price (per unit)',
     value: '',
     name: 'price',
     size: 'small',
+    placeholder: 'Asset price per unit',
     type: 'number',
     isRequired: false,
     errorMsg: '',
@@ -264,10 +267,11 @@ export const BLANK_INVENTORY_FORM = {
   barcode: {
     id: 'barcode',
     name: 'barcode',
-    label: 'Barcode of item',
+    label: 'Barcode',
     value: '',
     type: 'text',
     size: 'small',
+    placeholder: 'Barcode of the selected asset',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -280,10 +284,11 @@ export const BLANK_INVENTORY_FORM = {
   sku: {
     id: 'sku',
     name: 'sku',
-    label: 'Sku of item',
+    label: 'SKU',
     value: '',
     type: 'text',
     size: 'small',
+    placeholder: 'SKU of the selected asset',
     isRequired: false,
     errorMsg: '',
     validators: [
@@ -296,9 +301,10 @@ export const BLANK_INVENTORY_FORM = {
   quantity: {
     id: 'quantity',
     name: 'quantity',
-    label: 'Item quantity',
+    label: 'Asset quantity',
     value: '',
     type: 'number',
+    placeholder: 'The quantity of the asset',
     size: 'small',
     isRequired: true,
     errorMsg: '',
@@ -316,7 +322,8 @@ export const BLANK_INVENTORY_FORM = {
   bought_at: {
     id: 'bought_at',
     name: 'bought_at',
-    label: 'Where did you buy the item',
+    label: 'Place of purchase',
+    placeholder: 'Where did you buy this item?',
     value: '',
     type: 'text',
     size: 'small',
@@ -326,7 +333,8 @@ export const BLANK_INVENTORY_FORM = {
   },
   location: {
     id: 'location',
-    label: 'Where do you want to store the item',
+    label: 'Storage location',
+    placeholder: 'Where do you want to store the item',
     type: 'text',
     isRequired: false,
     errorMsg: '',
@@ -351,7 +359,8 @@ export const BLANK_INVENTORY_FORM = {
   return_location: {
     id: 'return_location',
     name: 'return_location',
-    label: 'Where to return the item',
+    label: 'Return location',
+    placeholder: 'Where to return the item',
     value: '',
     type: 'text',
     size: 'small',
@@ -367,7 +376,8 @@ export const BLANK_INVENTORY_FORM = {
   max_weight: {
     id: 'max_weight',
     name: 'max_weight',
-    label: 'Max weight in kg',
+    label: 'Maxmimum weight',
+    placeholder: 'Maximum weight of the selected asset in kg',
     value: '',
     type: 'number',
     size: 'small',
@@ -383,7 +393,8 @@ export const BLANK_INVENTORY_FORM = {
   min_weight: {
     id: 'min_weight',
     name: 'min_weight',
-    label: 'Min weight in kg',
+    label: 'Minimum Weight',
+    placeholder: 'Minimum weight of the selected asset in kg',
     value: '',
     type: 'number',
     size: 'small',
@@ -399,7 +410,8 @@ export const BLANK_INVENTORY_FORM = {
   max_height: {
     id: 'max_height',
     name: 'max_height',
-    label: 'Max height in kg',
+    label: 'Maximum height',
+    placeholder: 'Maximum height of selected asset in inches',
     value: '',
     type: 'number',
     size: 'small',
@@ -415,7 +427,8 @@ export const BLANK_INVENTORY_FORM = {
   min_height: {
     id: 'min_height',
     name: 'min_height',
-    label: 'Min height in kg',
+    label: 'Minimum height',
+    placeholder: 'Minimum height of selected asset in inches',
     value: '',
     type: 'number',
     size: 'small',

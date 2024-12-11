@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Box,
   Card,
@@ -10,13 +15,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import dayjs from 'dayjs';
-import { EmptyComponent } from '../utils';
-import { useEffect, useState } from 'react';
-import SimpleModal from '../SimpleModal';
-import ImagePicker from '../ImagePicker/ImagePicker';
-import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from '../../features/Assets/inventorySlice';
+
+import { EmptyComponent } from '@common/utils';
+import SimpleModal from '@common/SimpleModal';
+import ImagePicker from '@common/ImagePicker/ImagePicker';
+import { inventoryActions } from '@features/Assets/inventorySlice';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
   const dispatch = useDispatch();
@@ -25,6 +28,8 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedItemID, setSelectedItemID] = useState(-1);
   const handleCloseModal = () => setDisplayModal(false);
+
+  const selectedAsset = inventories.filter((v) => v.id === selectedItemID).find(() => true);
 
   const handleUpload = (id, imgFormData) => {
     dispatch(inventoryActions.createInventoryImage({ assetID: id, imageData: imgFormData }));
@@ -95,11 +100,8 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
           );
         })}
         {displayModal && (
-          <SimpleModal title={'Edit image'} handleClose={handleCloseModal} maxSize="sm">
-            <ImagePicker
-              selectedData={inventories.filter((v) => v.id === selectedItemID).find(() => true)}
-              handleUpload={handleUpload}
-            />
+          <SimpleModal title={'Edit image'} handleClose={handleCloseModal} maxSize="xs">
+            <ImagePicker id={selectedAsset.id} name={selectedAsset.name} handleUpload={handleUpload} disableCancel />
           </SimpleModal>
         )}
       </Stack>
