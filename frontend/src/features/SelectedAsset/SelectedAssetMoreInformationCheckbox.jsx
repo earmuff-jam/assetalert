@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, Stack, Typography } from '@mui/material';
 
-export default function SelectedAssetMoreInfoCheckbox({ isChecked, handleCheckbox, target, label, icon }) {
+export default function SelectedAssetMoreInformationCheckbox({ isChecked, handleCheckbox, target, label, icon }) {
   return (
     <FormControlLabel
       control={

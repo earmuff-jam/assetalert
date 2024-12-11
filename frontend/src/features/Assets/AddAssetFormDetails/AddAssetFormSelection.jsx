@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
-import AddInventoryFormReview from '@features/Assets/AddAssetFormDetails/AddInventoryFormReview';
-import AddInventoryFormDetails from '@features/Assets/AddAssetFormDetails/AddInventoryFormDetails';
-import AddInventoryFormItemDetails from '@features/Assets/AddAssetFormDetails/AddInventoryFormItemDetails';
+import AddAssetFormReview from '@features/Assets/AddAssetFormDetails/AddAssetFormReview';
+import AddAssetFormDetails from '@features/Assets/AddAssetFormDetails/AddAssetFormDetails';
+import AddAssetFormItemDetails from '@features/Assets/AddAssetFormDetails/AddAssetFormItemDetails';
 
 export default function AddAssetFormSelection({
   stepNumber,
@@ -20,7 +20,7 @@ export default function AddAssetFormSelection({
     case 1:
       return (
         <Stack alignItems="center">
-          <AddInventoryFormDetails
+          <AddAssetFormDetails
             formData={formData}
             options={options}
             storageLocation={storageLocation}
@@ -33,7 +33,7 @@ export default function AddAssetFormSelection({
     case 2:
       return (
         <Stack alignItems="center">
-          <AddInventoryFormItemDetails
+          <AddAssetFormItemDetails
             formData={formData}
             handleInputChange={handleInputChange}
             handleCheckbox={handleCheckbox}
@@ -43,7 +43,7 @@ export default function AddAssetFormSelection({
         </Stack>
       );
     case 3:
-      return <AddInventoryFormReview formData={formData} handleReset={handleReset} handleSubmit={handleSubmit} />;
+      return <AddAssetFormReview formData={formData} handleReset={handleReset} handleSubmit={handleSubmit} />;
     default:
       return null;
   }

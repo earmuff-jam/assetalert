@@ -12,7 +12,7 @@ import {
 
 const filter = createFilterOptions();
 
-export default function AddInventoryFormDetails({
+export default function AddAssetFormDetails({
   formData,
   options,
   storageLocation,
