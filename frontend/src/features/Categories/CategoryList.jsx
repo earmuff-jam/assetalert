@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Stack } from '@mui/material';
 
-import Category from './CategoryDetails/Category';
-import SimpleModal from '../../common/SimpleModal';
-import AddCategory from './AddCategory/AddCategory';
-import CategoryHeader from './CategoryHeader/CategoryHeader';
+import SimpleModal from '@common/SimpleModal';
+import AddCategory from '@features/Categories/AddCategory';
+import SectionCardHeader from '@common/SectionCard/SectionCardHeader';
+import { categoryActions } from '@features/Categories/categoriesSlice';
+import SectionCardContent from '@common/SectionCard/SectionCardContent';
 
 const CategoryList = ({ displayConcise = false }) => {
+  const dispatch = useDispatch();
   const { categories = [], loading } = useSelector((state) => state.categories);
 
   const [sortedData, setSortedData] = useState([]);
@@ -25,6 +27,9 @@ const CategoryList = ({ displayConcise = false }) => {
   };
 
   const toggleModal = () => setDisplayModal(!displayModal);
+  const handleDownload = () => dispatch(categoryActions.download());
+
+  const removeSelectedCategory = (id) => dispatch(categoryActions.removeCategory({ id }));
 
   const filterAndBuildCategories = (displayConcise, categories, selectedFilter) => {
     if (displayConcise) {
@@ -47,26 +52,40 @@ const CategoryList = ({ displayConcise = false }) => {
     }
   }, [sortingOrder, categories]);
 
+  useEffect(() => {
+    dispatch(categoryActions.getCategories(100));
+  }, []);
+
   return (
     <Stack sx={{ py: 2 }}>
-      <CategoryHeader
-        categories={categories}
+      <SectionCardHeader
+        title="Add Category"
+        caption={selectedFilter ? `Applying ${selectedFilter} status filter` : 'Organize items into categories'}
+        primaryBtnTitle="Add category"
         toggleModal={toggleModal}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         sortingOrder={sortingOrder}
         setSortingOrder={setSortingOrder}
-        displayConcise={displayConcise}
+        handleDownload={handleDownload}
         disableDownloadIcon={Boolean(categories) && categories.length <= 0}
       />
-      <Category
-        categories={filterAndBuildCategories(displayConcise, categories, selectedFilter)} // sorted data is after sort method
+      <SectionCardContent
         loading={loading}
-        setSelectedCategoryID={setSelectedCategoryID}
+        displayModal={displayModal}
         setDisplayModal={setDisplayModal}
+        setSelectedID={setSelectedCategoryID}
+        removeItem={removeSelectedCategory}
+        prefixURI={'category'}
+        content={filterAndBuildCategories(displayConcise, categories, selectedFilter)}
       />
       {displayModal && (
-        <SimpleModal title="Add New Category" handleClose={handleClose} maxSize="xs">
+        <SimpleModal
+          title="Add new category"
+          subtitle="Create categories to group assets. Assigned locations are approximate values."
+          handleClose={handleClose}
+          maxSize="sm"
+        >
           <AddCategory
             categories={categories}
             loading={loading}

@@ -93,6 +93,7 @@ const categoryItemDetailsSlice = createSlice({
     getSelectedImageFailure: (state) => {
       state.loading = false;
       state.error = '';
+      state.selectedCategoryImage = '';
     },
   },
 });

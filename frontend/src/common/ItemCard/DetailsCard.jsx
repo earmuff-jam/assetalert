@@ -21,7 +21,7 @@ import { maintenancePlanItemActions } from '../../features/MaintenancePlanItemDe
 
 dayjs.extend(relativeTime);
 
-export default function DetailsCard({ selectedItem, selectedImage, isViewingCategory = false }) {
+export default function DetailsCard({ selectedItem, selectedImage, categoryMode = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userID = localStorage.getItem('userID');
@@ -33,7 +33,7 @@ export default function DetailsCard({ selectedItem, selectedImage, isViewingCate
   const handleCloseModal = () => setOpenModal(false);
 
   const handleUpload = (id, selectedImage) => {
-    if (isViewingCategory) {
+    if (categoryMode) {
       dispatch(categoryItemDetailsActions.uploadImage({ id: id, selectedImage: selectedImage }));
     } else {
       dispatch(maintenancePlanItemActions.uploadImage({ id: id, selectedImage: selectedImage }));
@@ -46,13 +46,13 @@ export default function DetailsCard({ selectedItem, selectedImage, isViewingCate
     const draftSelectionDetails = produce(selectedItem, (draft) => {
       draft.updated_by = userID;
       draft.sharable_groups = newMembers;
-      if (isViewingCategory) {
+      if (categoryMode) {
         draft.status = draft.status_name;
       } else {
         draft.maintenance_status = draft.maintenance_status_name;
       }
     });
-    if (isViewingCategory) {
+    if (categoryMode) {
       dispatch(categoryActions.updateCategory(draftSelectionDetails));
       if (!newMembers.includes(userID)) {
         navigate('/');
@@ -74,7 +74,7 @@ export default function DetailsCard({ selectedItem, selectedImage, isViewingCate
     <>
       <Card>
         <CardMedia sx={{ height: '10rem' }} image={selectedImage || '/blank_canvas.png'} />
-        <DetailsCardItemContent selectedItem={selectedItem} isViewingCategory={isViewingCategory} />
+        <DetailsCardItemContent selectedItem={selectedItem} categoryMode={categoryMode} />
         <DetailsCardItemActions
           selectedItem={selectedItem}
           handleOpenModal={handleOpenModal}

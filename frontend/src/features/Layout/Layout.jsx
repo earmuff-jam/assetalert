@@ -30,14 +30,12 @@ const Layout = () => {
 
   const [openDrawer, setOpenDrawer] = useState(lgScreenSizeAndHigher ? true : false);
 
-  const handleDrawerOpen = () => {
-    setOpenDrawer(true);
-    dispatch(profileActions.getFavItems({ limit: 10 }));
-  };
+  const handleDrawerOpen = () => setOpenDrawer(true);
   const handleDrawerClose = () => setOpenDrawer(false);
 
   useEffect(() => {
     dispatch(profileActions.getProfileDetails());
+    dispatch(profileActions.getFavItems({ limit: 10 }));
   }, []);
 
   if (loading) {

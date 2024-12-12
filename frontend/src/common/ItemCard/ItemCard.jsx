@@ -103,7 +103,6 @@ export default function ItemCard({ data, handleEdit, handleDelete, prefixURI }) 
                   </Stack>
                 </Stack>
               </CardContent>
-
               <CardActions sx={{ justifyContent: 'space-between' }}>
                 {item.updated_at === null ? (
                   <Typography variant="caption" color="text.secondary">
