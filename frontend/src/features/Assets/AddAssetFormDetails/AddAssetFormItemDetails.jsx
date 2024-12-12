@@ -4,7 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 
-export default function AddInventoryFormItemDetails({
+export default function AddAssetFormItemDetails({
   formData,
   handleInputChange,
   handleCheckbox,

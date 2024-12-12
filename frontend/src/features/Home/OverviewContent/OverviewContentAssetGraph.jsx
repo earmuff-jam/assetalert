@@ -7,7 +7,8 @@ export default function OverviewContentAssetGraph({ assets = [], categories = []
   const formattedData = [categories, maintenancePlans, assets].map((v, index) => ({
     label: ['Categories', 'Plans', 'Assets'][index],
     count: v.length,
-    color: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
+    backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
+    borderColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
   }));
 
   return (

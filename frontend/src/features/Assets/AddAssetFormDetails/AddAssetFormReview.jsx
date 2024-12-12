@@ -1,7 +1,7 @@
 import { BookmarkRounded, CheckRounded, RestartAltRounded } from '@mui/icons-material';
 import { Button, IconButton, Stack, Typography } from '@mui/material';
 
-export default function AddInventoryFormReview({ formData, handleReset, handleSubmit }) {
+export default function AddAssetFormReview({ formData, handleReset, handleSubmit }) {
   return (
     <Stack alignItems="center">
       <Stack direction="row" alignSelf={'flex-start'}>

@@ -7,7 +7,7 @@ import { EmptyComponent } from '@common/utils';
 export default function MaintenancePlanItemDetailsGraphContent({ associatedAssets = [] }) {
   const theme = useTheme();
 
-  const displayGraph = !associatedAssets || associatedAssets?.length <= 0;
+  const displayGraph = Boolean(associatedAssets?.length > 0);
 
   return (
     <Stack spacing={2}>

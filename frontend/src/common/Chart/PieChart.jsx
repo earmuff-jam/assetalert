@@ -7,7 +7,8 @@ export default function PieChart({ data, prefix = ' ', itemLabel = 'items', heig
     datasets: [
       {
         data: data.map((v) => v.count),
-        backgroundColor: data.map((v) => v.color),
+        backgroundColor: data.map((v) => v.backgroundColor),
+        borderColor: data.map((v) => v.borderColor),
         hoverOffset: 4,
       },
     ],

@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { BookmarkAddedRounded, SwapHorizRounded } from '@mui/icons-material';
 import TextFieldWithLabel from '@common/TextFieldWithLabel/TextFieldWithLabel';
-import SelectedAssetMoreInfoCheckbox from '@features/SelectedAsset/SelectedAssetMoreInformationCheckbox';
+import SelectedAssetMoreInformationCheckbox from '@features/SelectedAsset/SelectedAssetMoreInformationCheckbox';
 import SelectedAssetReturnInformationContent from '@features/SelectedAsset/SelectedAssetReturnInformationContent';
 
 export default function SelectedAssetMoreInformation({
@@ -18,7 +18,7 @@ export default function SelectedAssetMoreInformation({
 
   return (
     <Stack spacing={2}>
-      <SelectedAssetMoreInfoCheckbox
+      <SelectedAssetMoreInformationCheckbox
         isChecked={isBookmarked}
         handleCheckbox={handleCheckbox}
         target="is_bookmarked"
@@ -26,7 +26,7 @@ export default function SelectedAssetMoreInformation({
         icon={<BookmarkAddedRounded color={isBookmarked ? 'primary' : 'secondary'} />}
       />
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
-        <SelectedAssetMoreInfoCheckbox
+        <SelectedAssetMoreInformationCheckbox
           isChecked={isReturnable}
           handleCheckbox={handleCheckbox}
           target="is_returnable"
