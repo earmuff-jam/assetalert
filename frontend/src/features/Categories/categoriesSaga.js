@@ -50,16 +50,6 @@ export function* createCategory(action) {
   }
 }
 
-export function* updateCategory(action) {
-  try {
-    const { id } = action.payload;
-    const response = yield call(instance.put, `${BASEURL}/category/${id}`, { ...action.payload });
-    yield put(categoryActions.updateCategorySuccess(response.data));
-  } catch (e) {
-    yield put(categoryActions.updateCategoryFailure(e));
-  }
-}
-
 export function* removeCategory(action) {
   try {
     const { id } = action.payload;
@@ -90,10 +80,6 @@ export function* watchCreateCategory() {
   yield takeLatest(`category/createCategory`, createCategory);
 }
 
-export function* watchUpdateCategory() {
-  yield takeLatest(`category/updateCategory`, updateCategory);
-}
-
 export function* watchRemoveCategory() {
   yield takeLatest(`category/removeCategory`, removeCategory);
 }
@@ -102,4 +88,4 @@ export function* watchDownload() {
   yield takeLatest(`category/download`, download);
 }
 
-export default [watchGetCategoryList, watchDownload, watchCreateCategory, watchUpdateCategory, watchRemoveCategory];
+export default [watchGetCategoryList, watchDownload, watchCreateCategory, watchRemoveCategory];

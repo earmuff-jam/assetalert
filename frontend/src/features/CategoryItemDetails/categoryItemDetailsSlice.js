@@ -27,6 +27,19 @@ const categoryItemDetailsSlice = createSlice({
       state.error = '';
       state.selectedCategory = {};
     },
+    updateCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateCategorySuccess: (state, action) => {
+      state.selectedCategory = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    updateCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     getItemsForCategory: (state) => {
       state.loading = true;
       state.error = '';

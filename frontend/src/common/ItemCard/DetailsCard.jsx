@@ -9,13 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardMedia } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import SimpleModal from '../SimpleModal';
-import SharableGroups from '../SharableGroups';
-import ImagePicker from '../ImagePicker/ImagePicker';
-import DetailsCardItemContent from './ItemContent/DetailsCardItemContent';
-import DetailsCardItemActions from './ItemContent/DetailsCardItemActions';
-import { categoryActions } from '../../features/Categories/categoriesSlice';
-import { maintenancePlanActions } from '../../features/MaintenancePlan/maintenanceSlice';
+import SimpleModal from '@common/SimpleModal';
+import SharableGroups from '@common/SharableGroups';
+import ImagePicker from '@common/ImagePicker/ImagePicker';
+import DetailsCardItemContent from '@common/ItemCard/ItemContent/DetailsCardItemContent';
+import DetailsCardItemActions from '@common/ItemCard/ItemContent/DetailsCardItemActions';
 import { categoryItemDetailsActions } from '../../features/CategoryItemDetails/categoryItemDetailsSlice';
 import { maintenancePlanItemActions } from '../../features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
 
@@ -56,7 +54,7 @@ export default function DetailsCard({ selectedItem, selectedImage, categoryMode 
       }
     });
     if (categoryMode) {
-      dispatch(categoryActions.updateCategory(draftSelectionDetails));
+      dispatch(categoryItemDetailsActions.updateCategory(draftSelectionDetails));
       enqueueSnackbar('Updated collaborators for selected category.', {
         variant: 'success',
       });
@@ -64,7 +62,7 @@ export default function DetailsCard({ selectedItem, selectedImage, categoryMode 
         navigate('/');
       }
     } else {
-      dispatch(maintenancePlanActions.updatePlan(draftSelectionDetails));
+      dispatch(maintenancePlanItemActions.updatePlan(draftSelectionDetails));
       enqueueSnackbar('Updated collaborators for selected maintenance plan.', {
         variant: 'success',
       });

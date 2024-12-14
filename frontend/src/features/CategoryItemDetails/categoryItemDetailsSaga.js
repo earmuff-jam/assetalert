@@ -21,6 +21,16 @@ export function* getCategory(action) {
   }
 }
 
+export function* updateCategory(action) {
+  try {
+    const { id } = action.payload;
+    const response = yield call(instance.put, `${BASEURL}/category/${id}`, { ...action.payload });
+    yield put(categoryItemDetailsActions.updateCategorySuccess(response.data));
+  } catch (e) {
+    yield put(categoryItemDetailsActions.updateCategoryFailure(e));
+  }
+}
+
 export function* getItemsForCategory(action) {
   try {
     const catID = action.payload;
@@ -105,6 +115,10 @@ export function* watchGetCategory() {
   yield takeLatest(`categoryItemDetails/getCategory`, getCategory);
 }
 
+export function* watchUpdateCategory() {
+  yield takeLatest(`categoryItemDetails/updateCategory`, updateCategory);
+}
+
 export function* watchGetItemsForCategory() {
   yield takeLatest(`categoryItemDetails/getItemsForCategory`, getItemsForCategory);
 }
@@ -127,6 +141,7 @@ export function* watchGetSelectedImage() {
 
 export default [
   watchGetCategory,
+  watchUpdateCategory,
   watchGetItemsForCategory,
   watchFetchAddItemsInCategory,
   watchRemoveItemsFromCategory,

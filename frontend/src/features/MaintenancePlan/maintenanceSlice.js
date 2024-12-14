@@ -41,24 +41,6 @@ const maintenancePlanSlice = createSlice({
       state.loading = false;
       state.error = '';
     },
-    updatePlan: (state) => {
-      state.loading = true;
-      state.error = '';
-    },
-    updatePlanSuccess: (state, action) => {
-      const draftMaintenancePlan = action.payload;
-      const filteredMaintenancePlan = [...state.maintenancePlan].filter((v) => {
-        return v.id !== draftMaintenancePlan.id;
-      });
-      state.maintenancePlan = [draftMaintenancePlan, ...filteredMaintenancePlan];
-      state.selectedMaintenancePlan = draftMaintenancePlan;
-      state.loading = false;
-      state.error = '';
-    },
-    updatePlanFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
     removePlan: (state) => {
       state.loading = true;
       state.error = '';

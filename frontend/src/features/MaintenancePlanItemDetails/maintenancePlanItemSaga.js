@@ -21,6 +21,24 @@ export function* getSelectedMaintenancePlan(action) {
   }
 }
 
+export function* updatePlan(action) {
+  try {
+    const { id } = action.payload;
+    const userID = localStorage.getItem('userID');
+    const currentMaintenancePlan = { ...action.payload };
+    const draftMaintenancePlan = Object.assign({}, { ...currentMaintenancePlan });
+    if (draftMaintenancePlan?.image) {
+      delete draftMaintenancePlan['image'];
+    }
+    const response = yield call(instance.put, `${BASEURL}/plan/${id}`, { ...draftMaintenancePlan, updated_by: userID });
+    yield put(
+      maintenancePlanItemActions.updatePlanSuccess({ ...response.data, image: currentMaintenancePlan?.image || '' })
+    );
+  } catch (e) {
+    yield put(maintenancePlanItemActions.updatePlanFailure(e));
+  }
+}
+
 export function* getItemsInMaintenancePlan(action) {
   try {
     const mID = action.payload;
@@ -105,6 +123,10 @@ export function* watchGetSelectedMaintenancePlan() {
   yield takeLatest(`maintenancePlanItem/getSelectedMaintenancePlan`, getSelectedMaintenancePlan);
 }
 
+export function* watchUpdatePlan() {
+  yield takeLatest(`maintenancePlanItem/updatePlan`, updatePlan);
+}
+
 export function* watchGetItemsInMaintenancePlan() {
   yield takeLatest(`maintenancePlanItem/getItemsInMaintenancePlan`, getItemsInMaintenancePlan);
 }
@@ -127,6 +149,7 @@ export function* watchGetSelectedImage() {
 
 export default [
   watchFetchAddItemsInPlan,
+  watchUpdatePlan,
   watchGetItemsInMaintenancePlan,
   watchGetSelectedMaintenancePlan,
   watchRemoveItemsFromMaintenancePlan,
