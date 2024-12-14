@@ -151,6 +151,7 @@ export default function AssetListContent({
             onRowSelect={onRowSelect}
             handleRowSelection={handleRowSelection}
             handleEdit={handleEdit}
+            maxHeight={'100%'}
           />
         )}
       </Stack>

@@ -48,8 +48,8 @@ export const RetrieveClientLocation = () => {
 /**
  * display no matching records found component if there are no records
  */
-export const EmptyComponent = ({ subtitle = '' }) => (
-  <Stack alignItems="center">
+export const EmptyComponent = ({ subtitle = '', padding = '0rem 0rem' }) => (
+  <Stack alignItems="center" sx={{ padding: padding }}>
     <Typography color="textSecondary">Sorry, no matching records found.</Typography>
     <Typography variant="caption" color="textSecondary">
       {subtitle}

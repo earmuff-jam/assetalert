@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import dayjs from 'dayjs';
 import { produce } from 'immer';
@@ -11,7 +12,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import SimpleModal from '../SimpleModal';
 import SharableGroups from '../SharableGroups';
 import ImagePicker from '../ImagePicker/ImagePicker';
-import { profileActions } from '../../features/Profile/profileSlice';
 import DetailsCardItemContent from './ItemContent/DetailsCardItemContent';
 import DetailsCardItemActions from './ItemContent/DetailsCardItemActions';
 import { categoryActions } from '../../features/Categories/categoriesSlice';
@@ -38,6 +38,9 @@ export default function DetailsCard({ selectedItem, selectedImage, categoryMode 
     } else {
       dispatch(maintenancePlanItemActions.uploadImage({ id: id, selectedImage: selectedImage }));
     }
+    enqueueSnackbar('New image upload successful.', {
+      variant: 'success',
+    });
     setEditImgMode(false);
   };
 
@@ -54,21 +57,23 @@ export default function DetailsCard({ selectedItem, selectedImage, categoryMode 
     });
     if (categoryMode) {
       dispatch(categoryActions.updateCategory(draftSelectionDetails));
+      enqueueSnackbar('Updated collaborators for selected category.', {
+        variant: 'success',
+      });
       if (!newMembers.includes(userID)) {
         navigate('/');
       }
     } else {
       dispatch(maintenancePlanActions.updatePlan(draftSelectionDetails));
+      enqueueSnackbar('Updated collaborators for selected maintenance plan.', {
+        variant: 'success',
+      });
       if (!newMembers.includes(userID)) {
         navigate('/');
       }
     }
     handleCloseModal();
   };
-
-  useEffect(() => {
-    dispatch(profileActions.getFavItems({ limit: 1000 }));
-  }, []);
 
   return (
     <>

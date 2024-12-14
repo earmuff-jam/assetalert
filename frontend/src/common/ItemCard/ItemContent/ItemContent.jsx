@@ -2,9 +2,8 @@ import { Paper, Stack } from '@mui/material';
 import RowHeader from '@common/RowHeader';
 import { pluralizeWord } from '@common/utils';
 import { AddRounded, RemoveRounded } from '@mui/icons-material';
-import { ASSET_LIST_HEADERS, VIEW_INVENTORY_LIST_HEADERS } from '@features/Assets/constants';
+import { VIEW_INVENTORY_LIST_HEADERS } from '@features/Assets/constants';
 import TableComponent from '@common/DataTable/CustomTableComponent/TableComponent';
-import DataTable from '@common/DataTable/DataTable';
 
 export default function ItemContent({
   selectedIDList,
@@ -70,7 +69,6 @@ export default function ItemContent({
           handleRowSelection={handleRowSelection}
           emptyComponentSubtext="Associate assets."
         />
-        <DataTable data={items} headerColumns={Object.values(ASSET_LIST_HEADERS).filter((v) => v.displayConcise)} />
       </Stack>
     </Paper>
   );

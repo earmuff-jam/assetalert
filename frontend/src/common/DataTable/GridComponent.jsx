@@ -41,7 +41,7 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
 
   return (
     <Box sx={{ overflow: 'auto' }}>
-      <Stack spacing={{ xs: 1 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
+      <Stack spacing={{ xs: 2 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
         {data.map((row, index) => {
           const isSelected = (id) => rowSelected.indexOf(id) !== -1;
           const selectedID = row.id;

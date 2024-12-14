@@ -73,6 +73,7 @@ const categoryItemDetailsSlice = createSlice({
     },
     uploadImage: (state) => {
       state.error = '';
+      state.loading = true;
     },
     uploadImageSuccess: (state) => {
       state.loading = false;

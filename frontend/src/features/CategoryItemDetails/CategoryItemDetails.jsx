@@ -67,10 +67,15 @@ export default function CategoryItemDetails() {
   };
 
   useEffect(() => {
+    if (!loading && !selectedCategoryImage) {
+      dispatch(categoryItemDetailsActions.getSelectedImage({ id }));
+    }
+  }, [loading]);
+
+  useEffect(() => {
     if (id) {
       dispatch(categoryItemDetailsActions.getCategory(id));
       dispatch(categoryItemDetailsActions.getItemsForCategory(id));
-      dispatch(categoryItemDetailsActions.getSelectedImage({ id }));
     }
   }, [id]);
 
