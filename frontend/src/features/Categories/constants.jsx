@@ -39,7 +39,6 @@ export const ADD_CATEGORY_FORM_FIELDS = {
     label: 'Description',
     placeholder: 'Category description in less than 500 characters',
     value: '',
-    name: 'description',
     errorMsg: '',
     required: false,
     fullWidth: true,
