@@ -1,34 +1,17 @@
-import { Box } from '@mui/material';
+import { useMemo } from 'react';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
-import { DataGrid } from '@mui/x-data-grid';
+export default function DataTable({ data, headerColumns }) {
+  const columns = useMemo(() => headerColumns, []);
 
-import { EmptyComponent } from '../utils';
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    muiTableContainerProps: { sx: { maxHeight: '600px' } },
+    enableColumnResizing: true,
+    enableDensityToggle: false,
+    initialState: { density: 'compact' },
+  });
 
-export default function DataTable({ rows, columns, isEmpty, subtitle }) {
-  if (isEmpty) {
-    return <EmptyComponent subtitle={subtitle} />;
-  }
-
-  return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'table',
-        tableLayout: 'fixed',
-        height: '10rem',
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-      />
-    </Box>
-  );
+  return <MaterialReactTable table={table} />;
 }

@@ -199,6 +199,119 @@ export const VIEW_INVENTORY_LIST_HEADERS = {
   },
 };
 
+export const ASSET_LIST_HEADERS = {
+  name: {
+    id: 1,
+    accessorKey: 'name',
+    header: 'Name',
+    displayConcise: true,
+    modifier: (value) => `${value || '-'}`,
+  },
+  description: {
+    id: 2,
+    accessorKey: 'description',
+    header: 'Description',
+    displayName: 'Description',
+    displayConcise: false,
+    modifier: (value) => `${value || '-'}`,
+  },
+  price: {
+    id: 3,
+    accessorKey: 'price',
+    header: 'Cost',
+    displayConcise: true,
+    modifier: (value) => `${+value || '-'}`,
+  },
+  barcode: {
+    id: 5,
+    accessorKey: 'barcode',
+    header: 'Barcode',
+    modifier: (value) => `${value || '-'}`,
+  },
+  sku: {
+    id: 6,
+    accessorKey: 'sku',
+    header: 'SKU',
+    modifier: (value) => `${value || '-'}`,
+  },
+  quantity: {
+    id: 7,
+    accessorKey: 'quantity',
+    header: 'Qty',
+    displayConcise: true,
+    modifier: (value) => `${+value || '-'}`,
+  },
+  location: {
+    id: 8,
+    accessorKey: 'location',
+    header: 'Location',
+    displayConcise: true,
+    modifier: (value) => `${value || '-'}`,
+  },
+  is_returnable: {
+    id: 9,
+    accessorKey: 'is_returnable',
+    header: 'Returnable',
+    modifier: (value) => (value ? <CheckRounded color="primary" /> : <CloseRounded color="warning" />),
+  },
+  return_location: {
+    id: 10,
+    accessorKey: 'return_location',
+    header: 'Return Location',
+    modifier: (value) => `${value || '-'}`,
+  },
+  max_weight: {
+    id: 11,
+    accessorKey: 'max_weight',
+    header: 'Max Weight',
+    modifier: (value) => `${value || '-'}`,
+  },
+  min_weight: {
+    id: 12,
+    accessorKey: 'min_weight',
+    header: 'Min Weight',
+    modifier: (value) => `${value || '-'}`,
+  },
+  max_height: {
+    id: 13,
+    accessorKey: 'max_height',
+    header: 'Max Height',
+    modifier: (value) => `${value || '-'}`,
+  },
+  min_height: {
+    id: 14,
+    accessorKey: 'min_height',
+    header: 'Min Height',
+    modifier: (value) => `${value || '-'}`,
+  },
+  bought_at: {
+    id: 18,
+    accessorKey: 'bought_at',
+    header: 'Purchase Location',
+    modifier: (value) => `${value || '-'}`,
+  },
+  qr_code: {
+    id: 14,
+    accessorKey: 'qr_code',
+    header: 'QR Code',
+    modifier: (value) => <QrCodeGen value={value} />,
+  },
+  updated_at: {
+    id: 15,
+    accessorKey: 'updated_at',
+    header: 'Updated',
+    displayConcise: true,
+    modifier: (value) => `${dayjs(value).fromNow()}`,
+  },
+  updator_name: {
+    id: 17,
+    accessorKey: 'updator',
+    header: 'Updated By',
+    displayConcise: true,
+    modifier: (value) => `${value || '-'}`,
+  },
+};
+
 // blank form to add inventory details
 export const BLANK_INVENTORY_FORM = {
   name: {

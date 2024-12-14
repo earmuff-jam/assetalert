@@ -3,6 +3,45 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
+export const ASSETS_IN_REPORTS_HEADER = [
+  {
+    name: 'name',
+    header: 'Asset Name',
+    accessorKey: 'name',
+    size: 150,
+  },
+  {
+    name: 'description',
+    header: 'Description',
+    accessorKey: 'description',
+    size: 200,
+  },
+  {
+    name: 'price',
+    header: 'Price',
+    accessorKey: 'price',
+    size: 150,
+  },
+  {
+    name: 'quantity',
+    header: 'Quantity',
+    accessorKey: 'quantity',
+    size: 150,
+  },
+  {
+    name: 'location',
+    header: 'Storage Location',
+    accessorKey: 'location',
+    size: 150,
+  },
+  {
+    name: 'updator',
+    header: 'Last updated by',
+    accessorKey: 'updator',
+    size: 150,
+  },
+];
+
 /**
  * filter options are the selection menu for the reports page.
  */
@@ -24,7 +63,6 @@ export const FILTER_OPTIONS = [
     label: 'past 15 days',
     display: 'past 15 days',
     value: dayjs().subtract(15, 'days').toISOString(),
-
   },
   {
     id: 4,
