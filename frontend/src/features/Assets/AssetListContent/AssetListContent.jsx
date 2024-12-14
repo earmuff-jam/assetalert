@@ -161,7 +161,12 @@ export default function AssetListContent({
         </SimpleModal>
       )}
       {modalState === MODAL_STATE.BULK_ITEM && (
-        <SimpleModal title="Add Bulk Item" handleClose={handleCloseModal} maxSize="sm">
+        <SimpleModal
+          title="Add Bulk Item"
+          subtitle="Upload inventory items in bulk with the selected template."
+          handleClose={handleCloseModal}
+          maxSize="sm"
+        >
           <AddAssetsInBulk handleClose={handleCloseModal} />
         </SimpleModal>
       )}
