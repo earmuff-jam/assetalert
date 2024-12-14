@@ -163,6 +163,20 @@ const inventorySlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    // used to upload images in asset list and
+    // display the images immediately
+    uploadAndRefreshData: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    uploadAndRefreshDataSuccess: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
+    uploadAndRefreshDataFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     getSelectedImage: (state) => {
       state.error = '';
     },

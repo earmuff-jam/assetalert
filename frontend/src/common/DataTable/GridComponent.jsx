@@ -16,12 +16,15 @@ import {
   Typography,
 } from '@mui/material';
 
-import { EmptyComponent } from '@common/utils';
+import { useNavigate } from 'react-router-dom';
+
 import SimpleModal from '@common/SimpleModal';
 import ImagePicker from '@common/ImagePicker/ImagePicker';
 import { inventoryActions } from '@features/Assets/inventorySlice';
+import { capitalizeFirstLetter, EmptyComponent } from '@common/utils';
 
 const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { inventories } = useSelector((state) => state.inventory);
 
@@ -31,8 +34,10 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
 
   const selectedAsset = inventories.filter((v) => v.id === selectedItemID).find(() => true);
 
+  const handleNavigate = (id) => navigate(`/inventories/${id}/update`);
+
   const handleUpload = (id, imgFormData) => {
-    dispatch(inventoryActions.createInventoryImage({ assetID: id, imageData: imgFormData }));
+    dispatch(inventoryActions.uploadAndRefreshData({ id: id, selectedImage: imgFormData }));
     handleCloseModal();
   };
 
@@ -41,13 +46,20 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
 
   return (
     <Box sx={{ overflow: 'auto' }}>
-      <Stack spacing={{ xs: 2 }} marginBottom="1rem" direction="row" useFlexGap flexWrap="wrap">
-        {data.map((row, index) => {
+      <Stack
+        spacing={{ xs: 2 }}
+        marginBottom="1rem"
+        direction="row"
+        justifyContent={'center'}
+        useFlexGap
+        flexWrap="wrap"
+      >
+        {data.map((row) => {
           const isSelected = (id) => rowSelected.indexOf(id) !== -1;
           const selectedID = row.id;
           const isItemSelected = isSelected(selectedID);
           return (
-            <Stack key={index} flexGrow={1} height="14rem" width="20rem">
+            <Stack key={row.id} direction="row" useFlexGap flexWrap="wrap">
               <Card
                 sx={{
                   display: 'flex',
@@ -64,8 +76,15 @@ const GridComponent = ({ isLoading, data, rowSelected, handleRowSelection }) => 
                     }}
                   />
                 </Tooltip>
-                <CardContent>
-                  <Typography variant="caption">{row.name}</Typography>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Stack sx={{ width: '12rem', flexGrow: 1, cursor: 'pointer' }} onClick={() => handleNavigate(row.id)}>
+                    <Typography variant="h6" color="text.secondary">
+                      {capitalizeFirstLetter(row.name)}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {capitalizeFirstLetter(row.description)}
+                    </Typography>
+                  </Stack>
                 </CardContent>
                 <CardActions>
                   <Stack flexGrow={1}>
