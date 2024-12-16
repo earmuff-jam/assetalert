@@ -45,9 +45,10 @@ const GENERIC_FORM_FIELDS = {
 
 export const BLANK_MAINTENANCE_PLAN = {
   name: {
-    value: '',
+    id: 'name',
     name: 'name',
     label: 'Title',
+    value: '',
     placeholder: 'Add a title to your maintenance plan',
     size: 'small',
     required: true,
@@ -65,9 +66,10 @@ export const BLANK_MAINTENANCE_PLAN = {
     ],
   },
   description: {
-    value: '',
+    id: 'description',
     name: 'description',
     label: 'Description',
+    value: '',
     placeholder: 'Add a short descrption to your maintenance plan in less than 100 characters.',
     required: true,
     size: 'small',

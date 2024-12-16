@@ -35,7 +35,7 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
         value={formFields.description.value}
         size={formFields.description.size}
         placeholder={formFields.description.placeholder}
-        onChange={handleInput}
+        handleChange={handleInput}
         required={formFields.description.required}
         fullWidth={formFields.description.fullWidth}
         error={Boolean(formFields.description.errorMsg)}
