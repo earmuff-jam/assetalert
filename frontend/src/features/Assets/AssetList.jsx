@@ -49,10 +49,8 @@ export default function AssetList() {
   }, [loading]);
 
   useEffect(() => {
-    if (!loading && inventories.length <= 0) {
-      dispatch(inventoryActions.getAllInventoriesForUser());
-    }
-  }, [loading]);
+    dispatch(inventoryActions.getAllInventoriesForUser());
+  }, []);
 
   return (
     <Stack flexGrow="1" spacing={2}>

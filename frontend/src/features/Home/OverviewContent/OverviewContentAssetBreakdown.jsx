@@ -7,7 +7,7 @@ import RowHeader from '@common/RowHeader';
 import OverviewCardItem from '@features/Home/OverviewCard/OverviewCardItem';
 import OverviewCardWrapper from '@features/Home/OverviewCard/OverviewCardWrapper';
 
-export default function OverviewContentAssetBreakdown({ assets, categories, maintenancePlans }) {
+export default function OverviewContentAssetBreakdown({ assets = [], categories = [], maintenancePlans = [] }) {
   const navigate = useNavigate();
   const handleClick = (to) => navigate(to);
 
@@ -40,7 +40,7 @@ export default function OverviewContentAssetBreakdown({ assets, categories, main
             label="are categorized"
             icon={<WarningRounded />}
             color="info.main"
-            dataLabel={assets.length || 0}
+            dataLabel={assets?.length || 0}
             word="asset"
             handleClick={() => handleClick('/inventories/list')}
           />
