@@ -106,7 +106,7 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	}
 	defer db.Close()
 
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -195,7 +195,7 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}
