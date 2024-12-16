@@ -19,6 +19,7 @@ import CustomTableHeader from './CustomTableHeader/CustomTableHeader';
  * @param {Function} handleRowSelection - the function that is used to handle selection of rows
  * @param {Function} handleEdit - the function that is used to handle editing capabilities
  * @param {boolean} emptyComponentSubtext - subtitle text to display when there is no selected rows, defaults: empty string
+ * @param {string} maxHeight - the maximum height of the table to expand, defaults: 20rem
  */
 const TableComponent = ({
   paper = false,
@@ -35,6 +36,7 @@ const TableComponent = ({
   handleRowSelection,
   handleEdit,
   emptyComponentSubtext = '',
+  maxHeight = '20rem',
 }) => {
   if (isLoading) return <Skeleton height="10vh" />;
 
@@ -43,7 +45,7 @@ const TableComponent = ({
   }
 
   return (
-    <TableContainer component={paper ? Paper : null}>
+    <TableContainer component={paper ? Paper : null} sx={{ maxHeight: maxHeight }}>
       <Table>
         <CustomTableHeader
           columns={columns}

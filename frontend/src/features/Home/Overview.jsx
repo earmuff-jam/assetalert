@@ -46,7 +46,7 @@ export default function Overview() {
           assetsPastDue={assetsPastDue}
         />
         <OverviewContent
-          assets={assetSummary?.AssetList}
+          assets={assetSummary?.AssetList || []}
           categories={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'C')}
           maintenancePlans={assetSummary?.AssetSummaryList?.filter((v) => v.type.toUpperCase() === 'M')}
         />

@@ -6,7 +6,7 @@ import PieChart from '@common/Chart/PieChart';
 export default function OverviewContentAssetGraph({ assets = [], categories = [], maintenancePlans = [] }) {
   const formattedData = [categories, maintenancePlans, assets].map((v, index) => ({
     label: ['Categories', 'Plans', 'Assets'][index],
-    count: v.length,
+    count: v?.length || 0,
     backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
     borderColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(211, 211, 211)'][index],
   }));

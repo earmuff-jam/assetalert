@@ -1,8 +1,12 @@
+import dayjs from 'dayjs';
 import CryptoJS from 'crypto-js';
 
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button, Stack, Typography } from '@mui/material';
 
 import SimpleModal from '@common/SimpleModal';
+
+dayjs.extend(relativeTime);
 
 /**
  * Function used to convert a valid base64 encoded string to a binary data set. Used
@@ -48,8 +52,8 @@ export const RetrieveClientLocation = () => {
 /**
  * display no matching records found component if there are no records
  */
-export const EmptyComponent = ({ subtitle = '' }) => (
-  <Stack alignItems="center">
+export const EmptyComponent = ({ subtitle = '', padding = '0rem 0rem' }) => (
+  <Stack alignItems="center" sx={{ padding: padding }}>
     <Typography color="textSecondary">Sorry, no matching records found.</Typography>
     <Typography variant="caption" color="textSecondary">
       {subtitle}
@@ -173,3 +177,27 @@ export const pluralizeWord = (stringToEdit = '', size) => {
     return `${size} ${stringToEdit}s`;
   }
 };
+
+/**
+ * Function is used to format the selected date. If the date does not exist, returns null.
+ * @param {string} Date object valid for dayjs to parse.
+ * @param {string} Layout layout of the date that the date object should be subjected to
+ * @returns {string} - The new formatted date that is parsed with the given layout
+ */
+export const formatDate = (date, layout = 'MMM, YYYY') => {
+  if (!date) return null;
+  return dayjs(date).isValid() && `${dayjs(date).format(layout)}`;
+};
+
+/**
+ * Function that is used to format the given file size into human readable format
+ * @param {string} sizeInBytes - the actual size of the file in bytes format
+ * @returns - The formatted size of the file size in human readable format.
+ */
+export function formatFileSize(sizeInBytes) {
+  if (sizeInBytes === 0) return '0 Bytes';
+  const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(sizeInBytes) / Math.log(1024));
+  const size = (sizeInBytes / Math.pow(1024, i)).toFixed(2); // Keeps 2 decimal places
+  return `${size} ${units[i]}`;
+}

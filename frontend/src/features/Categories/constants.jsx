@@ -1,6 +1,7 @@
 const GENERIC_FORM_FIELDS = {
   type: 'text',
   variant: 'outlined',
+  size: 'small',
 };
 
 const GENERIC_TEXTAREA_VARIANT = {
@@ -9,14 +10,15 @@ const GENERIC_TEXTAREA_VARIANT = {
   rows: 4,
   variant: 'outlined',
   fullWidth: true,
+  size: 'small',
 };
 
 export const ADD_CATEGORY_FORM_FIELDS = {
   name: {
+    name: 'name',
     label: 'Category Title',
     placeholder: 'Short category title',
     value: '',
-    name: 'name',
     errorMsg: '',
     required: true,
     fullWidth: true,
@@ -33,10 +35,10 @@ export const ADD_CATEGORY_FORM_FIELDS = {
     ...GENERIC_FORM_FIELDS,
   },
   description: {
+    name: 'description',
     label: 'Description',
     placeholder: 'Category description in less than 500 characters',
     value: '',
-    name: 'description',
     errorMsg: '',
     required: false,
     fullWidth: true,
@@ -49,10 +51,10 @@ export const ADD_CATEGORY_FORM_FIELDS = {
     ...GENERIC_TEXTAREA_VARIANT,
   },
   min_items_limit: {
+    name: 'min_items_limit',
     label: 'Min items count',
     placeholder: 'Mininum count of items',
     value: '',
-    name: 'min_items_limit',
     errorMsg: '',
     required: true,
     fullWidth: true,
@@ -76,10 +78,10 @@ export const ADD_CATEGORY_FORM_FIELDS = {
     ...GENERIC_FORM_FIELDS,
   },
   max_items_limit: {
+    name: 'max_items_limit',
     label: 'Max items count',
     placeholder: 'Maximum count of items',
     value: '',
-    name: 'max_items_limit',
     errorMsg: '',
     required: true,
     fullWidth: true,

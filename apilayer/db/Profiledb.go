@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
@@ -162,9 +163,10 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 		about_me=$6,
 		onlinestatus=$7,
 		appearance=$8,
-		grid_view=$9
+		grid_view=$9,
+		updated_at=$10
 		WHERE id=$1
-		RETURNING id, username, full_name, avatar_url, email_address, phone_number, about_me, onlinestatus, appearance, grid_view;`
+		RETURNING id, username, full_name, avatar_url, email_address, phone_number, about_me, onlinestatus, appearance, grid_view, updated_at;`
 
 	var updatedProfile model.Profile
 	var avatarUrl sql.NullString // Assuming avatar_url is a string column, not bytea
@@ -179,6 +181,7 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 		draftProfile.OnlineStatus,
 		draftProfile.Appearance,
 		draftProfile.GridView,
+		time.Now(),
 	)
 
 	err = row.Scan(
@@ -192,6 +195,7 @@ func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (
 		&updatedProfile.OnlineStatus,
 		&updatedProfile.Appearance,
 		&updatedProfile.GridView,
+		&updatedProfile.UpdatedAt,
 	)
 
 	if err != nil {

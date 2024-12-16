@@ -33,7 +33,7 @@ export default function OverviewContentSummary({ assets = [] }) {
             label="Total Unestimated assets"
             icon={<Inventory2Rounded />}
             color="text.secondary"
-            dataLabel={`${zeroCostItems.length || 0}`}
+            dataLabel={`${zeroCostItems?.length || 0}`}
             word="asset"
             tooltipTitle={'Total assets that do not have cost price associated with them.'}
           />

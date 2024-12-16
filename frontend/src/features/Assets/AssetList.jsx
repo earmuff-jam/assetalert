@@ -11,7 +11,7 @@ import AssetListContent from '@features/Assets/AssetListContent/AssetListContent
 
 export default function AssetList() {
   const dispatch = useDispatch();
-  const { loading, inventories } = useSelector((state) => state.inventory);
+  const { loading, inventories = [] } = useSelector((state) => state.inventory);
 
   const [options, setOptions] = useState([]);
   const [rowSelected, setRowSelected] = useState([]); // this is for checkbox and associated events

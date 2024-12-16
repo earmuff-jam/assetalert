@@ -42,25 +42,6 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = '';
     },
-    updateCategory: (state) => {
-      state.loading = true;
-      state.error = '';
-    },
-    updateCategorySuccess: (state, action) => {
-      const draftCategory = action.payload;
-      const filteredCategories = [...state.categories].filter((v) => {
-        return v.id !== draftCategory.id;
-      });
-      state.categories = [draftCategory, ...filteredCategories];
-      // TODO: remove this after removing selected category workflow - https://github.com/earmuff-jam/mashed/issues/215
-      state.selectedCategory = draftCategory;
-      state.loading = false;
-      state.error = '';
-    },
-    updateCategoryFailure: (state) => {
-      state.loading = false;
-      state.error = '';
-    },
     removeCategory: (state) => {
       state.loading = true;
       state.error = '';

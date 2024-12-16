@@ -72,6 +72,15 @@ func RetrieveAllCategories(user string, userID string, limit int) ([]model.Categ
 			}
 		}
 
+		content, _, _, err := FetchImage(categoryID.String)
+		if err != nil {
+			if err.Error() == "NoSuchKey" {
+				log.Printf("cannot find the selected document. error: %+v", err)
+			}
+		}
+
+		ec.Image = content
+
 		ec.ID = categoryID.String
 		ec.SharableGroups = sharableGroups
 		data = append(data, ec)

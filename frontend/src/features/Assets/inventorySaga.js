@@ -129,6 +129,45 @@ export function* uploadImage(action) {
   }
 }
 
+export function* uploadAndRefreshDataSuccess(action) {
+  /**
+   * Fixes https://github.com/earmuff-jam/pulse/issues/305.
+   * Refetch the data once the image is updated in the system.
+   */
+  try {
+    const { id, selectedImage } = action.payload;
+    const formData = new FormData();
+    formData.append('imageSrc', selectedImage);
+
+    yield call(instance.post, `${BASEURL}/${id}/uploadImage`, formData);
+
+    const params = new URLSearchParams();
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/inventories?${params.toString()}`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        if (item.image) {
+          try {
+            // decode the image url into a valid data
+            const binaryData = Base64ToUint8Array(item.image);
+            const blob = new Blob([binaryData], { type: 'image/png' });
+            item.image = URL.createObjectURL(blob);
+          } catch (error) {
+            console.debug(error);
+          }
+        }
+      });
+    }
+
+    yield put(inventoryActions.getAllInventoriesForUserSuccess(response.data || {}));
+    yield put(inventoryActions.uploadImageSuccess(response.data));
+  } catch (e) {
+    yield put(inventoryActions.uploadImageFailure(e));
+  }
+}
+
 export function* getSelectedImage(action) {
   try {
     const { id } = action.payload;
@@ -191,6 +230,10 @@ export function* watchUploadImage() {
   yield takeEvery(`inventory/uploadImage`, uploadImage);
 }
 
+export function* watchUploadAndRefreshDataSuccess() {
+  yield takeEvery(`inventory/uploadAndRefreshData`, uploadAndRefreshDataSuccess);
+}
+
 export function* watchGetSelectedImage() {
   yield takeLatest(`inventory/getSelectedImage`, getSelectedImage);
 }
@@ -205,5 +248,6 @@ export default [
   watchFetchRemoveInventoryRows,
   watchFetchAllStorageLocations,
   watchFetchAllInventoriesForUser,
+  watchUploadAndRefreshDataSuccess,
   watchUpdateExistingInventoryDetails,
 ];

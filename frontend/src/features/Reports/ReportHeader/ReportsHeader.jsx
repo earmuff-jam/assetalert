@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Stack } from '@mui/material';
 import RowHeader from '@common/RowHeader';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { capitalizeFirstLetter } from '@common/utils';
+import { capitalizeFirstLetter, formatDate } from '@common/utils';
 import { DownloadRounded, FilterAltRounded } from '@mui/icons-material';
 import ReportCardWrapper from '@features/Reports/ReportCard/ReportCardWrapper';
 import ReportItemDetails from '@features/Reports/ReportItemDetails/ReportItemDetails';
@@ -29,11 +29,6 @@ export default function ReportsHeader({
     }
   };
 
-  const formatDate = (date) => {
-    if (!date) return null;
-    return dayjs(date).isValid() && `Since ${dayjs(sinceValue).format('MMM, YYYY')}`;
-  };
-
   return (
     <Stack spacing={1}>
       <RowHeader
@@ -49,14 +44,14 @@ export default function ReportsHeader({
       <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '1rem' }}>
         <ReportCardWrapper
           title="Valuation"
-          chipLabel={formatDate(sinceValue)}
+          chipLabel={`Since ${formatDate(sinceValue)}`}
           value={`$${reports[0]?.total_valuation.toFixed(2) || 0.0}`}
           footerText="Total cost of items in"
           footerSuffix="dollar value."
         />
         <ReportCardWrapper
           title="Categorized Assets"
-          chipLabel={formatDate(sinceValue)}
+          chipLabel={`Since ${formatDate(sinceValue)}`}
           value={`$${reports[0]?.cost_category_items.toFixed(2) || 0.0}`}
         />
       </Stack>

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Box } from '@mui/material';
 import SimpleModal from '@common/SimpleModal';
-import MaintenancePlanHeader from '@features/MaintenancePlan/MaintenancePlanHeader/MaintenancePlanHeader';
-import MaintenancePlanContent from '@features/MaintenancePlan/MaintenancePlanContent/MaintenancePlanContent';
-import MaintenancePlanAddPlan from '@features/MaintenancePlan/MaintenancePlanAddPlan/MaintenancePlanAddPlan';
+import SectionCardHeader from '@common/SectionCard/SectionCardHeader';
+import SectionCardContent from '@common/SectionCard/SectionCardContent';
+import AddMaintenancePlan from '@features/MaintenancePlan/AddMaintenancePlan';
+import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 
 const MaintenancePlanList = () => {
+  const dispatch = useDispatch();
   const { maintenancePlan, loading } = useSelector((state) => state.maintenance);
 
   const [sortedData, setSortedData] = useState([]);
@@ -24,6 +26,10 @@ const MaintenancePlanList = () => {
     setSelectedMaintenancePlanID('');
   };
 
+  const handleDownload = () => {
+    dispatch(maintenancePlanActions.download());
+  };
+
   const filterAndBuildMaintenancePlans = (plans, selectedFilter) => {
     if (selectedFilter.length > 0) {
       return plans.filter((element) => element.maintenance_status_name === selectedFilter);
@@ -31,6 +37,8 @@ const MaintenancePlanList = () => {
       return sortedData;
     }
   };
+
+  const removeSelectedMaintenancePlan = (id) => dispatch(maintenancePlanActions.removePlan(id));
 
   useEffect(() => {
     if (sortingOrder) {
@@ -43,21 +51,32 @@ const MaintenancePlanList = () => {
     }
   }, [sortingOrder, maintenancePlan]);
 
+  useEffect(() => {
+    dispatch(maintenancePlanActions.getPlans(100));
+  }, []);
+
   return (
     <Box sx={{ py: 2 }}>
-      <MaintenancePlanHeader
+      <SectionCardHeader
+        title="Maintenance Plans"
+        caption={selectedFilter ? `Applying ${selectedFilter} status filter` : 'Assign items to maintenance plans'}
+        primaryBtnTitle="Add plan"
         toggleModal={toggleModal}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         sortingOrder={sortingOrder}
         setSortingOrder={setSortingOrder}
+        handleDownload={handleDownload}
+        disableDownloadIcon={Boolean(maintenancePlan) && maintenancePlan.length <= 0}
       />
-      <MaintenancePlanContent
+      <SectionCardContent
         loading={loading}
+        prefixURI={'plan'}
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
-        setSelectedMaintenancePlanID={setSelectedMaintenancePlanID}
-        maintenancePlan={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
+        setSelectedID={setSelectedMaintenancePlanID}
+        removeItem={removeSelectedMaintenancePlan}
+        content={filterAndBuildMaintenancePlans(maintenancePlan, selectedFilter)}
       />
       {displayModal && (
         <SimpleModal
@@ -67,7 +86,7 @@ const MaintenancePlanList = () => {
           handleClose={handleCloseAddNewPlan}
           maxSize="sm"
         >
-          <MaintenancePlanAddPlan
+          <AddMaintenancePlan
             maintenancePlan={maintenancePlan}
             handleCloseAddNewPlan={handleCloseAddNewPlan}
             selectedMaintenancePlanID={selectedMaintenancePlanID}
