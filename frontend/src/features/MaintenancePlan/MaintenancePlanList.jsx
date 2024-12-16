@@ -42,12 +42,8 @@ const MaintenancePlanList = () => {
 
   useEffect(() => {
     if (sortingOrder) {
-      if (maintenancePlan && maintenancePlan.length > 0) {
-        const draft = [...maintenancePlan].sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
-        setSortedData(draft);
-      } else {
-        setSortedData(maintenancePlan);
-      }
+      const draft = [...maintenancePlan].sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
+      setSortedData(draft);
     } else {
       setSortedData(maintenancePlan);
     }

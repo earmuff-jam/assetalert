@@ -41,6 +41,7 @@ export const ITEM_TYPE_MAPPER = {
 const GENERIC_FORM_FIELDS = {
   type: 'text',
   variant: 'outlined',
+  size: 'small',
 };
 
 export const BLANK_MAINTENANCE_PLAN = {
@@ -50,7 +51,6 @@ export const BLANK_MAINTENANCE_PLAN = {
     label: 'Title',
     value: '',
     placeholder: 'Add a title to your maintenance plan',
-    size: 'small',
     required: true,
     fullWidth: true,
     errorMsg: '',
@@ -92,7 +92,6 @@ export const BLANK_MAINTENANCE_PLAN = {
     label: 'Min items',
     placeholder: 'Mininum count of items',
     value: '',
-    size: 'small',
     name: 'min_items_limit',
     fullWidth: true,
     errorMsg: '',
@@ -120,7 +119,6 @@ export const BLANK_MAINTENANCE_PLAN = {
     label: 'Max items',
     placeholder: 'Maximum count of items',
     value: '',
-    size: 'small',
     name: 'max_items_limit',
     errorMsg: '',
     required: true,

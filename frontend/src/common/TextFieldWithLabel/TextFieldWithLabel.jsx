@@ -8,6 +8,7 @@ export default function TextFieldWithLabel({
   value,
   placeholder,
   handleChange,
+  required,
   multiline = false,
   variant,
   size,
@@ -19,7 +20,7 @@ export default function TextFieldWithLabel({
     <Stack spacing={1} sx={{ flexGrow: 1 }}>
       <Stack spacing={0}>
         <Typography variant="subtitle2" color="text.secondary">
-          {label}
+          {label} {required && '*'}
         </Typography>
         <Typography variant="caption" color={'text.secondary'}>
           {caption}
@@ -32,6 +33,7 @@ export default function TextFieldWithLabel({
         placeholder={placeholder}
         onChange={handleChange}
         variant={variant}
+        required={required}
         size={size}
         multiline={multiline}
         error={error}
