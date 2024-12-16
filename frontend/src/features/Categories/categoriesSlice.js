@@ -42,6 +42,23 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = '';
     },
+    updateCategory: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    updateCategorySuccess: (state, action) => {
+      const draftCategory = action.payload;
+      const index = state.categories.findIndex((category) => category.id === draftCategory.id);
+      if (index !== -1) {
+        Object.assign(state.categories[index], draftCategory);
+      }
+      state.loading = false;
+      state.error = '';
+    },
+    updateCategoryFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+    },
     removeCategory: (state) => {
       state.loading = true;
       state.error = '';
