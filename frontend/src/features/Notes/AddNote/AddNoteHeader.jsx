@@ -7,7 +7,7 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
   return (
     <>
       <Typography variant="subtitle2" color="text.secondary">
-        {formFields.title.label}
+        {formFields.title.label} {formFields.title.required && '*'}
       </Typography>
       <TextField
         id={formFields.title.name}
