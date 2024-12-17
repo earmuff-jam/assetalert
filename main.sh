@@ -70,6 +70,9 @@ loadUnitTest() {
     loadMigration
 
     sleep +2
+    loadSeedData
+
+    sleep +2
     loadData
 
     sleep +2
