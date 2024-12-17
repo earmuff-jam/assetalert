@@ -33,6 +33,16 @@ loadProdEnv() {
 
     sleep +2
     loadMigration
+
+    sleep +2
+    loadSeedData
+
+}
+
+loadSeedData() {
+    echo "building seed data files."
+    chmod +x setup/prod/_addSeedData.sh
+    ./setup/prod/_addSeedData.sh
 }
 
 loadMigration() {
