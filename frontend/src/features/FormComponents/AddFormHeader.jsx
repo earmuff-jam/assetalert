@@ -7,7 +7,7 @@ export default function AddFormHeader({ formFields, handleInputChange, setLocati
   return (
     <Stack spacing={1}>
       <Typography variant="subtitle2" color="text.secondary">
-        {formFields.name.label}
+        {formFields.name.label} {formFields.name.required && '*'}
       </Typography>
       <TextField
         id={formFields.name.id}
@@ -17,6 +17,7 @@ export default function AddFormHeader({ formFields, handleInputChange, setLocati
         placeholder={formFields.name.placeholder}
         fullWidth
         variant="outlined"
+        required={formFields.name.required}
         size={formFields.name.size}
         error={Boolean(formFields.name['errorMsg'].length)}
         helperText={formFields.name['errorMsg']}

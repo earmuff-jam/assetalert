@@ -65,10 +65,10 @@ type Note struct {
 	Location          Location    `json:"location,omitempty"`
 	CreatedAt         time.Time   `json:"created_at"`
 	CreatedBy         string      `json:"created_by"`
-	Creator           string      `json:"creator"`
+	Creator           string      `json:"creator,omitempty"`
 	UpdatedAt         time.Time   `json:"updated_at"`
 	UpdatedBy         string      `json:"updated_by"`
-	Updator           string      `json:"updator"`
+	Updator           string      `json:"updator,omitempty"`
 	SharableGroups    []uuid.UUID `json:"sharable_groups"`
 }
 

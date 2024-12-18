@@ -1,15 +1,15 @@
-version: '3'
+version: "3"
 services:
   webserver:
     image: nginx
-    container_name: 'nginx'
+    container_name: "nginx"
     build:
-      context: ./frontend
-      dockerfile: prod.Dockerfile
+      context: .
+      dockerfile: frontend/prod.Dockerfile
       args:
-        NODE_ENV: production  # Example build argument for the frontend service
+        NODE_ENV: PRODUCTION # Example build argument for the frontend service
     ports:
-      - '8081:80'
+      - "8081:80"
     environment:
       NODE_ENV: PRODUCTION
 
@@ -37,7 +37,7 @@ services:
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     restart: always
     ports:
-      - '8089:5432'
+      - "8089:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -61,7 +61,7 @@ services:
         MINIO_APP_LOCALHOST_URL: ${MINIO_APP_LOCALHOST_URL}
         DATABASE_DOCKER_CONTAINER_IP_ADDRESS: backend
     ports:
-      - '8087:8087'
+      - "8087:8087"
     environment:
       ENVIRONMENT: PRODUCTION
       TOKEN_VALIDITY_TIME: ${TOKEN_VALIDITY_TIME} # in minutes

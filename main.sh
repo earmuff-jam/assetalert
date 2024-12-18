@@ -42,10 +42,19 @@ loadDevEnv() {
     loadMigration
 
     sleep +2
+    loadSeedData
+
+    sleep +2
     loadData
     echo "adding generated test data for development purpose only..."
     cd apilayer/dataLake && go run main.go
 
+}
+
+loadSeedData() {
+    echo "building seed data files."
+    chmod +x setup/dev/_addSeedData.sh
+    ./setup/dev/_addSeedData.sh
 }
 
 loadUnitTest() {
@@ -59,6 +68,9 @@ loadUnitTest() {
 
     sleep +2
     loadMigration
+
+    sleep +2
+    loadSeedData
 
     sleep +2
     loadData

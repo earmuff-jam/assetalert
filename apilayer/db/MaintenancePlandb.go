@@ -221,7 +221,7 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 	defer db.Close()
 
 	// Retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.CreatedBy, draftMaintenancePlan.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.Status)
 	if err != nil {
 		log.Printf("error retrieving status details: %+v", err)
 		return nil, err
@@ -312,7 +312,7 @@ func UpdateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.CreatedBy, draftMaintenancePlan.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftMaintenancePlan.Status)
 	if err != nil {
 		return nil, err
 	}

@@ -151,6 +151,198 @@ func RetrieveAllCategoryItems(user string, userID string, categoryID string, lim
 
 // RetrieveCategory ...
 func RetrieveCategory(user string, userID string, categoryID string) (model.Category, error) {
+	category, err := retrieveCategoryByID(user, userID, categoryID)
+	if err != nil {
+		log.Printf("unable to retrieve selected category. Error: %+v", err)
+		return model.Category{}, err
+	}
+	return category, nil
+}
+
+// CreateCategory ...
+func CreateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		log.Printf("Failed to connect to the database: %+v", err)
+		return nil, err
+	}
+	defer db.Close()
+
+	// retrieve selected status
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.Status)
+	if err != nil {
+		log.Printf("error retrieving status details: %+v", err)
+		return nil, err
+	}
+	if selectedStatusDetails == nil {
+		return nil, errors.New("unable to find selected status")
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("Error starting transaction: %+v", err)
+		return nil, err
+	}
+
+	sqlStr := `
+	INSERT INTO community.category(
+		name, description, color, status, min_items_limit, max_items_limit, location,
+		created_by, created_at, updated_by, updated_at, sharable_groups
+	) VALUES($1, $2, $3, $4, $5, $6, POINT($7, $8), $9, $10, $11, $12, $13)
+	RETURNING id;`
+
+	row := tx.QueryRow(
+		sqlStr,
+		draftCategory.Name,
+		draftCategory.Description,
+		draftCategory.Color,
+		selectedStatusDetails.ID,
+		draftCategory.MinItemsLimit,
+		draftCategory.MaxItemsLimit,
+		draftCategory.Location.Lon,
+		draftCategory.Location.Lat,
+		draftCategory.CreatedBy,
+		time.Now(),
+		draftCategory.UpdatedBy,
+		time.Now(),
+		pq.Array(draftCategory.SharableGroups),
+	)
+
+	var selectedCategoryID string
+	err = row.Scan(
+		&selectedCategoryID,
+	)
+	if err != nil {
+		tx.Rollback()
+		log.Printf("Error scanning result: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("Error committing transaction: %+v", err)
+		return nil, err
+	}
+
+	selectedCategory, err := retrieveCategoryByID(user, draftCategory.CreatedBy, selectedCategoryID)
+	if err != nil {
+		log.Printf("unable to retrieve selected category. Error: %+v", err)
+		return nil, err
+	}
+
+	selectedCategory.StatusName = selectedStatusDetails.Name
+	selectedCategory.StatusDescription = selectedStatusDetails.Description
+
+	return &selectedCategory, nil
+}
+
+// UpdateCategory ...
+func UpdateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.Status)
+	if err != nil {
+		return nil, err
+	}
+	if selectedStatusDetails == nil {
+		return nil, errors.New("unable to find selected status")
+	}
+
+	sqlStr := `UPDATE community.category 
+    SET 
+    name = $2,
+    description = $3,
+	color = $4,
+	status = $5,
+	min_items_limit = $6,
+	max_items_limit = $7,
+	location = POINT($8, $9),
+    updated_by = $10,
+    updated_at = $11,
+	sharable_groups = $12
+    WHERE id = $1
+    RETURNING id;`
+
+	tx, err := db.Begin()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	parsedUpdatorID, err := uuid.Parse(draftCategory.UpdatedBy)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	row := tx.QueryRow(sqlStr,
+		draftCategory.ID,
+		draftCategory.Name,
+		draftCategory.Description,
+		draftCategory.Color,
+		selectedStatusDetails.ID,
+		draftCategory.MinItemsLimit,
+		draftCategory.MaxItemsLimit,
+		draftCategory.Location.Lon,
+		draftCategory.Location.Lat,
+		parsedUpdatorID,
+		time.Now(),
+		pq.Array(draftCategory.SharableGroups),
+	)
+
+	var selectedCategoryID string
+	err = row.Scan(
+		&selectedCategoryID,
+	)
+
+	if err != nil {
+		tx.Rollback()
+		log.Printf("unable to retrieve selected category. Error: %+v", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	selectedCategory, err := retrieveCategoryByID(user, draftCategory.UpdatedBy, selectedCategoryID)
+
+	if err != nil {
+		log.Printf("unable to retrieve selected category. Error: %+v", err)
+		return nil, err
+	}
+
+	selectedCategory.Status = selectedStatusDetails.ID.String()
+	selectedCategory.StatusName = selectedStatusDetails.Name
+	selectedCategory.StatusDescription = selectedStatusDetails.Description
+	selectedCategory.Location.Lat = draftCategory.Location.Lat
+	selectedCategory.Location.Lon = draftCategory.Location.Lon
+
+	return &selectedCategory, nil
+}
+
+// RemoveCategory ...
+func RemoveCategory(user string, categoryID string) error {
+	db, err := SetupDB(user)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	sqlStr := `DELETE FROM community.category WHERE id=$1;`
+	_, err = db.Exec(sqlStr, categoryID)
+	if err != nil {
+		log.Printf("unable to delete selected category. error: %+v", err)
+		return err
+	}
+	return nil
+}
+
+// retrieves the selected category by ID
+func retrieveCategoryByID(user string, userID string, categoryID string) (model.Category, error) {
 	db, err := SetupDB(user)
 	if err != nil {
 		return model.Category{}, err
@@ -207,197 +399,6 @@ func RetrieveCategory(user string, userID string, categoryID string) (model.Cate
 	}
 
 	return selectedCategory, nil
-}
-
-// CreateCategory ...
-func CreateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
-	db, err := SetupDB(user)
-	if err != nil {
-		log.Printf("Failed to connect to the database: %+v", err)
-		return nil, err
-	}
-	defer db.Close()
-
-	// retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status)
-	if err != nil {
-		log.Printf("error retrieving status details: %+v", err)
-		return nil, err
-	}
-	if selectedStatusDetails == nil {
-		return nil, errors.New("unable to find selected status")
-	}
-
-	tx, err := db.Begin()
-	if err != nil {
-		log.Printf("Error starting transaction: %+v", err)
-		return nil, err
-	}
-
-	sqlStr := `
-	INSERT INTO community.category(
-		name, description, color, status, min_items_limit, max_items_limit, location,
-		created_by, created_at, updated_by, updated_at, sharable_groups
-	) VALUES($1, $2, $3, $4, $5, $6, POINT($7, $8), $9, $10, $11, $12, $13)
-	RETURNING id, name, description, color, status, min_items_limit, max_items_limit,
-		created_at, created_by, updated_at, updated_by, sharable_groups
-	`
-
-	row := tx.QueryRow(
-		sqlStr,
-		draftCategory.Name,
-		draftCategory.Description,
-		draftCategory.Color,
-		selectedStatusDetails.ID,
-		draftCategory.MinItemsLimit,
-		draftCategory.MaxItemsLimit,
-		draftCategory.Location.Lon,
-		draftCategory.Location.Lat,
-		draftCategory.CreatedBy,
-		time.Now(),
-		draftCategory.UpdatedBy,
-		time.Now(),
-		pq.Array(draftCategory.SharableGroups),
-	)
-
-	err = row.Scan(
-		&draftCategory.ID,
-		&draftCategory.Name,
-		&draftCategory.Description,
-		&draftCategory.Color,
-		&draftCategory.Status,
-		&draftCategory.MinItemsLimit,
-		&draftCategory.MaxItemsLimit,
-		&draftCategory.CreatedAt,
-		&draftCategory.CreatedBy,
-		&draftCategory.UpdatedAt,
-		&draftCategory.UpdatedBy,
-		pq.Array(&draftCategory.SharableGroups),
-	)
-	if err != nil {
-		tx.Rollback()
-		log.Printf("Error scanning result: %+v", err)
-		return nil, err
-	}
-
-	if err := tx.Commit(); err != nil {
-		log.Printf("Error committing transaction: %+v", err)
-		return nil, err
-	}
-
-	draftCategory.StatusName = selectedStatusDetails.Name
-	draftCategory.StatusDescription = selectedStatusDetails.Description
-
-	return draftCategory, nil
-}
-
-// UpdateCategory ...
-func UpdateCategory(user string, draftCategory *model.Category) (*model.Category, error) {
-	db, err := SetupDB(user)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	selectedStatusDetails, err := RetrieveStatusDetails(user, draftCategory.CreatedBy, draftCategory.Status)
-	if err != nil {
-		return nil, err
-	}
-	if selectedStatusDetails == nil {
-		return nil, errors.New("unable to find selected status")
-	}
-
-	sqlStr := `UPDATE community.category 
-    SET 
-    name = $2,
-    description = $3,
-	color = $4,
-	status = $5,
-	min_items_limit = $6,
-	max_items_limit = $7,
-	location = POINT($8, $9),
-    updated_by = $10,
-    updated_at = $11,
-	sharable_groups = $12
-    WHERE id = $1
-    RETURNING id, name, description, color, status, min_items_limit, max_items_limit, created_at, created_by, updated_at, updated_by, sharable_groups;
-`
-	tx, err := db.Begin()
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	parsedUpdatorID, err := uuid.Parse(draftCategory.UpdatedBy)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	var updatedCategory model.Category
-
-	row := tx.QueryRow(sqlStr,
-		draftCategory.ID,
-		draftCategory.Name,
-		draftCategory.Description,
-		draftCategory.Color,
-		selectedStatusDetails.ID,
-		draftCategory.MinItemsLimit,
-		draftCategory.MaxItemsLimit,
-		draftCategory.Location.Lon,
-		draftCategory.Location.Lat,
-		parsedUpdatorID,
-		time.Now(),
-		pq.Array(draftCategory.SharableGroups),
-	)
-
-	err = row.Scan(
-		&updatedCategory.ID,
-		&updatedCategory.Name,
-		&updatedCategory.Description,
-		&updatedCategory.Color,
-		&updatedCategory.Status,
-		&updatedCategory.MinItemsLimit,
-		&updatedCategory.MaxItemsLimit,
-		&updatedCategory.CreatedAt,
-		&updatedCategory.CreatedBy,
-		&updatedCategory.UpdatedAt,
-		&updatedCategory.UpdatedBy,
-		pq.Array(&updatedCategory.SharableGroups),
-	)
-
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-
-	updatedCategory.Status = selectedStatusDetails.ID.String()
-	updatedCategory.StatusName = selectedStatusDetails.Name
-	updatedCategory.StatusDescription = selectedStatusDetails.Description
-	updatedCategory.Location.Lat = draftCategory.Location.Lat
-	updatedCategory.Location.Lon = draftCategory.Location.Lon
-
-	return &updatedCategory, nil
-}
-
-// RemoveCategory ...
-func RemoveCategory(user string, categoryID string) error {
-	db, err := SetupDB(user)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	sqlStr := `DELETE FROM community.category WHERE id=$1;`
-	_, err = db.Exec(sqlStr, categoryID)
-	if err != nil {
-		log.Printf("unable to delete selected category. error: %+v", err)
-		return err
-	}
-	return nil
 }
 
 // AddAssetToCategory ...

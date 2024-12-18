@@ -46,6 +46,8 @@ const CategoryList = ({ displayConcise = false }) => {
       if (categories && categories.length > 0) {
         const draft = [...categories].sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
         setSortedData(draft);
+      } else {
+        setSortedData(categories);
       }
     } else {
       setSortedData(categories);
@@ -59,7 +61,7 @@ const CategoryList = ({ displayConcise = false }) => {
   return (
     <Stack sx={{ py: 2 }}>
       <SectionCardHeader
-        title="Add Category"
+        title="Categories"
         caption={selectedFilter ? `Applying ${selectedFilter} status filter` : 'Organize items into categories'}
         primaryBtnTitle="Add category"
         toggleModal={toggleModal}

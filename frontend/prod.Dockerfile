@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18-alpine as build
+FROM node:20-alpine as build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -9,7 +9,7 @@ RUN apk add --no-cache curl && \
 
 ENV PATH="/root/.yarn/bin:${PATH}"
 
-COPY . .
+COPY frontend/ .
 
 RUN yarn -v && \
     yarn install --production && \

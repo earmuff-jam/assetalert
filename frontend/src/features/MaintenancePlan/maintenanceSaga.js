@@ -52,6 +52,24 @@ export function* createPlan(action) {
   }
 }
 
+export function* updatePlan(action) {
+  try {
+    const { id } = action.payload;
+    const userID = localStorage.getItem('userID');
+    const currentMaintenancePlan = { ...action.payload };
+    const draftMaintenancePlan = Object.assign({}, { ...currentMaintenancePlan });
+    if (draftMaintenancePlan?.image) {
+      delete draftMaintenancePlan['image'];
+    }
+    const response = yield call(instance.put, `${BASEURL}/plan/${id}`, { ...draftMaintenancePlan, updated_by: userID });
+    yield put(
+      maintenancePlanActions.updatePlanSuccess({ ...response.data, image: currentMaintenancePlan?.image || '' })
+    );
+  } catch (e) {
+    yield put(maintenancePlanActions.updatePlanFailure(e));
+  }
+}
+
 export function* removePlan(action) {
   try {
     const response = yield call(instance.delete, `${BASEURL}/plan/${action.payload}`);
@@ -81,6 +99,10 @@ export function* watchCreatePlan() {
   yield takeLatest(`maintenancePlan/createPlan`, createPlan);
 }
 
+export function* watchUpdatePlan() {
+  yield takeLatest(`maintenancePlan/updatePlan`, updatePlan);
+}
+
 export function* watchRemovePlan() {
   yield takeLatest(`maintenancePlan/removePlan`, removePlan);
 }
@@ -89,4 +111,4 @@ export function* watchDownload() {
   yield takeLatest(`maintenancePlan/download`, download);
 }
 
-export default [watchGetPlanList, watchCreatePlan, watchDownload, watchRemovePlan];
+export default [watchGetPlanList, watchCreatePlan, watchUpdatePlan, watchDownload, watchRemovePlan];

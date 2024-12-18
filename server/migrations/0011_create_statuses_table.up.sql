@@ -8,13 +8,7 @@ CREATE TABLE IF NOT EXISTS community.statuses
 (
     id                  UUID PRIMARY KEY             NOT NULL DEFAULT gen_random_uuid(),
     name                VARCHAR(50)                  NOT NULL,
-    description         VARCHAR(500)                 NULL,
-    color               VARCHAR(50),           
-    created_at          TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),
-    created_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    updated_at          TIMESTAMP WITH TIME ZONE     NOT NULL DEFAULT NOW(),
-    updated_by          UUID                         REFERENCES profiles (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    sharable_groups     UUID[]
+    description         VARCHAR(500)                 NULL
 );
 
 COMMENT ON TABLE statuses IS 'item status for any selected items within the application';

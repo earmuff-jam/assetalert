@@ -15,17 +15,6 @@ phone_number = '1234567890',
 about_me = 'I like to climb trees and hike with my friends'
 WHERE email_address = 'admin@gmail.com';
 
--- ADD STATUS SQL TEST DATA --
-INSERT INTO community.statuses(name, description, color, created_by, updated_by, sharable_groups) 
-VALUES ('draft', 'items under this bucket are in draft state', '#f7f7f7', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('archived', 'items under this bucket are archived', '#e7d3da', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('completed', 'items under this bucket are marked complete', '#963256', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('pending', 'items under this bucket are in pending state', '#c8aabf', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('urgent', 'items under this bucket require immediate attention', '#d433a7', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('general', 'items under this bucket are generalized items', '#d20a0a', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('on_hold', 'items under this bucket are on hold and needs more information', '#465760', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-('cancelled', 'items under this bucket are cancelled and pending for deletion', '#28b391', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY[(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
-
 -- ADD NOTES SQL TEST DATA --
 INSERT INTO community.notes (title, description, status, color, location, created_by, updated_by, sharable_groups)
 VALUES (

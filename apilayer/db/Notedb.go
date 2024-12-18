@@ -106,7 +106,7 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	}
 	defer db.Close()
 
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -163,8 +163,8 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	row := db.QueryRow(retrieveUserDetailsSqlStr, userID)
 
 	var creatorID string
-	var creatorUsername string
-	var creatorFullName string
+	var creatorUsername sql.NullString
+	var creatorFullName sql.NullString
 	err = row.Scan(&creatorID, &creatorUsername, &creatorFullName)
 	if err != nil {
 		log.Printf("creator not found. error :%+v", err)
@@ -175,13 +175,13 @@ func AddNewNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	draftNote.StatusName = selectedStatusDetails.Name
 	draftNote.StatusDescription = selectedStatusDetails.Description
 
-	if len(creatorUsername) > 0 {
+	if creatorUsername.Valid {
 		// creator === updator for the 1st time
-		draftNote.Creator = creatorUsername
-		draftNote.Updator = creatorUsername
-	} else {
-		draftNote.Creator = creatorFullName
-		draftNote.Updator = creatorFullName
+		draftNote.Creator = creatorUsername.String
+		draftNote.Updator = creatorUsername.String
+	} else if creatorFullName.Valid {
+		draftNote.Creator = creatorFullName.String
+		draftNote.Updator = creatorFullName.String
 	}
 	return &draftNote, nil
 }
@@ -195,7 +195,7 @@ func UpdateNote(user string, userID string, draftNote model.Note) (*model.Note, 
 	defer db.Close()
 
 	// retrieve selected status
-	selectedStatusDetails, err := RetrieveStatusDetails(user, userID, draftNote.Status)
+	selectedStatusDetails, err := RetrieveStatusDetails(user, draftNote.Status)
 	if err != nil {
 		return nil, err
 	}

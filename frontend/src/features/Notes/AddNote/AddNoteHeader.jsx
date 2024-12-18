@@ -7,7 +7,7 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
   return (
     <>
       <Typography variant="subtitle2" color="text.secondary">
-        {formFields.title.label}
+        {formFields.title.label} {formFields.title.required && '*'}
       </Typography>
       <TextField
         id={formFields.title.name}
@@ -35,7 +35,7 @@ export default function AddNoteHeader({ formFields, handleInput, setLocation }) 
         value={formFields.description.value}
         size={formFields.description.size}
         placeholder={formFields.description.placeholder}
-        onChange={handleInput}
+        handleChange={handleInput}
         required={formFields.description.required}
         fullWidth={formFields.description.fullWidth}
         error={Boolean(formFields.description.errorMsg)}

@@ -75,7 +75,7 @@ export default function AddCategory({
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
       if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
-        return el.value < 0;
+        return el.value <= 0;
       }
       return el.value.trim() === '';
     });

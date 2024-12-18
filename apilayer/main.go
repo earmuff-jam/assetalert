@@ -67,7 +67,6 @@ func main() {
 
 	// secure routes
 	router.Handle("/api/v1/locations", CustomRequestHandler(handler.GetAllStorageLocations)).Methods(http.MethodGet)
-	router.Handle("/api/v1/status/list", CustomRequestHandler(handler.GetStatusList)).Methods(http.MethodGet)
 
 	// summary
 	router.Handle("/api/v1/summary", CustomRequestHandler(handler.GetAssetsAndSummary)).Methods(http.MethodGet)

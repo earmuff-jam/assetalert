@@ -48,13 +48,23 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
     setFormFields(updatedFormFields);
   };
 
-  const submit = () => {
+  const isDisabled = () => {
     const containsErr = Object.values(formFields).some((el) => el.errorMsg);
-    const userID = localStorage.getItem('userID');
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => el.value.trim() === '');
 
-    if (containsErr || isRequiredFieldsEmpty) {
+    return (
+      containsErr ||
+      isRequiredFieldsEmpty ||
+      !dayjs(completionDate).isValid() ||
+      !dayjs(completionDate).isAfter(dayjs().add(-1, 'day'))
+    );
+  };
+
+  const submit = () => {
+    const userID = localStorage.getItem('userID');
+
+    if (isDisabled()) {
       enqueueSnackbar('Cannot add new item.', {
         variant: 'error',
       });
@@ -141,7 +151,12 @@ const AddNote = ({ setEditMode, setSelectedNoteID, noteID, notes }) => {
         editMode={true}
         displayLocationPicker={location?.lat}
       />
-      <Button onClick={submit} variant="outlined" startIcon={noteID ? <CheckCircleRounded /> : <AddRounded />}>
+      <Button
+        onClick={submit}
+        variant="outlined"
+        disabled={isDisabled()}
+        startIcon={noteID ? <CheckCircleRounded /> : <AddRounded />}
+      >
         {noteID ? 'Save' : 'Add'}
       </Button>
     </Stack>

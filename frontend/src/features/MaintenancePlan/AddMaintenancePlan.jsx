@@ -62,7 +62,7 @@ const AddMaintenancePlan = ({
 
   const resetData = () => {
     setFormData({ ...BLANK_MAINTENANCE_PLAN });
-    setPlanType(ITEM_TYPE_MAPPER['daily'].value); // annual
+    setPlanType(ITEM_TYPE_MAPPER['daily'].value);
     setPlanColor('#f7f7f7');
     handleCloseAddNewPlan();
     setStatus(STATUS_OPTIONS[0].label);
@@ -80,7 +80,7 @@ const AddMaintenancePlan = ({
     const requiredFormFields = Object.values(formData).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
       if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
-        return el.value < 0;
+        return el.value <= 0;
       }
       return el.value.trim() === '';
     });
@@ -160,7 +160,7 @@ const AddMaintenancePlan = ({
       const currentPlanType = Object.values(ITEM_TYPE_MAPPER).find((v) => v.value === draftMaintenancePlan?.plan_type);
 
       setStatus(draftMaintenancePlan?.maintenance_status_name || STATUS_OPTIONS[0].label);
-      setPlanType(currentPlanType?.value || '');
+      setPlanType(currentPlanType?.value || Object.values(ITEM_TYPE_MAPPER)[0].value);
       setLocation(draftMaintenancePlan?.location);
       setPlanColor(draftMaintenancePlan?.color);
     } else {
