@@ -33,6 +33,8 @@ jobs:
         run: |
           echo "Attempting to build test container and run migrations..."
           migrate -database "postgres://runner:password@localhost:5432/community?sslmode=disable" -path ./server/migrations up
+          echo "Attempting to seed data ..."
+          PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f server/seed/seedData.sql
           echo "Attempting to insert test data into container ..."
           PGPASSWORD=password psql -h localhost -p 5432 -U runner -d community -a -f setup/dev/test_data.sql
 
