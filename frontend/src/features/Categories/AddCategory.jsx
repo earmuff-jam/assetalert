@@ -1,9 +1,9 @@
-import { Button, Stack } from '@mui/material';
-
+import { produce } from 'immer';
+import { useDispatch } from 'react-redux';
+import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
-import { enqueueSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
+import { Button, Stack } from '@mui/material';
 
 import ColorPicker from '@common/ColorPicker';
 import LocationPicker from '@common/Location/LocationPicker';
@@ -12,7 +12,6 @@ import StatusOptions from '@common/StatusOptions/StatusOptions';
 import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
 import { categoryActions } from '@features/Categories/categoriesSlice';
 
-import AddFormLimit from '@features/FormComponents/AddFormLimit';
 import AddFormHeader from '@features/FormComponents/AddFormHeader';
 import { ADD_CATEGORY_FORM_FIELDS } from '@features/Categories/constants';
 
@@ -74,9 +73,6 @@ export default function AddCategory({
 
     const requiredFormFields = Object.values(formFields).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
-      if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
-        return el.value <= 0;
-      }
       return el.value.trim() === '';
     });
 
@@ -140,25 +136,13 @@ export default function AddCategory({
   useEffect(() => {
     if (!loading && selectedCategoryID !== '') {
       const draftCategory = categories.filter((v) => v.id === selectedCategoryID).find(() => true);
-      const updatedFormFields = Object.assign({}, formFields, {
-        name: {
-          ...formFields.name,
-          value: draftCategory?.name || '',
-        },
-        description: {
-          ...formFields.description,
-          value: draftCategory?.description || '',
-        },
-        min_items_limit: {
-          ...formFields.min_items_limit,
-          value: draftCategory?.min_items_limit || 0,
-        },
-        max_items_limit: {
-          ...formFields.max_items_limit,
-          value: draftCategory?.max_items_limit || 10,
-        },
-      });
-      setFormFields(updatedFormFields);
+      setFormFields(
+        produce(formFields, (draft) => {
+          draft.name.value = draftCategory?.name || '';
+          draft.description.value = draftCategory?.description || '';
+        })
+      );
+
       setLocation(draftCategory.location);
       setPlanColor(draftCategory.color);
       setStatus(draftCategory.status_name);
@@ -173,7 +157,6 @@ export default function AddCategory({
     <Stack alignItems={'center'}>
       <Stack spacing={2} sx={{ width: '100%' }}>
         <AddFormHeader formFields={formFields} setLocation={setLocation} handleInputChange={handleInputChange} />
-        <AddFormLimit formFields={formFields} handleInputChange={handleInputChange} />
         <StatusOptions value={status} onChange={handleStatus} />
         <ColorPicker value={planColor} handleChange={handleColorChange} label={'Associate color'} />
       </Stack>

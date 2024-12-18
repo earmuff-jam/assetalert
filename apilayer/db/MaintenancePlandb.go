@@ -27,8 +27,6 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) (*[]mode
 	ms.name AS status_name,
 	ms.description AS status_description,
 	mp.color, 
-	mp.min_items_limit, 
-	mp.max_items_limit,
 	mp.plan_type,
 	mp.location[0] AS lon,
 	mp.location[1] AS lat,
@@ -62,7 +60,7 @@ func RetrieveAllMaintenancePlans(user string, userID string, limit int) (*[]mode
 	for rows.Next() {
 		var ec model.MaintenancePlan
 		if err := rows.Scan(&maintenancePlanID, &ec.Name, &ec.Description, &ec.Status, &ec.StatusName, &ec.StatusDescription,
-			&ec.Color, &ec.MinItemsLimit, &ec.MaxItemsLimit, &ec.PlanType, &lon, &lat, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
+			&ec.Color, &ec.PlanType, &lon, &lat, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
 			return nil, err
 		}
 
@@ -108,8 +106,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 	ms.name AS status_name,
 	ms.description AS status_description,
 	mp.color, 
-	mp.min_items_limit, 
-	mp.max_items_limit,
+	mp.location[0] AS lon,
+	mp.location[1] AS lat,
 	mp.plan_type,
 	mp.created_at,
 	mp.created_by,
@@ -127,6 +125,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 	row := db.QueryRow(sqlStr, userID, maintenanceID)
 	selectedMaintenancePlan := model.MaintenancePlan{}
 
+	var lon, lat sql.NullFloat64
+
 	err = row.Scan(
 		&selectedMaintenancePlan.ID,
 		&selectedMaintenancePlan.Name,
@@ -134,8 +134,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 		&selectedMaintenancePlan.StatusName,
 		&selectedMaintenancePlan.StatusDescription,
 		&selectedMaintenancePlan.Color,
-		&selectedMaintenancePlan.MinItemsLimit,
-		&selectedMaintenancePlan.MaxItemsLimit,
+		&lon,
+		&lat,
 		&selectedMaintenancePlan.PlanType,
 		&selectedMaintenancePlan.CreatedAt,
 		&selectedMaintenancePlan.CreatedBy,
@@ -145,6 +145,14 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 		&selectedMaintenancePlan.Updator,
 		pq.Array(&selectedMaintenancePlan.SharableGroups),
 	)
+
+	if lon.Valid && lat.Valid {
+		selectedMaintenancePlan.Location = model.Location{
+			Lon: lon.Float64,
+			Lat: lat.Float64,
+		}
+	}
+
 	if err != nil {
 		return model.MaintenancePlan{}, err
 	}
@@ -236,9 +244,9 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		return nil, err
 	}
 
-	sqlStr := `INSERT INTO community.maintenance_plan(name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, location, created_by, created_at, updated_by, updated_at, sharable_groups)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, POINT($9, $10), $11, $12, $13, $14, $15)
-	RETURNING id, name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;`
+	sqlStr := `INSERT INTO community.maintenance_plan(name, description, color, status, plan_type, plan_due, location, created_by, created_at, updated_by, updated_at, sharable_groups)
+	VALUES ($1, $2, $3, $4, $5, $6, POINT($7, $8), $9, $10, $11, $12, $13)
+	RETURNING id, name, description, color, status, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;`
 
 	tx, err := db.Begin()
 	if err != nil {
@@ -257,8 +265,6 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		draftMaintenancePlan.Description,
 		draftMaintenancePlan.Color,
 		selectedStatusDetails.ID,
-		draftMaintenancePlan.MinItemsLimit,
-		draftMaintenancePlan.MaxItemsLimit,
 		draftMaintenancePlan.PlanType,
 		draftMaintenancePlan.PlanDue,
 		draftMaintenancePlan.Location.Lon,
@@ -276,8 +282,6 @@ func CreateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		&draftMaintenancePlan.Description,
 		&draftMaintenancePlan.Color,
 		&draftMaintenancePlan.Status,
-		&draftMaintenancePlan.MinItemsLimit,
-		&draftMaintenancePlan.MaxItemsLimit,
 		&draftMaintenancePlan.PlanType,
 		&draftMaintenancePlan.PlanDue,
 		&draftMaintenancePlan.CreatedAt,
@@ -326,16 +330,14 @@ func UpdateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
     description = $3,
 	color = $4,
 	status = $5,
-	min_items_limit = $6,
-	max_items_limit = $7,
-	plan_type = $8,
-	plan_due = $9,
-	location = POINT($10, $11),
-    updated_by = $12,
-    updated_at = $13,
-	sharable_groups = $14
+	plan_type = $6,
+	plan_due = $7,
+	location = POINT($8, $9),
+    updated_by = $10,
+    updated_at = $11,
+	sharable_groups = $12
     WHERE id = $1
-    RETURNING id, name, description, color, status, min_items_limit, max_items_limit, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;
+    RETURNING id, name, description, color, status, plan_type, plan_due, created_at, created_by, updated_at, updated_by, sharable_groups;
 `
 	tx, err := db.Begin()
 	if err != nil {
@@ -357,8 +359,6 @@ func UpdateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		draftMaintenancePlan.Description,
 		draftMaintenancePlan.Color,
 		selectedStatusDetails.ID,
-		draftMaintenancePlan.MinItemsLimit,
-		draftMaintenancePlan.MaxItemsLimit,
 		draftMaintenancePlan.PlanType,
 		draftMaintenancePlan.PlanDue,
 		draftMaintenancePlan.Location.Lon,
@@ -374,8 +374,6 @@ func UpdateMaintenancePlan(user string, draftMaintenancePlan *model.MaintenanceP
 		&updatedMaintenancePlan.Description,
 		&updatedMaintenancePlan.Color,
 		&updatedMaintenancePlan.Status,
-		&updatedMaintenancePlan.MinItemsLimit,
-		&updatedMaintenancePlan.MaxItemsLimit,
 		&updatedMaintenancePlan.PlanType,
 		&updatedMaintenancePlan.PlanDue,
 		&updatedMaintenancePlan.CreatedAt,

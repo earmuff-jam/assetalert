@@ -14,8 +14,6 @@ type Category struct {
 	Status            string    `json:"status"`
 	StatusName        string    `json:"status_name"`
 	StatusDescription string    `json:"status_description"`
-	MinItemsLimit     int       `json:"min_items_limit"`
-	MaxItemsLimit     int       `json:"max_items_limit"`
 	Location          Location  `json:"location,omitempty"`
 	Image             []byte    `json:"image,omitempty"`
 	CreatedBy         string    `json:"created_by"`

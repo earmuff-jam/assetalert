@@ -12,12 +12,10 @@ import LocationPicker from '@common/Location/LocationPicker';
 import StatusOptions from '@common/StatusOptions/StatusOptions';
 
 import { STATUS_OPTIONS } from '@common/StatusOptions/constants';
+import AddFormHeader from '@features/FormComponents/AddFormHeader';
+import AddTypeOptions from '@features/FormComponents/AddTypeOptions';
 import { maintenancePlanActions } from '@features/MaintenancePlan/maintenanceSlice';
 import { BLANK_MAINTENANCE_PLAN, ITEM_TYPE_MAPPER } from '@features/MaintenancePlan/constants';
-
-import AddFormHeader from '@features/FormComponents/AddFormHeader';
-import AddFormLimit from '@features/FormComponents/AddFormLimit';
-import AddTypeOptions from '@features/FormComponents/AddTypeOptions';
 
 const AddMaintenancePlan = ({
   handleCloseAddNewPlan,
@@ -79,9 +77,6 @@ const AddMaintenancePlan = ({
 
     const requiredFormFields = Object.values(formData).filter((v) => v.required);
     const isRequiredFieldsEmpty = requiredFormFields.some((el) => {
-      if (['min_items_limit', 'max_items_limit'].includes(el.name)) {
-        return el.value <= 0;
-      }
       return el.value.trim() === '';
     });
 
@@ -152,8 +147,6 @@ const AddMaintenancePlan = ({
         produce(formData, (draft) => {
           draft.name.value = draftMaintenancePlan?.name || '';
           draft.description.value = draftMaintenancePlan?.description || '';
-          draft.max_items_limit.value = draftMaintenancePlan?.max_items_limit || '';
-          draft.min_items_limit.value = draftMaintenancePlan?.min_items_limit || '';
         })
       );
 
@@ -173,7 +166,6 @@ const AddMaintenancePlan = ({
       <Stack spacing={2} sx={{ width: '100%' }}>
         <AddFormHeader formFields={formData} setLocation={setLocation} handleInputChange={handleInputChange} />
         <AddTypeOptions value={planType} handleChange={handlePlanChange} />
-        <AddFormLimit formFields={formData} handleInputChange={handleInputChange} />
         <StatusOptions value={status} onChange={handleStatus} />
         <ColorPicker value={planColor} handleChange={handleColorChange} label={'Associate color'} />
       </Stack>
