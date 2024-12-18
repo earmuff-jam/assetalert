@@ -6,7 +6,7 @@ import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Card, CardMedia, Paper, Stack, Typography } from '@mui/material';
+import { Card, CardMedia, Paper, Stack } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import SimpleModal from '@common/SimpleModal';
