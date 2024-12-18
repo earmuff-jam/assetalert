@@ -106,6 +106,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 	ms.name AS status_name,
 	ms.description AS status_description,
 	mp.color, 
+	mp.location[0] AS lon,
+	mp.location[1] AS lat,
 	mp.plan_type,
 	mp.created_at,
 	mp.created_by,
@@ -123,6 +125,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 	row := db.QueryRow(sqlStr, userID, maintenanceID)
 	selectedMaintenancePlan := model.MaintenancePlan{}
 
+	var lon, lat sql.NullFloat64
+
 	err = row.Scan(
 		&selectedMaintenancePlan.ID,
 		&selectedMaintenancePlan.Name,
@@ -130,6 +134,8 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 		&selectedMaintenancePlan.StatusName,
 		&selectedMaintenancePlan.StatusDescription,
 		&selectedMaintenancePlan.Color,
+		&lon,
+		&lat,
 		&selectedMaintenancePlan.PlanType,
 		&selectedMaintenancePlan.CreatedAt,
 		&selectedMaintenancePlan.CreatedBy,
@@ -139,6 +145,14 @@ func RetrieveMaintenancePlan(user string, userID string, maintenanceID string) (
 		&selectedMaintenancePlan.Updator,
 		pq.Array(&selectedMaintenancePlan.SharableGroups),
 	)
+
+	if lon.Valid && lat.Valid {
+		selectedMaintenancePlan.Location = model.Location{
+			Lon: lon.Float64,
+			Lat: lat.Float64,
+		}
+	}
+
 	if err != nil {
 		return model.MaintenancePlan{}, err
 	}

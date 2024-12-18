@@ -6,7 +6,7 @@ import { produce } from 'immer';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { Card, CardMedia } from '@mui/material';
+import { Box, Card, CardMedia, Paper, Stack, Typography } from '@mui/material';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import SimpleModal from '@common/SimpleModal';
@@ -16,6 +16,7 @@ import DetailsCardItemContent from '@common/ItemCard/ItemContent/DetailsCardItem
 import DetailsCardItemActions from '@common/ItemCard/ItemContent/DetailsCardItemActions';
 import { categoryItemDetailsActions } from '@features/CategoryItemDetails/categoryItemDetailsSlice';
 import { maintenancePlanItemActions } from '@features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
+import LocationPicker from '@common/Location/LocationPicker';
 
 dayjs.extend(relativeTime);
 
@@ -75,15 +76,22 @@ export default function DetailsCard({ selectedItem, selectedImage, categoryMode 
 
   return (
     <>
-      <Card>
-        <CardMedia sx={{ height: '10rem' }} image={selectedImage || '/blank_canvas.png'} />
-        <DetailsCardItemContent selectedItem={selectedItem} categoryMode={categoryMode} />
-        <DetailsCardItemActions
-          selectedItem={selectedItem}
-          handleOpenModal={handleOpenModal}
-          setEditImgMode={setEditImgMode}
-        />
-      </Card>
+      <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+        <Card sx={{ flexGrow: 1 }}>
+          <CardMedia sx={{ height: '10rem' }} image={selectedImage || '/blank_canvas.png'} />
+          <DetailsCardItemContent selectedItem={selectedItem} categoryMode={categoryMode} />
+          <DetailsCardItemActions
+            selectedItem={selectedItem}
+            handleOpenModal={handleOpenModal}
+            setEditImgMode={setEditImgMode}
+          />
+        </Card>
+        {selectedItem?.location?.lat ? (
+          <Paper elevation={2} sx={{ width: { xs: '100%', sm: '20rem' }, height: '10rem', flexGrow: 1 }}>
+            <LocationPicker location={selectedItem?.location} height="26vh" />
+          </Paper>
+        ) : null}
+      </Stack>
       {openModal && (
         <SimpleModal
           title="Add sharable groups"

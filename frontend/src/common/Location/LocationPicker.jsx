@@ -15,8 +15,9 @@ import { Box, Stack, Typography } from '@mui/material';
 const LocationPicker = ({
   location = { lon: 0, lat: 0 },
   onLocationChange,
-  disabled = false,
   subtitle,
+  height = '15vh',
+  disabled = false,
   editMode = false,
 }) => {
   const mapRef = useRef();
@@ -80,12 +81,20 @@ const LocationPicker = ({
   return (
     <Stack
       sx={{
-        height: { xs: '15vh' },
+        height: { xs: '100%', sm: height },
         width: { xs: '100%', sm: '100%' },
       }}
     >
       <Typography variant="caption">{subtitle}</Typography>
-      <Box sx={{ height: 'inherit', width: 'inherit', borderRadius: 2 }}>
+      <Box
+        sx={{
+          height: 'inherit',
+          width: 'inherit',
+          '& .ol-viewport': {
+            borderRadius: 2,
+          },
+        }}
+      >
         <Box sx={{ height: '100%', width: '100%' }} ref={mapRef} />
       </Box>
     </Stack>
@@ -110,7 +119,7 @@ const addMarkers = (map, vectorLayer, location, markerRef) => {
 
     const markerStyle = new Style({
       image: new Icon({
-        src: '/blueLocation.svg',
+        src: '/location.svg',
         scale: 0.4,
         anchor: [0.5, 0.5],
         anchorXUnits: 'fraction',

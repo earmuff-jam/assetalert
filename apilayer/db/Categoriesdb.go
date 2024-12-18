@@ -346,7 +346,9 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 	s.id,
 	s.name AS status_name,
 	s.description AS status_description,
-	c.color, 
+	c.color,
+	c.location[0] AS lon,
+	c.location[1] AS lat,
 	c.created_at,
 	c.created_by,
 	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator, 
@@ -364,6 +366,8 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 	row := db.QueryRow(sqlStr, userID, categoryID)
 	selectedCategory := model.Category{}
 
+	var lon, lat sql.NullFloat64
+
 	err = row.Scan(
 		&selectedCategory.ID,
 		&selectedCategory.Name,
@@ -372,6 +376,8 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 		&selectedCategory.StatusName,
 		&selectedCategory.StatusDescription,
 		&selectedCategory.Color,
+		&lon,
+		&lat,
 		&selectedCategory.CreatedAt,
 		&selectedCategory.CreatedBy,
 		&selectedCategory.Creator,
@@ -380,6 +386,14 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 		&selectedCategory.Updator,
 		pq.Array(&selectedCategory.SharableGroups),
 	)
+
+	if lon.Valid && lat.Valid {
+		selectedCategory.Location = model.Location{
+			Lon: lon.Float64,
+			Lat: lat.Float64,
+		}
+	}
+
 	if err != nil {
 		return model.Category{}, err
 	}
