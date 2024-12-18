@@ -14,8 +14,8 @@ import SharableGroups from '@common/SharableGroups';
 import ImagePicker from '@common/ImagePicker/ImagePicker';
 import DetailsCardItemContent from '@common/ItemCard/ItemContent/DetailsCardItemContent';
 import DetailsCardItemActions from '@common/ItemCard/ItemContent/DetailsCardItemActions';
-import { categoryItemDetailsActions } from '../../features/CategoryItemDetails/categoryItemDetailsSlice';
-import { maintenancePlanItemActions } from '../../features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
+import { categoryItemDetailsActions } from '@features/CategoryItemDetails/categoryItemDetailsSlice';
+import { maintenancePlanItemActions } from '@features/MaintenancePlanItemDetails/maintenancePlanItemSlice';
 
 dayjs.extend(relativeTime);
 

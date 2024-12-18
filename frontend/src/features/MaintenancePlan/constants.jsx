@@ -38,12 +38,6 @@ export const ITEM_TYPE_MAPPER = {
   },
 };
 
-const GENERIC_FORM_FIELDS = {
-  type: 'text',
-  variant: 'outlined',
-  size: 'small',
-};
-
 export const BLANK_MAINTENANCE_PLAN = {
   name: {
     id: 'name',
@@ -87,59 +81,5 @@ export const BLANK_MAINTENANCE_PLAN = {
         message: 'Plan description should be less than 500 characters',
       },
     ],
-  },
-  min_items_limit: {
-    label: 'Min items',
-    placeholder: 'Mininum count of items',
-    value: '',
-    name: 'min_items_limit',
-    fullWidth: true,
-    errorMsg: '',
-    required: true,
-    validators: [
-      {
-        validate: (value) => {
-          const parsedValue = parseInt(value, 10);
-          return isNaN(parsedValue) || parsedValue < 0;
-        },
-        message: 'Minimum threshold limit must be a positive integer',
-      },
-      {
-        validate: (value) => !Number.isInteger(parseFloat(value)),
-        message: 'Minimum threshold must be a number',
-      },
-      {
-        validate: (value) => parseFloat(value) >= Number.MAX_SAFE_INTEGER,
-        message: 'Minimum threshold number is too high',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS,
-  },
-  max_items_limit: {
-    label: 'Max items',
-    placeholder: 'Maximum count of items',
-    value: '',
-    name: 'max_items_limit',
-    errorMsg: '',
-    required: true,
-    fullWidth: true,
-    validators: [
-      {
-        validate: (value) => {
-          const parsedValue = parseInt(value, 10);
-          return isNaN(parsedValue) || parsedValue < 0;
-        },
-        message: 'Maximum threshold limit must be a positive integer',
-      },
-      {
-        validate: (value) => !Number.isInteger(parseFloat(value)),
-        message: 'Maximum threshold must be a number',
-      },
-      {
-        validate: (value) => parseFloat(value) >= Number.MAX_SAFE_INTEGER,
-        message: 'Maximum threshold number is too high',
-      },
-    ],
-    ...GENERIC_FORM_FIELDS,
   },
 };
