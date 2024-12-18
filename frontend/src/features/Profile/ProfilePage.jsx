@@ -12,7 +12,7 @@ import ProfileForm from '@features/Profile/ProfileForm/ProfileForm';
 const ProfilePage = () => {
   const theme = useTheme();
   const onlySmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const { profileDetails: data = {}, loading } = useSelector((state) => state.profile);
+  const { profileDetails: data = {}, profileStats = {}, loading } = useSelector((state) => state.profile);
 
   const [editMode, setEditMode] = useState(false);
 
@@ -23,7 +23,7 @@ const ProfilePage = () => {
         <UserDetails data={data} />
       </Stack>
       <Paper sx={{ padding: '1rem' }}>
-        <UserStatus data={data} onlySmallScreen={onlySmallScreen} />
+        <UserStatus profileStats={profileStats} onlySmallScreen={onlySmallScreen} />
       </Paper>
       <Paper sx={{ padding: '1rem' }}>
         <AppearanceSettings loading={loading} profileDetails={data} />

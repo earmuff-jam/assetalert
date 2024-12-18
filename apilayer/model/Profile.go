@@ -40,6 +40,16 @@ func (p *Profile) Validate() error {
 	return nil
 }
 
+// ProfileStats ...
+// swagger:model ProfileStats
+//
+// ProfileStats object that returns the count of assets, categories and maintenance plans
+type ProfileStats struct {
+	TotalCategories       int `json:"totalCategories"`
+	TotalMaintenancePlans int `json:"totalMaintenancePlans"`
+	TotalAssets           int `json:"totalAssets"`
+}
+
 // Location ...
 // swagger:model Location
 //

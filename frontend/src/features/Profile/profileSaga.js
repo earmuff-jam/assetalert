@@ -25,6 +25,16 @@ export function* fetchExistingUserDetails() {
   }
 }
 
+export function* fetchProfileStats() {
+  try {
+    const USER_ID = localStorage.getItem('userID');
+    const response = yield call(instance.get, `${BASEURL}/profile/${USER_ID}/stats`);
+    yield put(profileActions.getProfileStatsSuccess(response.data));
+  } catch (e) {
+    yield put(profileActions.getProfileStatsFailure(e));
+  }
+}
+
 export function* fetchRecentActivities() {
   try {
     const USER_ID = localStorage.getItem('userID');
@@ -141,6 +151,10 @@ export function* watchFetchExistingUserDetails() {
   yield takeLatest(`profile/getProfileDetails`, fetchExistingUserDetails);
 }
 
+export function* watchFetchProfileStats() {
+  yield takeLatest(`profile/getProfileStats`, fetchProfileStats);
+}
+
 export function* watchFetchRecentActivities() {
   yield takeLatest(`profile/getRecentActivities`, fetchRecentActivities);
 }
@@ -176,6 +190,7 @@ export function* watchRemoveFavItem() {
 export default [
   watchFetchAvatar,
   watchFetchProfileList,
+  watchFetchProfileStats,
   watchFetchFavItems,
   watchSaveFavItem,
   watchRemoveFavItem,
