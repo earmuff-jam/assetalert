@@ -14,8 +14,6 @@ type MaintenancePlan struct {
 	Status            string    `json:"maintenance_status"`
 	StatusName        string    `json:"maintenance_status_name"`
 	StatusDescription string    `json:"maintenance_status_description"`
-	MinItemsLimit     int       `json:"min_items_limit"`
-	MaxItemsLimit     int       `json:"max_items_limit"`
 	PlanType          string    `json:"plan_type"`
 	PlanDue           time.Time `json:"plan_due"`
 	Location          Location  `json:"location,omitempty"`

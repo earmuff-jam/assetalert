@@ -143,8 +143,6 @@ func populateFakeCategories(user string, limit int, creatorID string) {
 		draftCategory.Name = selectedCategory.Name
 		draftCategory.Description = selectedCategory.Description
 		draftCategory.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
-		draftCategory.MinItemsLimit = gofakeit.Number(1, 10)
-		draftCategory.MaxItemsLimit = gofakeit.Number(10, 100)
 		draftCategory.Status = "draft"
 		draftCategory.CreatedAt = startDate
 		draftCategory.UpdatedAt = startDate
@@ -217,8 +215,6 @@ func populateFakeMaintenancePlans(user string, limit int, creatorID string) {
 		draftMaintenancePlan.Name = selectedCategory.Name
 		draftMaintenancePlan.Description = selectedCategory.Description
 		draftMaintenancePlan.Color = gofakeit.RandString([]string{"#ffcc99", "#ff00ff", "#bb5588"})
-		draftMaintenancePlan.MinItemsLimit = gofakeit.Number(1, 10)
-		draftMaintenancePlan.MaxItemsLimit = gofakeit.Number(10, 100)
 		draftMaintenancePlan.Status = "draft"
 		draftMaintenancePlan.PlanType = gofakeit.RandString([]string{"annual", "weekly", "daily"})
 		draftMaintenancePlan.PlanDue = startDate

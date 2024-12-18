@@ -27,8 +27,6 @@ func RetrieveAllCategories(user string, userID string, limit int) ([]model.Categ
 	s.name AS status_name,
 	s.description AS status_description,
 	c.color, 
-	c.min_items_limit, 
-	c.max_items_limit,
 	c.location[0] AS lon,
 	c.location[1] AS lat,
 	c.created_at,
@@ -61,7 +59,7 @@ func RetrieveAllCategories(user string, userID string, limit int) ([]model.Categ
 	for rows.Next() {
 		var ec model.Category
 		if err := rows.Scan(&categoryID, &ec.Name, &ec.Description, &ec.Status, &ec.StatusName, &ec.StatusDescription,
-			&ec.Color, &ec.MinItemsLimit, &ec.MaxItemsLimit, &lon, &lat, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
+			&ec.Color, &lon, &lat, &ec.CreatedAt, &ec.CreatedBy, &ec.Creator, &ec.UpdatedAt, &ec.UpdatedBy, &ec.Updator, &sharableGroups); err != nil {
 			return nil, err
 		}
 
@@ -185,10 +183,8 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 	}
 
 	sqlStr := `
-	INSERT INTO community.category(
-		name, description, color, status, min_items_limit, max_items_limit, location,
-		created_by, created_at, updated_by, updated_at, sharable_groups
-	) VALUES($1, $2, $3, $4, $5, $6, POINT($7, $8), $9, $10, $11, $12, $13)
+	INSERT INTO community.category(name, description, color, status, location, created_by, created_at, updated_by, updated_at, sharable_groups
+	) VALUES($1, $2, $3, $4, POINT($5, $6), $7, $8, $9, $10, $11)
 	RETURNING id;`
 
 	row := tx.QueryRow(
@@ -197,8 +193,6 @@ func CreateCategory(user string, draftCategory *model.Category) (*model.Category
 		draftCategory.Description,
 		draftCategory.Color,
 		selectedStatusDetails.ID,
-		draftCategory.MinItemsLimit,
-		draftCategory.MaxItemsLimit,
 		draftCategory.Location.Lon,
 		draftCategory.Location.Lat,
 		draftCategory.CreatedBy,
@@ -257,12 +251,10 @@ func UpdateCategory(user string, draftCategory *model.Category) (*model.Category
     description = $3,
 	color = $4,
 	status = $5,
-	min_items_limit = $6,
-	max_items_limit = $7,
-	location = POINT($8, $9),
-    updated_by = $10,
-    updated_at = $11,
-	sharable_groups = $12
+	location = POINT($6, $7),
+    updated_by = $8,
+    updated_at = $9,
+	sharable_groups = $10
     WHERE id = $1
     RETURNING id;`
 
@@ -284,8 +276,6 @@ func UpdateCategory(user string, draftCategory *model.Category) (*model.Category
 		draftCategory.Description,
 		draftCategory.Color,
 		selectedStatusDetails.ID,
-		draftCategory.MinItemsLimit,
-		draftCategory.MaxItemsLimit,
 		draftCategory.Location.Lon,
 		draftCategory.Location.Lat,
 		parsedUpdatorID,
@@ -357,8 +347,6 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 	s.name AS status_name,
 	s.description AS status_description,
 	c.color, 
-	c.min_items_limit, 
-	c.max_items_limit, 
 	c.created_at,
 	c.created_by,
 	COALESCE(cp.full_name, cp.username, cp.email_address) AS creator, 
@@ -384,8 +372,6 @@ func retrieveCategoryByID(user string, userID string, categoryID string) (model.
 		&selectedCategory.StatusName,
 		&selectedCategory.StatusDescription,
 		&selectedCategory.Color,
-		&selectedCategory.MinItemsLimit,
-		&selectedCategory.MaxItemsLimit,
 		&selectedCategory.CreatedAt,
 		&selectedCategory.CreatedBy,
 		&selectedCategory.Creator,
