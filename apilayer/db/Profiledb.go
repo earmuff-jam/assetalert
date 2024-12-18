@@ -142,6 +142,43 @@ func FetchUserProfile(user string, userID string) (*model.Profile, error) {
 	return &draftProfile, nil
 }
 
+// FetchUserStats ...
+func FetchUserStats(user string, userID string) (model.ProfileStats, error) {
+	db, err := SetupDB(user)
+	if err != nil {
+		return model.ProfileStats{}, err
+	}
+	defer db.Close()
+
+	sqlStr := `SELECT 
+		(SELECT count(*) 
+				FROM community.category c 
+					WHERE c.created_by = $1
+			) AS total_categories,
+    	(SELECT count(*) 
+				FROM community.maintenance_plan mp 
+					WHERE mp.created_by = $1
+			) AS total_maintenance_plans,
+    	(SELECT count(*) 
+				FROM community.inventory i 
+					WHERE i.created_by = $1
+			) AS total_assets;`
+
+	row := db.QueryRow(sqlStr, userID)
+	profileStats := model.ProfileStats{}
+
+	err = row.Scan(
+		&profileStats.TotalAssets,
+		&profileStats.TotalCategories,
+		&profileStats.TotalMaintenancePlans,
+	)
+	if err != nil {
+		return model.ProfileStats{}, err
+	}
+
+	return profileStats, nil
+}
+
 // UpdateUserProfile ...
 func UpdateUserProfile(user string, userID string, draftProfile model.Profile) (*model.Profile, error) {
 	db, err := SetupDB(user)

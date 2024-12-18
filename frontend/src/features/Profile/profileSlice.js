@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: '',
   profiles: [],
+  profileStats: {},
   profileDetails: {},
   avatar: '',
   recentActivities: [],
@@ -29,6 +30,20 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = '';
       state.profiles = [];
+    },
+    getProfileStats: (state) => {
+      state.error = '';
+      state.profileStats = {};
+    },
+    getProfileStatsSuccess: (state, action) => {
+      state.profileStats = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    getProfileStatsFailure: (state) => {
+      state.loading = false;
+      state.error = '';
+      state.profileStats = {};
     },
     getRecentActivities: (state) => {
       state.loading = true;

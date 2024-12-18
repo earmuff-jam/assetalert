@@ -78,6 +78,48 @@ func GetProfile(rw http.ResponseWriter, r *http.Request, user string) {
 	json.NewEncoder(rw).Encode(resp)
 }
 
+// GetProfileStats ...
+// swagger:route GET /api/v1/profile/{id}/stats Profiles getProfileStats
+//
+// # Retrieves the user stats like count of categories, plans and assets
+//
+// Parameters:
+//   - +name: id
+//     in: path
+//     description: The userID of the selected user
+//     required: true
+//     type: string
+//
+// Responses:
+// 200: ProfileStats
+// 400: MessageResponse
+// 404: MessageResponse
+// 500: MessageResponse
+func GetProfileStats(rw http.ResponseWriter, r *http.Request, user string) {
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if len(userID) <= 0 {
+		log.Printf("Unable to retrieve profile with empty id")
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(nil)
+		return
+	}
+
+	resp, err := db.FetchUserStats(user, userID)
+	if err != nil {
+		log.Printf("Unable to retrieve profile details. error: +%v", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(err)
+		return
+
+	}
+	rw.Header().Add("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode(resp)
+}
+
 // GetFavouriteItems ...
 // swagger:route GET /api/v1/profile/{id}/fav Profiles getFavouriteItems
 //
