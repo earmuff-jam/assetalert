@@ -37,7 +37,7 @@ export default function OverviewContentAssetBreakdown({ assets = [], categories 
         </OverviewCardWrapper>
         <OverviewCardWrapper>
           <OverviewCardItem
-            label="are categorized"
+            label="are registered"
             icon={<WarningRounded />}
             color="info.main"
             dataLabel={assets?.length || 0}
