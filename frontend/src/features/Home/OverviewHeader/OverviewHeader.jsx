@@ -20,7 +20,7 @@ export default function OverviewHeader({
             label="assigned categories"
             icon={<CategoryRounded />}
             color="info.main"
-            tooltipTitle={assetsUnderCategories.flatMap((v) => v.items).join(', ')}
+            tooltipTitle={assetsUnderCategories.map((v) => v.name).join(', ')}
             dataLabel={assetsUnderCategories.flatMap((v) => v.items).length}
           />
         </OverviewCardWrapper>
@@ -29,7 +29,7 @@ export default function OverviewHeader({
             label="assigned maintenance plan"
             icon={<EngineeringRounded />}
             color="info.main"
-            tooltipTitle={assetsUnderMaintenancePlans.flatMap((v) => v.items).join(', ')}
+            tooltipTitle={assetsUnderMaintenancePlans.map((v) => v.name).join(', ')}
             dataLabel={assetsUnderMaintenancePlans.flatMap((v) => v.items).length}
           />
         </OverviewCardWrapper>
