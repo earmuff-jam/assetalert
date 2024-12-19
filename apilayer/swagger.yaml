@@ -63,14 +63,14 @@ definitions:
             id:
                 type: string
                 x-go-name: ID
-            max_items_limit:
-                format: int64
-                type: integer
-                x-go-name: MaxItemsLimit
-            min_items_limit:
-                format: int64
-                type: integer
-                x-go-name: MinItemsLimit
+            image:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+                x-go-name: Image
+            location:
+                $ref: '#/definitions/Location'
             name:
                 type: string
                 x-go-name: Name
@@ -144,6 +144,11 @@ definitions:
                     type: string
                 type: array
                 x-go-name: AssetIDs
+            collaborators:
+                items:
+                    type: string
+                type: array
+                x-go-name: Collaborators
             id:
                 type: string
                 x-go-name: ID
@@ -492,6 +497,12 @@ definitions:
             id:
                 type: string
                 x-go-name: ID
+            image:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+                x-go-name: Image
             is_returnable:
                 type: boolean
                 x-go-name: IsReturnable
@@ -552,7 +563,7 @@ definitions:
             updated_by:
                 type: string
                 x-go-name: UpdatedBy
-            updater_name:
+            updator:
                 type: string
                 x-go-name: UpdaterName
         title: Inventory ...
@@ -685,6 +696,11 @@ definitions:
                     type: string
                 type: array
                 x-go-name: AssetIDs
+            collaborators:
+                items:
+                    type: string
+                type: array
+                x-go-name: Collaborators
             id:
                 type: string
                 x-go-name: ID
@@ -769,6 +785,12 @@ definitions:
             id:
                 type: string
                 x-go-name: ID
+            image:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+                x-go-name: Image
             location:
                 $ref: '#/definitions/Location'
             maintenance_status:
@@ -780,17 +802,13 @@ definitions:
             maintenance_status_name:
                 type: string
                 x-go-name: StatusName
-            max_items_limit:
-                format: int64
-                type: integer
-                x-go-name: MaxItemsLimit
-            min_items_limit:
-                format: int64
-                type: integer
-                x-go-name: MinItemsLimit
             name:
                 type: string
                 x-go-name: Name
+            plan_due:
+                format: date-time
+                type: string
+                x-go-name: PlanDue
             plan_type:
                 type: string
                 x-go-name: PlanType
@@ -973,6 +991,23 @@ definitions:
         title: Profile ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
+    ProfileStats:
+        properties:
+            totalAssets:
+                format: int64
+                type: integer
+                x-go-name: TotalAssets
+            totalCategories:
+                format: int64
+                type: integer
+                x-go-name: TotalCategories
+            totalMaintenancePlans:
+                format: int64
+                type: integer
+                x-go-name: TotalMaintenancePlans
+        title: ProfileStats ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
     ProjectType:
         properties:
             id:
@@ -1059,6 +1094,51 @@ definitions:
                 type: string
                 x-go-name: Updator
         title: RecentActivity ...
+        type: object
+        x-go-package: github.com/mohit2530/communityCare/model
+    Report:
+        properties:
+            cost_category_items:
+                format: double
+                type: number
+                x-go-name: TotalCategoryItemsCost
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            created_by:
+                type: string
+                x-go-name: CreatedBy
+            creator_name:
+                type: string
+                x-go-name: CreatorName
+            id:
+                type: string
+                x-go-name: ID
+            selected_time_range:
+                format: date-time
+                type: string
+                x-go-name: SelectedTimeRange
+            sharable_groups:
+                items:
+                    type: string
+                type: array
+                x-go-name: SharableGroups
+            total_valuation:
+                format: double
+                type: number
+                x-go-name: ItemValuation
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+            updated_by:
+                type: string
+                x-go-name: UpdatedBy
+            updater_name:
+                type: string
+                x-go-name: UpdaterName
+        title: Report ...
         type: object
         x-go-package: github.com/mohit2530/communityCare/model
     ReportEvent:
@@ -1771,6 +1851,113 @@ paths:
             summary: Updates an existing note in the database
             tags:
                 - Notes
+    /api/reports/{id}:
+        get:
+            operationId: getReports
+            parameters:
+                - description: The userID of the selected user
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The start date for the result to begin from
+                  in: query
+                  name: since
+                  required: true
+                  type: string
+                - description: The boolean flag to determine if query response should consider overdue items or not.
+                  in: query
+                  name: includeOverdue
+                  required: true
+                  type: boolean
+            responses:
+                "200":
+                    description: Report
+                    schema:
+                        items:
+                            $ref: '#/definitions/Report'
+                        type: array
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: '# Retrieves the reports on the assets created by the selected user based on the query parameters.'
+            tags:
+                - Reports
+    /api/v1/{id}/fetchImage:
+        get:
+            operationId: FetchImage
+            parameters:
+                - description: The id of the selected image
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Retrives the current image that matches the passed in ID. If the image does not exist, the application will still return a HTTP ok response to ensure that the UI will not fail due to missing image
+            tags:
+                - Images
+    /api/v1/{id}/upload:
+        post:
+            operationId: UploadImage
+            parameters:
+                - description: The unique ID identifying the selected image object
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                - description: The full file details of the selected image object
+                  in: body
+                  name: FileHeader
+                  required: true
+                  schema:
+                    description: The full file details of the selected image object
+                    format: byte
+                    type: string
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Uploads an image with the selected id as filename. Used to persist user profile pictures, category or maintenance plan images
+            tags:
+                - Images
     /api/v1/categories:
         get:
             operationId: getAllCategories
@@ -1983,13 +2170,13 @@ paths:
         post:
             operationId: addItemsInMaintenancePlan
             parameters:
-                - description: The object containing the array of assets to update with the userID
+                - description: The object containing the array of assets to be removed from the association for maintenance plans
                   in: body
                   name: MaintenanceItemRequest
                   required: true
                   schema:
                     $ref: '#/definitions/MaintenanceItemRequest'
-                    description: The object containing the array of assets to update with the userID
+                    description: The object containing the array of assets to be removed from the association for maintenance plans
                     type: object
             responses:
                 "200":
@@ -2013,6 +2200,38 @@ paths:
             summary: Add selected items in a specific maintenance plan
             tags:
                 - MaintenancePlans
+    /api/v1/category/remove/items:
+        post:
+            operationId: RemoveAssociationFromCategory
+            parameters:
+                - description: The object containing the array of assets to update with the userID
+                  in: body
+                  name: CategoryItemRequest
+                  required: true
+                  schema:
+                    $ref: '#/definitions/CategoryItemRequest'
+                    description: The object containing the array of assets to update with the userID
+                    type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Removes association between the category and asset item
+            tags:
+                - Categories
     /api/v1/isValidEmail:
         post:
             operationId: IsValidUserEmail
@@ -2254,6 +2473,38 @@ paths:
             summary: Update maintenance plan function updates the selected maintenance plan with new values
             tags:
                 - MaintenancePlans
+    /api/v1/plan/remove/items:
+        post:
+            operationId: RemoveAssociationFromMaintenancePlan
+            parameters:
+                - description: The object containing the array of assets to be removed
+                  in: body
+                  name: MaintenanceItemRequest
+                  required: true
+                  schema:
+                    $ref: '#/definitions/MaintenanceItemRequest'
+                    description: The object containing the array of assets to be removed
+                    type: object
+            responses:
+                "200":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "400":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "404":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+                "500":
+                    description: MessageResponse
+                    schema:
+                        $ref: '#/definitions/MessageResponse'
+            summary: Removes association between the maintenance plan and asset item
+            tags:
+                - MaintenancePlans
     /api/v1/plans/items:
         get:
             operationId: getAllMaintenancePlanItems
@@ -2478,6 +2729,11 @@ paths:
                   name: id
                   required: true
                   type: string
+                - description: The timestamp with time zone until the data should be retrieved for. Returns all inventories if not passed in.
+                  format: date-time
+                  in: query
+                  name: until
+                  type: string
             responses:
                 "200":
                     description: Inventory
@@ -2576,28 +2832,20 @@ paths:
             summary: '# Retrieves the selected inventory that matches the passed in ID created by the user.'
             tags:
                 - Assets
-    /api/v1/profile/{id}/updateAvatar:
-        post:
-            operationId: updateProfileAvatar
+    /api/v1/profile/{id}/stats:
+        get:
+            operationId: getProfileStats
             parameters:
                 - description: The userID of the selected user
                   in: path
                   name: id
                   required: true
                   type: string
-                - description: The full file details of the avatar
-                  in: body
-                  name: FileHeader
-                  required: true
-                  schema:
-                    description: The full file details of the avatar
-                    format: byte
-                    type: string
             responses:
                 "200":
-                    description: Profile
+                    description: ProfileStats
                     schema:
-                        $ref: '#/definitions/Profile'
+                        $ref: '#/definitions/ProfileStats'
                 "400":
                     description: MessageResponse
                     schema:
@@ -2610,7 +2858,7 @@ paths:
                     description: MessageResponse
                     schema:
                         $ref: '#/definitions/MessageResponse'
-            summary: Updates the current user avatar for the selected user. Does not meddle with authentication
+            summary: Retrieves the user stats like count of categories, plans and assets
             tags:
                 - Profiles
     /api/v1/profile/list:
@@ -2758,157 +3006,6 @@ paths:
             summary: '# Sign up users into the database system.'
             tags:
                 - Authentication
-    /api/v1/status/list:
-        get:
-            operationId: getStatusList
-            parameters:
-                - description: The userID of the selected user
-                  in: query
-                  name: id
-                  required: true
-                  type: string
-                - description: The type of status option. Current options include "category", "notes", "maintenance"
-                  in: query
-                  name: type
-                  required: true
-                  type: string
-            responses:
-                "200":
-                    description: StatusList
-                    schema:
-                        items:
-                            $ref: '#/definitions/StatusList'
-                        type: array
-                "400":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "404":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "500":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-            summary: Retrieves the list of statuses that the user can associate with any event
-            tags:
-                - StatusList
-    /filestat/create/{id}/{type}/{itemID}:
-        post:
-            operationId: createFile
-            parameters:
-                - description: The userID of the selected user
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                - description: The type of item the image must be associated with.
-                  enum:
-                    - '[C'
-                    - A
-                    - M
-                    - P]
-                  in: path
-                  name: type
-                  required: true
-                  type: string
-                - description: The itemID of the associated element the image is uploaded against
-                  in: path
-                  name: itemID
-                  required: true
-                  type: string
-                - description: The contents of the file limited to 2mb
-                  in: body
-                  name: File
-                  required: true
-                  schema:
-                    description: The contents of the file limited to 2mb
-                    format: binary
-                    type: string
-            responses:
-                "200":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "400":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "404":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "500":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-            summary: '# Adds the passed in image from the request body to the storage folder. The folder is created if it does not exists. If the folder exists, then the image is added to the file.'
-            tags:
-                - Files
-    /filestat/list/{id}:
-        get:
-            operationId: getAllFiles
-            parameters:
-                - description: The userID of the selected user
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-            responses:
-                "200":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "400":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "404":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "500":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-            summary: Retrieves the list of files associated with the selected user
-            tags:
-                - Files
-    /filestat/view/{id}/{filename}:
-        get:
-            operationId: serveFile
-            parameters:
-                - description: The userID of the selected user
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                - description: The unique identifier for the selected file
-                  in: path
-                  name: filename
-                  required: true
-                  type: string
-            responses:
-                "200":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "400":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "404":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-                "500":
-                    description: MessageResponse
-                    schema:
-                        $ref: '#/definitions/MessageResponse'
-            summary: Retrieves the selected file associated with the user in binary form
-            tags:
-                - Files
 produces:
     - application/json
 swagger: "2.0"

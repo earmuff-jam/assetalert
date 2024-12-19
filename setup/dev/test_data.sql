@@ -29,18 +29,18 @@ VALUES (
 );
 
 -- ADD CATGORIES SQL TEST DATA ---
-INSERT INTO community.category (name, description, status, color, min_items_limit, max_items_limit, created_by, updated_by, sharable_groups)
-VALUES ('Groceries', 'used for grocery related items', (SELECT id FROM community.statuses s LIMIT 1), '#d20a0a', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Utilities', 'store boxes and utility related stuffs', (SELECT id FROM community.statuses s LIMIT 1), '#e7d3da', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
-       ('Entertainment', 'store gaming consoles, tvs, and / or any audio video equipment', (SELECT id FROM community.statuses s LIMIT 1), '#963256', 1, 100, (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
+INSERT INTO community.category (name, description, status, color, created_by, updated_by, sharable_groups)
+VALUES ('Groceries', 'used for grocery related items', (SELECT id FROM community.statuses s LIMIT 1), '#d20a0a',  (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+       ('Utilities', 'store boxes and utility related stuffs', (SELECT id FROM community.statuses s LIMIT 1), '#e7d3da', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]),
+       ('Entertainment', 'store gaming consoles, tvs, and / or any audio video equipment', (SELECT id FROM community.statuses s LIMIT 1), '#963256', (SELECT id FROM community.profiles p LIMIT 1), (SELECT id FROM community.profiles p LIMIT 1), ARRAY [(SELECT id FROM community.profiles p LIMIT 1)::UUID]);
 
 -- ADD MAINTENANCE PLAN SQL TEST DATA --
 INSERT INTO community.maintenance_plan 
-(name, description, status, color, min_items_limit, max_items_limit, plan_type, plan_due, location, created_by, updated_by, sharable_groups)
+(name, description, status, color, plan_type, plan_due, location, created_by, updated_by, sharable_groups)
 VALUES 
 ('Daily maintenance plan', 'used to validate daily items', 
  (SELECT id FROM community.statuses mps LIMIT 1), 
- '#d20a0a', 1, 100, 'annual', 
+ '#d20a0a', 'annual', 
  now() + interval '1 year', 
  '(-119.170898, 34.196411)', 
  (SELECT id FROM community.profiles p LIMIT 1), 
@@ -49,7 +49,7 @@ VALUES
 
 ('Weekly maintenance plan', 'used for weekly maintenance', 
  (SELECT id FROM community.statuses mps LIMIT 1), 
- '#28b391', 1, 100, 'weekly', 
+ '#28b391', 'weekly', 
  now() + interval '7 days', 
  '(-117.182541, 34.055569)', 
  (SELECT id FROM community.profiles p LIMIT 1), 
