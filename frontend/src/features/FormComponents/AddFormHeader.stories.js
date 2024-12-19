@@ -50,52 +50,6 @@ AddFormHeaderDefault.args = {
         },
       ],
     },
-    min_items_limit: {
-      label: 'Min items',
-      placeholder: 'Mininum count of items',
-      value: '',
-      size: 'small',
-      name: 'min_items_limit',
-      fullWidth: true,
-      errorMsg: '',
-      required: true,
-      validators: [
-        {
-          message: 'Minimum threshold limit must be a positive integer',
-        },
-        {
-          message: 'Minimum threshold must be a number',
-        },
-        {
-          message: 'Minimum threshold number is too high',
-        },
-      ],
-      type: 'text',
-      variant: 'outlined',
-    },
-    max_items_limit: {
-      label: 'Max items',
-      placeholder: 'Maximum count of items',
-      value: '',
-      size: 'small',
-      name: 'max_items_limit',
-      errorMsg: '',
-      required: true,
-      fullWidth: true,
-      validators: [
-        {
-          message: 'Maximum threshold limit must be a positive integer',
-        },
-        {
-          message: 'Maximum threshold must be a number',
-        },
-        {
-          message: 'Maximum threshold number is too high',
-        },
-      ],
-      type: 'text',
-      variant: 'outlined',
-    },
   },
   handleInputChange: () => {},
   setLocation: () => {},

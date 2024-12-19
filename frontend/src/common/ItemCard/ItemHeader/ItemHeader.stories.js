@@ -22,8 +22,6 @@ ItemHeaderDefault.args = {
     maintenance_status: '',
     maintenance_status_name: 'draft',
     maintenance_status_description: 'items under this bucket are in draft state',
-    min_items_limit: 1,
-    max_items_limit: 100,
     plan_type: 'annual',
     plan_due: '0001-01-01T00:00:00Z',
     location: {
@@ -52,8 +50,6 @@ ItemHeaderCategoryHeader.args = {
     maintenance_status: '',
     maintenance_status_name: 'draft',
     maintenance_status_description: 'items under this bucket are in draft state',
-    min_items_limit: 1,
-    max_items_limit: 100,
     plan_type: 'annual',
     plan_due: '0001-01-01T00:00:00Z',
     location: {

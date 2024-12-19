@@ -295,8 +295,6 @@ func Test_CreateCategory(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "general",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
 		SharableGroups: []string{prevUser.ID.String()},
@@ -328,8 +326,6 @@ func Test_CreateCategory(t *testing.T) {
 	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
 	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedCategory.StatusName, "general")
-	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
-	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
 
 	// cleanup
 	db.RemoveCategory(config.CTO_USER, selectedCategory.ID)
@@ -383,8 +379,6 @@ func Test_AddItemsInCategory(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "general",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
 		SharableGroups: []string{prevUser.ID.String()},
@@ -416,8 +410,6 @@ func Test_AddItemsInCategory(t *testing.T) {
 	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
 	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedCategory.StatusName, "general")
-	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
-	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
 	assert.Equal(t, len(selectedCategory.SharableGroups), 1)
 	assert.Equal(t, selectedCategory.SharableGroups[0], prevUser.ID.String())
 
@@ -535,8 +527,6 @@ func Test_RemoveAssociationFromCategory(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "general",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
 		SharableGroups: []string{prevUser.ID.String()},
@@ -568,8 +558,6 @@ func Test_RemoveAssociationFromCategory(t *testing.T) {
 	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
 	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedCategory.StatusName, "general")
-	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
-	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
 	assert.Equal(t, len(selectedCategory.SharableGroups), 1)
 	assert.Equal(t, selectedCategory.SharableGroups[0], prevUser.ID.String())
 

@@ -200,8 +200,6 @@ func Test_CreateMaintenancePlan(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "completed",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		PlanType:       "annual",
 		PlanDue:        time.Now().AddDate(1, 0, 0),
 		CreatedBy:      prevUser.ID.String(),
@@ -235,8 +233,6 @@ func Test_CreateMaintenancePlan(t *testing.T) {
 	assert.Equal(t, selectedMaintenancePlan.Name, "Kitty litter box")
 	assert.Equal(t, selectedMaintenancePlan.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedMaintenancePlan.StatusName, "completed")
-	assert.Equal(t, selectedMaintenancePlan.MaxItemsLimit, 120)
-	assert.Equal(t, selectedMaintenancePlan.MinItemsLimit, 1)
 	assert.Equal(t, selectedMaintenancePlan.PlanType, "annual")
 
 	// cleanup
@@ -505,8 +501,6 @@ func Test_AddItemsInMaintenancePlan(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "completed",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		PlanType:       "annual",
 		PlanDue:        time.Now().AddDate(1, 0, 0),
 		CreatedBy:      prevUser.ID.String(),
@@ -540,8 +534,6 @@ func Test_AddItemsInMaintenancePlan(t *testing.T) {
 	assert.Equal(t, selectedMaintenancePlan.Name, "Kitty litter box")
 	assert.Equal(t, selectedMaintenancePlan.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedMaintenancePlan.StatusName, "completed")
-	assert.Equal(t, selectedMaintenancePlan.MaxItemsLimit, 120)
-	assert.Equal(t, selectedMaintenancePlan.MinItemsLimit, 1)
 	assert.Equal(t, selectedMaintenancePlan.PlanType, "annual")
 	assert.Equal(t, len(selectedMaintenancePlan.SharableGroups), 1)
 	assert.Equal(t, selectedMaintenancePlan.SharableGroups[0], prevUser.ID.String())
@@ -660,8 +652,6 @@ func Test_RemoveAssociationFromMaintenancePlan(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "completed",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		PlanType:       "annual",
 		PlanDue:        time.Now().AddDate(1, 0, 0),
 		CreatedBy:      prevUser.ID.String(),
@@ -695,8 +685,6 @@ func Test_RemoveAssociationFromMaintenancePlan(t *testing.T) {
 	assert.Equal(t, selectedMaintenancePlan.Name, "Kitty litter box")
 	assert.Equal(t, selectedMaintenancePlan.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedMaintenancePlan.StatusName, "completed")
-	assert.Equal(t, selectedMaintenancePlan.MaxItemsLimit, 120)
-	assert.Equal(t, selectedMaintenancePlan.MinItemsLimit, 1)
 	assert.Equal(t, selectedMaintenancePlan.PlanType, "annual")
 	assert.Equal(t, len(selectedMaintenancePlan.SharableGroups), 1)
 	assert.Equal(t, selectedMaintenancePlan.SharableGroups[0], prevUser.ID.String())

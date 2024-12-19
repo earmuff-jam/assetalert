@@ -309,8 +309,6 @@ func Test_SaveFovouriteItems_Category(t *testing.T) {
 		Description:    "Palette storage of kitty litter",
 		Color:          "#f7f7f7",
 		Status:         "general",
-		MaxItemsLimit:  120,
-		MinItemsLimit:  1,
 		CreatedBy:      prevUser.ID.String(),
 		UpdatedBy:      prevUser.ID.String(),
 		SharableGroups: []string{prevUser.ID.String()},
@@ -342,8 +340,6 @@ func Test_SaveFovouriteItems_Category(t *testing.T) {
 	assert.Equal(t, selectedCategory.Name, "Kitty litter box")
 	assert.Equal(t, selectedCategory.Description, "Palette storage of kitty litter")
 	assert.Equal(t, selectedCategory.StatusName, "general")
-	assert.Equal(t, selectedCategory.MaxItemsLimit, 120)
-	assert.Equal(t, selectedCategory.MinItemsLimit, 1)
 
 	draftFavouriteItems := model.FavouriteItem{
 		CategoryID: selectedCategory.ID,
