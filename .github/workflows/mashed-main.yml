@@ -25,7 +25,7 @@ jobs:
 
       - name: Build and Run Docker Container
         run: |
-          docker build -t custom-postgres:latest .
+          docker build -t custom-postgres:latest -f ./server/Dockerfile .
           docker run -d -p 5432:5432 --name ci-postgres custom-postgres:latest
           sleep 30
 
