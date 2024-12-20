@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Custom Postgres Container
         run: |
-          docker run -d -p 5432:5432 --name ci-postgres custom-postgres:latest
+          docker run -d -p 5432:5432 --name ci-postgres -e POSTGRES_PASSWORD=password custom-postgres:latest
           docker ps
           docker logs ci-postgres
           echo "Waiting for Postgres to be ready..."
