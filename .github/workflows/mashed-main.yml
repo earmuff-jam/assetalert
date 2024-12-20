@@ -11,17 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:15.4
         env:
           POSTGRES_USER: runner
           POSTGRES_PASSWORD: password
           POSTGRES_DB: community
         ports:
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd "pg_isready -U runner -d community" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Build and Run Docker Container
+        run: |
+          docker build -t custom-postgres:latest .
+          docker run -d -p 5432:5432 --name ci-postgres custom-postgres:latest
+          sleep 30
 
       - name: Install Golang migrate dependency
         run: |
